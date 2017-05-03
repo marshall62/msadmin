@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/strategy.css' %}">
+    {#     Goto https://www.google.com/fonts to get fonts like this! #}
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Tutoring Strategies</title>
+</head>
+<body>
+<div class="page-header">
+    <h1><a href="/">MathSpring Admin Tool</a></h1>
+</div>
+<a href="/admin">Go to the Admin for Base Strategy Components</a>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body></body>
+</html>

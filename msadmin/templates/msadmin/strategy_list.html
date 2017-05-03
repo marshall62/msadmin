@@ -1,0 +1,18 @@
+{% extends 'msadmin/base.html' %}
+{% block content %}
+
+    <h1>Strategies:</h1>
+    {% for s in strategies %}
+        <a class="strategy" href="">{{ s }}</a><br>
+
+        <h2>Components</h2>
+        <ul>
+            <div class="strategy_component"><li><a href="{% url 'sc_detail' pk=s.login.pk %}">{{ s.login.name }}</a></li></div>
+            <div class="strategy_component"><li><a href="{% url 'sc_detail' pk=s.lesson.pk %}">{{ s.lesson.name }}</a></li></div>
+            <div class="strategy_component"><li><a href="{% url 'sc_detail' pk=s.tutor.pk %}">{{ s.tutor.name }}</a></li></div>
+        </ul>
+
+
+    {% endfor %}
+
+{% endblock %}
