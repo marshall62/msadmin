@@ -127,12 +127,24 @@ class SCParamMap (models.Model):
 class Class (models.Model):
     name = models.CharField(max_length=50)
     teacher = models.CharField(max_length=50)
+    strategies = models.ManyToManyField(Strategy, through='ClassStrategyMap')
 
     class Meta:
         db_table = "class"
 
     def __str__ (self):
         return self.teacher + ": " + self.name
+
+class ClassStrategyMap (models.Model):
+    myclass = models.ForeignKey(Class,db_column='classId')
+    strategy = models.ForeignKey(Strategy,db_column='strategyId')
+
+    class Meta:
+        db_table = "class_strategy_map"
+
+    def __str__ (self):
+        return str(self.myclass) + str(self.strategy)
+
 
 '''
 Django Composite Key might be a solution for you:
@@ -166,17 +178,38 @@ class ClassSCISMap (models.Model):
 
 
 
-
-'''
-class Machine (models.Model):
-    name = models.CharField(max_length=45)
-    parts = models.ManyToManyField(StrategyComponentParam, through='Machine2PartMap')
 class Part (models.Model):
     name = models.CharField(max_length=45)
-class Machine2PartMap (models.Model):
-    machine = models.ForeignKey(Machine)
-    part = models.ForeignKey(Part)
-    '''
+
+    class Meta:
+        db_table = "part"
+
+    def __str__ (self):
+        return self.name
+
+class Machine (models.Model):
+    name = models.CharField(max_length=45)
+    parts = models.ManyToManyField(Part, through='Machine2Part')
+    class Meta:
+        db_table = "machine"
+
+    def __str__ (self):
+        return self.name
+
+
+class Machine2Part (models.Model):
+    machine = models.ForeignKey(Machine,db_column='machineId')
+    part = models.ForeignKey(Part,db_column='partId')
+    class Meta:
+        db_table = "machine2part"
+
+    def __str__ (self):
+        m = Machine.objects.get(pk=self.machine)
+        p = Part.objects.get(pk=self.part)
+        return m.name + ":" + p.name
+
+
+
 
 
 

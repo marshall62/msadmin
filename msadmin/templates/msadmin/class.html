@@ -1,0 +1,18 @@
+{% extends 'msadmin/base.html' %}
+{% block content %}
+    <h3>class: {{  class.name }}</h3>
+    <h3>teacher: {{  class.teacher }}</h3>
+    <h3>Strategies used by this class:</h3>
+    <table>
+        <tbody>
+        {% for s in strategies %}
+            <tr>
+    {#            <td><a  href="{% url 'class_detail' pk=c.pk %}">{{s.name}}</a></td>#}
+                <td><a href="{% url 'strategy_detail' pk=s.pk %}">{{s.name}}</a></td><td>&nbsp;</td>
+{#                <td><a href="{% url 'class_strat_detail' classId=class.id strategyId=s.pk %}">Customize</a></td>#}
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'msadmin/base.html' %}
+{% block content %}
+
+    <h1>Classes:</h1>
+    <table>
+        <tbody>
+        {% for c in classes %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.teacher }}</td>
+                <td><a  href="{% url 'class_detail' pk=c.pk %}">{{c.name}}</a></td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
