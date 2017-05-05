@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import StrategyComponent
 from .models import Strategy
@@ -31,3 +32,7 @@ def class_detail (request, pk):
 def strategy_detail (request, pk):
     strat = get_object_or_404(Strategy, pk=pk)
     return render(request, 'msadmin/strategy.html', {'strategy': strat})
+
+
+def blee (request):
+    return HttpResponse("Blee")
