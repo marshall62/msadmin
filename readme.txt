@@ -49,7 +49,9 @@ t0mand3rs
 Development stuff:
 
 DJango Shell:  Can interact with models and other code.
+I am not able to get the shell running correctly from Intellij Tools menu.
 
+Must cd to project root in a term window:
 activate the venv
 python manage.py shell
 

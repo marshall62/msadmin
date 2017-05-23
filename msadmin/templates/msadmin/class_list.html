@@ -2,13 +2,20 @@
 {% block content %}
 
     <h1>Classes:</h1>
-    <table>
+    <table >
+        <thead>
+            <tr>
+                <th style="width: 60px">ID</th>
+                <th style="width: 200px">Teacher</th>
+                <th style="width: 300px">Class</th>
+            </tr>
+        </thead>
         <tbody>
         {% for c in classes %}
             <tr>
-                <td>{{ c.id }}</td>
-                <td>{{ c.teacher }}</td>
-                <td><a  href="{% url 'class_detail' pk=c.pk %}">{{c.name}}</a></td>
+                <td style="width: 80px">{{ c.id }}</td>
+                <td > {{ c.teacher }}</td>
+                <td ><a  href="{% url 'class_detail' pk=c.pk %}">{{c.name}}</a></td>
 
             </tr>
         {% endfor %}

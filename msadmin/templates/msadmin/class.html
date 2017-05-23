@@ -3,16 +3,71 @@
     <h3>class: {{  class.name }}</h3>
     <h3>teacher: {{  class.teacher }}</h3>
     <h3>Strategies used by this class:</h3>
-    <table>
-        <tbody>
-        {% for s in strategies %}
-            <tr>
-    {#            <td><a  href="{% url 'class_detail' pk=c.pk %}">{{s.name}}</a></td>#}
-                <td><a href="{% url 'strategy_detail' pk=s.pk %}">{{s.name}}</a></td><td>&nbsp;</td>
-{#                <td><a href="{% url 'class_strat_detail' classId=class.id strategyId=s.pk %}">Customize</a></td>#}
+    <script>
 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        $(document).ready(function() {
+
+
+
+            $('.dropdown-toggle').hide();
+            $('.dropdown-toggle').dropdown()
+            $('#jstree_demo_div').on("changed.jstree", function (e, data) {
+                console.log(data.selected);
+            });
+
+
+            $('#add-strategy').click(function (e)  {
+{#     using an anchor which is causing the page to reload. prevent this by using the preventDefault         #}
+                e.preventDefault();
+                $('.dropdown-toggle').toggle();
+            });
+
+        });
+    </script>
+    <form method="post">
+        <table style="border-spacing: 30px 0;">
+            <tbody>
+            {% for s in strategies %}
+                <tr>
+        {#            <td><a  href="{% url 'class_detail' pk=c.pk %}">{{s.name}}</a></td>#}
+                    <td class="padded-td"><a href="{% url 'strategy_detail' pk=s.pk %}">{{s.name}}</a></td>
+                    <td class="padded-td"><a href="{% url 'class-strategy' classId=class.pk strategyId=s.pk %}"><span class="glyphicon glyphicon-wrench"></span></a></td>
+                    <td class="padded-td">
+                        <a onclick="confirm('Are you sure you want to remove this strategy?')" href="{% url 'remove-class-strategy' classId=class.pk strategyId=s.pk%}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+
+    {#                <td><a href="{% url 'class_strat_detail' classId=class.id strategyId=s.pk %}">Customize</a></td>#}
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <p>
+            <table>
+                <tr><td class="padded-td">Add another strategy</td>
+                    <td class="padded-td"><a id="add-strategy" href=""><span class="glyphicon glyphicon-plus"></span></a></td>
+                </tr>
+            </table>
+        </p>
+{#        <button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>#}
+        <div id="strategy-pulldown"  class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                ----
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {% for s in otherStrategies %}
+                    <li><a href="/class/{{ class.id }}/strategy/{{ s.id }}/add">{{ s.name }}</a></li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+
+
+    </form>
 {% endblock %}
