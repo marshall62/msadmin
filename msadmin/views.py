@@ -72,9 +72,10 @@ def strategy_detail (request, pk):
 #  The params are based on the class.
 def getInterventionSelectorInfo (aclass, stratComp):
     res = []
-    for sel in stratComp.getInterventionSelectors():
+    for sel in stratComp.interventionSelectors.all():
         params = []
-        isActive = sel.setActiveStatus(aclass, stratComp)
+        # set the active true/false status of the intervention selector so that the GUI knows if its on or off.
+        sel.setActiveStatus(aclass, stratComp)
         baseISParams = sel.getBaseParams()
         # for p in sel.getParams(stratComp):
         for p in baseISParams:
@@ -86,16 +87,20 @@ def getInterventionSelectorInfo (aclass, stratComp):
 def configure_class_strategy (request, classId, strategyId):
     cl = get_object_or_404(Class, pk=classId)
     st = get_object_or_404(Strategy, pk=strategyId)
-    loginComp = st.login
-    tutorComp = st.tutor
-    lessonComp = st.lesson
-    # d maps isel ids -> a dictionary of param.id -> param
-    loginISParams=getInterventionSelectorInfo(cl,loginComp)
-    lessonISParams=getInterventionSelectorInfo(cl,lessonComp)
-    tutorISParams=getInterventionSelectorInfo(cl,tutorComp)
-    return render(request, 'msadmin/class_strategy.html',
-                  {'class': cl, 'strategy': st, 'loginSC': loginComp, 'tutorSC': tutorComp, 'lessonSC': lessonComp,
-                   'loginInfo': loginISParams, 'lessonInfo':lessonISParams, 'tutorInfo':tutorISParams})
+    clstrat = Strategy_Class.objects.get(theClass=cl, strategy=st)
+    # No longer send down objects through variables.  Page makes AJAX request to get JSON to populate a tree
+
+    # loginComp = st.login
+    # tutorComp = st.tutor
+    # lessonComp = st.lesson
+    # # d maps isel ids -> a dictionary of param.id -> param
+    # loginISParams=getInterventionSelectorInfo(cl,loginComp)
+    # lessonISParams=getInterventionSelectorInfo(cl,lessonComp)
+    # tutorISParams=getInterventionSelectorInfo(cl,tutorComp)
+    return render(request, 'msadmin/class_strategy2.html',
+                  {'class': cl, 'strategy': st, 'classStrategy': clstrat})
+    # 'loginSC': loginComp, 'tutorSC': tutorComp, 'lessonSC': lessonComp,
+    #                'loginInfo': loginISParams, 'lessonInfo':lessonISParams, 'tutorInfo':tutorISParams})
 
 def add_class_strategy (request, classId, strategyId):
     c = get_object_or_404(Class, pk=classId)

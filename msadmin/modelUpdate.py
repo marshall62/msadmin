@@ -1,0 +1,111 @@
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
+
+from msadmin.forms import ClassForm
+from .models import StrategyComponent, ClassSCParam, Strategy_Class, LC
+from .models import Strategy
+from .models import Class
+from .models import ClassISParam
+from .models import ClassSCParam
+from .models import InterventionSelector
+from .models import ClassSCISMap
+from .models import SCISMap
+
+
+# An AJAX post request coming from a dialog box that allows edit of class-is-param.
+def save_is_param (request, isParamId):
+    if request.method == "POST":
+        post = request.POST
+        newVal = post['value']
+        isActive = post['isActive']
+        p = get_object_or_404(ClassISParam, pk=isParamId)
+        p.value = newVal
+        p.isActive = isActive == 'true'
+        p.save()
+    return JsonResponse({"isParamId": isParamId, "name": p.name, "value": newVal, "isActive": p.isActive})
+
+
+# An AJAX post request coming from a dialog box that allows edit of class-sc-param.
+def save_sc_param (request, scParamId):
+    if request.method == "POST":
+        post = request.POST
+        newVal = post['value']
+        isActive = post['isActive']
+        p = get_object_or_404(ClassSCParam, pk=scParamId)
+        p.value = newVal
+        p.isActive = isActive == 'true'
+        p.save()
+    return JsonResponse({"scParamId": scParamId, "name": p.name, "value": newVal, "isActive": p.isActive})
+
+# An AJAX post request coming from a dialog box that allows edit of class-sc_is_map
+def save_is (request, isId):
+    if request.method == "POST":
+        post = request.POST
+        config = post['config']
+        isActive = post['isActive']
+        classId = post['classId']
+        scId = post['scId']
+        c = get_object_or_404(Class, pk=classId)
+        sc = get_object_or_404(StrategyComponent, pk=scId)
+        insel = get_object_or_404(InterventionSelector, pk=isId)
+        scismap = get_object_or_404(SCISMap, strategyComponent=sc, interventionSelector=insel)
+        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c)
+        cl_scismap.isActive = isActive == 'true'
+        cl_scismap.config = config
+        cl_scismap.save()
+    return JsonResponse({"isId": isId, "isActive": cl_scismap.isActive})
+
+# An AJAX post request coming from the tree editor when checkbox next to an isParam is clicked
+# if checkbox is selected, isActive='true', o/w = 'false'
+# sets the class_is_param.isActive field accordingly
+def save_is_param_active (request, isParamId):
+    if request.method == "POST":
+        post = request.POST
+        status = post['active']
+        p = get_object_or_404(ClassISParam, pk=isParamId)
+        p.isActive = status == 'true'
+        p.save()
+    return JsonResponse({"isParamId": isParamId})
+
+# An AJAX post request coming from the tree editor when checkbox next to an scParam is clicked
+# if checkbox is selected, isActive='true', o/w = 'false'
+# sets the class_sc_param.isActive field accordingly
+def save_sc_param_active (request, scParamId):
+    if request.method == "POST":
+        post = request.POST
+        status = post['active']
+        p = get_object_or_404(ClassSCParam, pk=scParamId)
+        p.isActive = status == 'true'
+        p.save()
+    return JsonResponse({"isParamId": scParamId})
+
+# An AJAX post request coming from the tree editor when checkbox next to an interventionSelector is clicked
+# if checkbox is selected, isActive='true', o/w = 'false'
+# sets the class_sc_is_map.isActive field accordingly
+def save_intervSel_active (request, isId):
+    if request.method == "POST":
+        post = request.POST
+        status = post['active']
+        classId = post['classId']
+        scId = post['scId']
+        c = get_object_or_404(Class, pk=classId)
+        sc = get_object_or_404(StrategyComponent, pk=scId)
+        insel = get_object_or_404(InterventionSelector, pk=isId)
+        scismap = get_object_or_404(SCISMap, strategyComponent=sc, interventionSelector=insel)
+        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c)
+        cl_scismap.isActive = status == 'true'
+        cl_scismap.save()
+    return JsonResponse({"id": isId})
+
+# An Ajax POST when the strategy dialog is saved.  Will set the Strategy_class lc object.
+def save_strategy (request, id):
+    if request.method == "POST":
+        post = request.POST
+        lcid = post['lcid']
+        stratclass = get_object_or_404(Strategy_Class,pk=id)
+        lc = get_object_or_404(LC,pk=lcid)
+        stratclass.lc = lc
+        stratclass.save()
+        return JsonResponse({"id": id})

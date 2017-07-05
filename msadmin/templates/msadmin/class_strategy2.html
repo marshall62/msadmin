@@ -1,0 +1,660 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% block page-css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.22.5/skin-bootstrap-n/ui.fancytree.css" />
+    <style>
+        /* Define custom width and alignment of table columns */
+        #treetable {
+            table-layout: fixed;
+        }
+        #treetable tr td:nth-of-type(1) {
+            text-align: right;
+        }
+        #treetable tr td:nth-of-type(2) {
+            text-align: center;
+        }
+        #treetable tr td:nth-of-type(3) {
+            min-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        {#        Styles to force nodes not to highlight as green when selected or checked.  #}
+        {#        Unfortunately, this removes the striping on a checked row. #}
+        {#        TODO: Striped rows should have background-color f9f9f9 but these set to transp #}
+
+        table.fancytree-ext-table tbody tr.fancytree-selected {
+            background-color: transparent;
+        }
+        table.fancytree-ext-table tbody tr.fancytree-selected span.fancytree-node {
+            background-color: transparent;
+        }
+        table.fancytree-ext-table tbody tr.fancytree-selected span.fancytree-title {
+            background-color: transparent;
+        }
+        {#        table.fancytree-ext-table tbody tr.fancytree-active {#}
+        {#            background-color: transparent;#}
+        {#        }#}
+        {#        table.fancytree-ext-table tbody tr.fancytree-active span.fancytree-node {#}
+        {#            background-color: transparent;#}
+        {#        }#}
+
+        table.fancytree-ext-table.fancytree-treefocus tbody tr.fancytree-selected {
+            background-color: transparent;
+        }
+        table.fancytree-ext-table.fancytree-treefocus tbody tr.fancytree-selected span.fancytree-node {
+            background-color: transparent;
+        }
+        table.fancytree-ext-table.fancytree-treefocus tbody tr.fancytree-selected span.fancytree-title {
+            background-color: transparent;
+        }
+
+
+
+
+        .modal-header, h4, .close {
+            background-color: #889400;
+            color:black !important;
+            text-align: center;
+            font-size: 30px;
+        }
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+
+        .is-param {
+            color: #889400;
+        }
+
+    </style>
+{% endblock %}
+
+{% block page-js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.22.5/jquery.fancytree-all.min.js"></script>
+    <script>
+
+        var is_param_id; // global that holds the is_param_id being edited in a dialog
+        var sc_param_id; // global that holds the sc_param_id being edited in a dialog
+        var is_id; // global that holds the interventionselector id being edited in a dialog
+
+        glyph_opts = {
+            map: {
+                doc: "glyphicon glyphicon-file",
+                docOpen: "glyphicon glyphicon-file",
+                checkbox: "glyphicon glyphicon-unchecked",
+                checkboxSelected: "glyphicon glyphicon-check",
+                checkboxUnknown: "glyphicon glyphicon-share",
+                dragHelper: "glyphicon glyphicon-play",
+                dropMarker: "glyphicon glyphicon-arrow-right",
+                error: "glyphicon glyphicon-warning-sign",
+                expanderClosed: "glyphicon glyphicon-menu-right",
+                expanderLazy: "glyphicon glyphicon-menu-right",  // "glyphicon-plus-sign"
+                expanderOpen: "glyphicon glyphicon-menu-down",  // glyphicon-collapse-down
+                folder: "glyphicon glyphicon-folder-close",
+                folderOpen: "glyphicon glyphicon-folder-open",
+                loading: "glyphicon glyphicon-refresh glyphicon-spin"
+            }
+        };
+
+        function isISParam (node) {
+            return node.data.type == 'param';
+        }
+
+        function isIS (node) {
+            return node.data.type == 'interventionSelector';
+        }
+
+        function isSCParam (node) {
+            return node.data.type == 'scparam';
+        }
+
+
+
+        // When an intervention selector node is clicked, this will fill the body of the modal with some stuff
+        function fillModalDialog (node) {
+            $('#modalHeader').html('AAA')
+            $('#modalBody').html('BBB')
+        }
+
+        // When the icon next to an insel param is clicked,  this calls the server to get info on it and then
+        // sends the json to the dialog and opens it.
+        function configParam (isParamId) {
+            var url_mask = "{% url 'class_is_param_detail' isParamId=12345 %}".replace(/12345/, isParamId.toString());
+            $.get(url_mask, function(data) {
+                console.log("Got ISParam json detail");
+                console.log(data);
+                showISParamDialog(data);
+
+            });
+        }
+
+        function configSCParam (scParamId) {
+            var url_mask = "{% url 'class_sc_param_detail' scParamId=12345 %}".replace(/12345/, scParamId.toString());
+            $.get(url_mask, function(data) {
+                console.log("Got SCParam json detail");
+                console.log(data);
+                showSCParamDialog(data);
+
+            });
+        }
+
+
+        // When the pencil icon next to an intervention selector is clicked, this calls the server to get JSON about it.
+        // This is then used to populate a dialog that comes up.
+        function configIS (isId, scId) {
+            console.log(isId);
+            console.log(scId);
+{#            var url_mask = ''#}
+{#            var url_mask = "{% url 'class_is_detail' classId=class.id isId=12345 %}".replace(/12345/, isId.toString());#}
+            var url_mask = "{% url 'class_is_detail' classId=class.id isId=54321 scId=12345 %}".replace(/54321/,isId.toString());
+            url_mask = url_mask.replace(/12345/,scId.toString());
+            $.get(url_mask, function(data) {
+                console.log("Got IS json detail");
+                console.log(data);
+                showISDialog(data);
+
+            });
+        }
+
+        // The strategy dialog will show the currently selected learning companion in a pulldown menu along with all the other
+        // LCs as a possible options.
+        function configStrategy (stratId, stratName, stratDescr, lcid) {
+            var id = {{ classStrategy.id }};
+            var url = "{%  url 'strategy_lcs' id=12345 %}";
+            url = url.replace(/12345/,id);
+            // call server to get all the LC options.
+            $.get(url, function(data) {
+                showStrategyDialog(stratId, stratName, stratDescr, lcid, data);
+            });
+
+        }
+
+        // data is JSON like {lcid: 3, all_lcs: {1: 'RuleBased:Jane', 2: 'Rulebased:Jake', ...}  where each number is an lcID
+        function showStrategyDialog(stratId, stratName, stratDescr, lcid, data) {
+            $('#strategy-name').val(stratName)
+            $('#strategy-description').html("<b>Description:</b> " + stratDescr);
+            $('#strategy-lc').empty();
+            var curLCID = data.lcid;
+            var allLCs = data.all_lcs;
+            // allLCs is JSON with all the learning companions.   Each key is an lc-id, Each value is a String which is the name+character of the lc.
+            $.each(allLCs, function(key, value) {
+                $('#strategy-lc')
+                    .append($("<option/>").val(key).text(value));
+            });
+            $('#strategy-lc').val(curLCID); // sets the option that has curlcId as its val to be selected
+            $('#strategyModalEditor').modal('show');
+        }
+
+
+        function showISDialog (isObj) {
+            // Set the form values of the dialog
+            $('#is-name').val(isObj.name);
+            $('#is-config').val(isObj.config);
+            $('#is-description').html("<b>Description:</b> " + isObj.description);
+            $('#is-active').prop('checked',isObj.isActive);
+            $('#is-dialog-title').html("Intervention Selector");
+            is_id = isObj.id;  // set a global var holding the id of the IS we edit
+            $('#isModalEditor').modal('show');
+        }
+
+        // If there are a set of possible values for a param, then we remove the text input from the divId tag and replace it with
+        // tags that create a pulldown menu set with the curValue and the set of possible values.
+        function setValueInput (inputId, possibleValues, curValue) {
+
+            // if possible values are given replace the text input with pulldown controls
+            if (possibleValues.length > 0) {
+                var pulldown = '<select class="form-control" id="' +inputId+ '">';
+                for (var i=0; i < possibleValues.length; i++) {
+                    pulldown +=  possibleValues[i] == curValue ? '<option selected>' : '<option>'
+                    pulldown += possibleValues[i] + '</option>';
+                }
+                pulldown += '</select>';
+
+                $('#' + inputId).replaceWith(pulldown);
+            }
+            else {  // no possible values, so use the default text input and set it to the cur value
+                $('#' + inputId).replaceWith('<input type="text" class="form-control" id="' + inputId + '">');
+                $('#' + inputId).val(curValue);
+            }
+        }
+
+
+
+        function showISParamDialog (isParamObj) {
+            // Set the form values of the dialog
+            $('#param-name').val(isParamObj.name);
+            var possibleVals = isParamObj.possibleValues;
+            setValueInput('param-value', possibleVals,isParamObj.value);
+            var descr = "<b>Description: </b>" + isParamObj.description;
+            descr += "<br><b>Possible Values: </b>" + possibleVals;
+
+            $('#param-description').html(descr);
+            $('#param-active').prop('checked',isParamObj.isActive);
+            $('#param-dialog-title').html(isParamObj.interventionSelectorName + " Parameter");
+            is_param_id = isParamObj.id;  // set a global var holding the id of the is-param we edit
+            $('#isParamModalEditor').modal('show');
+        }
+
+
+
+        function showSCParamDialog (scParamObj) {
+            // Set the form values of the dialog
+            $('#sc-param-name').val(scParamObj.name);
+{#            var possibleVals = scParamObj.possibleValues;#}
+            var descr = "<b>Description: </b>" + scParamObj.description;
+{#            descr += "<br><b>Possible Values: </b>" + possibleVals;#}
+            $('#sc-param-value').val(scParamObj.value);
+            {#            TODO isParamObj.possibleValues is a list of legal values.  Use it to create a pulldown menu ; o/w a text input #}
+            $('#sc-param-description').html(descr);
+            $('#sc-param-active').prop('checked',scParamObj.isActive);
+            $('#sc-param-dialog-title').html("Strategy Component Parameter");
+            sc_param_id = scParamObj.id;  // set a global var holding the id of the sc-param we edit
+            $('#scParamModalEditor').modal('show');
+        }
+
+        // Saves the sc-param values from the dialog when the save button is clicked.  Then takes down the dialog
+        function saveSCParamEdit () {
+
+            var sc_param_val = $('#sc-param-value').val();
+            var isActive = $('#sc-param-active').prop("checked");
+            var url_mask = "{% url 'class_sc_param_save' scParamId=12345 %}".replace(/12345/, sc_param_id);
+
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: {value: sc_param_val, isActive: isActive },
+                success: function (data) {
+                    console.log("JSON returned by POST");
+                    console.log(data);
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    node = $("#treetable").fancytree("getActiveNode");
+// Use the API
+                    node.setTitle(data.name + "=" + data.value);
+                    node.setSelected(data.isActive);  // set the correct active status too
+                }
+            });
+            $('#scParamModalEditor').modal('toggle');
+
+        }
+
+        // Called when isParam dialog box Save button is clicked.  sends data to server to update db,
+        // closes dialog, updates the tree display of the object.
+        function saveISParamEdit () {
+
+            var is_param_val = $('#param-value').val();
+            var isActive = $('#param-active').prop("checked");
+            var url_mask = "{% url 'class_is_param_save' isParamId=12345 %}".replace(/12345/, is_param_id.toString());
+
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: {value: is_param_val, isActive: isActive },
+                success: function (data) {
+                    console.log("JSON returned by POST");
+                    console.log(data);
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    node = $("#treetable").fancytree("getActiveNode");
+// Use the API
+                    node.setTitle(data.name + "=" + data.value);
+                    node.setSelected(data.isActive);  // set the correct active status too
+                }
+            });
+            // closes the dialog
+            $('#isParamModalEditor').modal('toggle');
+
+        }
+
+        function saveISEdit () {
+
+            var config = $('#is-config').val();
+            var isActive = $('#is-active').prop("checked");
+            var node = $("#treetable").fancytree("getActiveNode");
+            var url_mask = "{% url 'class_is_save' isId=12345 %}".replace(/12345/, is_id);
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: { isActive: isActive, config: config, classId: {{ class.id}}, scId: node.data.scId },
+                success: function (data) {
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    node.setSelected(data.isActive);  // set the correct active status too
+                }
+            });
+
+            $('#isModalEditor').modal('toggle');
+{#            TODO make sure that tree node (including the checkbox) accurately reflect the new state of the insel #}
+        }
+
+
+        function saveStrategy () {
+            var lcid = $('#strategy-lc').val();
+            var url_mask = "{% url 'strategy_save' id=12345 %}".replace(/12345/,{{ classStrategy.id }});
+
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: { lcid: lcid },
+                success: function (data) {
+                }
+            });
+
+            $('#strategyModalEditor').modal('toggle');
+
+        }
+
+        // The checkbox on a node will cause a server call to the appropriate URL which is selected
+        // based on the type of the node.
+        function saveObjectActivated (node) {
+            var id = node.data.id;
+            var isSelected = node.isSelected();
+            var isParam_url_mask = "{% url 'class_is_param_active_save' isParamId=12345 %}".replace(/12345/, id);
+            var scParam_url_mask = "{% url 'class_sc_param_active_save' scParamId=12345 %}".replace(/12345/, id);
+            var is_url_mask = "{% url 'class_intervSel_active_save' isId=12345 %}".replace(/12345/, id);
+            var url;
+            var d = {active : isSelected};
+            if (isIS(node)) {
+                url = is_url_mask;
+                d.scId = node.data.scId; // include the sc ID so we can locate the class-scismap
+                d.classId = {{ class.id }}; // include class id so we can locate the class_scimap
+            }
+            else if (isISParam(node))
+                url = isParam_url_mask;
+            else if (isSCParam(node))
+                url = scParam_url_mask;
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: d,
+                success: function (data) {
+                    console.log("JSON returned by POST");
+                    console.log(data);
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    node = $("#treetable").fancytree("getActiveNode");
+// Use the API
+{#                    node.setTitle(data.name + "=" + data.value);#}
+                }
+            });
+
+
+        }
+
+
+
+        function handleCheckboxClick (event, data) {
+            t = $("#treetable");
+            treeData = t.data;
+            if (!treeData.rendering) {
+                console.log(data);
+                saveObjectActivated(data.node);
+
+                // Display list of selected nodes
+                if (data.node.isSelected())
+                    console.log("checked");
+                else console.log("unchecked");
+            }
+        }
+
+
+
+
+        $(function () {
+            // 6 create an instance when the DOM is ready
+            $('#treetable').fancytree({
+                    extensions: ["edit", "glyph", "table"],
+                    checkbox: true,
+                    glyph: glyph_opts,
+                    source: {
+                        url :"{% url 'strategy-json' classId=class.id strategyId=strategy.id %}"
+                    },
+                    {#                source: [{"title": "EmbeddedSurveyLogin", "children": [{"title": "Pretest", "children": [{"title": "startMessage=Before using the software, please TELL US WHAT YOU THINK.<br>Please be very sincere in your responses.  We are really interested in knowing how you feel about mathematics.  NOBODY other than the UMass research team will know your responses."}, {"title": "terminationTest=completeAllProblems"}, {"title": "weight=1"}, {"title": "runFreq=oncepersession"}]}, {"title": "Posttest", "children": [{"title": "weight=2"}, {"title": "runFreq=oncepersession"}, {"title": "startMessage=Now that you have used the software, please TELL US WHAT YOU THINK.<br>Please be very sincere in your responses.  We are really interested in knowing what you thought of this experience.  NOBODY other than the UMass research team will know your responses."}, {"title": "terminationTest=completeAllProblems"}]}]}, {"title": "TopicWithIntroAndDemo", "children": [{"title": "TopicSwitchAskIS", "children": [{"title": "weight=1"}, {"title": "ask=false"}]}, {"title": "TopicIntroIS", "children": [{"title": "weight=1"}, {"title": "runFreq=oncePerSession"}]}, {"title": "DemoProblemIS", "children": [{"title": "weight=2"}, {"title": "runFreq=always"}]}]}, {"title": "MiniGamesTutoring", "children": [{"title": "AskEmotion", "children": [{"title": "inputType=radio"}, {"title": "numVals=5"}, {"title": "interruptIntervalMin=5"}, {"title": "interruptIntervalProblems=8"}, {"title": "weight=1"}, {"title": "askWhy=true"}]}, {"title": "ExternalActivity", "children": [{"title": "frequencyPct=5.0"}, {"title": "numProblemsBetweenOffers=10"}, {"title": "numMinutesBetweenOffers=10"}, {"title": "allowRepeat=false"}, {"title": "mode=ask"}, {"title": "weight=2"}]}]}],#}
+                    toggleEffect: { effect: "drop", options: {direction: "left"}, duration: 400 },
+                    table: {
+                        checkboxColumnIdx: 1,
+                        nodeColumnIdx: 2
+                    },
+
+                    activate: function(event, data) {
+                    },
+
+                    init: function(event, data) {
+
+                    },
+                    select: handleCheckboxClick,
+
+                    renderColumns: function(event, data) {
+                        // The following 3 lines are a kludge around the problem that rendering the tree as it opens up sets the checkboxes using the setSelected
+                        // method below.  This acts just like a user-click on a checkbox and has the undesirable effect of calling the handleCheckboxClick
+                        // function.  So if rendering is happening I set a flag inside of treetable.data.rendering to be true.   This way handleCheckboxClick
+                        // checks that flag and ignores those selection events that are from rendering rather than user clicks.
+                        var t = $("#treetable");
+                        var treeData = t.data;
+                        treeData.rendering = true;
+                        var fnCall;
+                        var node = data.node,
+                            $tdList = $(node.tr).find(">td");
+                        console.log(node);
+                        $tdList.eq(0).text(node.getIndexHier());
+{#                        $tdList.eq(3).text(!!node.isActive);#}
+                        // only put in the edit (pencil) icon if the node is a param
+                        if (node.data.type == 'param') {
+                            // Will allow changing the value of the param.  Just needs the  is_param_class.id
+                            fnCall = "configParam(" +node.data.id+ ")";
+                            $tdList.eq(3).html("<a onClick='" +fnCall+ ";' data-toggle='modal' data-target='#isParamModalEditor'>" +
+                                "<span class='glyphicon glyphicon-pencil'></span></a>");
+                        }
+                        else if (node.data.type == 'interventionSelector') {
+                            node.setSelected(node.data.isActive=='true');
+                            fnCall = "configIS(" +node.data.id+ ", " +node.data.scId+ ") ";
+                            $tdList.eq(3).html("<a onClick='" +fnCall+ ";' data-toggle='modal' data-target='#isModalEditor' >" +
+                                "<span class='glyphicon glyphicon-pencil'></span></a>");
+
+
+                        }
+                        else if (node.data.type == 'scparam') {
+                            node.setSelected(node.data.isActive=='true');
+                            fnCall = "configSCParam(" +node.data.id+ ") ";
+                            $tdList.eq(3).html("<a onClick='" +fnCall+ ";' data-toggle='modal' data-target='#scParamModalEditor' >" +
+                                "<span class='glyphicon glyphicon-pencil'></span></a>");
+
+
+                        }
+
+                        // turn off the rendering flag
+                        treeData.rendering = false;
+                    }
+                }
+
+            );
+
+        });
+    </script>
+{% endblock %}
+
+{#  See tree demo at http://wwwendt.de/tech/fancytree/demo/#sample-ext-bootstrap.html #}
+{% block content %}
+
+    <!-- 5 include the minified jstree source -->
+    <h3>Class: <a href="{% url 'class_detail' pk=class.id %}"> {{  class.name }}</a></h3>
+    <h3>Strategy: {{  strategy.name }}
+        <a onclick="configStrategy({{  strategy.id }}, '{{ strategy.name }}', '{{ strategy.description }}', {{ classStrategy.lc.id }} );">
+            <span class="glyphicon glyphicon-pencil"></span></a></h3>
+    <table id="treetable" class="table table-condensed table-hover table-striped fancytree-fade-expander">
+        <colgroup>
+            <col width="80px"></col>
+            <col width="50px"></col>
+            <col width="*"></col>
+            <col width="60px"></col>
+            <col width="50px"></col>
+            <col width="100px"></col>
+        </colgroup>
+        <thead>
+        <tr> <th></th> <th>Active</th> <th>Classification</th> <th>Edit</th> <th></th> <th></th> </tr>
+        </thead>
+        <tbody>
+        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Modal Dialog that will come up when click on Intervention Selector PARAM nodes-->
+    <div class="modal fade" id="isParamModalEditor" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="param-dialog-title" class="modal-title">Strategy Component Parameter</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="param-name">Name</label>
+                            <input type="text" class="form-control" id="param-name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="param-value">Value</label>
+{#                            A container for an input that is determined at runtime. The child of the div can be tags that #}
+{#                            create a pulldown menu when there are fixed set of allowable inputs or a text input when values are not limited #}
+
+                            <div id="param-value-div">
+                                <input id="param-value" type="text"/>
+                            </div>
+
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" id="param-active" checked>Active</label>
+                        </div>
+                        <div class="form-group">
+                            <p id="param-description"></p>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveISParamEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{#  Modal Dialog that comes up when click on SC-PARAM  #}
+    <div class="modal fade" id="scParamModalEditor" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="sc-param-dialog-title" class="modal-title">Intervention Selector Parameter</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="sc-param-name">Name</label>
+                            <input type="text" class="form-control" id="sc-param-name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="sc-param-value">Value</label>
+                            <div id="sc-param-value-div">
+                                <input type="text" class="form-control" id="sc-param-value">
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" id="sc-param-active" checked>Active</label>
+                        </div>
+                        <div class="form-group">
+                            <p id="sc-param-description"></p>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveSCParamEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{#    Modal Dialog that comes up when click on edit icon of Intervention Selector #}
+    <div class="modal fade" id="isModalEditor" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="is-dialog-title" class="modal-title">Intervention Selector</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="is-name">Name</label>
+                            <input type="text" class="form-control" id="is-name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="is-config">Config</label>
+                            <textarea class="form-control" rows="5" id="is-config"></textarea>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" id="is-active" checked>Active</label>
+                        </div>
+                        <div class="form-group">
+                            <p id="is-description"></p>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveISEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {#    Modal Dialog that comes up when click on edit icon of Strategy #}
+    <div class="modal fade" id="strategyModalEditor" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="strategy-dialog-title" class="modal-title">Strategy</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="strategy-name">Name</label>
+                            <input type="text" class="form-control" id="strategy-name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <p id="strategy-description"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="strategy-lc">Learning Companion</label>
+                            <select class="form-control" id="strategy-lc">
+                            </select>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveStrategy();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

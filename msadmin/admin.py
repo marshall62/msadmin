@@ -39,6 +39,7 @@ class SCParamMapInLine(admin.TabularInline):
 # IS is in the SCSIMap and that needs the ID of the SC
 #  My Github issue: https://github.com/marshall62/msadmin/issues/1
 class StrategyComponentAdmin(admin.ModelAdmin):
+    # filter_horizontal = ('params',)
     inlines = [
         SCISMapInline, SCParamMapInLine
     ]
@@ -56,15 +57,37 @@ admin.site.register(StrategyComponent, StrategyComponentAdmin)
 #     fields = ('name', 'value')
 
 
+# A base intervention selector param tabular inline
+class ISParamBaseInline(admin.TabularInline):
+    model = ISParamBase
+    fields = ('name', 'value',)
+
 # An intervention selector param that is connected to the SCISMap
+# TODO: FIx the following:
+#  1.  Have to type in name and value.
+#  2.  Want it to be able to just select a baseParam and populate the name/value from that with ability to edit value but not name
+#  3.  Want to limit the number of selections of baseParam to only be ones that are for this IS
 class ISParamInline(admin.TabularInline):
     model = InterventionSelectorParam
-    fields = ('name', 'value',)
-    readonly_fields = ('name',)
-    # fields = ( 'value',)
+    fields = ('name', 'value', 'isActive','baseParam')
 
-    def name(self, obj):
-        return obj.baseParam.name
+    #  This was close to working except I needed to use the interventionSelector in the filter and couldn't figure out how to get the object other
+    # than through hacking into the request string and then querying for it using the scismap ID.
+    # This is called once when the SCISMap admin form loads.  It populates the tabular inline for intervention selector params such that
+    # the pulldown menu for base-is-params only has ones that relate to the intervention selector attached to this scismap.
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        n = db_field.name
+        p = self.parent_model
+        if db_field.name == 'baseParam':
+            # pull the SCISMap ID out of the request URL
+            scisid = int(request.path.split('/')[4])
+            # lookup the scismap and get its interv selector
+            insel = SCISMap.objects.get(id=scisid).interventionSelector
+            # queryset of is-param-base objects should be limited to only those for this intervention selector
+            kwargs["queryset"] = ISParamBase.objects.filter(interventionSelector=insel)
+        return super(ISParamInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 
 # Defines an inline viewer for use in intervention selector so that it will display the strategy component but not allow
 # editing of it
@@ -123,8 +146,11 @@ admin.site.register(StrategyComponentParam,StrategyComponentParamAdmin)
 
 # The admin form for the SCISMap shows the pairing of SC and IS.  This is the place to set each IS's params (because
 # the params for each IS depend on the SC).  So we include an inline tabular in the form so it can include the is_param table.
+#
 class SCISMapAdmin (admin.ModelAdmin):
     inlines = [ISParamInline]
+
+
 
 
 # Defines an inline viewer for use in intervention selector so that it will display the strategy component but not allow
@@ -166,20 +192,17 @@ class ClassISParamAdmin (admin.ModelAdmin):
     model = ClassISParam
 
 
-# Remove some day when I don't need this example for testing out stuff with relationships
-
-class Machine2PartInline (admin.TabularInline):
-    # fields = ['name']
-    model = Machine2Part
+class LC2RSInline(admin.TabularInline):
+    model = LC2Ruleset
+    extra = 3
+    fields = ('ruleset',)
+    # unique_together = (("lc", "ruleset"),)
     show_change_link = True
 
-class MachineAdmin (admin.ModelAdmin):
-    inlines = [Machine2PartInline]
+class LCAdmin (admin.ModelAdmin):
+    inlines = [LC2RSInline]
 
-admin.site.register(Machine, MachineAdmin)
-admin.site.register(Part)
-admin.site.register(Machine2Part)
-
+admin.site.register(LC,LCAdmin)
 
 admin.site.register(SCISMap,SCISMapAdmin)
 
@@ -188,7 +211,7 @@ admin.site.register(ClassISParam, ClassISParamAdmin)
 admin.site.register(ClassSCISMap,ClassSCISMapAdmin)
 admin.site.register(Class,ClassAdmin)
 
-# TODO I want to set up IS Params to be listed ordered by intervention selector name
+# TODO I want to set up IS Params to be listed ordered by intervention selector name and then secondarily by the param name and sc
 # but that exists in another table so I don't know how to do this.   For now it just orders based on the scismap
 # but the real value is in scismap.interventionSelector.name
 class ISParamAdmin (admin.ModelAdmin):
@@ -216,3 +239,59 @@ admin.site.register(Strategy)
 # items for a pulldown used to set the value of the param.
 admin.site.register(ISParamBase,BaseISParamAdmin)
 admin.site.register(ISParamValue)
+# ######################################################
+# testing
+
+# Remove some day when I don't need this example for testing out stuff with relationships
+
+class Machine2PartInline (admin.TabularInline):
+    # fields = ['name']
+    model = Machine2Part
+    show_change_link = True
+
+class Machine2OwnerInline (admin.TabularInline):
+    # fields = ['name']
+    model = Machine2Owner
+    show_change_link = True
+
+class MachineAdmin (admin.ModelAdmin):
+    inlines = [Machine2PartInline, Machine2OwnerInline]
+    def get_readonly_fields(self, request, obj=None):
+        return self.readonly_fields + ('id',)
+
+# admin.site.register(Machine)
+admin.site.register(Machine, MachineAdmin)
+admin.site.register(Part)
+admin.site.register(Owner)
+# admin.site.register(Machine2Part)
+
+## a second set of SC stuff for debug
+
+# class SC2ISInline (admin.TabularInline):
+#     # fields = ['name']
+#     # model = Sc2Is2
+#     # show_change_link = True
+#     model = Sc2Is2
+#     extra = 1
+#     fields = ('insel',)
+#     unique_together = (("sc", "insel"),)
+#     show_change_link = True
+#
+#
+#
+# class SC2PInline (admin.TabularInline):
+#     # fields = ['name']
+#     model = Sc2P2
+#     extra = 1
+#     show_change_link = True
+#
+# class SC2Admin (admin.ModelAdmin):
+#     inlines = [SC2ISInline, SC2PInline]
+#
+#     def get_readonly_fields(self, request, obj=None):
+#         return self.readonly_fields + ('id',)
+#
+# # admin.site.register(Machine)
+# admin.site.register(SC2, SC2Admin)
+# admin.site.register(IS2)
+# admin.site.register(SCParam2)

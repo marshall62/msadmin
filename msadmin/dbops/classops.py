@@ -9,57 +9,93 @@ from msadmin.models import *
 # class_is_param:  a parameter for each intervention selector (a copy of the is_param)
 # class_sc_param: a parameter for each strat-component (a copy of sc_param)
 def copyStrategyToClass (aclass,strategy):
-    copyStrategyComponentToClass(aclass,strategy.lesson)
-    copyStrategyComponentToClass(aclass,strategy.login)
-    copyStrategyComponentToClass(aclass,strategy.tutor)
+    clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc)
+    clstrat.save()
+    copyStrategyComponentToClass(aclass,strategy.lesson,clstrat)
+    copyStrategyComponentToClass(aclass,strategy.login,clstrat)
+    copyStrategyComponentToClass(aclass,strategy.tutor,clstrat)
 
 # Copy a strategy components params and intervention selector info to a class
-def copyStrategyComponentToClass (aclass, strategyComponent):
-    copyStrategyComponentParamsToClass(aclass,strategyComponent)
-    copyStrategyComponentInterventionSelectorsToClass(aclass,strategyComponent)
+def copyStrategyComponentToClass (aclass, strategyComponent, classStrategy):
+    scCl = SC_Class(theClass=aclass,sc=strategyComponent,classStrategy=classStrategy)
+    scCl.save()
+    copyStrategyComponentParamsToClass(aclass,strategyComponent,scCl)
+    copyStrategyComponentInterventionSelectorsToClass(aclass,strategyComponent,scCl)
 
 # for every scis_map row, create a class_sc_is_map row.
-# This is just a row for each intervention selector that is setting it to ON
+# This is just a row for each intervention selector that is setting it to ON and
+# it has a copy of the IS config from the scismap
 def createSCISMaps (aclass, strategyComponent):
     scisMaps = SCISMap.objects.filter(strategyComponent=strategyComponent)
     for m in scisMaps:
-        cm = ClassSCISMap(ismap=m, theClass=aclass,isActive=True)
+        cm = ClassSCISMap(ismap=m, config=m.config,theClass=aclass,isActive=True)
         cm.save()
 
 # Copy the intervention selectors of a strategy component into a class.  This involves
 # creating a row in Class_sc_is_map for each interv-selector that turns on the interv-selector.
-# It also means creating a class_is_param for each interv_selector's param
-def copyStrategyComponentInterventionSelectorsToClass(aclass, strategyComponent):
+# It also means creating a class_is_param for each is-param-sc.
+# After the is-params-sc rows have been copied to is-param-class rows we need to create additional rows in the is-param-class table
+# for each is-param-base that is not mentioned in the is-param-sc.   Those params will be copied in as INACTIVE.
+#  The reason this is done is so that the intervention selector will have these params in the list so that the author can turn them on if desired.
+def copyStrategyComponentInterventionSelectorsToClass(aclass, strategyComponent, classSC):
 
     # Get the intervention selectors for the strategy component
-    interventionSelectors = strategyComponent.getInterventionSelectors()
-    # copy all their base parameters into the class_is_params
+    interventionSelectors = strategyComponent.interventionSelectors.all()
+    # copy all their scis parameters into the class_is_params
     for intsel in interventionSelectors:
-        for bp in intsel.getBaseParams():
-            copyBaseParamToClass(aclass,bp)
+        # for bp in intsel.getBaseParams():
+        scisParams = intsel.getParams(strategyComponent)
+        for bp in scisParams:
+            # copyBaseParamToClass(aclass,bp)
+            copySCISParamToClass(aclass,bp, classSC)
+        # Now we copy in the is-param-base objects that are not within this sc-is and make them inactive
+        copyUnusedSCISParamsToClass(aclass,intsel,scisParams,classSC)
         # Now we use the strategy component's is params to overwrite the values that came from base is params
-        overwriteParams(aclass,strategyComponent, intsel)
+        # overwriteParams(aclass,strategyComponent, intsel)
     # Now set all the intervention selectors in this sc as active
     createSCISMaps(aclass,strategyComponent)
 
 # Params have been copied from the base is_params to the class is_params.
-#  THis will go through the is_params based on the strategy compeonent and
+#  THis will go through the is_params based on the strategy component and
 # overwrite what is in the class is param with those values.  It will also set the
 # param to active=true
 def overwriteParams (aclass, strategyComponent, intsel):
     sc_isParams = intsel.getParams(strategyComponent)
-    # go through the is params that are part of this intervention within this strategy component
-    # and set the corresponding class is param to have isActive=true
+    # go through the is-params that are part of this intervention within this strategy component
     for p in sc_isParams:
         # From the sc_is_param get the corresponding class_is_param
         c_isParam = ClassISParam.objects.get(theClass=aclass, isParam=p.baseParam)
-        c_isParam.isActive = True
+        c_isParam.isActive = p.isActive
         c_isParam.value = p.value
         c_isParam.save()
 
+
+# This creates is-param-class objects that are inactive for each is-param-base object that is NOT AMONG
+# parameters assigned in the list of is-param-sc  objects.
+def copyUnusedSCISParamsToClass (aclass, intsel,scisParams, classSC):
+    baseParams = intsel.getBaseParams()
+    for bp in baseParams:
+        found = False
+        #see if the base param is among the scisParams
+        for p in scisParams:
+            if p.baseParam == bp:
+                found = True
+                break
+        # When its not found, we want to create an is-param-class object for it that is inactive.
+        # Possible problem:  We are wanting to create a is param-class from a is-param-base but there is no is-param-sc for this and the is-param-class
+        # has a foreign key to an is-param-sc.  THis FK allows NULL
+        if not found:
+            copyBaseParamToClass(aclass,bp, classSC)
+
+
 # Copy the base is param to the class is param and make it inactive.
-def copyBaseParamToClass (aclass, baseParam):
-    cp = ClassISParam(theClass=aclass, isParam=baseParam, value=baseParam.value, isActive=False)
+def copyBaseParamToClass (aclass, baseParam, classSC):
+    cp = ClassISParam(theClass=aclass, classSC=classSC, scisParam=None, isParam=baseParam, name=baseParam.name, value=baseParam.value, isActive=False)
+    cp.save()
+
+# Copy the scis param to the class is param and make it inactive.
+def copySCISParamToClass (aclass, scisParam, classSC):
+    cp = ClassISParam(theClass=aclass, classSC=classSC, scisParam=scisParam, isParam=scisParam.baseParam, name=scisParam.name, value=scisParam.value, isActive=scisParam.isActive)
     cp.save()
 
 
@@ -74,20 +110,20 @@ def copyBaseParamToClass (aclass, baseParam):
 
 
 # For each SC param make a class_SC_param and copy its value.
-def copyStrategyComponentParamsToClass (aclass, strategyComponent):
-    scParams = strategyComponent.getParams() # gets a list of StrategyComponentParam objects
+def copyStrategyComponentParamsToClass (aclass, strategyComponent, classSC):
+    scParams = strategyComponent.params.all() # gets a list of StrategyComponentParam objects
     for p in scParams:
-        cp = ClassSCParam(scParam=p,theClass=aclass,value=p.value)
+        cp = ClassSCParam(scParam=p,theClass=aclass,classSC=classSC,name=p.name,value=p.value,isActive=True)
         cp.save()
 
 # When a strategy is removed from a class we delete the specific settings of intervention selector params
 # and strategy component params
 
 # Remove the classes strategy components params
-def removeStrategyComponentParamsFromClass(aclass, strategyComponent):
-    scParams = strategyComponent.getParams() # gets a list of StrategyComponentParam objects
+def removeStrategyComponentParamsFromClass(aclass, strategyComponent, classSC):
+    scParams = strategyComponent.params.all() # gets a list of StrategyComponentParam objects
     for p in scParams:
-        cparams = ClassSCParam.objects.filter(scParam=p,theClass=aclass)
+        cparams = ClassSCParam.objects.filter(scParam=p,theClass=aclass,classSC=classSC)
         for cp in cparams:
             cp.delete()
 
@@ -103,33 +139,38 @@ def removeSCISMapsFromClass (aclass, strategyComponent) :
 
 
 # remove the interv-sel params
-def removeInterventionSelectorParamsFromClass(aclass, intsel, strategyComponent):
+def removeInterventionSelectorParamsFromClass(aclass, intsel, classSC):
     # use all the base params for an intsel to locate the class isParams.  Delete them.
      params = intsel.getBaseParams()
      for p in params:
-         iparams = ClassISParam.objects.filter(theClass=aclass, isParam=p)
+         iparams = ClassISParam.objects.filter(theClass=aclass, isParam=p, classSC=classSC)
          for cp in iparams:
             cp.delete()
 
 # remove the switches that turn on intervention selectors (class_sc_is_map)
 # and the interv-sel params
-def removeStrategyComponentInterventionSelectorsFromClass(aclass, strategyComponent):
+def removeStrategyComponentInterventionSelectorsFromClass(aclass, strategyComponent, classSC):
     removeSCISMapsFromClass(aclass,strategyComponent)
-    for intsel in strategyComponent.getInterventionSelectors():
-        removeInterventionSelectorParamsFromClass(aclass,intsel,strategyComponent)
+    for intsel in strategyComponent.interventionSelectors.all():
+        removeInterventionSelectorParamsFromClass(aclass,intsel, classSC)
+
 
 
 # remove the components params and intervention selector info
-def removeStrategyComponentFromClass(aclass, strategyComponent):
-    removeStrategyComponentParamsFromClass(aclass,strategyComponent)
-    removeStrategyComponentInterventionSelectorsFromClass(aclass,strategyComponent)
+def removeStrategyComponentFromClass(aclass, strategyComponent, classStrategy):
+    classSC = SC_Class.objects.get(theClass=aclass,sc=strategyComponent,classStrategy=classStrategy)
+    removeStrategyComponentParamsFromClass(aclass,strategyComponent,classSC)
+    removeStrategyComponentInterventionSelectorsFromClass(aclass,strategyComponent,classSC)
+    classSC.delete()
 
 
 # remove the info about all three components
 def removeStrategyFromClass (aclass,strategy):
-    removeStrategyComponentFromClass(aclass,strategy.lesson)
-    removeStrategyComponentFromClass(aclass,strategy.login)
-    removeStrategyComponentFromClass(aclass,strategy.tutor)
+    classStrategy = Strategy_Class.objects.get(theClass=aclass, strategy=strategy)
+    removeStrategyComponentFromClass(aclass, strategy.lesson, classStrategy)
+    removeStrategyComponentFromClass(aclass, strategy.login, classStrategy)
+    removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
+    classStrategy.delete()
 
 
 
