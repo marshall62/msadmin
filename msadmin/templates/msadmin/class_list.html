@@ -1,6 +1,58 @@
 {% extends 'msadmin/base.html' %}
-{% block content %}
+{% block page-js %}
+    <script language="JavaScript">
+        // When the teacher is changed, we call the server to get a new list of classes and then
+        // replace the contents of the table with these rows.
+        function changeTeacherFilter () {
+            var teacher= $('#teacherSelector').val() ;
+            var url_mask = "{% url 'class_list_by_teacher' teacherId='All' %}";
+            url_mask = url_mask.replace('All',teacher);
+            window.location.href= url_mask;
+{#            $.get(url_mask, function(data) {#}
+{#                console.log("Got classes JSON");#}
+{##}
+{#                replaceTable(data);#}
+{##}
+{#            });#}
+        }
 
+{#        <tr>#}
+{#        <td style="width: 80px">{{ c.id }}</td>#}
+{#            <td > {{ c.teacher }}</td>#}
+{#            <td ><a  href="{% url 'class_detail' pk=c.pk %}">{{c.name}}</a></td>#}
+{##}
+{#            </tr>#}
+        function replaceTable (json) {
+            console.log(json);
+            var url_mask = "{% url 'class_detail' pk=12345 %}";
+
+            $('#classData').empty(); // remove the table rows
+            // the json is an array of objects like: [{id:3, teacher:'dave', name:'My Class'}, {}...]
+            $.each(json, function(item) {
+                url_mask = url_mask.replace(/12345/,this.id);
+                $('#classData')
+                    .append('<tr><td style="width: 80px">' + this.id + '</td><td>' + this.teacher + '</td><td><a href="' +url_mask+ '">' + this.name + '</a></td></tr>');
+            });
+
+        }
+
+
+    </script>
+
+{%  endblock %}
+{% block content %}
+    <h3>Filter by teacher:</h3>
+    <select id="teacherSelector" onchange="changeTeacherFilter();" class="form-control">
+        <option value="All">All</option>
+        {% for t in teachers %}
+            {% if t.pk == teacherId  %}
+                <option selected value="{{ t.pk }}">{{ t.lname }}, {{ t.fname }}</option>
+            {% endif %}
+            {% if t.pk != teacherId  %}
+                <option value="{{ t.pk }}">{{ t.lname }}, {{ t.fname }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
     <h1>Classes:</h1>
     <table >
         <thead>
@@ -10,7 +62,7 @@
                 <th style="width: 300px">Class</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="classData">
         {% for c in classes %}
             <tr>
                 <td style="width: 80px">{{ c.id }}</td>

@@ -61,7 +61,39 @@ Strategy.objects.all()
 
 
 
-For deployment to rose:
+For routine deployment to rose:
+
+location: /mnt/net/django/msadmin
+git pull
+
+Set
+export STATIC_ROOT='/mnt/net/http/msadmin_static/'
+
+Run the command to move static into above dir so apache serves
+cd /mnt/net/django/msadmin
+source env-msadmin-py3-4/bin/activate
+(venv)python manage.py collectstatic -n
+This will pretend to move the files.  Verify that it moves them to the correct place and then do:
+(venv)python manage.py collectstatic
+
+Alternative to the above is to move files by hand from /msadmin_static into /mnt/net/http/msadmin_static
+
+Make sure database tables have been updated if necessary
+
+restart apache.
+
+deactivate // will leave the virtualenv
+
+URLS to test:
+http://rose.cs.umass.edu/msadmin/classes/
+http://rose.cs.umass.edu/msadmin/class/1022/
+http://rose.cs.umass.edu/msadmin/admin/
+
+superuser: marshall / t0mand3rs
+
+
+
+Setting up rose to serve:
 
 I have omitted the file msadminsite/settings.py from git to protect db passwords.
 Currently I have it using the marshall user rather than WayangServer because it needs to create tables to support django
@@ -78,7 +110,9 @@ marshall
 marshall62@gmail.com
 t0mand3rs
 
+Test:
 python manage.py runserver
+Can only hit the localhost:8000
 
 Set up mod_wsgi for apache as in /httpd/conf.d/wsgi.conf
 (last line is specific for centos)
@@ -97,6 +131,7 @@ run the command to move static into above dir so apache serves
 (venv)python manage.py collectstatic -n
 This will pretend to move the files.  Verify that it moves them to the correct place and then do:
 (venv)python manage.py collectstatic
+
 restart apache.
 
 

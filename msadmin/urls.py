@@ -8,6 +8,7 @@ from . import modelUpdate
 
 urlpatterns = [
     url(r'^$', views.strategy_list, name='strategy_list'),
+    url(r'^classes/(?P<teacherId>.+)/$', views.class_list_by_teacher, name='class_list_by_teacher'),
     url(r'^classes/$', views.class_list, name='class_list'),
     url(r'^test/$', views.test, name='test'),
     url(r'^sc/(?P<pk>\d+)/$', views.sc_detail, name='sc_detail'),

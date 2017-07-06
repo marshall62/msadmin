@@ -83,3 +83,17 @@ def get_strategy_lcs (request, id):
         lcd[lc.id] = lc.name + ':' + lc.charName
     d['all_lcs'] = lcd
     return JsonResponse(d)
+
+# Return  JSON that is a like [ {id:34, teacher:'David marshall', name:'My Class'}, ... ] style JSON objects
+def class_list_by_teacher(request, teacher):
+
+    json_arr = []
+    if teacher == 'All':
+        classes = Class.objects.all().order_by('teacher', 'name')
+    else:
+        classes = Class.objects.filter(teacher=teacher).order_by('name')
+
+    for c in classes:
+        json_arr.append(c.toJSON())
+
+    return JsonResponse(json_arr,safe=False)

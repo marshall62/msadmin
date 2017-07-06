@@ -331,12 +331,21 @@ class Class (models.Model):
     name = models.CharField(max_length=50)
     teacher = models.CharField(max_length=50)
     strategies = models.ManyToManyField(Strategy, through='ClassStrategyMap')
+    teacherId = models.IntegerField()
 
     class Meta:
         db_table = "class"
 
     def __str__ (self):
         return self.teacher + ": " + self.name
+
+    def toJSON (self):
+        d = {}
+        d['id'] = self.pk
+        d['teacher'] = self.teacher
+        d['teacherId'] = self.teacherId
+        d['name'] = self.name
+        return d
 
 class ClassStrategyMap (models.Model):
     myclass = models.ForeignKey(Class,db_column='classId')
@@ -348,6 +357,19 @@ class ClassStrategyMap (models.Model):
     def __str__ (self):
         return str(self.myclass) + str(self.strategy)
 
+
+
+
+class Teacher (models.Model):
+
+    fname = models.CharField(max_length=50,db_column='fname')
+    lname = models.CharField(max_length=50,db_column='lname')
+
+    class Meta:
+        db_table = "teacher"
+
+    def __str__ (self):
+        return str(self.fname) + str(self.lname)
 
 '''
 Django Composite Key might be a solution for you:

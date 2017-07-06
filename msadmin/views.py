@@ -23,10 +23,28 @@ def sc_detail (request, pk):
 
 # Create your views here.
 def class_list(request):
-    classes = Class.objects.all()
-    classes = Class.objects.filter(teacher='David Marshall').order_by('teacher', 'name')
+    classes = Class.objects.all().order_by('teacher', 'name')
+    teachers = Teacher.objects.all().order_by('lname', 'fname')
+    # classes = Class.objects.filter(teacher='David Marshall').order_by('teacher', 'name')
 
-    return render(request, 'msadmin/class_list.html', {'classes': classes})
+    return render(request, 'msadmin/class_list.html', {'classes': classes, 'teachers': teachers})
+
+# Create your views here.
+def class_list_by_teacher(request, teacherId):
+
+    teacher = None
+    if teacherId != None and teacherId != 'All':
+        teacher = Teacher.objects.get(pk=teacherId)
+        teacherId = int(teacherId)
+    teachers = Teacher.objects.all().order_by('lname', 'fname')
+    if teacher != None:
+        classes = Class.objects.filter(teacherId=teacherId).order_by('teacher', 'name')
+    else:
+        classes = Class.objects.all().order_by('teacher', 'name')
+
+    return render(request, 'msadmin/class_list.html', {'classes': classes, 'teacherId': teacherId, 'teachers': teachers})
+
+
 
 def class_detail (request, pk):
     c = get_object_or_404(Class, pk=pk)
