@@ -1,14 +1,9 @@
 {% extends 'msadmin/base.html' %}
-{% block content %}
-    <h3>class: {{  class.name }}</h3>
-    <h3>teacher: <a href="{% url 'class_list_by_teacher' teacherId=class.teacherId %}">{{  class.teacher }}</a></h3>
-    <h3>Strategies used by this class:</h3>
-    <script>
+{% block page-js %}
+    <script language="javascript">
+
 
         $(document).ready(function() {
-
-
-
             $('.dropdown-toggle').hide();
             $('.dropdown-toggle').dropdown()
             $('#jstree_demo_div').on("changed.jstree", function (e, data) {
@@ -17,13 +12,19 @@
 
 
             $('#add-strategy').click(function (e)  {
-{#     using an anchor which is causing the page to reload. prevent this by using the preventDefault         #}
+                {#     using an anchor which is causing the page to reload. prevent this by using the preventDefault         #}
                 e.preventDefault();
                 $('.dropdown-toggle').toggle();
             });
 
         });
     </script>
+{% endblock %}
+{% block content %}
+    <h3>class: {{  class.name }}</h3>
+    <h3>teacher: <a href="{% url 'class_list_by_teacher' teacherId=class.teacherId %}">{{  class.teacher }}</a></h3>
+    <h3>Strategies used by this class:</h3>
+
     <form method="post">
         <table style="border-spacing: 30px 0;">
             <tbody>
@@ -61,7 +62,8 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {% for s in otherStrategies %}
-                    <li><a href="/class/{{ class.id }}/strategy/{{ s.id }}/add">{{ s.name }}</a></li>
+                    <li><a href="{% url 'add-class-strategy' classId=class.id strategyId=s.id %}">{{ s.name }}</a></li>
+{#                    <li><a href=href="/class/{{ class.id }}/strategy/{{ s.id }}/add">{{ s.name }}</a></li>#}
                 {% endfor %}
 
             </ul>
