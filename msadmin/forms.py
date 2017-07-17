@@ -9,4 +9,5 @@ class ClassForm(forms.ModelForm):
 
     class Meta:
         model = Class
-        fields = ('name','teacher', 'strategies')
+        # fields = ('name','teacher', 'strategies')
+        fields = ('name','teacher')

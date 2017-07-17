@@ -6,7 +6,6 @@ from msadmin.forms import ClassForm
 from .models import StrategyComponent
 from .models import Strategy
 from .models import Class
-from .models import ClassStrategyMap
 from .models import SCISMap
 from .dbops.classops import *
 
@@ -49,7 +48,10 @@ def class_list_by_teacher(request, teacherId):
 def class_detail (request, pk):
     c = get_object_or_404(Class, pk=pk)
     classid = c.id
-    strats = Strategy.objects.filter(classstrategymap__myclass__id=classid)
+    class_strats = Strategy_Class.objects.filter(theClass=c)
+    strats = []
+    for cs in class_strats:
+        strats.append(cs.strategy)
     allstrats = Strategy.objects.all()
     otherstrats = []
     for s in allstrats:
@@ -60,25 +62,7 @@ def class_detail (request, pk):
     # sc = StrategyComponent.ojects.get(pk=pk)
     return render(request, 'msadmin/class.html', {'class': c, 'strategies' : strats, 'otherStrategies': otherstrats})
 
-# def class_detail2 (request, pk):
-#     if request.method == "POST":
-#         form = ClassForm(request.POST)
-#         if form.is_valid():
-#             cl = form.save(commit=False)
-#             cl.save()
-#             return redirect('class_detail2',pk=cl.pk)
-#         else:
-#             cl = Class.get(pk)
-#             form = ClassForm()
-#     c = get_object_or_404(Class, pk=pk)
-#     classid = c.id
-#     # lookup a the class strategies
-#     form = ClassForm()
-#     strats = Strategy.objects.filter(classstrategymap__myclass__id=classid)
-#     otherstrats = Strategy.objects.all()
-#
-#     # sc = StrategyComponent.ojects.get(pk=pk)
-#     return render(request, 'msadmin/class.html', {'class': c, 'strategies' : strats, 'allStrategies': otherstrats})
+
 
 
 def strategy_detail (request, pk):
@@ -123,9 +107,7 @@ def configure_class_strategy (request, classId, strategyId):
 def add_class_strategy (request, classId, strategyId):
     c = get_object_or_404(Class, pk=classId)
     s = get_object_or_404(Strategy, pk=strategyId)
-    # map the class to the strategy
-    m = ClassStrategyMap(myclass=c,strategy=s)
-    m.save()
+
     # Copies various items from the strategy into tables specific to this class
     copyStrategyToClass(c,s)
     return class_detail(request,classId)
@@ -136,8 +118,6 @@ def remove_class_strategy (request, classId, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
     # gets rid of rows in tables that have specific information about this strategy for the class
     removeStrategyFromClass(c,s)
-    m = ClassStrategyMap.objects.get(myclass=c,strategy=s)
-    m.delete()
     return class_detail(request,classId)
 
 

@@ -25,10 +25,10 @@ def copyStrategyComponentToClass (aclass, strategyComponent, classStrategy):
 # for every scis_map row, create a class_sc_is_map row.
 # This is just a row for each intervention selector that is setting it to ON and
 # it has a copy of the IS config from the scismap
-def createSCISMaps (aclass, strategyComponent):
+def createSCISMaps (aclass, strategyComponent,classSC):
     scisMaps = SCISMap.objects.filter(strategyComponent=strategyComponent)
     for m in scisMaps:
-        cm = ClassSCISMap(ismap=m, config=m.config,theClass=aclass,isActive=True)
+        cm = ClassSCISMap(ismap=m, config=m.config,theClass=aclass,isActive=True,classSC=classSC)
         cm.save()
 
 # Copy the intervention selectors of a strategy component into a class.  This involves
@@ -53,7 +53,7 @@ def copyStrategyComponentInterventionSelectorsToClass(aclass, strategyComponent,
         # Now we use the strategy component's is params to overwrite the values that came from base is params
         # overwriteParams(aclass,strategyComponent, intsel)
     # Now set all the intervention selectors in this sc as active
-    createSCISMaps(aclass,strategyComponent)
+    createSCISMaps(aclass,strategyComponent,classSC)
 
 # Params have been copied from the base is_params to the class is_params.
 #  THis will go through the is_params based on the strategy component and
@@ -165,11 +165,15 @@ def removeStrategyComponentFromClass(aclass, strategyComponent, classStrategy):
 
 
 # remove the info about all three components
+# Foreign-key on-delete=cascade exists on sc_class -> strategy_class so deleting the strategy_class will cause the sc_class rows to get deleted
+# FK class_sc_param -> sc_class on-delete=cascade so deleting the sc_class causes the class_sc_params to get deleted
+# FK is_param_class -> sc_class on-delete=cascade so deleting the sc_class causes the is_param_class rows to get deleted.
+# FK class_sc_is_map -> sc_class on-delete=cascade so deleting the sc_class causes the class_sc_is_map rows to get deleted.
 def removeStrategyFromClass (aclass,strategy):
     classStrategy = Strategy_Class.objects.get(theClass=aclass, strategy=strategy)
-    removeStrategyComponentFromClass(aclass, strategy.lesson, classStrategy)
-    removeStrategyComponentFromClass(aclass, strategy.login, classStrategy)
-    removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
+    # removeStrategyComponentFromClass(aclass, strategy.lesson, classStrategy)
+    # removeStrategyComponentFromClass(aclass, strategy.login, classStrategy)
+    # removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
     classStrategy.delete()
 
 

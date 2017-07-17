@@ -49,7 +49,7 @@ class InterventionSelector(models.Model):
         jarr = []
         # We need to find all the is-param-base objects for this IS and then round up the is-param-class objects from them.
         for bp in ISParamBase.objects.filter(interventionSelector=self):
-            print("getting is-param-class for class=" + str(aclass.id) + " param=" + str(bp.id) )
+            # print("getting is-param-class for class=" + str(aclass.id) + " param=" + str(bp.id) )
             p = ClassISParam.objects.get(theClass=aclass, isParam=bp, classSC=classSC)
             j = p.getJSON()
             jarr.append(j)
@@ -114,7 +114,7 @@ class StrategyComponentParam (models.Model):
         return self.name + "=" + self.value
 
     def getJSON (self, aclass, classSC):
-        print("getJSON for " + str(self))
+        # print("getJSON for " + str(self))
         cp = ClassSCParam.objects.get(scParam=self,theClass=aclass, classSC=classSC)
         d = {}
         d['title'] = self.name + '=' + cp.value
@@ -330,7 +330,7 @@ class SCParamMap (models.Model):
 class Class (models.Model):
     name = models.CharField(max_length=50)
     teacher = models.CharField(max_length=50)
-    strategies = models.ManyToManyField(Strategy, through='ClassStrategyMap')
+    # strategies = models.ManyToManyField(Strategy, through='ClassStrategyMap')
     teacherId = models.IntegerField()
 
     class Meta:
@@ -347,15 +347,7 @@ class Class (models.Model):
         d['name'] = self.name
         return d
 
-class ClassStrategyMap (models.Model):
-    myclass = models.ForeignKey(Class,db_column='classId')
-    strategy = models.ForeignKey(Strategy,db_column='strategyId')
 
-    class Meta:
-        db_table = "class_strategy_map"
-
-    def __str__ (self):
-        return str(self.myclass) + str(self.strategy)
 
 
 
@@ -429,6 +421,7 @@ class ClassSCISMap (models.Model):
     theClass = models.ForeignKey(Class, db_column="classId", verbose_name="Class")
     isActive = models.BooleanField()
     config = models.TextField()
+    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class SC")
 
     class Meta:
         db_table = "class_sc_is_map"
