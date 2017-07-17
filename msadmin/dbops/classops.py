@@ -1,4 +1,5 @@
 from msadmin.models import *
+from django.db import transaction
 #When a strategy is added to a class we use the following two functions to copy data from tables
 # that define defaults into class-specific tables.
 
@@ -9,11 +10,13 @@ from msadmin.models import *
 # class_is_param:  a parameter for each intervention selector (a copy of the is_param)
 # class_sc_param: a parameter for each strat-component (a copy of sc_param)
 def copyStrategyToClass (aclass,strategy):
-    clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc)
-    clstrat.save()
-    copyStrategyComponentToClass(aclass,strategy.lesson,clstrat)
-    copyStrategyComponentToClass(aclass,strategy.login,clstrat)
-    copyStrategyComponentToClass(aclass,strategy.tutor,clstrat)
+    # defines an atomic db transaction that will only be commited if all the operations within this block are successful.
+    with transaction.atomic():
+        clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc)
+        clstrat.save()
+        copyStrategyComponentToClass(aclass,strategy.lesson,clstrat)
+        copyStrategyComponentToClass(aclass,strategy.login,clstrat)
+        copyStrategyComponentToClass(aclass,strategy.tutor,clstrat)
 
 # Copy a strategy components params and intervention selector info to a class
 def copyStrategyComponentToClass (aclass, strategyComponent, classStrategy):
