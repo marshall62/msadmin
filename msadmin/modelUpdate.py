@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 from msadmin.forms import ClassForm
-from .models import StrategyComponent, ClassSCParam, Strategy_Class, LC
+from .models import StrategyComponent, ClassSCParam, Strategy_Class, LC, SC_Class
 from .models import Strategy
 from .models import Class
 from .models import ClassISParam
@@ -90,11 +90,14 @@ def save_intervSel_active (request, isId):
         status = post['active']
         classId = post['classId']
         scId = post['scId']
+        stratClassId = post['strategyClass']
         c = get_object_or_404(Class, pk=classId)
+        stratClass = get_object_or_404(Strategy_Class,pk=stratClassId)
         sc = get_object_or_404(StrategyComponent, pk=scId)
+        sc_class = SC_Class.objects.filter(theClass=c,sc=sc,classStrategy=stratClass)
         insel = get_object_or_404(InterventionSelector, pk=isId)
         scismap = get_object_or_404(SCISMap, strategyComponent=sc, interventionSelector=insel)
-        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c)
+        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c, classSC=sc_class)
         cl_scismap.isActive = status == 'true'
         cl_scismap.save()
     return JsonResponse({"id": isId})
@@ -104,8 +107,12 @@ def save_strategy (request, id):
     if request.method == "POST":
         post = request.POST
         lcid = post['lcid']
+        name = post['name']
+        descr = post['description']
         stratclass = get_object_or_404(Strategy_Class,pk=id)
         lc = get_object_or_404(LC,pk=lcid)
         stratclass.lc = lc
+        stratclass.name = name
+        stratclass.description = descr
         stratclass.save()
         return JsonResponse({"id": id})

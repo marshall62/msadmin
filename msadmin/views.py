@@ -1,6 +1,7 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.shortcuts import redirect
+from django.template import RequestContext
 
 from msadmin.forms import ClassForm
 from .models import StrategyComponent
@@ -8,6 +9,8 @@ from .models import Strategy
 from .models import Class
 from .models import SCISMap
 from .dbops.classops import *
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+
 
 # Create your views here.
 def strategy_list(request):
@@ -46,21 +49,31 @@ def class_list_by_teacher(request, teacherId):
 
 
 def class_detail (request, pk):
+    # csrfContext = RequestContext(request)
     c = get_object_or_404(Class, pk=pk)
     classid = c.id
+    # Get all the strategies that exist for this class
     class_strats = Strategy_Class.objects.filter(theClass=c)
     strats = []
+    # put in a standard list
     for cs in class_strats:
-        strats.append(cs.strategy)
+        if cs.strategy_id != None:
+            strats.append(cs.strategy)
+    # get all the generic strategies
     allstrats = Strategy.objects.all()
     otherstrats = []
+    # add all the generics to a standard list and then remove the ones that are already in use for the class
     for s in allstrats:
         otherstrats.append(s)
     for s in strats:
         otherstrats.remove(s)
-
+    loginSCs = StrategyComponent.objects.filter(type=StrategyComponent.LOGIN)
+    lessonSCs = StrategyComponent.objects.filter(type=StrategyComponent.LESSON)
+    tutorSCs = StrategyComponent.objects.filter(type=StrategyComponent.TUTOR)
+    lcs = LC.objects.all()
     # sc = StrategyComponent.ojects.get(pk=pk)
-    return render(request, 'msadmin/class.html', {'class': c, 'strategies' : strats, 'otherStrategies': otherstrats})
+    return render(request,'msadmin/class.html',
+                              {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs })
 
 
 
@@ -88,21 +101,11 @@ def getInterventionSelectorInfo (aclass, stratComp):
 
 def configure_class_strategy (request, classId, strategyId):
     cl = get_object_or_404(Class, pk=classId)
-    st = get_object_or_404(Strategy, pk=strategyId)
-    clstrat = Strategy_Class.objects.get(theClass=cl, strategy=st)
-    # No longer send down objects through variables.  Page makes AJAX request to get JSON to populate a tree
+    # st = get_object_or_404(Strategy, pk=strategyId)
+    clstrat = get_object_or_404(Strategy_Class, pk=strategyId)
 
-    # loginComp = st.login
-    # tutorComp = st.tutor
-    # lessonComp = st.lesson
-    # # d maps isel ids -> a dictionary of param.id -> param
-    # loginISParams=getInterventionSelectorInfo(cl,loginComp)
-    # lessonISParams=getInterventionSelectorInfo(cl,lessonComp)
-    # tutorISParams=getInterventionSelectorInfo(cl,tutorComp)
     return render(request, 'msadmin/class_strategy2.html',
-                  {'class': cl, 'strategy': st, 'classStrategy': clstrat})
-    # 'loginSC': loginComp, 'tutorSC': tutorComp, 'lessonSC': lessonComp,
-    #                'loginInfo': loginISParams, 'lessonInfo':lessonISParams, 'tutorInfo':tutorISParams})
+                  {'class': cl, 'classStrategy': clstrat})
 
 def add_class_strategy (request, classId, strategyId):
     c = get_object_or_404(Class, pk=classId)
@@ -110,15 +113,38 @@ def add_class_strategy (request, classId, strategyId):
 
     # Copies various items from the strategy into tables specific to this class
     copyStrategyToClass(c,s)
-    return class_detail(request,classId)
+    return redirect("class_detail",pk=classId)
+
+
+# handles a POST request coming from the class page.  It adds a new custom strategy to the class and then redirects
+# to the class detail page to show the new list of strategies that the class has.
+def add_class_custom_strategy (request, classId):
+
+    # return render_to_response('foo.html', csrfContext)
+    c = get_object_or_404(Class, pk=classId)
+    if request.method == "POST":
+        post = request.POST
+        strategyName = post['strategyName']
+        descr = post['strategyDescr']
+        loginSCId = post['loginSCId']
+        lessonSCId = post['lessonSCId']
+        tutorSCId = post['tutorSCId']
+        lcId = post['lcId']
+        loginSC = get_object_or_404(StrategyComponent, pk=loginSCId)
+        lessonSC = get_object_or_404(StrategyComponent, pk=lessonSCId)
+        tutorSC = get_object_or_404(StrategyComponent, pk=tutorSCId)
+        lc = get_object_or_404(LC,pk=lcId)
+        createCustomStrategyForClass(c,strategyName,loginSC,lessonSC,tutorSC, lc,descr)
+
+    return redirect("class_detail",pk=classId)
 
 def remove_class_strategy (request, classId, strategyId):
     # TODO add stuff to the db
     c = get_object_or_404(Class, pk=classId)
-    s = get_object_or_404(Strategy, pk=strategyId)
+    s = get_object_or_404(Strategy_Class, pk=strategyId)
     # gets rid of rows in tables that have specific information about this strategy for the class
     removeStrategyFromClass(c,s)
-    return class_detail(request,classId)
+    return redirect("class_detail",pk=classId)
 
 
 # support for AJAX call from a checkbox next to a intervention-selector node in the jstree

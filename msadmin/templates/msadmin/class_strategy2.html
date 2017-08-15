@@ -1,4 +1,7 @@
 {% extends 'msadmin/base_ajax.html' %}
+{# Note that extending base_ajax.html is necessary to pick up the CSRF token necessary for post requests to work #}
+
+
 {% block page-css %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.22.5/skin-bootstrap-n/ui.fancytree.css" />
     <style>
@@ -76,6 +79,9 @@
         var is_param_id; // global that holds the is_param_id being edited in a dialog
         var sc_param_id; // global that holds the sc_param_id being edited in a dialog
         var is_id; // global that holds the interventionselector id being edited in a dialog
+
+        var strategyName = '{{ classStrategy.name }}'; // This can get changed by strategy dialog .
+        var strategyDescr = '{{ classStrategy.description }}'
 
         glyph_opts = {
             map: {
@@ -158,21 +164,21 @@
 
         // The strategy dialog will show the currently selected learning companion in a pulldown menu along with all the other
         // LCs as a possible options.
-        function configStrategy (stratId, stratName, stratDescr, lcid) {
+        function configStrategy (stratName, stratDescr, lcid) {
             var id = {{ classStrategy.id }};
             var url = "{%  url 'strategy_lcs' id=12345 %}";
             url = url.replace(/12345/,id);
             // call server to get all the LC options.
             $.get(url, function(data) {
-                showStrategyDialog(stratId, stratName, stratDescr, lcid, data);
+                showStrategyDialog(stratName, stratDescr, lcid, data);
             });
 
         }
 
         // data is JSON like {lcid: 3, all_lcs: {1: 'RuleBased:Jane', 2: 'Rulebased:Jake', ...}  where each number is an lcID
-        function showStrategyDialog(stratId, stratName, stratDescr, lcid, data) {
+        function showStrategyDialog( stratName, stratDescr, lcid, data) {
             $('#strategy-name').val(stratName)
-            $('#strategy-description').html("<b>Description:</b> " + stratDescr);
+            $('#strategy-description').val(stratDescr);
             $('#strategy-lc').empty();
             var curLCID = data.lcid;
             var allLCs = data.all_lcs;
@@ -304,6 +310,7 @@
 
         }
 
+        // Saves when the intervention selector dialog is saved and closed.
         function saveISEdit () {
 
             var config = $('#is-config').val();
@@ -325,15 +332,23 @@
         }
 
 
+        // Saves when the strategy dialog is saved and closed.
         function saveStrategy () {
             var lcid = $('#strategy-lc').val();
+            var name = $('#strategy-name').val();
+            var descr = $('#strategy-description').val();
             var url_mask = "{% url 'strategy_save' id=12345 %}".replace(/12345/,{{ classStrategy.id }});
 
             $.ajax({
                 url: url_mask,
                 type: "POST",
-                data: { lcid: lcid },
+                data: { lcid: lcid, name: name, description: descr },
                 success: function (data) {
+                    console.log("JSON returned by POST");
+                    console.log(data);
+                    document.getElementById('stratName').textContent =  name;
+                    strategyName = name; // update the global variables so that opening dialog again will get the newer name & descr
+                    strategyDescr = descr;
                 }
             });
 
@@ -350,7 +365,8 @@
             var scParam_url_mask = "{% url 'class_sc_param_active_save' scParamId=12345 %}".replace(/12345/, id);
             var is_url_mask = "{% url 'class_intervSel_active_save' isId=12345 %}".replace(/12345/, id);
             var url;
-            var d = {active : isSelected};
+
+            var d = {active : isSelected, strategyClass : {{ classStrategy.id }} };
             if (isIS(node)) {
                 url = is_url_mask;
                 d.scId = node.data.scId; // include the sc ID so we can locate the class-scismap
@@ -403,7 +419,8 @@
                     checkbox: true,
                     glyph: glyph_opts,
                     source: {
-                        url :"{% url 'strategy-json' classId=class.id strategyId=strategy.id %}"
+{#                        url :"{% url 'strategy-json' classId=class.id strategyId=strategy.id %}"#}
+                        url :"{% url 'strategy-json' classId=class.id strategyId=classStrategy.id %}"
                     },
                     {#                source: [{"title": "EmbeddedSurveyLogin", "children": [{"title": "Pretest", "children": [{"title": "startMessage=Before using the software, please TELL US WHAT YOU THINK.<br>Please be very sincere in your responses.  We are really interested in knowing how you feel about mathematics.  NOBODY other than the UMass research team will know your responses."}, {"title": "terminationTest=completeAllProblems"}, {"title": "weight=1"}, {"title": "runFreq=oncepersession"}]}, {"title": "Posttest", "children": [{"title": "weight=2"}, {"title": "runFreq=oncepersession"}, {"title": "startMessage=Now that you have used the software, please TELL US WHAT YOU THINK.<br>Please be very sincere in your responses.  We are really interested in knowing what you thought of this experience.  NOBODY other than the UMass research team will know your responses."}, {"title": "terminationTest=completeAllProblems"}]}]}, {"title": "TopicWithIntroAndDemo", "children": [{"title": "TopicSwitchAskIS", "children": [{"title": "weight=1"}, {"title": "ask=false"}]}, {"title": "TopicIntroIS", "children": [{"title": "weight=1"}, {"title": "runFreq=oncePerSession"}]}, {"title": "DemoProblemIS", "children": [{"title": "weight=2"}, {"title": "runFreq=always"}]}]}, {"title": "MiniGamesTutoring", "children": [{"title": "AskEmotion", "children": [{"title": "inputType=radio"}, {"title": "numVals=5"}, {"title": "interruptIntervalMin=5"}, {"title": "interruptIntervalProblems=8"}, {"title": "weight=1"}, {"title": "askWhy=true"}]}, {"title": "ExternalActivity", "children": [{"title": "frequencyPct=5.0"}, {"title": "numProblemsBetweenOffers=10"}, {"title": "numMinutesBetweenOffers=10"}, {"title": "allowRepeat=false"}, {"title": "mode=ask"}, {"title": "weight=2"}]}]}],#}
                     toggleEffect: { effect: "drop", options: {direction: "left"}, duration: 400 },
@@ -474,9 +491,19 @@
 
     <!-- 5 include the minified jstree source -->
     <h3>Class: <a href="{% url 'class_detail' pk=class.id %}"> {{  class.name }}</a></h3>
-    <h3>Strategy: {{  strategy.name }}
-        <a onclick="configStrategy({{  strategy.id }}, '{{ strategy.name }}', '{{ strategy.description }}', {{ classStrategy.lc.id }} );">
-            <span class="glyphicon glyphicon-pencil"></span></a></h3>
+{#    <h3>Strategy: {{  strategy.name }}#}
+    <h3>
+    <table><tr>
+        <td>Strategy:</td>
+        <td id="stratName" class="padded-td">{{  classStrategy.name }}</td>
+        <td class="padded-td"> <a onclick="configStrategy(strategyName, strategyDescr, {{ classStrategy.lc.id }} );">
+            <span class="glyphicon glyphicon-pencil"></span></a>
+        </td>
+    </tr></table>
+    </h3>
+{#    <h3>Strategy: <div id="stratName"> {{  classStrategy.name }} </div>#}
+{#        <a onclick="configStrategy('{{ classStrategy.name }}', '{{ classStrategy.description }}', {{ classStrategy.lc.id }} );">#}
+{#            <span class="glyphicon glyphicon-pencil"></span></a></h3>#}
     <table id="treetable" class="table table-condensed table-hover table-striped fancytree-fade-expander">
         <colgroup>
             <col width="80px"></col>
@@ -632,10 +659,11 @@
                     <form role="form">
                         <div class="form-group">
                             <label for="strategy-name">Name</label>
-                            <input type="text" class="form-control" id="strategy-name" readonly>
+                            <input type="text" class="form-control" id="strategy-name">
                         </div>
                         <div class="form-group">
-                            <p id="strategy-description"></p>
+                            <label for="strategy-description">Description</label>
+                            <textarea id="strategy-description" class="form-control" rows="3" cols="40"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="strategy-lc">Learning Companion</label>

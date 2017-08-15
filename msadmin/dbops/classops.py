@@ -4,6 +4,14 @@ from django.db import transaction
 # that define defaults into class-specific tables.
 
 
+def createCustomStrategyForClass (aclass, strategyName, loginSC, lessonSC, tutorSC, lc, descr):
+    with transaction.atomic():
+        clstrat = Strategy_Class(theClass=aclass,strategy=None,lc=lc,name=strategyName, description=descr)
+        clstrat.save()
+        copyStrategyComponentToClass(aclass,loginSC,clstrat)
+        copyStrategyComponentToClass(aclass,lessonSC,clstrat)
+        copyStrategyComponentToClass(aclass,tutorSC,clstrat)
+
 # Copy the 3 strategy-components of a strategy to a class.
 # WHen this successfully completes there will be rows add to the following tables:
 # class_sc_is_map :  on/off switch for each intervention selector
@@ -12,7 +20,7 @@ from django.db import transaction
 def copyStrategyToClass (aclass,strategy):
     # defines an atomic db transaction that will only be commited if all the operations within this block are successful.
     with transaction.atomic():
-        clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc)
+        clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc,name=strategy.name, description=strategy.description)
         clstrat.save()
         copyStrategyComponentToClass(aclass,strategy.lesson,clstrat)
         copyStrategyComponentToClass(aclass,strategy.login,clstrat)
@@ -172,12 +180,11 @@ def removeStrategyComponentFromClass(aclass, strategyComponent, classStrategy):
 # FK class_sc_param -> sc_class on-delete=cascade so deleting the sc_class causes the class_sc_params to get deleted
 # FK is_param_class -> sc_class on-delete=cascade so deleting the sc_class causes the is_param_class rows to get deleted.
 # FK class_sc_is_map -> sc_class on-delete=cascade so deleting the sc_class causes the class_sc_is_map rows to get deleted.
-def removeStrategyFromClass (aclass,strategy):
-    classStrategy = Strategy_Class.objects.get(theClass=aclass, strategy=strategy)
+def removeStrategyFromClass (aclass,strategyClass):
     # removeStrategyComponentFromClass(aclass, strategy.lesson, classStrategy)
     # removeStrategyComponentFromClass(aclass, strategy.login, classStrategy)
     # removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
-    classStrategy.delete()
+    strategyClass.delete()
 
 
 

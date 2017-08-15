@@ -64,7 +64,14 @@ Strategy.objects.all()
 For routine deployment to rose:
 
 location: /mnt/net/django/msadmin
+
+If changes have been made to the msadminsite/settings.py file make a safe copy of the version on rose because it has settings
+in it that are different than the ones on a dev machine.  This file is omitted from the git repo (via .gitignore) so new versions need to moved onto
+rose using scp
+
 git pull
+
+hand-merge the safe copy of settings.py with the one being moved using scp.
 
 Set
 export STATIC_ROOT='/mnt/net/http/msadmin_static/'
@@ -81,6 +88,7 @@ Alternative to the above is to move files by hand from /msadmin_static into /mnt
 Make sure database tables have been updated if necessary
 
 restart apache.
+sudo /etc/init.d/httpd restart
 
 deactivate // will leave the virtualenv
 

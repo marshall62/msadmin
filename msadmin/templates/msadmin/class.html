@@ -1,22 +1,26 @@
-{% extends 'msadmin/base.html' %}
+{% extends 'msadmin/base_ajax.html' %}
+{# Note that extending base_ajax.html is necessary to pick up the CSRF token necessary for post requests to work #}
+{% block page-css %}
+    #exTab3 .tab-content {
+        color : green;
+        background-color: #eeeeee;
+        padding : 5px 15px;
+    }
+{% endblock %}
+
 {% block page-js %}
     <script language="javascript">
 
+        function validCustomStrategy () {
+            var x = document.forms["customStrategyForm"]["strategyName"].value;
+            if (x == "") {
+                alert("Strategy Name must be filled out");
+                return false;
+            }
+        }
 
         $(document).ready(function() {
-            $('.dropdown-toggle').hide();
             $('.dropdown-toggle').dropdown()
-            $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-                console.log(data.selected);
-            });
-
-
-            $('#add-strategy').click(function (e)  {
-                {#     using an anchor which is causing the page to reload. prevent this by using the preventDefault         #}
-                e.preventDefault();
-                $('.dropdown-toggle').toggle();
-            });
-
         });
     </script>
 {% endblock %}
@@ -25,7 +29,7 @@
     <h3>teacher: <a href="{% url 'class_list_by_teacher' teacherId=class.teacherId %}">{{  class.teacher }}</a></h3>
     <h3>Strategies used by this class:</h3>
 
-    <form method="post">
+
         <table style="border-spacing: 30px 0;">
             <tbody>
             {% for s in strategies %}
@@ -46,30 +50,95 @@
 
             </tbody>
         </table>
-        <p>
-            <table>
-                <tr><td class="padded-td">Add another strategy</td>
-                    <td class="padded-td"><a id="add-strategy" href=""><span class="glyphicon glyphicon-plus"></span></a></td>
-                </tr>
-            </table>
-        </p>
-{#        <button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>#}
-        <div id="strategy-pulldown"  class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                ----
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                {% for s in otherStrategies %}
-                    <li><a href="{% url 'add-class-strategy' classId=class.id strategyId=s.id %}">{{ s.name }}</a></li>
-{#                    <li><a href=href="/class/{{ class.id }}/strategy/{{ s.id }}/add">{{ s.name }}</a></li>#}
-                {% endfor %}
+
+
+    <h3>Add a strategy </h3>
+    <div class="container"></div>
+        <div id="exTab3" class="container">
+            <ul  class="nav nav-tabs">
+                <li class="active">
+                    <a  href="#1b" data-toggle="tab">Start from a Generic Strategy</a>
+                </li>
+                <li><a href="#2b" data-toggle="tab">Create a Custom Strategy</a>
+                </li>
 
             </ul>
-        </div>
 
+            <div class="tab-content">
+                <div class="tab-pane active" id="1b">
+                    <br>
+                    <h4>Select a generic strategy from the list (you can customize it later):</h4>
+                    <div id="strategy-pulldown"  class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            ----
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            {% for s in otherStrategies %}
+                                <li><a href="{% url 'add-class-strategy' classId=class.id strategyId=s.id %}">{{ s.name }}</a></li>
+                                {#                    <li><a href=href="/class/{{ class.id }}/strategy/{{ s.id }}/add">{{ s.name }}</a></li>#}
+                            {% endfor %}
 
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane" id="2b">
+                <br>
+                    <h4>Name your strategy and select its components</h4>
+                    <form name="customStrategyForm" method="post" onsubmit="return validCustomStrategy();" action="{% url 'add-class-custom-strategy'  classId=class.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="strategyName">Name</label>
+                            <input id="strategyName" class="form-control" name="strategyName" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label for="lcId">Learning Companion</label>
+                            <select id="lcId" name="lcId" class="form-control">
+                                {% for lc in lcs %}
+                                    <option value="{{ lc.id }}">{{ lc.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginSCId">Login Component</label>
+                            <select id="loginSCId" name="loginSCId" class="form-control">
+                                {% for sc in loginSCs %}
+                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
+                                {% endfor %}
 
-    </form>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lessonSCId">Lesson Component</label>
+                            <select id="lessonSCId" name="lessonSCId" class="form-control">
+                                {% for sc in lessonSCs %}
+                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tutorSCId">Tutor Component</label>
+                            <select id="tutorSCId" name="tutorSCId" class="form-control">
+                                {% for sc in tutorSCs %}
+                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="strategyDescr">Description</label>
+                            <textarea id="strategyDescr" name="strategyDescr" class="form-control" rows="4" cols="50"></textarea>
+                        </div>
+
+                        <br>
+                        <button id="addCustomStrategy" class="btn btn-default">Add</button>
+
+                    </form>
+                </div>
+
+            </div>
+    </div>
+
 {% endblock %}

@@ -38,13 +38,17 @@ class InterventionSelector(models.Model):
         return self.name
 
     def getJSON (self, sc, aclass, classSC):
+        # One field in the JSON is determined based on class and SC.   This is because the class_sc_is_map holds the status
+        # of whether the intervention selector is active or not.   So this sets a local isActive which is then included in the JSON
+        isActive = self.setActiveStatus(aclass,sc,classSC)
         d = {}
         d['title'] = self.name
         d['type'] = 'interventionSelector'
         d['id'] = self.id
         d['icon'] = "glyphicon glyphicon-modal-window"
         d['scId'] = sc.id
-        d['isActive'] = 'true' if self.isActive(aclass,sc) else 'false'
+        # d['isActive'] = 'true' if self.isActive(aclass,sc) else 'false'
+        d['isActive'] = 'true' if isActive else 'false'
         d['tooltip'] = self.briefDescription if self.briefDescription else self.description
         jarr = []
         # We need to find all the is-param-base objects for this IS and then round up the is-param-class objects from them.
@@ -62,14 +66,14 @@ class InterventionSelector(models.Model):
 
     # This is called just before rendering a view that shows this intervention selector.
     #  It sets its status based on the class_sc_is_map which holds switches that turn on/off ISs
-    def setActiveStatus (self, aclass, sc):
+    def setActiveStatus (self, aclass, sc, classSC):
         scismap= SCISMap.objects.get(strategyComponent=sc, interventionSelector=self)
-        cscismap = ClassSCISMap.objects.get(theClass=aclass,ismap=scismap)
-        self.isActive = cscismap.isActive
-        return self.isActive
+        cscismap = ClassSCISMap.objects.get(theClass=aclass,ismap=scismap, classSC=classSC)
+        isActive = cscismap.isActive
+        return isActive
 
-    def isActive (self, aclass, strategyComponent):
-        return self.isActive
+    # def isActive (self, aclass, strategyComponent):
+    #     return self.isActive
 
     # Gets the parameters of the intervention selector based on the strategy component.  This means
     # getting the isparam objects on the other end of the scismap connected to the interventionSelectorParam
@@ -127,6 +131,10 @@ class StrategyComponentParam (models.Model):
 
 
 class StrategyComponent(models.Model):
+    LESSON="lesson"
+    LOGIN="login"
+    TUTOR="tutor"
+
     # id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)
     # className = models.CharField(max_length=100)
@@ -135,10 +143,15 @@ class StrategyComponent(models.Model):
                                                           ('edu.umass.ckc.wo.tutor.pedModel.BasePedagogicalModel', 'BasePedagogicalModel'),
                                                           ('edu.umass.ckc.wo.tutor.pedModel.SingleTopicPM','SingleTopicPedagogicalModel'),
                                                           ('None','None')])
+    description = models.CharField(max_length=800)
+    briefDescr = models.CharField(max_length=200)
+    type = models.CharField(max_length=45, choices=[(LOGIN,LOGIN),(LESSON,LESSON),(TUTOR,TUTOR) ])
     # supports the many-to-many relationship from StrategyComponent to InterventionSelector via the sc_is_map table
     interventionSelectors = models.ManyToManyField(InterventionSelector, through='SCISMap')
     # supports the many-to-many relationship from StrategyComponent to StrategyComponentParam via the sc_param_map
     params = models.ManyToManyField(StrategyComponentParam, through='SCParamMap')
+
+
 
     #id = models.IntegerField(primary_key=True);
 
@@ -218,9 +231,27 @@ class Strategy_Class (models.Model):
     strategy = models.ForeignKey(Strategy, db_column="strategyId")
     theClass = models.ForeignKey('Class', db_column="classId")
     lc = models.ForeignKey('LC',db_column='lcid')
+    name = models.CharField(max_length=60)
+    description = models.TextField();
+
 
     class Meta:
         db_table = "strategy_class"
+
+    def getJSON (self):
+        # get the SC_Class objects that go with this strategy-class (there should be 3 scs: login,lesson,tutor)
+        scs = SC_Class.objects.filter(classStrategy=self)
+        loginsc = lessonsc = tutorsc = None
+        for sc in scs:
+            if sc.sc.type == StrategyComponent.LOGIN:
+                loginsc = sc
+            elif sc.sc.type == StrategyComponent.LESSON:
+                lessonsc = sc
+            else:
+                tutorsc = sc
+
+        j = [loginsc.getJSON(self), lessonsc.getJSON(self),  tutorsc.getJSON(self)]
+        return j
 
 
 class SC_Class (models.Model):
@@ -230,6 +261,34 @@ class SC_Class (models.Model):
 
     class Meta:
         db_table = "sc_class"
+
+    # return a dictionary
+    def getJSON (self, classStrategy):
+        d = {}
+        d ['title'] = self.sc.name
+        d ['icon'] = "glyphicon glyphicon-king"
+        d['unselectable'] = 'true' # disables the checkbox
+        intervFolder = {}
+        intervFolder['title'] = 'Interventions'
+        intervFolder['unselectable'] = 'true' # disables the checkbox
+        intervFolder['icon'] = "glyphicon glyphicon-equalizer"
+        scparamFolder = {}
+        scparamFolder['title'] = 'Parameters'
+        scparamFolder['unselectable'] = 'true' # disables the checkbox
+        scparamFolder['icon'] = "glyphicon glyphicon-tree-conifer"
+        folders = [intervFolder, scparamFolder]
+        d['children'] = folders
+        inselarr = []
+        for insel in self.sc.interventionSelectors.all():
+            j = insel.getJSON(self.sc,self.theClass,self)
+            inselarr.append(j)
+        intervFolder['children'] = inselarr
+        scparams = []
+        for p in self.sc.params.all():
+            j = p.getJSON(self.theClass,self)
+            scparams.append(j)
+        scparamFolder['children'] = scparams
+        return d
 
 
 # This isn't quite right because it connects a param to an intervention selector. We need to create

@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^all_lcs/$', json.get_all_lcs, name='all_lcs'),
     url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/$', views.configure_class_strategy, name='class-strategy'),
     url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/add$', views.add_class_strategy, name='add-class-strategy'),
+    url(r'^class/(?P<classId>\d+)/customStrategy/add$', views.add_class_custom_strategy, name='add-class-custom-strategy'),
     url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/remove$', views.remove_class_strategy, name='remove-class-strategy'),
     url(r'^class/(?P<classId>\d+)/sc/(?P<scId>\d+)/is/(?P<isId>\d+)/activate/(?P<isActive>\w+)$', views.class_activate_is, name='intervention-selector-activate'),
     url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/json/$',json.get_strategy_json, name='strategy-json'),

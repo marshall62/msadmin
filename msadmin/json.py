@@ -17,6 +17,12 @@ def get_strategy_json (request, classId, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
     return JsonResponse(s.getJSON(c), safe=False)
 
+# strategyId is the id of a Strategy_class row
+def get_strategy_json (request, classId, strategyId):
+    c = get_object_or_404(Class, pk=classId)
+    stratClass = get_object_or_404(Strategy_Class, pk=strategyId)
+    return JsonResponse(stratClass.getJSON(), safe=False)
+
 # Given the id of a ClassISParam return JSON that represents all its detail
 def get_is_param_json (request, isParamId):
     p = get_object_or_404(ClassISParam, pk=isParamId)
