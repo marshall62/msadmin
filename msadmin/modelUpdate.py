@@ -40,7 +40,7 @@ def save_sc_param (request, scParamId):
     return JsonResponse({"scParamId": scParamId, "name": p.name, "value": newVal, "isActive": p.isActive})
 
 # An AJAX post request coming from a dialog box that allows edit of class-sc_is_map
-def save_is (request, isId):
+def save_is (request, isId, strategyId):
     if request.method == "POST":
         post = request.POST
         config = post['config']
@@ -50,8 +50,10 @@ def save_is (request, isId):
         c = get_object_or_404(Class, pk=classId)
         sc = get_object_or_404(StrategyComponent, pk=scId)
         insel = get_object_or_404(InterventionSelector, pk=isId)
+        stratClass = get_object_or_404(Strategy_Class, pk=strategyId)
         scismap = get_object_or_404(SCISMap, strategyComponent=sc, interventionSelector=insel)
-        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c)
+        sc_class = get_object_or_404(SC_Class, sc=sc, theClass=c, classStrategy=stratClass)
+        cl_scismap = get_object_or_404(ClassSCISMap, ismap=scismap, theClass=c, classSC=sc_class)
         cl_scismap.isActive = isActive == 'true'
         cl_scismap.config = config
         cl_scismap.save()

@@ -150,9 +150,11 @@
         function configIS (isId, scId) {
             console.log(isId);
             console.log(scId);
+            var stratId = {{ classStrategy.id }};
+            console.log("Strategy id: " + stratId);
 {#            var url_mask = ''#}
 {#            var url_mask = "{% url 'class_is_detail' classId=class.id isId=12345 %}".replace(/12345/, isId.toString());#}
-            var url_mask = "{% url 'class_is_detail' classId=class.id isId=54321 scId=12345 %}".replace(/54321/,isId.toString());
+            var url_mask = "{% url 'class_is_detail' classId=class.id isId=54321 scId=12345 strategyId=classStrategy.id%}".replace(/54321/,isId.toString());
             url_mask = url_mask.replace(/12345/,scId.toString());
             $.get(url_mask, function(data) {
                 console.log("Got IS json detail");
@@ -316,7 +318,7 @@
             var config = $('#is-config').val();
             var isActive = $('#is-active').prop("checked");
             var node = $("#treetable").fancytree("getActiveNode");
-            var url_mask = "{% url 'class_is_save' isId=12345 %}".replace(/12345/, is_id);
+            var url_mask = "{% url 'class_is_save' isId=12345 strategyId=classStrategy.id %}".replace(/12345/, is_id);
             $.ajax({
                 url: url_mask,
                 type: "POST",

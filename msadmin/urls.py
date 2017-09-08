@@ -27,10 +27,10 @@ urlpatterns = [
     url(r'^class_sc_param/(?P<scParamId>\d+)/json/$',json.get_sc_param_json, name='class_sc_param_detail'),
     url(r'^class_is_param/(?P<isParamId>\d+)/save/$',modelUpdate.save_is_param, name='class_is_param_save'),
     url(r'^class_sc_param/(?P<scParamId>\d+)/save/$',modelUpdate.save_sc_param, name='class_sc_param_save'),
-    url(r'^class_is/(?P<isId>\d+)/save/$',modelUpdate.save_is, name='class_is_save'),
+    url(r'^class_is/(?P<isId>\d+)/(?P<strategyId>\d+)/save/$',modelUpdate.save_is, name='class_is_save'),
     url(r'^class_is_param/(?P<isParamId>\d+)/active/save/$',modelUpdate.save_is_param_active, name='class_is_param_active_save'),
     url(r'^class_sc_param/(?P<scParamId>\d+)/active/save/$',modelUpdate.save_sc_param_active, name='class_sc_param_active_save'),
     url(r'^class_intervSel/(?P<isId>\d+)/active/save/$',modelUpdate.save_intervSel_active, name='class_intervSel_active_save'),
-    url(r'^class/(?P<classId>\d+)/is/(?P<isId>\d+)/sc/(?P<scId>\d+)/json/$',json.get_is, name='class_is_detail')
+    url(r'^class/(?P<classId>\d+)/is/(?P<isId>\d+)/sc/(?P<scId>\d+)/strategy/(?P<strategyId>\d+)/json/$',json.get_is, name='class_is_detail')
 
 ]

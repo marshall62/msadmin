@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 from msadmin.forms import ClassForm
-from .models import StrategyComponent, ClassSCParam, LC, Strategy_Class
+from .models import StrategyComponent, ClassSCParam, LC, Strategy_Class, SC_Class
 from .models import Strategy
 from .models import Class
 from .models import ClassISParam
@@ -56,12 +56,14 @@ def get_sc_param_json (request, scParamId):
     return JsonResponse(d)
 
 
-def get_is (request, classId, isId, scId):
+def get_is (request, classId, isId, scId, strategyId):
     c = get_object_or_404(Class, pk=classId)
     isel = get_object_or_404(InterventionSelector, pk=isId)
     sc = get_object_or_404(StrategyComponent, pk=scId)
+    stratClass = get_object_or_404(Strategy_Class, pk=strategyId)
+    scClass = get_object_or_404(SC_Class, theClass=c, sc=sc, classStrategy=stratClass)
     scismap = get_object_or_404(SCISMap, interventionSelector=isel, strategyComponent=sc)
-    m = get_object_or_404(ClassSCISMap, theClass=c, ismap=scismap)
+    m = get_object_or_404(ClassSCISMap, theClass=c, ismap=scismap, classSC=scClass)
     insel = get_object_or_404(InterventionSelector,pk=isId)
     d= {}
     d['name'] = insel.name
