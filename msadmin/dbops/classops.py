@@ -129,6 +129,51 @@ def copyStrategyComponentParamsToClass (aclass, strategyComponent, classSC):
         cp = ClassSCParam(scParam=p,theClass=aclass,classSC=classSC,name=p.name,value=p.value,isActive=True)
         cp.save()
 
+
+# clones the structure of a strategy in some other class into this class.   This means copying all the
+# class-level rows from one to the other.   It can't copy generic versions of objects (such as in above functions)
+def copyStrategyFromOtherClass (thisClass, otherClass, classStrategy):
+    with transaction.atomic():
+        # Clone the Strategy_Class object
+        if classStrategy.strategy_id == None:
+            classStrategy.strategy = None
+        strat = Strategy_Class(strategy=classStrategy.strategy, theClass=thisClass, lc=classStrategy.lc, name=classStrategy.name, description=classStrategy.description)
+        strat.save()
+        # get the three (class) strategy components
+        scs= SC_Class.objects.filter(theClass=otherClass, classStrategy=classStrategy)
+        # clone each of the (class) SC objects.
+        for sc in scs:
+            # clone the SC
+            new_sc = SC_Class(theClass=thisClass, sc=sc.sc, classStrategy=strat)
+            new_sc.save()
+
+            # Clone the SC's params
+            # get all the sc params from this sc
+            sc_params = ClassSCParam.objects.filter(classSC=sc)
+            # clone all of them
+            for p in sc_params:
+                new_p = ClassSCParam(scParam=p.scParam,theClass=thisClass,classSC=new_sc,isActive=p.isActive,name=p.name,value=p.value)
+                new_p.save()
+
+
+            # get the (class) scismaps connected to this SC and clone
+            scismaps= ClassSCISMap.objects.filter(classSC=sc)
+            for scismap in scismaps:
+                # clone the map
+                new_scismap = ClassSCISMap(ismap=scismap.ismap,theClass=thisClass,isActive=scismap.isActive,config=scismap.config,classSC=new_sc)
+                new_scismap.save()
+            # get all the intervention selector params associated with this SC and clone them
+            isparams = ClassISParam.objects.filter(classSC=sc)
+            for isp in isparams:
+                new_isp = ClassISParam(isParam=isp.isParam,scisParam=isp.scisParam,theClass=thisClass,classSC=new_sc,name=isp.name,value=isp.value,isActive=isp.isActive)
+                new_isp.save()
+        return strat
+
+
+    # Clone its sub-structure objects
+
+
+
 # When a strategy is removed from a class we delete the specific settings of intervention selector params
 # and strategy component params
 
@@ -187,6 +232,33 @@ def removeStrategyFromClass (aclass,strategyClass):
     # removeStrategyComponentFromClass(aclass, strategy.login, classStrategy)
     # removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
     strategyClass.delete()
+
+
+# This is only a testing routine not associated with anything in the website.   I will call it directly
+# Its purpose is to validate the generic structures that define tutoring strategies.   These are complicated
+# and it is possible through user error to omit necessary things which can result in structures that are incorrect
+
+# This validator helps make sure that all SCISMaps have the correct number of is-param-sc rows
+#  Each IS has a number of is-param-base rows which define all the possible params for the selector
+#  Each SCISMap should set up an is-param-sc that goes with the is-param-base.  So the number of params should be the same.
+#  Almost all of them should be isActive=true to indicate that the param is in use.  A small number may be turned off and they will be reported on here.
+
+def validateSCISMaps_have_necessary_is_param_sc ():
+    maps = SCISMap.objects.all()
+    for m in maps:
+        sc = m.strategyComponent
+        insel = m.interventionSelector
+        is_param_bases = insel.getBaseParams()
+        n_base_isparams = is_param_bases.__len__()
+        is_param_scs = m.getISParams()
+        n_sc_isparams = is_param_scs.__len__()
+        if (n_base_isparams != n_sc_isparams):
+            print("Failure: scismap id:", m.pk)
+            print("    ", sc.name, ":", insel.name)
+            # print("Failure:  SCISmap id: " + m.pk + " has IS " + insel.name + " with " , n_base_isparams , " base params but " , n_sc_isparams , " sc-is-params.  Number should be same")
+        for p in is_param_scs:
+            if not p.isActive:
+                print("In ", sc.name, ":", insel.name, " the param", p.name, "is inactive")
 
 
 

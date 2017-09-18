@@ -105,3 +105,21 @@ def class_list_by_teacher(request, teacher):
         json_arr.append(c.toJSON())
 
     return JsonResponse(json_arr,safe=False)
+
+def get_teacher_classes (request, teacherId) :
+    json_arr = []
+    classes = Class.objects.filter(teacherId=teacherId).order_by('name')
+    for c in classes:
+        json_arr.append(c.toJSON())
+
+    return JsonResponse(json_arr,safe=False)
+
+def get_class_strategies (request, classId) :
+    json_arr = []
+    c = get_object_or_404(Class, pk=classId)
+    strats = Strategy_Class.objects.filter(theClass=c).order_by('name')
+    for s in strats:
+        json_arr.append(s.getSimpleJSON())
+
+    return JsonResponse(json_arr,safe=False)
+

@@ -11,6 +11,98 @@
 {% block page-js %}
     <script language="javascript">
 
+        function getFirstClass (classesJSON) {
+            if (classesJSON.length > 0)
+                return classesJSON[0].id;
+            else return null;
+        }
+
+        function populateTeacherClasses (classesJSON) {
+            var selector = document.getElementById('classSelector');
+            selector.options.length = 0; // remove all the options
+            for (var i=0;i<classesJSON.length;i++) {
+                var option = document.createElement("option");
+                option.text = classesJSON[i].name;
+                option.value = classesJSON[i].id;
+                selector.add(option);
+            }
+        }
+
+        function populateClassStrategies (strategies) {
+            var selector = document.getElementById('stratSelector');
+            selector.options.length = 0; // remove all the options
+
+            if (strategies) {
+                for (var i=0;i<strategies.length;i++) {
+                    var option = document.createElement("option");
+                    option.text = strategies[i].name;
+                    option.value = strategies[i].id;
+                    selector.add(option);
+                }
+            }
+        }
+
+        // When the teacher is changed we need to get a list of his classes and repopulate the class selector and
+        // set the strategy selector to the strategies for the first class in the list of returned classes
+        function teacherChanged () {
+            alert("teacher Changed");
+            var selector = document.getElementById('teacherSelector');
+            var option = selector.options[selector.selectedIndex];
+            var teacherId = option.value;
+            alert("selected Option " + option.text + "id : " + teacherId);
+            // make AJAX call to get the list of classes this teacher owns
+            // on successful return of this, it will repopulate the classes selector and empty the strategy selector
+            var url = "{% url 'get-teacher-classes' teacherId=12345 %}".replace(/12345/, teacherId);
+
+            var d = {};
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: d,
+                success: function (data) {
+                    // Get back JSON that is a bunch of class objects like {id: 34, name: 'Test class'}
+                    populateTeacherClasses(data);
+                    // This has the effect of making the first class seem to be selected, so set the strategies
+                    // to be the ones that go with this class
+                    var class1 = getFirstClass(data);
+                    if (class1)
+                        getClassStrategies(class1);
+                    // if no first class, then empty out the strategies
+                    else
+                        populateClassStrategies(null);
+                }
+            });
+        }
+
+        function getClassStrategies (classId) {
+            var url = "{% url 'get-class-strategies' classId=12345 %}".replace(/12345/, classId);
+
+            var d = {};
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: d,
+                success: function (data) {
+                    console.log("JSON returned by GET");
+                    console.log(data);
+                    // Get back JSON that is a bunch of class objects like {id: 34, name: 'Test class'}
+                    populateClassStrategies(data);
+                }
+            });
+        }
+
+        // When the class is changed we need to change the strategies
+        function classChanged () {
+            alert("class Changed");
+            var selector = document.getElementById('classSelector');
+            var option = selector.options[selector.selectedIndex];
+            var classId = option.value;
+            getClassStrategies(classId);
+
+        }
+
         function validCustomStrategy () {
             var x = document.forms["customStrategyForm"]["strategyName"].value;
             if (x == "") {
@@ -19,8 +111,45 @@
             }
         }
 
+        function addStrategyFromOtherClass () {
+            var selector = document.getElementById('classSelector');
+            var option = selector.options[selector.selectedIndex];
+            var classId = option.value;
+            selector = document.getElementById('stratSelector');
+            option = selector.options[selector.selectedIndex];
+            var stratId = option.value;
+            if (classId && stratId) {
+                var url = "{% url 'add-other-class-strategy' classId=class.id otherClassId=12345 stratId=890 %}".replace(/12345/, classId);
+                url = url.replace(/890/, stratId);
+                location.href= url;
+            }
+            else {
+                alert("Please select a class and strategy ")
+            }
+{##}
+{#            var d = {};#}
+{##}
+{#            $.ajax({#}
+{#                url: url,#}
+{#                type: "POST",#}
+{#                data: d,#}
+{#                success: function (data) {#}
+{#                    console.log("JSON returned by GET");#}
+{#                    console.log(data);#}
+{#                    // Get back JSON that is a bunch of class objects like {id: 34, name: 'Test class'}#}
+{#                   // populateClassStrategies(data);#}
+{#                }#}
+{#            });#}
+        }
+
         $(document).ready(function() {
-            $('.dropdown-toggle').dropdown()
+            $('.dropdown-toggle').dropdown();
+            $('#teacherSelector').change(teacherChanged);
+            $('#classSelector').change(classChanged);
+            $('#selectStratButton').click(function () {
+                alert('select strategy button clicked!');
+                addStrategyFromOtherClass();
+            })
         });
     </script>
 {% endblock %}
@@ -60,6 +189,8 @@
                     <a  href="#1b" data-toggle="tab">Start from a Generic Strategy</a>
                 </li>
                 <li><a href="#2b" data-toggle="tab">Create a Custom Strategy</a>
+                </li>
+                <li><a href="#3b" data-toggle="tab">Get Strategy from another class</a>
                 </li>
 
             </ul>
@@ -137,7 +268,46 @@
 
                     </form>
                 </div>
+                <div class="tab-pane" id="3b">
+                    <br>
+                    <div class="form-group">
+                        <label for="teacherSelector">Select Teacher:</label>
+                        <select id="teacherSelector" name="teacherToCopyFrom" class="form-control">
+                            {% for t in teachers %}
+                                {% if t.id == curTeacherId %}
+                                <option selected="true" value="{{ t.id }}">{{ t.lname }}, {{ t.fname }}</option>
+                                {% else %}
+                                <option value="{{ t.id }}">{{ t.lname }}, {{ t.fname }}</option>
+                                {% endif %}
+                            {% endfor %}
 
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="classSelector">Select a class:</label>
+                        <select id="classSelector" name="classToCopyFrom" class="form-control">
+                            {% for cl in myclasses %}
+                                {% if class.id == cl.id %}
+                                    <option selected="true" value="{{ cl.id }}">{{ cl.name }}</option>
+                                {% else %}
+                                    <option value="{{ cl.id }}">{{ cl.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stratSelector">Select a strategy:</label>
+                        <select id="stratSelector" name="stratToCopyId" class="form-control">
+                            {% for st in otherStrategies %}
+                                <option value="{{ cl.id }}">{{ st.name }}</option>
+
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                    <button id="selectStratButton" class="btn btn-default">Select</button>
+                </div>
             </div>
     </div>
 

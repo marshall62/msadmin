@@ -1,6 +1,7 @@
 from django.db import models
 
 # A class used to hold all possible params and default values for an intervention selector
+# This is used to populate pulldown menus so that user can only choose legal values for parameters.
 class ISParamBase (models.Model):
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=1000)
@@ -228,7 +229,8 @@ class Strategy (models.Model):
 
 #  TODO Need to be able to change the learning companion that is assigned to the strategy for a class.
 class Strategy_Class (models.Model):
-    strategy = models.ForeignKey(Strategy, db_column="strategyId")
+    # Note:  A custom strategy made from components will not refer to a strategy it can be None (or null in the strategyId column)
+    strategy = models.ForeignKey(Strategy, db_column="strategyId", null=True)
     theClass = models.ForeignKey('Class', db_column="classId")
     lc = models.ForeignKey('LC',db_column='lcid')
     name = models.CharField(max_length=60)
@@ -237,6 +239,14 @@ class Strategy_Class (models.Model):
 
     class Meta:
         db_table = "strategy_class"
+
+    def getSimpleJSON (self) :
+        d = {}
+        d['name'] = self.name
+        d['id'] = self.pk
+        return d
+
+
 
     def getJSON (self):
         # get the SC_Class objects that go with this strategy-class (there should be 3 scs: login,lesson,tutor)
@@ -323,6 +333,10 @@ class SCISMap (models.Model):
 
     def __str__(self):
         return self.strategyComponent.__str__() + ":" + self.interventionSelector.__str__()
+
+    # return the list of is-param-sc objects associated with this.
+    def getISParams (self):
+        return InterventionSelectorParam.objects.filter(scismap=self)
 
 
 # This is the actual param value used by a particular intervention selector in a particular
@@ -439,6 +453,9 @@ class ClassSCParam (models.Model):
     class Meta:
         db_table = "class_sc_param"
 
+    def __str__ (self):
+        return str(self.theClass.name) + ":" + self.classSC.sc.name + "::" + self.name + "=" + self.value
+
 class ClassISParam (models.Model):
     isParam = models.ForeignKey(ISParamBase, db_column="is_param_id",verbose_name="Intervention Selector Param")
     # Defined to allow Null in this fk
@@ -460,6 +477,9 @@ class ClassISParam (models.Model):
 
     class Meta:
         db_table = "is_param_class"
+
+    def __str__ (self):
+        return str(self.theClass.name) + ":" + self.isParam.interventionSelector.name + "::" + self.name + "=" + self.value
 
     def getJSON (self):
         d = {}
@@ -484,6 +504,9 @@ class ClassSCISMap (models.Model):
 
     class Meta:
         db_table = "class_sc_is_map"
+
+    def __str__ (self):
+        return str(self.theClass.name) + ":" + self.ismap.strategyComponent.name + "::" + self.ismap.interventionSelector.name
 
 # Some Base ISParams have legal values.  This is a record of a legal value for a param.
 class ISParamValue (models.Model):
@@ -530,10 +553,6 @@ class LC (models.Model):
 
     def __str__ (self):
         return self.name + ": " + self.charName
-
-
-
-
 
 
 class Part (models.Model):

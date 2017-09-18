@@ -51,7 +51,10 @@ def class_list_by_teacher(request, teacherId):
 def class_detail (request, pk):
     # csrfContext = RequestContext(request)
     c = get_object_or_404(Class, pk=pk)
+    teacherId= c.teacherId
+    classes = Class.objects.filter(teacherId=teacherId).order_by('name')
     classid = c.id
+    teachers = Teacher.objects.all().order_by('lname','fname')
     # Get all the strategies that exist for this class
     class_strats = Strategy_Class.objects.filter(theClass=c)
     strats = []
@@ -73,7 +76,7 @@ def class_detail (request, pk):
     lcs = LC.objects.all()
     # sc = StrategyComponent.ojects.get(pk=pk)
     return render(request,'msadmin/class.html',
-                              {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs })
+                              {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
 
 
 
@@ -135,6 +138,18 @@ def add_class_custom_strategy (request, classId):
         tutorSC = get_object_or_404(StrategyComponent, pk=tutorSCId)
         lc = get_object_or_404(LC,pk=lcId)
         createCustomStrategyForClass(c,strategyName,loginSC,lessonSC,tutorSC, lc,descr)
+
+    return redirect("class_detail",pk=classId)
+
+# handles a POST request coming from the class page.  It copies a strategy from another class to this class.
+def add_class_other_class_strategy (request, classId, otherClassId, stratId):
+
+    # return render_to_response('foo.html', csrfContext)
+    c = get_object_or_404(Class, pk=classId)
+    oc = get_object_or_404(Class, pk=otherClassId)
+    strat = get_object_or_404(Strategy_Class, pk=stratId)
+
+    copyStrategyFromOtherClass(c,oc,strat)
 
     return redirect("class_detail",pk=classId)
 

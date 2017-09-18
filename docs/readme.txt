@@ -52,12 +52,22 @@ DJango Shell:  Can interact with models and other code.
 I am not able to get the shell running correctly from Intellij Tools menu.
 
 Must cd to project root in a term window:
-activate the venv
-python manage.py shell
+activate the venv by doing : source myenv/bin/activate
+(venv)python3 manage.py shell
 
 from msadmin.models import Strategy
 Strategy.objects.all()
 
+from msadmin.models import *
+from msadmin.dbops.classops import *
+validateSCISMaps_have_necessary_is_param_sc ()
+
+I cannot figure out how to reload a module into this shell to enable bug fixing.  SOmething like this should work:
+    To reload or reimport a module after fixing a bug
+    import importlib
+    importlib.reload(msadmin.dbops.classops)
+
+deactivate
 
 
 
@@ -69,6 +79,8 @@ If changes have been made to the msadminsite/settings.py file make a safe copy o
 in it that are different than the ones on a dev machine.  This file is omitted from the git repo (via .gitignore) so new versions need to moved onto
 rose using scp
 
+ssh marshall@rose.cs.umass.edu
+cd /mnt/net/django/msadmin
 git pull
 
 hand-merge the safe copy of settings.py with the one being moved using scp.
@@ -85,7 +97,7 @@ This will pretend to move the files.  Verify that it moves them to the correct p
 
 Alternative to the above is to move files by hand from /msadmin_static into /mnt/net/http/msadmin_static
 
-Make sure database tables have been updated if necessary
+Make sure database tables have been updated if necessary (see below)
 
 restart apache.
 sudo /etc/init.d/httpd restart
@@ -99,6 +111,34 @@ http://rose.cs.umass.edu/msadmin/admin/
 
 superuser: marshall / t0mand3rs
 
+
+Updating the db:
+
+All the tables involved in the tutoring strategy are new and can be moved (with data) into the rose db without worry of
+ruining existing data.
+
+Once the tutoring strategies go into use, this won't be true and I'll have to work differently.
+
+Tables involved:
+wayangoutpostdb_class_sc_is_map.sql
+wayangoutpostdb_class_sc_param.sql
+wayangoutpostdb_intervention_selector.sql
+wayangoutpostdb_is_param_base.sql
+wayangoutpostdb_is_param_class.sql
+wayangoutpostdb_is_param_sc.sql
+wayangoutpostdb_is_param_value.sql
+wayangoutpostdb_lc.sql
+wayangoutpostdb_sc_class.sql
+wayangoutpostdb_sc_is_map.sql
+wayangoutpostdb_sc_param_map.sql
+wayangoutpostdb_sc_param.sql
+wayangoutpostdb_strategy_class.sql
+wayangoutpostdb_strategy_component.sql
+wayangoutpostdb_strategy.sql
+
+Dump them in a folder within /srv/raiddisk/wodbs/stratXXX
+
+OPen a rose db window and import each file.
 
 
 Setting up rose to serve:
