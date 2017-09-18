@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/dbload.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/readme.txt" afterPath="$PROJECT_DIR$/docs/readme.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/dbops/classops.py" afterPath="$PROJECT_DIR$/msadmin/dbops/classops.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/json.py" afterPath="$PROJECT_DIR$/msadmin/json.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/models.py" afterPath="$PROJECT_DIR$/msadmin/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/class.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/class.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/urls.py" afterPath="$PROJECT_DIR$/msadmin/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/views.py" afterPath="$PROJECT_DIR$/msadmin/views.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -120,7 +115,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="classops.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="classops.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/dbops/classops.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="363">
@@ -130,11 +125,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="readme.txt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dbload.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/dbload.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="readme.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+            <state relative-caret-position="460">
+              <caret line="143" column="29" lean-forward="false" selection-start-line="143" selection-start-column="29" selection-end-line="143" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -153,8 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>No desc</find>
-      <find>strategy-j</find>
       <find>InterventionS</find>
       <find>strategy.</find>
       <find>remove</find>
@@ -183,12 +186,16 @@
       <find>showIs</find>
       <find>classSCIS</find>
       <find>class_list</find>
+      <find>.sql</find>
+      <find>drop table</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
       <replace>orange;</replace>
       <replace>yellow;</replace>
       <replace>transparent</replace>
+      <replace>wayangoutpostdb.</replace>
+      <replace>drop table IF EXISTS</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -222,10 +229,11 @@
         <option value="$PROJECT_DIR$/msadmin/json.py" />
         <option value="$PROJECT_DIR$/msadmin/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/views.py" />
-        <option value="$PROJECT_DIR$/docs/readme.txt" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/class.html" />
         <option value="$PROJECT_DIR$/msadmin/dbops/classops.py" />
         <option value="$PROJECT_DIR$/msadmin/models.py" />
+        <option value="$PROJECT_DIR$/docs/dbload.sql" />
+        <option value="$PROJECT_DIR$/docs/readme.txt" />
       </list>
     </option>
   </component>
@@ -797,7 +805,7 @@
       <workItem from="1501507553757" duration="4846000" />
       <workItem from="1502219579372" duration="41590000" />
       <workItem from="1503926889096" duration="11038000" />
-      <workItem from="1504645745200" duration="30418000" />
+      <workItem from="1504645745200" duration="31459000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -883,11 +891,18 @@
       <option name="project" value="LOCAL" />
       <updated>1504874277662</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added ability to copy a strategy from another class">
+      <created>1505759087165</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1505759087165</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="484433000" />
+    <option name="totallyTimeSpent" value="485474000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="52" width="1427" height="1028" extended-state="0" />
@@ -955,7 +970,8 @@
     <MESSAGE value="Beginning of documentation by adding a docs folder." />
     <MESSAGE value="Worked in the ability to create a custom strategies for a class by selecting 3 components." />
     <MESSAGE value="FIxed some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="FIxed some bugs" />
+    <MESSAGE value="Added ability to copy a strategy from another class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added ability to copy a strategy from another class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -982,13 +998,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/manage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/MySQLdb/cursors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -1299,14 +1308,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_strategy2.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -1351,6 +1352,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
           <caret line="146" column="0" lean-forward="false" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/dbload.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/readme.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="143" column="29" lean-forward="false" selection-start-line="143" selection-start-column="29" selection-end-line="143" selection-end-column="29" />
           <folding />
         </state>
       </provider>

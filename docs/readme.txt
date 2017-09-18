@@ -136,9 +136,12 @@ wayangoutpostdb_strategy_class.sql
 wayangoutpostdb_strategy_component.sql
 wayangoutpostdb_strategy.sql
 
-Dump them in a folder within /srv/raiddisk/wodbs/stratXXX
+Export them in a single file folder within /srv/raiddisk/wodbs/stratXXX
 
-OPen a rose db window and import each file.
+OPen a rose db window
+MAKE SURE YOU ARE IN ROSE DB:
+load the file docs/dbload.sql which will remove all these tables from the rose DB
+Now import what you exported.
 
 
 Setting up rose to serve:
