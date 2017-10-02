@@ -18,6 +18,12 @@ def strategy_list(request):
 
     return render(request, 'msadmin/strategy_list.html', {'strategies': strategies})
 
+# Shows the main page of the site
+def main(request):
+    return render(request, 'msadmin/main.html', {})
+
+
+
 def sc_detail (request, pk):
     sc = get_object_or_404(StrategyComponent, pk=pk)
     # sc = StrategyComponent.ojects.get(pk=pk)
@@ -174,6 +180,12 @@ def class_activate_is (request, classId, scId, isId, isActive):
     cscimap.isActive = setting
     cscimap.save()
     return HttpResponse()
+
+def validate_generic (request):
+    return HttpResponse(validateGenericStructure())
+
+def validate_class_tutoring (request):
+    return validateClassTutoringStrategies(request)
 
 def test (request):
     return render(request,'msadmin/test.html')

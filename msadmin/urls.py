@@ -1,13 +1,20 @@
 from django.conf.urls import url
 
 from . import views
-
+from . import qaviews
 from . import json
 from . import modelUpdate
 
 
 urlpatterns = [
-    url(r'^$', views.strategy_list, name='strategy_list'),
+    url(r'^$', views.main, name='main'),
+    url(r'^reactTest/$', qaviews.reactTest, name='reactTest'),
+    url(r'^qauth/$', qaviews.main, name='qauth_main'),
+    url(r'^qauth/prob/create/$', qaviews.create_problem, name='qauth_create_prob'),
+    url(r'^qauth/prob/save/$', qaviews.save_problem, name='qauth_save_prob'),
+    url(r'^qauth/prob/edit/(?P<probId>\d+)/$', qaviews.edit_problem, name='qauth_edit_prob'),
+    url(r'^validate_generic_structure/$', views.validate_generic, name='validate_generic'),
+    url(r'^validate_class_tutoring/$', views.validate_class_tutoring, name='validate_class_tutoring'),
     url(r'^classes/(?P<teacherId>.+)/$', views.class_list_by_teacher, name='class_list_by_teacher'),
     url(r'^classes/$', views.class_list, name='class_list'),
     url(r'^test/$', views.test, name='test'),

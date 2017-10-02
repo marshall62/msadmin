@@ -1,0 +1,31 @@
+{% extends 'msadmin/base_ajax.html' %}
+
+{% block page-css %}
+{% endblock %}
+
+{% block page-js %}
+<script language="javascript">
+
+    function editProblem () {
+        var prob= $('#problem_selector').val() ;
+        var url_mask = "{% url 'qauth_edit_prob' probId=12345 %}";
+        url_mask = url_mask.replace(/12345/,prob);
+        window.location.href= url_mask;
+    }
+</script>
+{% endblock %}
+
+
+{% block content %}
+    <h3>Select a problem to edit</h3>
+    <div class="input-group">
+        <span class="input-group-addon">Problem</span>
+        <select class="form-control" onchange="editProblem();" style="width:auto;" name='problem' id="problem_selector">
+        {% for prob in problems %}
+            <option value="{{ prob.id }}">{{ prob.id }}:{{ prob.name }}</option>
+        {% endfor %}
+    </select>
+    </div>
+    <h3><a href="{% url 'qauth_create_prob' %}">Create a new problem</a></h3>
+
+{% endblock %}

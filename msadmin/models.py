@@ -1,7 +1,12 @@
 from django.db import models
+from .submodel import machine_model
+from .submodel import qauth_model
 
 # A class used to hold all possible params and default values for an intervention selector
 # This is used to populate pulldown menus so that user can only choose legal values for parameters.
+from django.db.models.signals import post_init
+
+
 class ISParamBase (models.Model):
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=1000)
@@ -319,11 +324,21 @@ class SC_Class (models.Model):
 
 
 
+# Note:  WHen a new SCISMap is added to the system it is connecting an SC to an IS.  Often I forget to then connect
+# all the necessary is_param_sc rows to this (there should be one for every is_param_base row).  It would be nice if the constructor
+# of this class did that so that when I use the admin tool to connect an sc to an is, the is_param_sc get inserted, but I cannot
+# figure out how to override the Model constructor.   They all break in various ways.
 class SCISMap (models.Model):
 
     strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id")
     interventionSelector = models.ForeignKey(InterventionSelector, db_column="intervention_selector_id")
     config = models.TextField(db_column='config',blank=True)
+
+    # def __init__ (self, *args, **kwargs):
+    #     print("hi")
+    #     super().__init__(args,kwargs)
+    #     print('bye')
+
 
 
     class Meta:
@@ -338,6 +353,22 @@ class SCISMap (models.Model):
     def getISParams (self):
         return InterventionSelectorParam.objects.filter(scismap=self)
 
+# This handles a signal from django after it runs its SCIS constructor.
+# def extraSCISInit (**kwargs):
+#     print("in My SCIS extra init ")
+#     instance = kwargs.get('instance')
+    # print("SCIS ID " + instance.id)
+    # if instance.strategyComponent != None:
+    #     print("I have an sc")
+    # else:
+    #     print("I have no sc")
+    # instance = kwargs.get('instance')
+    # print(instance)
+    # sc = kwargs.get('strategyComponent')
+    # print(sc)
+
+
+# post_init.connect(extraSCISInit, SCISMap)
 
 # This is the actual param value used by a particular intervention selector in a particular
 # strat component
@@ -555,101 +586,8 @@ class LC (models.Model):
         return self.name + ": " + self.charName
 
 
-class Part (models.Model):
-    name = models.CharField(max_length=45)
-
-    class Meta:
-        db_table = "part"
-
-    def __str__ (self):
-        return self.name
-
-class Owner (models.Model):
-    name = models.CharField(max_length=45)
-
-    class Meta:
-        db_table = "owner"
-
-    def __str__ (self):
-        return self.name
-
-class Machine (models.Model):
-    name = models.CharField(max_length=45)
-    parts = models.ManyToManyField(Part, through='Machine2Part')
-    owner = models.ManyToManyField(Owner, through='Machine2Owner')
-    class Meta:
-        db_table = "machine"
-
-    def __str__ (self):
-        return self.name
 
 
-class Machine2Part (models.Model):
-    machine = models.ForeignKey(Machine,db_column='machineId')
-    part = models.ForeignKey(Part,db_column='partId')
-    class Meta:
-        db_table = "machine2part"
-
-class Machine2Owner (models.Model):
-    machine = models.ForeignKey(Machine,db_column='machineId')
-    owner = models.ForeignKey(Owner,db_column='ownerId')
-    class Meta:
-        db_table = "machine2owner"
-
-
-#
-# # A second set of objects for SC
-#
-# class IS2 (models.Model):
-#     name = models.CharField(max_length=45)
-#
-#     class Meta:
-#         db_table = "intervention_selector"
-#
-#     def __str__ (self):
-#         return self.name
-#
-# class SCParam2 (models.Model):
-#     name = models.CharField(max_length=45)
-#
-#     class Meta:
-#         db_table = "sc_param"
-#
-#     def __str__ (self):
-#         return self.name
-#
-# class SC2 (models.Model):
-#
-#     name = models.CharField(max_length=45)
-#     # insels = models.ManyToManyField(IS2, through='Sc2Is2')
-#     insel = models.ManyToManyField(InterventionSelector, through='Sc2Is2')
-#     # owner = models.ManyToManyField(SCParam2, through='Sc2P2')
-#     owner = models.ManyToManyField(StrategyComponentParam, through='Sc2P2')
-#     class Meta:
-#         db_table = "strategy_component"
-#
-#     def __str__ (self):
-#         return self.name
-#
-#
-# class Sc2Is2 (models.Model):
-#     sc = models.ForeignKey(SC2,db_column='scid')
-#     # insel = models.ForeignKey(IS2,db_column='isid')
-#     insel = models.ForeignKey(InterventionSelector,db_column='isid')
-#     config = models.TextField(db_column='config',blank=True)
-#
-#     def __str__(self):
-#         return self.sc.__str__() + ":" + self.insel.__str__()
-#
-#     class Meta:
-#         db_table = "temp_sc2is"
-#
-# class Sc2P2 (models.Model):
-#     sc = models.ForeignKey(SC2,db_column='scid')
-#     # param = models.ForeignKey(SCParam2,db_column='pid')
-#     param = models.ForeignKey(StrategyComponentParam,db_column='pid')
-#     class Meta:
-#         db_table = "temp_sc2p"
 
 
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from .submodel.machine_model import *
 
 # Register your models here.
 # This defines the admin page structures.

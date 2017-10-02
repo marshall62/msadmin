@@ -1,0 +1,219 @@
+{% extends 'msadmin/base_ajax.html' %}
+
+{% block page-css %}
+{% endblock %}
+
+{% block page-js %}
+<script language="javascript">
+    function validateProblem () {
+        if (false) {
+            alert("Form is not valid");
+            return false;
+        }
+        else return true;
+    }
+</script>
+{% endblock %}
+
+
+{% block content %}
+    {% if probId == -1 %}
+    <h3>Create a new math problem</h3>
+    {% else %}
+    <h3>Edit a math problem</h3>
+    {% endif %}
+
+    <form method="post" onsubmit="return validateProblem();" action="{% url 'qauth_save_prob' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+
+        <div class="input-group">
+            <span class="input-group-addon">ID</span>
+            {% if probId == -1 %}
+                <input id="id" type="text" class="form-control" name="id" readonly placeholder="--">
+            {% else %}
+                <input id="id" type="text" class="form-control" name="id" value = "{{ problem.id }}" placeholder="--">
+            {% endif %}
+
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">Name</span>
+            {% if probId == -1 %}
+                <input id="name" type="text" class="form-control" name="name" placeholder="Problem Name">
+            {% else %}
+                <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
+            {% endif %}
+
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">Nick Name</span>
+            {% if probId == -1 %}
+                <input id="nickname" type="text" class="form-control" name="nickname" placeholder="Nick Name">
+            {% else %}
+                <input id="nickname" type="text" class="form-control" name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
+            {% endif %}
+
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Statement</span>
+            {% if probId == -1 %}
+                <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML"></textarea>
+            {% else %}
+                <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
+            {% endif %}
+
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Read aloud audio</span>
+            <select class="form-control" style="width:auto;" name='audioResource' id="audioResource">
+                {% if probId == -1 %}
+                    <option name="hasAudio">Has Audio</option>
+                    <option selected name="noAudio">No Audio</option>
+                {% else %}
+                    <option
+                            {% if problem.audioResource == 'question' %}
+                                selected
+                            {% endif %}
+                            name="hasAudio">Has Audio</option>
+                    <option
+                            {% if problem.audioResource == null %}
+                                selected
+                            {% endif %}
+                            name="noAudio">No Audio</option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+
+
+        <div class="input-group">
+            <span class="input-group-addon">Image URL</span>
+            {% if probId == -1 %}
+                <input id="imageURL" type="text" class="form-control" name="imageURL" placeholder="">
+            {% else %}
+                <input id="imageURL" type="text" class="form-control" name="imageURL" value = "{{ problem.imageURL }}">
+            {% endif %}
+
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Answer Type</span>
+            <select class="form-control" style="width:auto;" name='questType' id="questType">
+                {% if probId == -1 %}
+                    <option name="shortanswer">Short Answer</option>
+                    <option selected name="multichoice">Multiple Choice</option>
+
+                {% else %}
+                    <option name="shortanswer"
+                            {% if problem.questType == 'shortanswer' %}
+                            selected
+                            {% endif %}
+                    >Short Answer</option>
+                    <option name="multichoice"
+                            {% if problem.questType == 'multichoice' %}
+                            selected
+                            {% endif %}
+                    >Multiple Choice</option>
+                {% endif %}
+            </select>
+
+        </div>
+        <br>
+
+
+        <div class="input-group">
+            <span class="input-group-addon">Answer</span>
+            {% if probId == -1 %}
+                <input id="answer" type="text" class="form-control" name="answer" placeholder="">
+            {% else %}
+                <input id="answer" type="text" class="form-control" name="answer" value = "{{ problem.answer }}">
+            {% endif %}
+
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Status</span>
+            <select class="form-control" style="width:auto;" name='status' id="status">
+                {% if probId == -1 %}
+                    <option name="ready">Ready</option>
+                    <option selected name="testable">Testable</option>
+                    <option name="dead">Dead</option>
+
+                {% else %}
+                    <option name="ready" value="ready"
+                            {% if problem.status == 'ready' %}
+                            selected
+                            {% endif %}
+                    >Ready</option>
+                    <option name="testable" value="testable"
+                            {% if problem.status == 'testable' %}
+                            selected
+                            {% endif %}
+                    >Testable</option>
+                    <option name="dead" value="dead"
+                            {% if problem.status != 'testable' and problem.status != 'ready' %}
+                            selected
+                            {% endif %}
+                    >Dead</option>
+                {% endif %}
+            </select>
+        </div>
+
+        <br/>
+
+        <div class="input-group">
+            <span class="input-group-addon">Standard ID</span>
+            {% if probId == -1 %}
+                <input id="standardId" type="text" class="form-control" name="standardId" placeholder="">
+            {% else %}
+                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
+            {% endif %}
+
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Cluster ID</span>
+            {% if probId == -1 %}
+                <input id="clusterId" type="text" class="form-control" name="clusterId" placeholder="">
+            {% else %}
+                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
+            {% endif %}
+
+        </div>
+        <br>
+
+
+        <button id="saveButton" class="btn btn-default">Save</button>
+        </div>
+
+    {% if hints %}
+    <h3>Hints</h3>
+        <div class="input-group">
+        <span class="input-group-addon">Action</span>
+        <select class="form-control" style="width:auto;"><option>Add</option><option>Delete Selected</option></select>
+        </div>
+        <table class="table table-bordered">
+        <thead>
+            <tr><td style="width: 60px"></td><th style="width: 60px">ID</th><th style="width: 60px">name</th><th style="width: 200px">statement</th></tr>
+        </thead>
+        <tbody>
+        {% for h in hints %}
+            <tr><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="">{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    {% endif %}
+
+    </form>
+
+{% endblock %}

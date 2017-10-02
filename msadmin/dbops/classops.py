@@ -233,6 +233,9 @@ def removeStrategyFromClass (aclass,strategyClass):
     # removeStrategyComponentFromClass(aclass, strategy.tutor, classStrategy)
     strategyClass.delete()
 
+def indent (n):
+    return "&nbsp;" * n
+
 
 # This is only a testing routine not associated with anything in the website.   I will call it directly
 # Its purpose is to validate the generic structures that define tutoring strategies.   These are complicated
@@ -245,6 +248,7 @@ def removeStrategyFromClass (aclass,strategyClass):
 
 def validateSCISMaps_have_necessary_is_param_sc ():
     maps = SCISMap.objects.all()
+    strbuf = ""
     for m in maps:
         sc = m.strategyComponent
         insel = m.interventionSelector
@@ -253,13 +257,117 @@ def validateSCISMaps_have_necessary_is_param_sc ():
         is_param_scs = m.getISParams()
         n_sc_isparams = is_param_scs.__len__()
         if (n_base_isparams != n_sc_isparams):
-            print("Failure: scismap id:", m.pk)
-            print("    ", sc.name, ":", insel.name)
+            strbuf += "Failure: sc_is_map (" + str(m.pk) + ") for strategy_component (" + str(sc.pk) + ") " + sc.name + "\n<br>"
+            strbuf += "&nbsp; &nbsp; intervention_selector (" + str(insel.pk) + ") " + insel.name + " has " + str(n_base_isparams) + ":<br>"
+            for bp in is_param_bases:
+                strbuf += "&nbsp; &nbsp; &nbsp; &nbsp; (" + str(bp.pk) + ") " + bp.name + "="+ bp.value + "\n<br>"
+            strbuf += "&nbsp; &nbsp; But the sc_is_map sets " + str(n_sc_isparams) + " of them:<br>"
+            for p2 in is_param_scs:
+                strbuf += "&nbsp; &nbsp; &nbsp; &nbsp; (" + str(p2.pk) + ") " + p2.name + "=" + p2.value + "\n<br>"
+
+            # strbuf += "&nbsp;&nbsp;"+ sc.name + " : " + insel.name + "\n<br>"
+            # print("Failure: scismap id:", m.pk)
+            # print("    ", sc.name, ":", insel.name)
             # print("Failure:  SCISmap id: " + m.pk + " has IS " + insel.name + " with " , n_base_isparams , " base params but " , n_sc_isparams , " sc-is-params.  Number should be same")
         for p in is_param_scs:
             if not p.isActive:
-                print("In ", sc.name, ":", insel.name, " the param", p.name, "is inactive")
+                # print("In ", sc.name, ":", insel.name, " the param", p.name, "is inactive")
+                strbuf += "Warning: is_param_sc (" + str(p.pk) + ") " + sc.name + " : " + insel.name + "-- The param " + p.name + " is inactive" + "\n<br>"
+        # strbuf += "<br>"
+    return strbuf
+
+def validate_scismaps (sc, il):
+    strbuf = ""
+    scismaps = SCISMap.objects.filter(strategyComponent=sc)
+    for m in scismaps:
+        insel = m.interventionSelector
+        is_param_bases = insel.getBaseParams()
+        n_base_isparams = is_param_bases.__len__()
+        is_param_scs = m.getISParams()
+        n_sc_isparams = is_param_scs.__len__()
+        if (n_base_isparams != n_sc_isparams):
+            strbuf += indent(il) + "Failure: sc_is_map (" + str(m.pk) + ") for strategy_component (" + str(sc.pk) + ") " + sc.name + "\n<br>"
+            strbuf += indent(il+4) +"Intervention_selector (" + str(insel.pk) + ") " + insel.name + " has " + str(n_base_isparams) + ":<br>"
+            for bp in is_param_bases:
+                strbuf += indent(il+4) +" &nbsp; &nbsp; (" + str(bp.pk) + ") " + bp.name + "="+ bp.value + "\n<br>"
+            strbuf += indent(il+4) +"But the sc_is_map sets " + str(n_sc_isparams) + " of them:<br>"
+            for p2 in is_param_scs:
+                strbuf += indent(il+4) +"(" + str(p2.pk) + ") " + p2.name + "=" + p2.value + "\n<br>"
+
+                # strbuf += "&nbsp;&nbsp;"+ sc.name + " : " + insel.name + "\n<br>"
+                # print("Failure: scismap id:", m.pk)
+                # print("    ", sc.name, ":", insel.name)
+                # print("Failure:  SCISmap id: " + m.pk + " has IS " + insel.name + " with " , n_base_isparams , " base params but " , n_sc_isparams , " sc-is-params.  Number should be same")
+        for p in is_param_scs:
+            if not p.isActive:
+                # print("In ", sc.name, ":", insel.name, " the param", p.name, "is inactive")
+                strbuf += indent(il) +"Warning: is_param_sc (" + str(p.pk) + ") " + sc.name + " : " + insel.name + "-- The param " + p.name + " is inactive" + "\n<br>"
+    return strbuf
+
+def validate_strategy_scismaps (strat, il):
+    sc_login = strat.login
+    sc_lesson = strat.lesson
+    sc_tutor = strat.tutor
+    msg = ""
+    msg += validate_scismaps (sc_login,il)
+    msg += validate_scismaps (sc_lesson,il)
+    msg += validate_scismaps (sc_tutor,il)
+    return msg
 
 
 
+# Make sure the sc has only the expected params and that they are all present
+def validate_sc_2 (sc, expected_params, il):
+    maps = SCParamMap.objects.filter(strategyComponent=sc)
+    strbuf = indent(il) + "Validating SC (" + str(sc.pk) + ") " + sc.name + "<br>"
+    found_params = []
+    for m in maps:
+        p = m.param
+        found_params.append(p.name)
+        if not p.name in expected_params:
+            strbuf += indent(il+4) + "Warning: sc-param (" + str(p.pk) + ") " + p.name + " found. This is not appropriate for this sc\n<br>"
+    for ep in expected_params:
+        if not ep in found_params:
+            strbuf += indent(il+4) + "Failure: sc_param " + ep + " is not found among the params for this sc\n<br>"
+    return strbuf
 
+
+#  It is possible that a strategy component does not have the correct number of parameters so that it can run correctly.
+# THere is nothing in the db to indicate which parameters must be set for each SC so the knowledge is coded in here.
+def validate_sc_params (strat, il):
+
+    sc = strat.lesson
+    strbuf = ""
+    lesson_params = [ 'maxTimeInTopicSecs', 'contentFailureThreshold', 'topicMastery', 'minNumberProbs', 'maxNumberProbs', 'minTimeInTopicSecs']
+    strbuf += validate_sc_2(sc,lesson_params,il)
+
+    sc = strat.tutor
+    tutor_params = [ 'studentModelClass', 'problemSelectorClass', 'reviewModeProblemSelectorClass', 'challengeModeProblemSelectorClass', 'problemReuseIntervalSessions', 'problemReuseIntervalDays', 'displayMyProgressPage', 'hintSelectorClass','difficultyRate']
+    strbuf += validate_sc_2(sc,tutor_params,il)
+
+    return strbuf
+
+def validateStrategy (strat):
+    msg = "Validating strategy (" + str(strat.pk) + ") " + strat.name + "<br>"
+    msg += validate_sc_params(strat,4)
+    msg += '--<br>'
+    msg += validate_strategy_scismaps(strat,4)
+    msg += '-----------------------------------------------------<br><br>'
+    return msg
+
+def validate_all_strategies () :
+    strats = Strategy.objects.all()
+    strbuf = ""
+    for s in strats:
+        strbuf += validateStrategy(s)
+    return strbuf
+
+def validateGenericStructure ():
+    strats = Strategy.objects.all()
+    messages =  ""
+    for strat in strats:
+        messages += validateStrategy(strat)
+    return messages
+
+def validateClassTutoringStrategies (request):
+    pass

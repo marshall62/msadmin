@@ -15,6 +15,12 @@ a {
     text-decoration: none;
 }
 
+.page-header a, .page-header a:visited, .page-header a:active {
+    color: #000000;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
 .page-header img {
     width: 60px;
     height: 60px;
