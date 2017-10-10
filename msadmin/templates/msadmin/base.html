@@ -33,20 +33,21 @@
         <img src="{% static 'images/apple-touch-icon.png' %}" width="60" height="60">
     </div>
     <div style="position: absolute; top: 10px; width: 600px; height: 50px; left: 120px;"> <h1><a href="/">MathSpring Admin Tool</a></h1></div>
-    <nav class="navbar "  >
-        <div class="container-fluid">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{% url 'validate_generic'%}">Utilities</a></li>
-                <li class="active"><a href="{% url 'class_list'%}">Tutoring Strategies</a></li>
-                <li class="active"><a href="{% url 'qauth_main'%}">Quick Auth</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-        </div>
-    </nav>
+
 </div>
+<nav class="navbar "  >
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="{% url 'validate_generic'%}">Utilities</a></li>
+            <li class="active"><a href="{% url 'class_list'%}">Tutoring Strategies</a></li>
+            <li class="active"><a href="{% url 'qauth_main'%}">Quick Auth</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+    </div>
+</nav>
 
 <a href="{% url 'admin:index' %}">Go to the Admin for Base Strategy Components</a>
 <div class="content container">
