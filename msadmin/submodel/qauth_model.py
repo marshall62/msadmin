@@ -13,9 +13,35 @@ class Problem (models.Model):
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
 
+    def setFields (self, **kwargs):
+        if kwargs is not None:
+            self.name = kwargs['name']
+            self.nickname = kwargs['nickname']
+            self.questType = kwargs['questType']
+            self.statementHTML = kwargs['statementHTML']
+            self.audioResource = kwargs['audioResource']
+            self.answer = kwargs['answer']
+            self.imageURL = kwargs['imageURL']
+            self.status = kwargs['status']
+            self.standardId = kwargs['standardId']
+            self.clusterId = kwargs['clusterId']
+            self.form = kwargs['form']
+
 
     class Meta:
         db_table = "problem"
+
+    def isReadAloud (self):
+        return self.audioResource == 'question'
+
+    def getReadAloud (self):
+        return 'hasAudio' if self.isReadAloud() else 'noAudio'
+
+    def getStatus3 (self):
+        if self.status == 'ready' or self.status == 'testable':
+            return self.status
+        else:
+            return 'dead'
 
 
     # A static method to get all the quickAuth problems.  There's some inefficiency in this because we are going

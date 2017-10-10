@@ -26,6 +26,7 @@ def edit_problem (request, probId):
 def save_problem (request):
     if request.method == "POST":
         post = request.POST
+        id = post['id']
         name = post['name']
         nickname = post['nickname']
         statementHTML = post['statementHTML']
@@ -38,10 +39,15 @@ def save_problem (request):
         audioResource = post['audioResource']
         audioResource = 'question' if audioResource == 'hasAudio' else None
         form= 'quickAuth'
-
-        p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=answer,
+        if not id:
+            p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=answer,
                     imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
                     questType=questType, audioResource=audioResource)
+        else:
+            p = get_object_or_404(Problem, pk=id)
+            p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=answer,
+                        imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
+                        questType=questType, audioResource=audioResource)
         p.save()
         probId = p.pk
     return redirect("qauth_edit_prob",probId=probId)

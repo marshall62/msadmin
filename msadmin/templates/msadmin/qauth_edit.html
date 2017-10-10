@@ -1,18 +1,60 @@
 {% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
 
 {% block page-css %}
+    <style>
+
+        .modal-header, h4, .close {
+            background-color: #889400;
+            color:black !important;
+            text-align: center;
+            font-size: 30px;
+        }
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+    </style>
 {% endblock %}
 
 {% block page-js %}
-<script language="javascript">
-    function validateProblem () {
-        if (false) {
-            alert("Form is not valid");
-            return false;
+
+
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react-dom.js"></script>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.3/react-bootstrap.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/JSXTransformer.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/mycomponents.js' %}"></script>
+
+    <script language="javascript">
+
+        function validateProblem () {
+            if (false) {
+                alert("Form is not valid");
+                return false;
+            }
+            else return true;
         }
-        else return true;
-    }
-</script>
+
+        function editHint (id,name,stmt) {
+            console.log("clicked on hint " + id);
+            $('#hid').val(id);
+            $('#hname').val(name);
+            $('#hstatement').val(stmt);
+            $('#hintDialog').modal('show');
+        }
+
+        $(function () {
+{#            test('hi there');#}
+
+
+            mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});
+            mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
+            mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+
+        });
+
+
+    </script>
 {% endblock %}
 
 
@@ -69,28 +111,29 @@
 
         </div>
         <br>
-
-        <div class="input-group">
-            <span class="input-group-addon">Read aloud audio</span>
-            <select class="form-control" style="width:auto;" name='audioResource' id="audioResource">
-                {% if probId == -1 %}
-                    <option name="hasAudio">Has Audio</option>
-                    <option selected name="noAudio">No Audio</option>
-                {% else %}
-                    <option
-                            {% if problem.audioResource == 'question' %}
-                                selected
-                            {% endif %}
-                            name="hasAudio">Has Audio</option>
-                    <option
-                            {% if problem.audioResource == null %}
-                                selected
-                            {% endif %}
-                            name="noAudio">No Audio</option>
-                {% endif %}
-            </select>
-        </div>
+        <div id="my-pulldown1" label="Read Aloud Audio" myId="audioResource" myName="audioResource" selectedOption="{{ problem.getReadAloud }}"></div>
         <br>
+{#        <div class="input-group">#}
+{#            <span class="input-group-addon">Read aloud audio</span>#}
+{#            <select class="form-control" style="width:auto;" name='audioResource' id="audioResource">#}
+{#                {% if probId == -1 %}#}
+{#                    <option value="hasAudio">Has Audio</option>#}
+{#                    <option selected value="noAudio">No Audio</option>#}
+{#                {% else %}#}
+{#                    <option#}
+{#                            {% if problem.isReadAloud %}#}
+{#                                selected#}
+{#                            {% endif %}#}
+{#                            value="hasAudio">Has Audio</option>#}
+{#                    <option#}
+{#                            {% if not problem.isReadAloud %}#}
+{#                                selected#}
+{#                            {% endif %}#}
+{#                            value="noAudio">No Audio</option>#}
+{#                {% endif %}#}
+{#            </select>#}
+{#        </div>#}
+{#        <br>#}
 
 
         <div class="input-group">
@@ -103,30 +146,31 @@
 
         </div>
         <br>
-
-        <div class="input-group">
-            <span class="input-group-addon">Answer Type</span>
-            <select class="form-control" style="width:auto;" name='questType' id="questType">
-                {% if probId == -1 %}
-                    <option name="shortanswer">Short Answer</option>
-                    <option selected name="multichoice">Multiple Choice</option>
-
-                {% else %}
-                    <option name="shortanswer"
-                            {% if problem.questType == 'shortanswer' %}
-                            selected
-                            {% endif %}
-                    >Short Answer</option>
-                    <option name="multichoice"
-                            {% if problem.questType == 'multichoice' %}
-                            selected
-                            {% endif %}
-                    >Multiple Choice</option>
-                {% endif %}
-            </select>
-
-        </div>
+        <div id="my-pulldown2" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
         <br>
+
+{#        <div class="input-group">#}
+{#            <span class="input-group-addon">Answer Type</span>#}
+{#            <select class="form-control" style="width:auto;" name='questType' id="questType">#}
+{#                {% if probId == -1 %}#}
+{#                    <option value="shortanswer">Short Answer</option>#}
+{#                    <option selected value="multichoice">Multiple Choice</option>#}
+{##}
+{#                {% else %}#}
+{#                    <option value="shortanswer"#}
+{#                            {% if problem.questType == 'shortanswer' %}#}
+{#                            selected#}
+{#                            {% endif %}#}
+{#                    >Short Answer</option>#}
+{#                    <option value="multichoice"#}
+{#                            {% if problem.questType == 'multichoice' %}#}
+{#                            selected#}
+{#                            {% endif %}#}
+{#                    >Multiple Choice</option>#}
+{#                {% endif %}#}
+{#            </select>#}
+{##}
+{#        </div>#}
 
 
         <div class="input-group">
@@ -139,34 +183,35 @@
 
         </div>
         <br>
+        <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}"></div>
 
-        <div class="input-group">
-            <span class="input-group-addon">Status</span>
-            <select class="form-control" style="width:auto;" name='status' id="status">
-                {% if probId == -1 %}
-                    <option name="ready">Ready</option>
-                    <option selected name="testable">Testable</option>
-                    <option name="dead">Dead</option>
-
-                {% else %}
-                    <option name="ready" value="ready"
-                            {% if problem.status == 'ready' %}
-                            selected
-                            {% endif %}
-                    >Ready</option>
-                    <option name="testable" value="testable"
-                            {% if problem.status == 'testable' %}
-                            selected
-                            {% endif %}
-                    >Testable</option>
-                    <option name="dead" value="dead"
-                            {% if problem.status != 'testable' and problem.status != 'ready' %}
-                            selected
-                            {% endif %}
-                    >Dead</option>
-                {% endif %}
-            </select>
-        </div>
+{#        <div class="input-group">#}
+{#            <span class="input-group-addon">Status</span>#}
+{#            <select class="form-control" style="width:auto;" name='status' id="status">#}
+{#                {% if probId == -1 %}#}
+{#                    <option value="ready">Ready</option>#}
+{#                    <option selected value="testable">Testable</option>#}
+{#                    <option value="dead">Dead</option>#}
+{##}
+{#                {% else %}#}
+{#                    <option value="ready"#}
+{#                            {% if problem.status == 'ready' %}#}
+{#                            selected#}
+{#                            {% endif %}#}
+{#                    >Ready</option>#}
+{#                    <option value="testable"#}
+{#                            {% if problem.status == 'testable' %}#}
+{#                            selected#}
+{#                            {% endif %}#}
+{#                    >Testable</option>#}
+{#                    <option value="dead"#}
+{#                            {% if problem.status != 'testable' and problem.status != 'ready' %}#}
+{#                            selected#}
+{#                            {% endif %}#}
+{#                    >Dead</option>#}
+{#                {% endif %}#}
+{#            </select>#}
+{#        </div>#}
 
         <br/>
 
@@ -208,12 +253,56 @@
         </thead>
         <tbody>
         {% for h in hints %}
-            <tr><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="">{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
+            <tr><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="#" onClick='editHint({{ h.id }},"{{ h.name }}","{{ h.statementHTML }}")'>{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
         {% endfor %}
         </tbody>
         </table>
     {% endif %}
 
     </form>
+
+
+    <!-- Modal Dialog that will come up when hint name is clicked-->
+    <div class="modal fade" id="hintDialog" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="param-dialog-title" class="modal-title">Edit Hint</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="hid">ID</label>
+                            <input type="text" class="form-control" id="hid" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="hname">Name</label>
+                            <input type="text" class="form-control" id="hname">
+                        </div>
+                        <div class="form-group">
+                            <label for="hstatement">Value</label>
+
+                            <div id="param-value-div">
+                                <textarea id="hstatement" rows="6" cols="50" />
+                            </div>
+
+                        </div>
+
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveHintEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}
