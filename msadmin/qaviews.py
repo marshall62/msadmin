@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.shortcuts import redirect
 from .submodel.qauth_model import *
@@ -52,3 +53,58 @@ def save_problem (request):
         probId = p.pk
     return redirect("qauth_edit_prob",probId=probId)
 
+def getHint (request, hintId):
+    h = get_object_or_404(Hint,pk=hintId)
+    d = {}
+    d['id'] = hintId
+    d['name'] = h.name
+    d['statementHTML'] = h.statementHTML
+    d['audioResource'] = h.audioResource
+    d['order'] = h.order
+    d['hoverText'] = h.hoverText
+    d['givesAnswer'] = h.givesAnswer
+    return JsonResponse(d)
+
+def saveHint (request, probId):
+    if request.method == "POST":
+        post = request.POST
+        id = post['id']
+        name = post['name']
+        statementHTML = post['statementHTML']
+        hoverText = post['hoverText']
+        audioResource = post['audioResource']
+        order = post['order']
+        givesAnswer = post['givesAnswer']
+        if id:
+            h = get_object_or_404(Hint,pk=id)
+            h.name=name
+            h.statementHTML=statementHTML
+            h.audioResource=audioResource
+            h.hoverText=hoverText
+            h.order=order
+            h.givesAnswer=givesAnswer=='true'
+            h.save()
+        else:
+            hints = Hint.objects.filter(problem_id=probId)
+            order = len(hints) + 1
+            h = Hint(name=name,statementHTML=statementHTML,problem_id=probId,audioResource=audioResource,hoverText=hoverText,order=order,givesAnswer=givesAnswer=='true')
+            h.save()
+    return redirect("qauth_edit_prob",probId=probId)
+
+def deleteHints (request, probId):
+    if request.method == "POST":
+        post = request.POST
+        # hints are given as an array of ids
+        hintIds = post.getlist('data[]')
+        for hid in hintIds:
+            h = get_object_or_404(Hint,pk=hid)
+            h.delete()
+        # after deleting there may be holes in the ordering sequence, so we renumber all the remaining hints
+        # 1-based ordering is used
+        hints = Hint.objects.filter(problem_id=probId).order_by('order')
+        for i in range(len(hints)):
+            hints[i].order = i+1
+            hints[i].save()
+
+
+    return redirect("qauth_edit_prob",probId=probId)

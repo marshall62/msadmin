@@ -35,14 +35,105 @@
             else return true;
         }
 
-        function editHint (id,name,stmt) {
-            console.log("clicked on hint " + id);
-            $('#hid').val(id);
-            $('#hname').val(name);
-            $('#hstatement').val(stmt);
+        // Called when the user clicks the hyperlink of a hint.
+        // Will get the hint JSON from the server and will pop up the dialog to edit it.
+        function editHint2 (id) {
+            var url_mask = "{% url 'qauth_get_hint' hintId=12345 %}".replace(/12345/, id.toString());
+            $.get(url_mask, function(data) {
+                console.log("Got hint json detail");
+                console.log(data);
+                $('#hid').val(id);
+                $('#hname').val(data.name);
+                $('#haudioResource').val(data.audioResource);
+                $('#hstatement').val(data.statementHTML);
+                $('#order').val(data.order);
+                $('#hoverText').val(data.hoverText);
+                $('#givesAnswer').prop('checked',data.givesAnswer);
+                showHintDialog();
+
+            });
+        }
+
+        // Called when the user clicks the + hint button to add a new hint.
+        // Clears the dialog fields and pops it up.
+        function addHint () {
+            $('#hid').val('');
+            $('#hname').val('');
+            $('#haudioResource').val('');
+            $('#hstatement').val('');
+            $('#order').val('');
+            $('#hoverText').val('');
+            $('#givesAnswer').prop('checked',false);
+            showHintDialog();
+        }
+
+        // When dialog save button is clicked, save the hint.
+        // Closes the dialog after the save POST has been sent to the server
+        function saveHint (probId) {
+            var id = $('#hid').val();
+            var name = $('#hname').val();
+            var statement = $('#hstatement').val();
+            var order = $('#order').val();
+            var givesAnswer = $('#givesAnswer').prop("checked");
+            var hoverText = $('#hoverText').val();
+            var url_mask = "{% url 'qauth_save_hint' probId=12345 %}".replace(/12345/, probId.toString());
+            var audioResource = $('#haudioResource').val();
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: {id: id, name: name, statementHTML: statement, audioResource:audioResource, order: order, hoverText: hoverText, givesAnswer: givesAnswer },
+                error: function (a,b,c) {
+                    console.log("Failed to write to server! " + a.responseText + b);
+                    console.log(a);
+                    alert("Failed to write to server! " + a.responseText + b);
+                },
+                success: function (data) {
+                    console.log("JSON returned by POST");
+                    console.log(data);
+                    location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+                }
+            });
+            $('#hintDialog').modal('toggle');
+
+
+        }
+
+        function deleteSelectedHints (probId) {
+            if (confirm("Are you sure you want to delete the selected hints?")) {
+                var ids = [];
+
+                $('#hintTable').find('tr').each(function () {
+                    var row = $(this);
+                    if (row.find('input[type="checkbox"]').is(':checked') ) {
+                        var rid = row.attr('id');
+                        ids.push(rid);
+                    }
+                });
+
+
+                var url_mask = "{% url 'qauth_delete_hints' probId=12345 %}".replace(/12345/, probId.toString());
+                $.ajax({
+                    url: url_mask,
+                    type: "POST",
+                    data: {data: ids },
+                    error: function (a,b,c) {
+                        console.log("Failed to delete hints! " + a.responseText + b);
+                        console.log(a);
+                        alert("Failed to delete hints " + a.responseText + b);
+                    },
+                    success: function (data) {
+                        location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+                    }
+                });
+            }
+        }
+
+        // opens the hint dialog
+        function showHintDialog () {
             $('#hintDialog').modal('show');
         }
 
+        // loads the pulldowns with their options
         $(function () {
 {#            test('hi there');#}
 
@@ -113,28 +204,6 @@
         <br>
         <div id="my-pulldown1" label="Read Aloud Audio" myId="audioResource" myName="audioResource" selectedOption="{{ problem.getReadAloud }}"></div>
         <br>
-{#        <div class="input-group">#}
-{#            <span class="input-group-addon">Read aloud audio</span>#}
-{#            <select class="form-control" style="width:auto;" name='audioResource' id="audioResource">#}
-{#                {% if probId == -1 %}#}
-{#                    <option value="hasAudio">Has Audio</option>#}
-{#                    <option selected value="noAudio">No Audio</option>#}
-{#                {% else %}#}
-{#                    <option#}
-{#                            {% if problem.isReadAloud %}#}
-{#                                selected#}
-{#                            {% endif %}#}
-{#                            value="hasAudio">Has Audio</option>#}
-{#                    <option#}
-{#                            {% if not problem.isReadAloud %}#}
-{#                                selected#}
-{#                            {% endif %}#}
-{#                            value="noAudio">No Audio</option>#}
-{#                {% endif %}#}
-{#            </select>#}
-{#        </div>#}
-{#        <br>#}
-
 
         <div class="input-group">
             <span class="input-group-addon">Image URL</span>
@@ -149,30 +218,6 @@
         <div id="my-pulldown2" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
         <br>
 
-{#        <div class="input-group">#}
-{#            <span class="input-group-addon">Answer Type</span>#}
-{#            <select class="form-control" style="width:auto;" name='questType' id="questType">#}
-{#                {% if probId == -1 %}#}
-{#                    <option value="shortanswer">Short Answer</option>#}
-{#                    <option selected value="multichoice">Multiple Choice</option>#}
-{##}
-{#                {% else %}#}
-{#                    <option value="shortanswer"#}
-{#                            {% if problem.questType == 'shortanswer' %}#}
-{#                            selected#}
-{#                            {% endif %}#}
-{#                    >Short Answer</option>#}
-{#                    <option value="multichoice"#}
-{#                            {% if problem.questType == 'multichoice' %}#}
-{#                            selected#}
-{#                            {% endif %}#}
-{#                    >Multiple Choice</option>#}
-{#                {% endif %}#}
-{#            </select>#}
-{##}
-{#        </div>#}
-
-
         <div class="input-group">
             <span class="input-group-addon">Answer</span>
             {% if probId == -1 %}
@@ -184,34 +229,6 @@
         </div>
         <br>
         <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}"></div>
-
-{#        <div class="input-group">#}
-{#            <span class="input-group-addon">Status</span>#}
-{#            <select class="form-control" style="width:auto;" name='status' id="status">#}
-{#                {% if probId == -1 %}#}
-{#                    <option value="ready">Ready</option>#}
-{#                    <option selected value="testable">Testable</option>#}
-{#                    <option value="dead">Dead</option>#}
-{##}
-{#                {% else %}#}
-{#                    <option value="ready"#}
-{#                            {% if problem.status == 'ready' %}#}
-{#                            selected#}
-{#                            {% endif %}#}
-{#                    >Ready</option>#}
-{#                    <option value="testable"#}
-{#                            {% if problem.status == 'testable' %}#}
-{#                            selected#}
-{#                            {% endif %}#}
-{#                    >Testable</option>#}
-{#                    <option value="dead"#}
-{#                            {% if problem.status != 'testable' and problem.status != 'ready' %}#}
-{#                            selected#}
-{#                            {% endif %}#}
-{#                    >Dead</option>#}
-{#                {% endif %}#}
-{#            </select>#}
-{#        </div>#}
 
         <br/>
 
@@ -241,25 +258,34 @@
         <button id="saveButton" class="btn btn-default">Save</button>
         </div>
 
+    </form>
+
     {% if hints %}
     <h3>Hints</h3>
-        <div class="input-group">
-        <span class="input-group-addon">Action</span>
-        <select class="form-control" style="width:auto;"><option>Add</option><option>Delete Selected</option></select>
-        </div>
-        <table class="table table-bordered">
+{#        <div class="input-group">#}
+        <button type="submit" class="btn btn-link" onclick="addHint()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <button type="submit" class="btn btn-link" onclick="deleteSelectedHints({{ problem.id }})">
+            <span class="glyphicon glyphicon-minus"></span>
+        </button>
+{#        <span class="input-group-addon">Action</span>#}
+{#        <select class="form-control" style="width:auto;"><option>Add</option><option>Delete Selected</option></select>#}
+{#        </div>#}
+        <table id="hintTable" class="table table-bordered">
         <thead>
             <tr><td style="width: 60px"></td><th style="width: 60px">ID</th><th style="width: 60px">name</th><th style="width: 200px">statement</th></tr>
         </thead>
-        <tbody>
+        <tbody id="hinttbody">
+{#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
         {% for h in hints %}
-            <tr><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="#" onClick='editHint({{ h.id }},"{{ h.name }}","{{ h.statementHTML }}")'>{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
+            <tr id="{{ h.id }}"><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="#" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
         {% endfor %}
         </tbody>
         </table>
     {% endif %}
 
-    </form>
+
 
 
     <!-- Modal Dialog that will come up when hint name is clicked-->
@@ -283,20 +309,28 @@
                             <input type="text" class="form-control" id="hname">
                         </div>
                         <div class="form-group">
-                            <label for="hstatement">Value</label>
-
-                            <div id="param-value-div">
-                                <textarea id="hstatement" rows="6" cols="50" />
-                            </div>
-
+                            <label for="order">Order</label>
+                            <input type="text" class="form-control" id="order" readonly>
                         </div>
-
-
-
+                        <div class="form-group">
+                            <label for="hstatement">Statement</label>
+                            <textarea id="hstatement" class="form-control" rows="6" cols="50"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="hoverText">Hover Text</label>
+                            <input type="text" class="form-control" id="hoverText">
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" id="givesAnswer" checked>Gives Answer</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="haudioResource">Audio Resource</label>
+                            <input type="text" class="form-control" id="haudioResource">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button onClick="saveHintEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button onClick="saveHint({{ problem.id }});" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
                     <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
