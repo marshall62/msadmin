@@ -81,11 +81,13 @@ class ISParamInline(admin.TabularInline):
         p = self.parent_model
         if db_field.name == 'baseParam':
             # pull the SCISMap ID out of the request URL
-            s = request.path.split('/')[4]
+            s = request.path.split('/')
+            n = s.index('scismap')
+            s = s[n+1] # get the item out of the URL following scismap. Will be either an ID or 'add'
             # if creating a NEW scismap, s will be 'add' rather than an id.
             if s == 'add':
                 return super(ISParamInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
-            scisid = int(request.path.split('/')[4])
+            scisid = int(s)
             # lookup the scismap and get its interv selector
             insel = SCISMap.objects.get(id=scisid).interventionSelector
             # queryset of is-param-base objects should be limited to only those for this intervention selector

@@ -137,8 +137,8 @@
       <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="83" column="42" lean-forward="true" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
+            <state relative-caret-position="355">
+              <caret line="86" column="39" lean-forward="true" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -922,7 +922,7 @@
       <workItem from="1507849621271" duration="5028000" />
       <workItem from="1508255901817" duration="4990000" />
       <workItem from="1508856090590" duration="7759000" />
-      <workItem from="1510058230268" duration="1370000" />
+      <workItem from="1510058230268" duration="2125000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1057,11 +1057,18 @@
       <option name="project" value="LOCAL" />
       <updated>1508863399770</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Fixed bug in admin so that SCIS maps can be created">
+      <created>1510070643392</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1510070643392</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="593330000" />
+    <option name="totallyTimeSpent" value="594085000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="87" y="127" width="1537" height="927" extended-state="0" />
@@ -1136,7 +1143,8 @@
     <MESSAGE value="Added hint dialog and a pulldown component built in JS" />
     <MESSAGE value="fixed navbar" />
     <MESSAGE value="Added hint dialog for creating and editing hints.  Also added delete of hint functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added hint dialog for creating and editing hints.  Also added delete of hint functionality" />
+    <MESSAGE value="Fixed bug in admin so that SCIS maps can be created" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in admin so that SCIS maps can be created" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1530,8 +1538,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="83" column="42" lean-forward="true" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
+        <state relative-caret-position="355">
+          <caret line="86" column="39" lean-forward="true" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
           <folding />
         </state>
       </provider>
