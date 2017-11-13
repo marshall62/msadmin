@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^qauth/hint/(?P<hintId>\d+)/$', qaviews.getHint, name='qauth_get_hint'),
     url(r'^qauth/prob/(?P<probId>\d+)/hint/save/$', qaviews.saveHint, name='qauth_save_hint'),
     url(r'^qauth/prob/(?P<probId>\d+)/hint/delete/$', qaviews.deleteHints, name='qauth_delete_hints'),
+    url(r'^qauth/layouts/$', qaviews.getLayouts, name='qauth_layouts'),
     url(r'^validate_generic_structure/$', views.validate_generic, name='validate_generic'),
     url(r'^validate_class_tutoring/$', views.validate_class_tutoring, name='validate_class_tutoring'),
     url(r'^classes/(?P<teacherId>.+)/$', views.class_list_by_teacher, name='class_list_by_teacher'),

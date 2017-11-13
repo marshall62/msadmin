@@ -12,6 +12,7 @@ class Problem (models.Model):
     standardId = models.CharField(max_length=45)
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
+    layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
 
     def setFields (self, **kwargs):
         if kwargs is not None:
@@ -26,6 +27,7 @@ class Problem (models.Model):
             self.standardId = kwargs['standardId']
             self.clusterId = kwargs['clusterId']
             self.form = kwargs['form']
+            self.layout_id=kwargs['layout_id']
 
 
     class Meta:
@@ -42,6 +44,25 @@ class Problem (models.Model):
             return self.status
         else:
             return 'dead'
+
+    def getLayoutId (self):
+        if self.layout:
+            return self.layout.id
+        else:
+            return -1
+
+    def getLayoutName (self):
+        if self.layout:
+            return self.layout.name
+        else:
+            return ''
+
+    def getLayoutDescription (self):
+        if self.layout:
+            return self.layout.description
+        else:
+            return ''
+
 
 
     # A static method to get all the quickAuth problems.  There's some inefficiency in this because we are going
@@ -67,3 +88,19 @@ class Hint (models.Model):
 
     def __str__ (self):
         return self.name
+
+class ProblemLayout (models.Model):
+    problemFormat = models.TextField()
+    name = models.CharField(max_length=45)
+    notes = models.CharField(max_length=100)
+    description = models.CharField(max_length=150)
+
+    class Meta:
+        db_table = "problemlayout"
+
+    def toJSON (self):
+        d = {}
+        d['id'] = self.pk
+        d['name'] = self.name
+        d['description'] = self.description
+        return d

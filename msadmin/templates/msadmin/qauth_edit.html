@@ -133,6 +133,10 @@
             $('#hintDialog').modal('show');
         }
 
+        function createPulldownOption (value, label, description) {
+            return {label: label+(description ? ("  "+description) : ""), value: value};
+        }
+
         // loads the pulldowns with their options
         $(function () {
 {#            test('hi there');#}
@@ -141,6 +145,23 @@
             mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});
             mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
             mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+            var url_mask = "{% url 'qauth_layouts' %}";
+            $.ajax({
+                url: url_mask,
+                type: "GET",
+                error: function (a,b,c) {
+                    alert("Failed to get layouts " + a.responseText + b);
+                },
+                success: function (data) {
+                    var layoutOpts = data;
+                    var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
+                    console.log("options list");
+                    console.log(opts);
+                    mountPulldownComponent('my-pulldown4',{label:"Layout", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
+
+                }
+            });
+
 
         });
 
@@ -156,7 +177,7 @@
     <h3>Edit a math problem</h3>
     {% endif %}
 
-    <form method="post" onsubmit="return validateProblem();" action="{% url 'qauth_save_prob' %}">
+    <form method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_prob' %}">
         {% csrf_token %}
 
         <div class="form-group">
@@ -166,7 +187,7 @@
             {% if probId == -1 %}
                 <input id="id" type="text" class="form-control" name="id" readonly placeholder="--">
             {% else %}
-                <input id="id" type="text" class="form-control" name="id" value = "{{ problem.id }}" placeholder="--">
+                <input id="id" type="text" class="form-control" name="id" readonly value = "{{ problem.id }}" placeholder="--">
             {% endif %}
 
         </div>
@@ -202,23 +223,32 @@
 
         </div>
         <br>
-        <div id="my-pulldown1" label="Read Aloud Audio" myId="audioResource" myName="audioResource" selectedOption="{{ problem.getReadAloud }}"></div>
-        <br>
+        <div class="form-inline">
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0" id="my-pulldown1" label="Read Aloud Audio" myId="audioResource" myName="audioResource" selectedOption="{{ problem.getReadAloud }}"></div>
 
-        <div class="input-group">
-            <span class="input-group-addon">Image URL</span>
-            {% if probId == -1 %}
-                <input id="imageURL" type="text" class="form-control" name="imageURL" placeholder="">
-            {% else %}
-                <input id="imageURL" type="text" class="form-control" name="imageURL" value = "{{ problem.imageURL }}">
-            {% endif %}
+            <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
 
         </div>
         <br>
-        <div id="my-pulldown2" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
-        <br>
 
-        <div class="input-group">
+        <div class="form-inline">
+            <div class="input-group">
+                <span class="input-group-addon">Image URL</span>
+                {% if probId == -1 %}
+                    <input id="imageURL" type="text" class="form-control" name="imageURL" placeholder="">
+                {% else %}
+                    <input id="imageURL" type="text" class="form-control" name="imageURL" value = "{{ problem.imageURL }}">
+                {% endif %}
+
+            </div>
+            <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
+        </div>
+        <br>
+            <div class="form-inline">
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0" id="my-pulldown2" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
+
+
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
             <span class="input-group-addon">Answer</span>
             {% if probId == -1 %}
                 <input id="answer" type="text" class="form-control" name="answer" placeholder="">
@@ -227,35 +257,44 @@
             {% endif %}
 
         </div>
+            </div>
         <br>
+
+
         <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}"></div>
 
         <br/>
 
-        <div class="input-group">
-            <span class="input-group-addon">Standard ID</span>
-            {% if probId == -1 %}
-                <input id="standardId" type="text" class="form-control" name="standardId" placeholder="">
-            {% else %}
-                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
-            {% endif %}
+        <div id="my-pulldown4"></div>
 
+        <br/>
+
+        <div class="form-inline">
+            <div class="input-group">
+                <span class="input-group-addon">Standard ID</span>
+                {% if probId == -1 %}
+                    <input id="standardId" type="text" class="form-control" name="standardId" placeholder="">
+                {% else %}
+                    <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
+                {% endif %}
+
+            </div>
+
+
+            <div class="input-group">
+                <span class="input-group-addon">Cluster ID</span>
+                {% if probId == -1 %}
+                    <input id="clusterId" type="text" class="form-control" name="clusterId" placeholder="">
+                {% else %}
+                    <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
+                {% endif %}
+
+            </div>
         </div>
         <br>
 
-        <div class="input-group">
-            <span class="input-group-addon">Cluster ID</span>
-            {% if probId == -1 %}
-                <input id="clusterId" type="text" class="form-control" name="clusterId" placeholder="">
-            {% else %}
-                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
-            {% endif %}
 
-        </div>
-        <br>
-
-
-        <button id="saveButton" class="btn btn-default">Save</button>
+        <button id="saveButton" class="btn btn-primary">Save</button>
         </div>
 
     </form>
