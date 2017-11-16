@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^qauth/prob/create/$', qaviews.create_problem, name='qauth_create_prob'),
     url(r'^qauth/prob/save/$', qaviews.save_problem, name='qauth_save_prob'),
     url(r'^qauth/prob/edit/(?P<probId>\d+)/$', qaviews.edit_problem, name='qauth_edit_prob'),
+    url(r'^qauth/problem/(?P<probId>\d+)/$', qaviews.getProblemJSON, name='qauth_get_problem'),
     url(r'^qauth/hint/(?P<hintId>\d+)/$', qaviews.getHint, name='qauth_get_hint'),
     url(r'^qauth/prob/(?P<probId>\d+)/hint/save/$', qaviews.saveHint, name='qauth_save_hint'),
     url(r'^qauth/prob/(?P<probId>\d+)/hint/delete/$', qaviews.deleteHints, name='qauth_delete_hints'),

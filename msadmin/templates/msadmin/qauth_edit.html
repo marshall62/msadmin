@@ -13,6 +13,14 @@
         .modal-footer {
             background-color: #f9f9f9;
         }
+        .bs-example{
+            margin: 50px;
+        }
+        .bs-example a{
+            font-size: 22px;
+            text-decoration: none;
+            margin: 0 10px;
+        }
     </style>
 {% endblock %}
 
@@ -27,7 +35,22 @@
 
     <script language="javascript">
 
+        var theProblem = null; // a problem object obtained from AJAX call when page loads
+        var answerType = "shortanswer"; // the currently selected answerType
+        var choiceLabels = ["a", "b", "c", "d", "e"];
+        var numChoices = 0; // keeps track of how many multi choice answers fields there are.
+        var numAnswers = 0; // keeps track of how many short answer fields there are.
+
+
         function validateProblem () {
+            // some multi-choice answer must be marked correct
+            if (answerType == 'multichoice') {
+                var numChecked = $('#multichoicetablebody tr td input[name="correctChoice"]:checked').length;
+                if (numChecked != 1) {
+                    alert("You must select a single multiple choice response to as the correct answer!");
+                    return false;
+                }
+            }
             if (false) {
                 alert("Form is not valid");
                 return false;
@@ -40,8 +63,6 @@
         function editHint2 (id) {
             var url_mask = "{% url 'qauth_get_hint' hintId=12345 %}".replace(/12345/, id.toString());
             $.get(url_mask, function(data) {
-                console.log("Got hint json detail");
-                console.log(data);
                 $('#hid').val(id);
                 $('#hname').val(data.name);
                 $('#haudioResource').val(data.audioResource);
@@ -88,8 +109,6 @@
                     alert("Failed to write to server! " + a.responseText + b);
                 },
                 success: function (data) {
-                    console.log("JSON returned by POST");
-                    console.log(data);
                     location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
                 }
             });
@@ -137,15 +156,272 @@
             return {label: label+(description ? ("  "+description) : ""), value: value};
         }
 
+        function addMultiChoiceRows (n) {
+            var numRows = $('#multichoicetablebody tr').length;
+            if (numRows + n > choiceLabels.length) {
+                alert("Cannot add more choices.");
+                return;
+            }
+            for (var i = numChoices; i < numChoices+n; i++) {
+                var tddel ='<td class="deleteButton">' +
+                        '<a class="delChoice" href="#multichoices">' +
+                        '<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this choice"></span>'+
+                        '</a>'+
+                        '</td>';
+                var tdlab = '<td class="choiceLabel">' + choiceLabels[i] + '</td>';
+                var tdradio = '<td class="choiceCorrect"><input class="correctRadio" type="radio" name="correctChoice" value="' +choiceLabels[i]+ '"></td>';
+                var tdtxt = '<td><div class="row"><div class="form-group col-lg-12">' +
+                    '<input name="multichoice[]" type="text" class="form-control" value=""/>' +
+                    "</div>" +
+                    "</div></td>";
+
+                var tr="<tr>" + tddel + tdlab + tdradio + tdtxt + "</tr>";
+
+                $('#multichoicetable > tbody:last-child').append(tr);
+            }
+            numChoices += n;
+            showDebug();
+        }
+
+        function addShortAnswerRows (n) {
+            {#            $("#multichoicetablebody").empty();#}
+
+            for (var i = 0; i < n; i++) {
+                var tddel ='<td class="deleteButton">'+
+                    '<a class="delShortAnswer" href="#shortanswertable">'+
+                    '<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>'+
+                    '</a>'+
+                    '</td>';
+
+                var tdtxt = '<td><div class="row"><div class="form-group col-lg-12">' +
+                    '<input type="text" class="form-control" name="shortanswer[]" value=""/>' +
+                    "</div>" +
+                    "</div></td>";
+
+                var tr="<tr>" + tddel + tdtxt + "</tr>";
+
+                $('#shortanswertable > tbody:last-child').append(tr);
+                numAnswers++
+            }
+        }
+
+        function getChildWithClass (element, classname) {
+            for (c of element.children) {
+                if (c.className === classname)
+                    return c;
+            }
+            return null;
+        }
+
+        function showDebug () {
+            var tbody = document.getElementById("multichoicetablebody");
+            console.log("-------------------");
+            for (var i = 0, row; row = tbody.rows[i]; i++) {
+                var c = row.cells[0];
+                var cell = row.cells[2];
+
+                console.log(cell);
+                var inp = cell.childNodes[0];
+                inp = getChildWithClass(cell,"correctRadio")
+                inp.value = choiceLabels[i];
+                console.log("Row " + i + " " + inp.name + ":" + "choiceval: " + inp.value + " checked: " + inp.checked );
+                console.log(inp);
+            }
+            console.log("-------------------");
+
+        }
+
+        function labelChoices () {
+            var tbody = document.getElementById("multichoicetablebody");
+            for (var i = 0, row; row = tbody.rows[i]; i++) {
+                //iterate through rows
+                //rows would be accessed using the "row" variable assigned in the for loop
+                for (var j=0, cell; cell=tbody.rows[i].cells[j]; j++)
+                    if (cell.className == "choiceLabel") {
+                        cell.innerHTML = choiceLabels[i];
+
+                    }
+                    // the radio button for marking correct choice needs to have its value changed to the new letter (same as label letter)
+                    else if (cell.className == "choiceCorrect")  {
+                        var inp = getChildWithClass(cell,"correctRadio");
+                        inp.value = choiceLabels[i];
+
+                    }
+
+
+
+            }
+            showDebug();
+        }
+
+        // GIven the 0-based row number in the multichoice table, delete that row
+        function deleteChoice (n) {
+            var numRows = $('#multichoicetablebody tr').length;
+            if (numRows == 2) {
+                alert("A multi choice problem should have at least 2 choices.");
+                return;
+            }
+            document.getElementById("multichoicetablebody").deleteRow(n);
+            numChoices--;
+            labelChoices();
+        }
+
+        // given the <a> element in the row that triggered the delete action
+        function deleteMultiChoiceRow (aTagDelButton) {
+            var numRows = $('#multichoicetablebody tr').length;
+            if (numRows == 2) {
+                alert("A multi choice problem should have at least 2 choices.");
+                return;
+            }
+            var td = aTagDelButton.parent();
+            var tr = td.parent();
+            var tbody = tr.parent();
+            tr.remove();
+            numChoices--;
+            labelChoices()
+        }
+
+        function deleteAnswerRow (aTagDelButton) {
+            var numRows = $('#shortanswertablebody tr').length;
+            if (numRows == 1) {
+                alert("A short answer problem should have at least 1 answer.");
+                return;
+            }
+            var td = aTagDelButton.parent();
+            var tr = td.parent();
+            var tbody = tr.parent();
+            numAnswers--
+            tr.remove();
+        }
+
+        // no longer using checkboxes on rows to indicate deleting
+        function deleteCheckedMultiChoiceRows () {
+            var numRows = $('#multichoicetablebody tr').length;
+
+            var numChecked = $('#multichoicetablebody tr td input[name="deleteChoice"]:checked').length;
+            if ((numRows-numChecked) < 2) {
+                alert("A multi choice problem should have at least 2 choices.");
+                return;
+            }
+            numChoices -= numChecked;
+            $('#multichoicetablebody tr').has('input[name="deleteChoice"]:checked').remove();
+            labelChoices();
+        }
+
+        function deleteCheckedShortAnswerRows () {
+
+        }
+
+        function exposeMultiChoiceControls () {
+            $('#multichoices').show();
+            $('#shortAnswer').hide();
+        }
+
+        function exposeShortAnswerControls () {
+            $('#multichoices').hide();
+            $('#shortAnswer').show();
+        }
+
+        // Callback function.  When this HTML file opens on an existing problem, an AJAX call is made to get the JSON
+        // of the problem.  The JSON data is sent to this function to initialize internal state in the page's javascript
+        function problemInit (data) {
+            theProblem = data;
+            answerType = theProblem.questType;
+            if (answerType == 'multichoice') {
+                numChoices = theProblem.answers.length;
+                numAnswers = 0;
+            }
+            else {
+                numAnswers = theProblem.answers.length;
+                numChoices = 0;
+            }
+
+            if (theProblem.isMultiChoice)
+                exposeMultiChoiceControls();
+            else
+                exposeShortAnswerControls();
+        }
+
         // loads the pulldowns with their options
         $(function () {
 {#            test('hi there');#}
+            $('[data-toggle="tooltip"]').tooltip({
+                placement : 'top'
+            });
+            // by default we expose the short answer controls.
+            // This will be replaced by appropriate controls if we are loading an existing problem
+            exposeShortAnswerControls()
+
+            // delete Choice button in the multichoice table click handling
+{#            $('.delChoice').click(function(x) {#}
+{#                deleteMultiChoiceRow($(this));#}
+{#            });#}
+            $('#addChoice').click(function (x) {
+                addMultiChoiceRows(1);
+            });
 
 
-            mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});
-            mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
-            mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
-            var url_mask = "{% url 'qauth_layouts' %}";
+            $('#addAnswer').click(function (x) {
+                addShortAnswerRows(1);
+            });
+
+            // rather than do a $('.delChoice').click() to handle clicks on the elements with delChoice class
+            // we use this method of listening for click events on elements with this class.  This is necessary
+            // because elements with the delChoice class are added dynamically and they won't be handled correctly
+            // by the ordinary click handling and must be done this way.  See:
+            // https://stackoverflow.com/questions/203198/event-binding-on-dynamically-created-elements
+            $(document).on('click', '.delChoice', function(){
+                deleteMultiChoiceRow($(this));
+            });
+            $(document).on('click', '.delShortAnswer', function(){
+                deleteAnswerRow($(this));
+            });
+
+            $('#my-pulldown2').change(function (x) {
+                var val = $('#questType').val();
+                answerType = val;
+                if (val == 'shortanswer') {
+                    $('#shortAnswer').show();
+                    $('#multichoices').hide();
+
+                    if (numAnswers == 0)
+                        addShortAnswerRows(1);
+                }
+                else {
+                    $('#shortAnswer').hide();
+                    $('#multichoices').show();
+                    if (numChoices == 0)
+                        addMultiChoiceRows(2);
+                }
+            })
+
+{#            mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});#}
+
+            {% if probId != -1 %}
+                mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
+                mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+            {% else %}
+                mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"shortanswer", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
+                mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"testable", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+            {% endif %}
+            var url_mask;
+            url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
+{#            if the probId is valid, make an ajax call to get the problem JSON #}
+            {% if probId != -1 %}
+                url_mask = url_mask.replace("12345", "{{ probId }}");
+            $.ajax({
+                url: url_mask,
+                type: "GET",
+                error: function (a,b,c) {
+                    alert("Failed to get problem " + a.responseText + b);
+                },
+                success: function (data) {
+                    problemInit(data);
+
+                }
+            });
+            {% endif %}
+            url_mask = "{% url 'qauth_layouts' %}";
             $.ajax({
                 url: url_mask,
                 type: "GET",
@@ -155,8 +431,6 @@
                 success: function (data) {
                     var layoutOpts = data;
                     var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
-                    console.log("options list");
-                    console.log(opts);
                     mountPulldownComponent('my-pulldown4',{label:"Layout", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
 
                 }
@@ -224,11 +498,19 @@
         </div>
         <br>
         <div class="form-inline">
-            <div class="input-group mb-2 mr-sm-2 mb-sm-0" id="my-pulldown1" label="Read Aloud Audio" myId="audioResource" myName="audioResource" selectedOption="{{ problem.getReadAloud }}"></div>
+            <div class="input-group">
+                <span class="input-group-addon">Audio File</span>
+                {% if probId == -1 %}
+                    <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
+                {% else %}
+                    <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
+                {% endif %}
 
+            </div>
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
-
+            <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
         </div>
+
         <br>
 
         <div class="form-inline">
@@ -242,22 +524,101 @@
 
             </div>
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
+            <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else the name of the file you upload which can be referenced as {[myfile.jpg]}"></span></a>
         </div>
         <br>
-            <div class="form-inline">
-        <div class="input-group mb-2 mr-sm-2 mb-sm-0" id="my-pulldown2" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
 
-
-        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-            <span class="input-group-addon">Answer</span>
+        <div class="form-inline">
             {% if probId == -1 %}
-                <input id="answer" type="text" class="form-control" name="answer" placeholder="">
-            {% else %}
-                <input id="answer" type="text" class="form-control" name="answer" value = "{{ problem.answer }}">
+                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="shortanswer"></div>
+            {%  else %}
+                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
             {% endif %}
 
+
+
         </div>
-            </div>
+        <br>
+        <div id="shortAnswer" class="input-group mb-2 mr-sm-2 mb-sm-0" >
+            <a id="addAnswer" href="#shortAnswer"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a short answer"></span></a>
+            <table id="shortanswertable" class="table table-bordered">
+                <thead><tr><th style="width: 60px">Delete</th>
+                    <th>Value <a href="#shortAnswer"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Each row should have a possible correct answer (e.g. 4, 4.0, 8/2)"></span></a>
+                    </th></tr></thead>
+                <tbody id="shortanswertablebody">
+                {% if probId != -1 and problem.isShortAnswer %}
+
+                    {% for c in problem.getAnswers %}
+
+                        <tr><td class="deleteButton">
+                            <a class="delShortAnswer" href="#shortanswertable">
+                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
+                            </a>
+                        </td>
+                            <td>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <input id="answer-{{ forloop.counter0 }}" name="shortanswer[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                    </div>
+                                </div>
+                            </td></tr>
+                    {% endfor %}
+                {% elif probId == -1  %}
+                    <tr><td class="deleteButton">
+                        <a class="delShortAnswer" href="#shortanswertable">
+                            <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
+                        </a>
+                    </td>
+                        <td>
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <input id="answer-0" name="shortanswer[]" type="text" class="form-control" value=""/>
+                                </div>
+                            </div>
+                        </td></tr>
+                {% endif %}
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div id="multichoices">
+            <a id="addChoice" href="#multichoices"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a choice answer"></span></a>
+            <table id="multichoicetable" class="table table-bordered">
+                <thead><tr><th style="width: 60px">Delete</th><th style="width: 60px">Choice</th><th style="width: 60px">Correct</th>
+                    <th>Value <a href="#multichoices"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Value or image URL like {[myimage.jpg]}"></span></a>
+                    </th></tr></thead>
+                <tbody id="multichoicetablebody">
+                    {% if probId != -1 and problem.isMultiChoice %}
+
+                        {% for c in problem.getAnswers %}
+
+                            <tr>
+{#                                <td><input name="deleteChoice" type="checkbox"></td>#}
+                                <td class="deleteButton">
+                                    <a class="delChoice" href="#multichoices">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this choice"></span>
+                                    </a>
+                                </td>
+                                <td class="choiceLabel">{{ c.choiceLetter }}</td>
+                                <td class="choiceCorrect">
+                                    <input class="correctRadio" type="radio" name="correctChoice" {% if c.choiceLetter == problem.answer %} checked {% endif %} value="{{ c.choiceLetter }}">
+                               </td>
+                                <td>
+                                    <div class="row">
+                                       <div class="form-group col-lg-12">
+                                           <input id="choice-{{ forloop.counter0 }}" name="multichoice[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                       </div>
+                                    </div>
+                                </td></tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
         <br>
 
 
@@ -295,6 +656,7 @@
 
 
         <button id="saveButton" class="btn btn-primary">Save</button>
+        <button id="previewButton" class="btn btn-primary">Preview</button>
         </div>
 
     </form>
@@ -345,7 +707,7 @@
                         </div>
                         <div class="form-group">
                             <label for="hname">Name</label>
-                            <input type="text" class="form-control" id="hname">
+                            <input type="text" class="form-control" id="hname" readonly>
                         </div>
                         <div class="form-group">
                             <label for="order">Order</label>
@@ -362,10 +724,26 @@
                         <div class="checkbox">
                             <label><input type="checkbox" value="" id="givesAnswer" checked>Gives Answer</label>
                         </div>
+
                         <div class="form-group">
                             <label for="haudioResource">Audio Resource</label>
-                            <input type="text" class="form-control" id="haudioResource">
+                            <div class="form-inline">
+
+                                <input type="text" class="form-control" readonly id="haudioResource">
+                                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="haudioFile" type="file">
+
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label for="haudioResource">Image</label>
+                            <div class="form-inline">
+
+                                <input type="text" class="form-control" readonly id="himageURL">
+                                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="haudioFile" type="file">
+
+                            </div>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">

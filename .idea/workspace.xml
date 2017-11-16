@@ -4,7 +4,6 @@
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qaviews.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/mycomponents.js" afterPath="$PROJECT_DIR$/msadmin/static/js/mycomponents.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/urls.py" afterPath="$PROJECT_DIR$/msadmin/urls.py" />
@@ -47,21 +46,38 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="18" column="68" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="68" />
+            <state relative-caret-position="150">
+              <caret line="15" column="60" lean-forward="true" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3420">
-              <caret line="228" column="76" lean-forward="false" selection-start-line="228" selection-start-column="76" selection-end-line="228" selection-end-column="76" />
+            <state relative-caret-position="182">
+              <caret line="65" column="27" lean-forward="false" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
               <folding>
-                <marker date="1510245499263" expanded="false" signature="12687:12698" ph="..." />
+                <element signature="e#23176#23195#0#HTML" expanded="true" />
+                <element signature="e#25575#25594#0#HTML" expanded="true" />
+                <element signature="e#25610#25629#0#HTML" expanded="true" />
+                <element signature="e#25645#25664#0#HTML" expanded="true" />
+                <element signature="e#29596#29615#0#HTML" expanded="true" />
+                <element signature="e#29625#29644#0#HTML" expanded="true" />
+                <element signature="e#29656#29675#0#HTML" expanded="true" />
+                <marker date="1510841547352" expanded="false" signature="29404:29415" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="174">
+              <caret line="59" column="39" lean-forward="false" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -69,8 +85,8 @@
       <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="-1709">
+              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -88,7 +104,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="407">
@@ -101,28 +117,18 @@
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/submodel/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="46" lean-forward="false" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
+            <state relative-caret-position="-4">
+              <caret line="94" column="39" lean-forward="true" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/json.py">
+      <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/template/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1410">
-              <caret line="106" column="43" lean-forward="false" selection-start-line="106" selection-start-column="33" selection-end-line="106" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6675">
-              <caret line="451" column="16" lean-forward="false" selection-start-line="446" selection-start-column="7" selection-end-line="451" selection-end-column="16" />
+            <state relative-caret-position="176">
+              <caret line="910" column="0" lean-forward="false" selection-start-line="910" selection-start-column="0" selection-end-line="910" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -151,36 +157,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>exTab</find>
-      <find>% if</find>
-      <find>select</find>
-      <find>{{</find>
-      <find>strategy_lc</find>
-      <find>&lt;select</find>
-      <find>Foreign</find>
-      <find>table</find>
-      <find>status</find>
-      <find>reactd</find>
-      <find>localho</find>
-      <find>option</find>
-      <find>scParamModalEditor</find>
-      <find>hintDial</find>
-      <find>texta</find>
-      <find>editH</find>
-      <find>strategyModalEditor</find>
-      <find>showISP</find>
-      <find>href</find>
-      <find>sc-param-active</find>
-      <find>prop</find>
-      <find>editHint</find>
-      <find>check</find>
-      <find>is-act</find>
-      <find>showHint</find>
       <find>prob.</find>
       <find>alert</find>
       <find>strategy-lc</find>
-      <find>ajax</find>
       <find>MEDIA</find>
+      <find>glyph</find>
+      <find>span</find>
+      <find>{%</find>
+      <find>glyp</find>
+      <find>thePr</find>
+      <find>ajax</find>
+      <find>.len</find>
+      <find>correctChoice</find>
+      <find>saveButt</find>
+      <find>delete</find>
+      <find>&quot;multichoice&quot;</find>
+      <find>&quot;choiceL</find>
+      <find>&quot;correctCh</find>
+      <find>delC</find>
+      <find>deleteC</find>
+      <find>choiceCorr</find>
+      <find>deleteChoi</find>
+      <find>deleteChoice</find>
+      <find>choiceCorrect</find>
+      <find>onclick</find>
+      <find>delChoice</find>
+      <find>delAnswer</find>
+      <find>ProblemA</find>
+      <find>delShortAnswer</find>
+      <find>numChoices</find>
+      <find>console.log</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -236,12 +242,12 @@
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/react1.html" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/base.html" />
         <option value="$PROJECT_DIR$/msadmin/admin.py" />
-        <option value="$PROJECT_DIR$/msadmin/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/mycomponents.js" />
-        <option value="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" />
-        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" />
         <option value="$PROJECT_DIR$/msadminsite/settings.py" />
+        <option value="$PROJECT_DIR$/msadmin/urls.py" />
+        <option value="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" />
         <option value="$PROJECT_DIR$/msadmin/qaviews.py" />
+        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" />
       </list>
     </option>
   </component>
@@ -261,8 +267,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="84" />
-    <option name="y" value="106" />
+    <option name="x" value="218" />
+    <option name="y" value="64" />
     <option name="width" value="1328" />
     <option name="height" value="927" />
   </component>
@@ -917,7 +923,7 @@
       <workItem from="1508255901817" duration="4990000" />
       <workItem from="1508856090590" duration="7759000" />
       <workItem from="1510058230268" duration="15267000" />
-      <workItem from="1510584917404" duration="4712000" />
+      <workItem from="1510584917404" duration="61105000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1066,14 +1072,21 @@
       <option name="project" value="LOCAL" />
       <updated>1510071374206</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Added file upload to the qauth problems.">
+      <created>1510589656430</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1510589656430</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="611939000" />
+    <option name="totallyTimeSpent" value="668332000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="84" y="106" width="1328" height="927" extended-state="0" />
+    <frame x="218" y="64" width="1328" height="927" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1085,13 +1098,13 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2803398" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25978917" sideWeight="0.46678635" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25978917" sideWeight="0.4676525" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.75179" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25978917" sideWeight="0.5332136" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25978917" sideWeight="0.5323475" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14922349" sideWeight="0.54618937" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20880681" sideWeight="0.4055944" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32402912" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3434466" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30062112" sideWeight="0.46977812" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32549942" sideWeight="0.49120122" order="19" side_tool="false" content_ui="tabs" />
@@ -1146,7 +1159,8 @@
     <MESSAGE value="fixed navbar" />
     <MESSAGE value="Added hint dialog for creating and editing hints.  Also added delete of hint functionality" />
     <MESSAGE value="Fixed bug in admin so that SCIS maps can be created" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in admin so that SCIS maps can be created" />
+    <MESSAGE value="Added file upload to the qauth problems." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added file upload to the qauth problems." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1158,8 +1172,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/msadmin/qaviews.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="189" />
+          <line>43</line>
+          <option name="timeStamp" value="203" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1169,7 +1183,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="191" />
+      <option name="time" value="204" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1178,13 +1192,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/strategycomponent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="19" lean-forward="true" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/db/models/manager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="172">
@@ -1296,6 +1303,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
           <caret line="580" column="0" lean-forward="false" selection-start-line="580" selection-start-column="0" selection-end-line="580" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1303,6 +1311,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="17" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1313,17 +1322,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/dbops/classops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="354" column="73" lean-forward="false" selection-start-line="354" selection-start-column="73" selection-end-line="354" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1338,6 +1341,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1345,13 +1349,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
           <caret line="155" column="27" lean-forward="false" selection-start-line="155" selection-start-column="27" selection-end-line="155" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1369,13 +1367,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="59" column="39" lean-forward="false" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="39" />
+          <folding>
+            <element signature="e#605#624#0#HTML" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1383,6 +1377,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="2" selection-end-line="15" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1418,6 +1413,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="28" selection-end-column="59" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1459,25 +1455,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="18" column="68" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_strategy2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="66" lean-forward="false" selection-start-line="5" selection-start-column="62" selection-end-line="5" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/base_ajax.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="25" lean-forward="false" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1485,6 +1467,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="722">
           <caret line="49" column="6" lean-forward="false" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1496,28 +1479,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/submodel/qauth_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="46" lean-forward="false" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3420">
-          <caret line="228" column="76" lean-forward="false" selection-start-line="228" selection-start-column="76" selection-end-line="228" selection-end-column="76" />
-          <folding>
-            <marker date="1510245499263" expanded="false" signature="12687:12698" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="9" lean-forward="false" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="142" column="27" lean-forward="true" selection-start-line="142" selection-start-column="27" selection-end-line="142" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_strategy2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="689" column="2" lean-forward="false" selection-start-line="689" selection-start-column="0" selection-end-line="689" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4190">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/class_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="59" column="39" lean-forward="false" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="15" column="60" lean-forward="true" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/template/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="910" column="0" lean-forward="false" selection-start-line="910" selection-start-column="0" selection-end-line="910" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1530,21 +1543,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/submodel/qauth_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4">
+          <caret line="94" column="39" lean-forward="true" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/dbops/classops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="176" column="51" lean-forward="false" selection-start-line="176" selection-start-column="45" selection-end-line="176" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+        <state relative-caret-position="-1709">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="142" column="27" lean-forward="true" selection-start-line="142" selection-start-column="27" selection-end-line="142" selection-end-column="27" />
-          <folding />
+        <state relative-caret-position="182">
+          <caret line="65" column="27" lean-forward="false" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
+          <folding>
+            <element signature="e#23176#23195#0#HTML" expanded="true" />
+            <element signature="e#25575#25594#0#HTML" expanded="true" />
+            <element signature="e#25610#25629#0#HTML" expanded="true" />
+            <element signature="e#25645#25664#0#HTML" expanded="true" />
+            <element signature="e#29596#29615#0#HTML" expanded="true" />
+            <element signature="e#29625#29644#0#HTML" expanded="true" />
+            <element signature="e#29656#29675#0#HTML" expanded="true" />
+            <marker date="1510841547352" expanded="false" signature="29404:29415" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

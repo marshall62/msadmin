@@ -34,12 +34,19 @@ def save_problem (request):
         name = post['name']
         nickname = post['nickname']
         statementHTML = post['statementHTML']
-        answer = post['answer']
+        # answer = post['answer']
         imageURL = post['imageURL']
         status = post['status']
         standardId = post['standardId']
         clusterId = post['clusterId']
         questType = post['questType']
+        correctAnswer=None
+        if questType == Problem.MULTI_CHOICE:
+            correctAnswer = post['correctChoice']
+            choices = post.getlist('multichoice[]')
+        else:
+            answers = post.getlist('shortanswer[]')
+            correctAnswer = None # want all the answers to go into the problemAnswers table - not into problem.answer
         audioResource = post['audioResource']
         layoutId = post['layout']
         audioResource = 'question' if audioResource == 'hasAudio' else None
@@ -73,19 +80,47 @@ def save_problem (request):
             if fs2.exists(audFile.name):
                 fs2.delete(audFile.name)
             fs2.save(audFile.name, audFile)
+            audioResource= audFile.name.split('.')[0] # get rid of the file extension e.g.
 
         if not id:
-            p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=answer,
+            p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                     imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
                     questType=questType, audioResource=audioResource, layout_id=layoutId)
+
         else:
             p = get_object_or_404(Problem, pk=id)
-            p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=answer,
+            p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
                         questType=questType, audioResource=audioResource,layout_id=layoutId)
         p.save()
         probId = p.pk
+        # if its a multichoice problem delete all the problem answers and add the given list
+        if questType==Problem.MULTI_CHOICE:
+            deleteProblemAnswers(p)
+            saveProblemMultiChoices(p,correctAnswer,choices)
+        else:
+            deleteProblemAnswers(p)
+            saveProblemShortAnswers(p,correctAnswer,answers)
     return redirect("qauth_edit_prob",probId=probId)
+
+def deleteProblemAnswers (problem):
+    answers = problem.getAnswers()
+    for a in answers:
+        a.delete()
+
+def saveProblemMultiChoices (problem, correctAnswer, choices):
+    i=0
+    for c,l in zip(choices,['a','b','c','d','e']):
+        pa = ProblemAnswer(choiceLetter=l,val=c,order=i,problem=problem)
+        pa.save()
+        i += 1
+
+def saveProblemShortAnswers (problem, correctAnswer, answers):
+    i=0
+    for a in answers:
+        pa = ProblemAnswer(val=a,order=i,problem=problem)
+        pa.save()
+        i += 1
 
 def getHint (request, hintId):
     h = get_object_or_404(Hint,pk=hintId)
@@ -146,3 +181,8 @@ def getLayouts (request):
     # create a list of layout objects in json
     a = [l.toJSON() for l in layouts]
     return JsonResponse(a,safe=False)
+
+def getProblemJSON (request, probId):
+    p = get_object_or_404(Problem,pk=probId)
+    js = p.toJSON()
+    return JsonResponse(js,safe=False)
