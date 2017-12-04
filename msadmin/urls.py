@@ -4,7 +4,8 @@ from . import views
 from . import qaviews
 from . import json
 from . import modelUpdate
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.main, name='main'),
@@ -52,3 +53,6 @@ urlpatterns = [
     url(r'^class/(?P<classId>\d+)/is/(?P<isId>\d+)/sc/(?P<scId>\d+)/strategy/(?P<strategyId>\d+)/json/$',json.get_is, name='class_is_detail')
 
 ]
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

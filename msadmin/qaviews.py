@@ -6,8 +6,9 @@ from django.core.files.storage import FileSystemStorage
 import os
 import sys
 from .submodel.qauth_model import *
+from msadminsite.settings import MEDIA_URL,MEDIA_ROOT
 
-CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
+# CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
 
 # Shows the main page of the site
 def main (request):
@@ -27,16 +28,26 @@ def create_problem (request):
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
-    return render(request, 'msadmin/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'mediaURL': CONTENT_MEDIA_URL})
+    return render(request, 'msadmin/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'mediaURL': MEDIA_URL})
 
-def saveMedia (name, file):
+# write the file to path/problem_probId/f.name
+def handle_uploaded_file(probId, f):
+    path = MEDIA_ROOT
+    dirName = getProblemDirName(probId)
+    fullPath = os.path.join(path,dirName,f.name)
+    os.makedirs(os.path.dirname(fullPath), exist_ok=True)
+    with open(fullPath, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+# no longer used.  We use the handle_uploaded_file above instead
+def saveMedia(probId, name, file):
     # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
     fs = FileSystemStorage()
     location = fs.location
-    base_url = fs.base_url
     file_permissions_mode = fs.file_permissions_mode
     directory_permissions_mode = fs.directory_permissions_mode
-    newPath = os.path.join(location, name)
+    newPath = os.path.join(location, getProblemDirName(probId))
     # MEDIA_ROOT (on the server) is the location of the mscontent/html5Problems directory within the Apache
     # server.   This creates a directory in there with the name of the problem (or proceeds if it exists).
     try:
@@ -44,25 +55,24 @@ def saveMedia (name, file):
     except FileExistsError as e:
         pass
 
-    newloc = os.path.join(location, name)
+    newloc = os.path.join(location, getProblemDirName(probId), name)
     # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
-    fs2 = FileSystemStorage(location=newloc ,base_url=base_url,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    fs2 = FileSystemStorage(location=newloc , file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
     if fs2.exists(file.name):
         fs2.delete(file.name)
     fs2.save(file.name, file)
 
 
-def deleteMediaFile (fileName):
+def deleteMediaFile (probId, fileName):
     # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
     fs = FileSystemStorage()
     location = fs.location
     base_url = fs.base_url
     file_permissions_mode = fs.file_permissions_mode
     directory_permissions_mode = fs.directory_permissions_mode
-    newPath = os.path.join(location, fileName)
-    newloc = os.path.join(location, fileName)
+    newloc = os.path.join(location, getProblemDirName(probId))
     # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
-    fs2 = FileSystemStorage(location=newloc ,base_url=base_url,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    fs2 = FileSystemStorage(location=newloc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
     if fs2.exists(fileName):
         fs2.delete(fileName)
 
@@ -77,7 +87,8 @@ def save_problem_media (request, probId):
             for f in files:
                 pmf = ProblemMediaFile(filename=f.name,problem=p)
                 pmf.save()
-                saveMedia(f.name,f)
+                handle_uploaded_file(probId,f)
+                #saveMedia(probId, f.name, f)
     return redirect("qauth_edit_prob",probId=probId)
 
 def save_problem (request):
@@ -106,27 +117,49 @@ def save_problem (request):
         form= 'quickAuth'
         if 'imageFile' in request.FILES:
             imgFile = request.FILES['imageFile']
-            saveMedia(imgFile.name,imgFile)
             imageURL = '{[' + imgFile.name + ']}' # change the imageURL saved in the db to the name of this file.
 
 
         if 'audioFile' in request.FILES:
             audFile = request.FILES['audioFile']
-            saveMedia(audFile.name,audFile)
             audioResource= audFile.name.split('.')[0] # get rid of the file extension e.g.
+
 
         if not id:
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                     imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
                     questType=questType, audioResource=audioResource, layout_id=layoutId)
 
+
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                        imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
-                        questType=questType, audioResource=audioResource,layout_id=layoutId)
+                            status=status,standardId=standardId,clusterId=clusterId,form=form,
+                            questType=questType, layout_id=layoutId)
+            # if no audio or image file are given we don't want to overwrite the problem's audio or image with NULL
+            # because it may have these files and we don't want problem-save eliminating them
+            if imageURL:
+                p.imageURL=imageURL
+            if audioResource:
+                p.audioResource=audioResource
         p.save()
         probId = p.pk
+
+        if 'imageFile' in request.FILES:
+            imgFile = request.FILES['imageFile']
+            pmf = ProblemMediaFile(filename=imgFile.name,problem=p)
+            pmf.save()
+            handle_uploaded_file(probId,imgFile)
+            # saveMedia(probId, imgFile.name, imgFile)
+
+
+        if 'audioFile' in request.FILES:
+            audFile = request.FILES['audioFile']
+            pmf = ProblemMediaFile(filename=audFile.name,problem=p)
+            pmf.save()
+            handle_uploaded_file(probId, audFile)
+            # saveMedia(probId, audFile.name, audFile)
+
         # if its a multichoice problem delete all the problem answers and add the given list
         if questType==Problem.MULTI_CHOICE:
             deleteProblemAnswers(p)
@@ -182,15 +215,20 @@ def saveHint (request, probId):
         hoverText = post['hoverText']
         imageURL = post['imageURL']
         audioResource = post['audioResource']
+        p = get_object_or_404(Problem,pk=probId)
         if 'audioFile' in request.FILES:
             audFile = request.FILES['audioFile']
             audioResource = audFile.name
-            saveMedia(audFile.name,audFile)
-
+            pmf = ProblemMediaFile(filename=audFile.name,problem=p)
+            pmf.save()
+            handle_uploaded_file(probId,audFile)
         if 'imageFile' in request.FILES:
             imgFile = request.FILES['imageFile']
             imageURL = imgFile.name
-            saveMedia(imgFile.name,imgFile)
+            pmf = ProblemMediaFile(filename=imgFile.name,problem=p)
+            pmf.save()
+            handle_uploaded_file(probId,imgFile)
+
         if 'givesAnswer' in post:
             givesAnswer = True
         else: givesAnswer = False
@@ -241,9 +279,10 @@ def deleteMedia (request, probId):
         mediaIds = post.getlist('data[]')
         for mid in mediaIds:
             mf = get_object_or_404(ProblemMediaFile,pk=mid)
-            deleteMediaFile(mf.filename)
+            deleteMediaFile(probId,mf.filename)
             mf.delete()
-    return redirect("qauth_edit_prob",probId=probId)
+    return JsonResponse({})
+    # return redirect("qauth_edit_prob",probId=probId)
 
 def getLayouts (request):
     layouts = ProblemLayout.objects.all()
@@ -255,3 +294,7 @@ def getProblemJSON (request, probId):
     p = get_object_or_404(Problem,pk=probId)
     js = p.toJSON()
     return JsonResponse(js,safe=False)
+
+
+def getProblemDirName (probId):
+    return "problem_" + str(probId)

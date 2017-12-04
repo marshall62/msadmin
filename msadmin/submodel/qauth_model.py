@@ -23,14 +23,14 @@ class Problem (models.Model):
             self.nickname = kwargs['nickname']
             self.questType = kwargs['questType']
             self.statementHTML = kwargs['statementHTML']
-            self.audioResource = kwargs['audioResource']
             self.answer = kwargs['answer']
-            self.imageURL = kwargs['imageURL']
             self.status = kwargs['status']
             self.standardId = kwargs['standardId']
             self.clusterId = kwargs['clusterId']
             self.form = kwargs['form']
             self.layout_id=kwargs['layout_id']
+
+
 
 
     class Meta:
@@ -92,6 +92,9 @@ class Problem (models.Model):
             loneAns = ProblemAnswer(val=self.answer)
             anslist.append(loneAns)
         return anslist
+
+    def getProblemDir (self):
+        return 'problem_' + str(self.pk) + "/"
 
     def getMediaFiles (self):
         files = ProblemMediaFile.objects.filter(problem=self)

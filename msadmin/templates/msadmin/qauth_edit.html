@@ -42,7 +42,7 @@
         var numChoices = 0; // keeps track of how many multi choice answers fields there are.
         var numAnswers = 0; // keeps track of how many short answer fields there are.
 
-        var mediaURL = "{{ mediaURL }}";
+        var mediaURL = "{{ MEDIA_URL }}";
 
 
         function createPulldownOption (value, label, description) {
@@ -74,17 +74,15 @@
                 $('#givesAnswer').prop('checked',data.givesAnswer);
                 if (data.audioResource) {
                     $('#haudioResource').val(data.audioResource);
-                    $('#hintAudioMP3').attr('src',mediaURL+theProblem.name+ "/" +data.audioResource +".mp3");
+                    $('#hintAudioMP3').attr('src',mediaURL+ 'problem_'+theProblem.id+ "/" +data.audioResource );
                     $('#hintAudio').show();
                     var audio = $('#haudioPlayer');
                     audio[0].load();
-                    console.log("hint audio is " +mediaURL+theProblem.name+ "/" +data.audioResource +".mp3");
-                    console.log($('#hintAudioMP3').attr('src'));
                 }
                 else
                     $('#hintAudio').hide();
                 if (data.imageURL) {
-                    $('#himage').attr('src',mediaURL+theProblem.name+ "/"+data.imageURL);
+                    $('#himage').attr('src',mediaURL+'problem_'+theProblem.id+ "/"+data.imageURL);
                     $('#himageURL').val(data.imageURL);
                     $('#himageDiv').show();
                 }
@@ -396,37 +394,25 @@
         //////////////  Functions that work on media table /////////////////
 
 
-        function removeMediaTableRow (n) {
-            document.getElementById("mediatbody").deleteRow(n);
-        }
 
-        function sortNumberDesc (a, b) {
-            return b-a;
-        }
 
         function deleteSelectedMedia () {
             if (confirm("Are you sure you want to delete the selected media files?")) {
                 var ids = [];
-                var newRowNums = [];
                 var probId = theProblem.id;
-                var rowNum = 0;
                 $('#mediatbody').find('tr').each(function () {
 
                     var row = $(this);
                     if (row.find('input[type="checkbox"]').is(':checked') ) {
                         var rid = row.attr('id');
-                        if (rid)
+                        if (rid) {
                             ids.push(rid);
-                        else
-                            newRowNums.push(rowNum);
+                            row.remove();
+                        }
+
                     }
-                    rowNum++;
                 });
-                // new to reverse sort the list of rowNums so that when we delete a row by number the
-                // indexes of the remaining rows to delete are valid
-                newRowNums.sort(sortNumberDesc);
-                for (i of newRowNums)
-                    removeMediaTableRow(i);
+
                 if (ids.length > 0) {
 
                     var url_mask = "{% url 'qauth_delete_media' probId=12345 %}".replace(/12345/, probId.toString());
@@ -435,12 +421,12 @@
                         type: "POST",
                         data: {data: ids },
                         error: function (a,b,c) {
-                            console.log("Failed to delete hints! " + a.responseText + b);
+                            console.log("Failed to delete media! " + a.responseText + b);
                             console.log(a);
-                            alert("Failed to delete hints " + a.responseText + b);
+                            alert("Failed to delete media " + a.responseText + b);
                         },
                         success: function (data) {
-                            location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+                            // location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
                         }
                     });
                 }
@@ -885,7 +871,7 @@
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
             {% if problem.audioResource %}
                 <audio controls>
-                    <source src="{{ mediaURL }}{{ problem.name }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
+                    <source src="{{ mediaURL }}{{ problem.getProblemDir }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
                     Your browser does not support the audio tag.
                 </audio>
             {% endif %}
@@ -906,7 +892,7 @@
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else the name of the file you upload which can be referenced as {[myfile.jpg]}"></span></a>
             {% if problem.imageURL %}
-                <img onmouseover="this.removeAttribute('width'); this.removeAttribute('height');" onmouseout="this.width='50'; this.height='50';" width="50" height="50" src="{{ mediaURL }}{{ problem.name }}/{{ problem.getImageURL }}">
+                <img onmouseover="this.removeAttribute('width'); this.removeAttribute('height');" onmouseout="this.width='50'; this.height='50';" width="50" height="50" src="{{ MEDIA_URL }}{{ problem.getProblemDir }}{{ problem.getImageURL }}">
             {% endif %}
         </div>
         <br>
@@ -1121,8 +1107,9 @@
             {% endfor %}
             </tbody>
         </table>
-        <button class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Media Files</button>
-        <button class="btn btn-primary" onClick="deleteSelectedMedia({{ problem.id }})">Delete Selected Media Files</button>
+{#        save will submit the form, deleting will ajax the ids to server but will keep the page where it is#}
+        <button  class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Media Files</button>
+        <a href="#mediaTable" class="btn btn-primary" onClick="deleteSelectedMedia()">Delete Selected Media Files</a>
         </form>
         </div>
         </div>
