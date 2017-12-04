@@ -647,7 +647,7 @@
                 }
             }
             else {
-                if (numAnswers < 1) {
+                if (!hasShortAnswer()) {
                     alert("A short answer problem must have at least one answer!");
                     return false;
                 }
@@ -657,6 +657,10 @@
                 return false;
             }
             else return true;
+        }
+
+        function hasShortAnswer () {
+            return $('#shortanswertablebody tr:first input').val() != ''
         }
 
         // Callback function.  When this HTML file opens on an existing problem, an AJAX call is made to get the JSON

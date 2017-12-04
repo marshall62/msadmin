@@ -67,21 +67,21 @@
       <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="1104" column="0" lean-forward="true" selection-start-line="1104" selection-start-column="0" selection-end-line="1104" selection-end-column="0" />
+            <state relative-caret-position="370">
+              <caret line="662" column="30" lean-forward="false" selection-start-line="662" selection-start-column="30" selection-end-line="662" selection-end-column="30" />
               <folding>
-                <element signature="e#44817#44823#1#HTML" expanded="true" />
-                <element signature="e#44824#44830#1#HTML" expanded="true" />
-                <element signature="e#44839#44845#1#HTML" expanded="true" />
-                <element signature="e#44846#44852#1#HTML" expanded="true" />
-                <element signature="e#45069#45075#1#HTML" expanded="true" />
-                <element signature="e#45076#45082#1#HTML" expanded="true" />
-                <element signature="e#45787#45806#0#HTML" expanded="true" />
-                <element signature="e#45822#45841#0#HTML" expanded="true" />
-                <element signature="e#45855#45874#0#HTML" expanded="true" />
-                <element signature="e#45886#45905#0#HTML" expanded="true" />
-                <element signature="e#47304#47322#0#HTML" expanded="true" />
-                <marker date="1512405156234" expanded="false" signature="45583:45594" ph="..." />
+                <element signature="e#44941#44947#1#HTML" expanded="true" />
+                <element signature="e#44948#44954#1#HTML" expanded="true" />
+                <element signature="e#44963#44969#1#HTML" expanded="true" />
+                <element signature="e#44970#44976#1#HTML" expanded="true" />
+                <element signature="e#45193#45199#1#HTML" expanded="true" />
+                <element signature="e#45200#45206#1#HTML" expanded="true" />
+                <element signature="e#45911#45930#0#HTML" expanded="true" />
+                <element signature="e#45946#45965#0#HTML" expanded="true" />
+                <element signature="e#45979#45998#0#HTML" expanded="true" />
+                <element signature="e#46010#46029#0#HTML" expanded="true" />
+                <element signature="e#47428#47446#0#HTML" expanded="true" />
+                <marker date="1512414332843" expanded="false" signature="45707:45718" ph="..." />
               </folding>
             </state>
           </provider>
@@ -172,8 +172,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>glyph</find>
-      <find>relabel</find>
       <find>Functions that</find>
       <find>name</find>
       <find>hint-name-label</find>
@@ -200,8 +198,10 @@
       <find>prob_create</find>
       <find>prob</find>
       <find>prob/cre</find>
-      <find>qauth_save_hint</find>
       <find>saveH</find>
+      <find>qauth_save_hint</find>
+      <find>numAnswers</find>
+      <find>shortAnswer</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -967,7 +967,7 @@
       <workItem from="1508856090590" duration="7759000" />
       <workItem from="1510058230268" duration="15267000" />
       <workItem from="1510584917404" duration="61943000" />
-      <workItem from="1511193998724" duration="79429000" />
+      <workItem from="1511193998724" duration="80663000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1144,11 +1144,18 @@
       <option name="project" value="LOCAL" />
       <updated>1512404961838</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="media file stuff has to be included for a problem without media">
+      <created>1512405220960</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1512405220960</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="748599000" />
+    <option name="totallyTimeSpent" value="749833000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="91" y="63" width="1445" height="989" extended-state="0" />
@@ -1228,7 +1235,8 @@
     <MESSAGE value="Got short answer and multi choice controls working" />
     <MESSAGE value="completed drag and drop hint function" />
     <MESSAGE value="fixed bugs with create-problem so that hint stuff isn't included" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed bugs with create-problem so that hint stuff isn't included" />
+    <MESSAGE value="media file stuff has to be included for a problem without media" />
+    <option name="LAST_COMMIT_MESSAGE" value="media file stuff has to be included for a problem without media" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1618,14 +1626,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1636,23 +1636,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="1104" column="0" lean-forward="true" selection-start-line="1104" selection-start-column="0" selection-end-line="1104" selection-end-column="0" />
+        <state relative-caret-position="370">
+          <caret line="662" column="30" lean-forward="false" selection-start-line="662" selection-start-column="30" selection-end-line="662" selection-end-column="30" />
           <folding>
-            <element signature="e#44817#44823#1#HTML" expanded="true" />
-            <element signature="e#44824#44830#1#HTML" expanded="true" />
-            <element signature="e#44839#44845#1#HTML" expanded="true" />
-            <element signature="e#44846#44852#1#HTML" expanded="true" />
-            <element signature="e#45069#45075#1#HTML" expanded="true" />
-            <element signature="e#45076#45082#1#HTML" expanded="true" />
-            <element signature="e#45787#45806#0#HTML" expanded="true" />
-            <element signature="e#45822#45841#0#HTML" expanded="true" />
-            <element signature="e#45855#45874#0#HTML" expanded="true" />
-            <element signature="e#45886#45905#0#HTML" expanded="true" />
-            <element signature="e#47304#47322#0#HTML" expanded="true" />
-            <marker date="1512405156234" expanded="false" signature="45583:45594" ph="..." />
+            <element signature="e#44941#44947#1#HTML" expanded="true" />
+            <element signature="e#44948#44954#1#HTML" expanded="true" />
+            <element signature="e#44963#44969#1#HTML" expanded="true" />
+            <element signature="e#44970#44976#1#HTML" expanded="true" />
+            <element signature="e#45193#45199#1#HTML" expanded="true" />
+            <element signature="e#45200#45206#1#HTML" expanded="true" />
+            <element signature="e#45911#45930#0#HTML" expanded="true" />
+            <element signature="e#45946#45965#0#HTML" expanded="true" />
+            <element signature="e#45979#45998#0#HTML" expanded="true" />
+            <element signature="e#46010#46029#0#HTML" expanded="true" />
+            <element signature="e#47428#47446#0#HTML" expanded="true" />
+            <marker date="1512414332843" expanded="false" signature="45707:45718" ph="..." />
           </folding>
         </state>
       </provider>
