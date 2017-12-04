@@ -7,6 +7,8 @@ import os
 import sys
 from .submodel.qauth_model import *
 
+CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
+
 # Shows the main page of the site
 def main (request):
     probs = Problem.get_quickAuth_problems()
@@ -25,7 +27,58 @@ def create_problem (request):
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
-    return render(request, 'msadmin/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints})
+    return render(request, 'msadmin/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'mediaURL': CONTENT_MEDIA_URL})
+
+def saveMedia (name, file):
+    # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
+    fs = FileSystemStorage()
+    location = fs.location
+    base_url = fs.base_url
+    file_permissions_mode = fs.file_permissions_mode
+    directory_permissions_mode = fs.directory_permissions_mode
+    newPath = os.path.join(location, name)
+    # MEDIA_ROOT (on the server) is the location of the mscontent/html5Problems directory within the Apache
+    # server.   This creates a directory in there with the name of the problem (or proceeds if it exists).
+    try:
+        os.mkdir(newPath)
+    except FileExistsError as e:
+        pass
+
+    newloc = os.path.join(location, name)
+    # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
+    fs2 = FileSystemStorage(location=newloc ,base_url=base_url,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    if fs2.exists(file.name):
+        fs2.delete(file.name)
+    fs2.save(file.name, file)
+
+
+def deleteMediaFile (fileName):
+    # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
+    fs = FileSystemStorage()
+    location = fs.location
+    base_url = fs.base_url
+    file_permissions_mode = fs.file_permissions_mode
+    directory_permissions_mode = fs.directory_permissions_mode
+    newPath = os.path.join(location, fileName)
+    newloc = os.path.join(location, fileName)
+    # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
+    fs2 = FileSystemStorage(location=newloc ,base_url=base_url,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    if fs2.exists(fileName):
+        fs2.delete(fileName)
+
+def save_problem_media (request, probId):
+    if request.method == "POST":
+        post = request.POST
+
+        if 'mediaFiles[]' in request.FILES:
+            #files = post.getlist('mediaFiles[]')
+            p = get_object_or_404(Problem,pk=probId)
+            files = request.FILES.getlist('mediaFiles[]')
+            for f in files:
+                pmf = ProblemMediaFile(filename=f.name,problem=p)
+                pmf.save()
+                saveMedia(f.name,f)
+    return redirect("qauth_edit_prob",probId=probId)
 
 def save_problem (request):
     if request.method == "POST":
@@ -51,35 +104,15 @@ def save_problem (request):
         layoutId = post['layout']
         audioResource = 'question' if audioResource == 'hasAudio' else None
         form= 'quickAuth'
-        # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
-        fs = FileSystemStorage()
-        location = fs.location
-        base_url = fs.base_url
-        file_permissions_mode = fs.file_permissions_mode
-        directory_permissions_mode = fs.directory_permissions_mode
-        newPath = os.path.join(location, name)
-        # MEDIA_ROOT (on the server) is the location of the mscontent/html5Problems directory within the Apache
-        # server.   This creates a directory in there with the name of the problem (or proceeds if it exists).
-        try:
-            os.mkdir(newPath)
-        except FileExistsError as e:
-            pass
-
-        newloc = os.path.join(location, name)
-        # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
-        fs2 = FileSystemStorage(location=newloc ,base_url=base_url,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
         if 'imageFile' in request.FILES:
             imgFile = request.FILES['imageFile']
+            saveMedia(imgFile.name,imgFile)
             imageURL = '{[' + imgFile.name + ']}' # change the imageURL saved in the db to the name of this file.
-            if fs2.exists(imgFile.name):
-                fs2.delete(imgFile.name)
-            fs2.save(imgFile.name, imgFile)
+
 
         if 'audioFile' in request.FILES:
             audFile = request.FILES['audioFile']
-            if fs2.exists(audFile.name):
-                fs2.delete(audFile.name)
-            fs2.save(audFile.name, audFile)
+            saveMedia(audFile.name,audFile)
             audioResource= audFile.name.split('.')[0] # get rid of the file extension e.g.
 
         if not id:
@@ -124,41 +157,63 @@ def saveProblemShortAnswers (problem, correctAnswer, answers):
 
 def getHint (request, hintId):
     h = get_object_or_404(Hint,pk=hintId)
-    d = {}
-    d['id'] = hintId
-    d['name'] = h.name
-    d['statementHTML'] = h.statementHTML
-    d['audioResource'] = h.audioResource
-    d['order'] = h.order
-    d['hoverText'] = h.hoverText
-    d['givesAnswer'] = h.givesAnswer
+    d = h.toJSON()
     return JsonResponse(d)
+
+# when the user drag and drops the hints to re-order them, we get a post with the new sequence order of ids.
+#  This means re-ordering the hints in the db
+def saveHints (request, probId):
+    if request.method == "POST":
+        post = request.POST
+        ids = post.getlist('hintIds[]')
+        loc = 0
+        for i in ids:
+            hint = Hint.objects.get(pk=i)
+            hint.order = loc
+            loc += 1
+            hint.save()
+        return JsonResponse({});
 
 def saveHint (request, probId):
     if request.method == "POST":
         post = request.POST
         id = post['id']
-        name = post['name']
         statementHTML = post['statementHTML']
         hoverText = post['hoverText']
+        imageURL = post['imageURL']
         audioResource = post['audioResource']
-        order = post['order']
-        givesAnswer = post['givesAnswer']
+        if 'audioFile' in request.FILES:
+            audFile = request.FILES['audioFile']
+            audioResource = audFile.name
+            saveMedia(audFile.name,audFile)
+
+        if 'imageFile' in request.FILES:
+            imgFile = request.FILES['imageFile']
+            imageURL = imgFile.name
+            saveMedia(imgFile.name,imgFile)
+        if 'givesAnswer' in post:
+            givesAnswer = True
+        else: givesAnswer = False
         if id:
             h = get_object_or_404(Hint,pk=id)
-            h.name=name
             h.statementHTML=statementHTML
-            h.audioResource=audioResource
             h.hoverText=hoverText
-            h.order=order
-            h.givesAnswer=givesAnswer=='true'
+            h.order=post['order']
+            h.imageURL = imageURL
+            h.audioResource= audioResource
+            h.givesAnswer=givesAnswer
             h.save()
         else:
             hints = Hint.objects.filter(problem_id=probId)
-            order = len(hints) + 1
-            h = Hint(name=name,statementHTML=statementHTML,problem_id=probId,audioResource=audioResource,hoverText=hoverText,order=order,givesAnswer=givesAnswer=='true')
+            name = 'Hint ' + str(len(hints) + 1)
+            order = len(hints)
+            # Hint names are like Hint 1, Hint 2 ... the order field is 0-based
+            h = Hint(name=name,statementHTML=statementHTML,problem_id=probId,audioResource=audioResource,imageURL=imageURL,hoverText=hoverText,order=order,givesAnswer=givesAnswer)
             h.save()
-    return redirect("qauth_edit_prob",probId=probId)
+
+    json = h.toJSON()
+    return JsonResponse(json)
+    # return redirect("qauth_edit_prob",probId=probId)
 
 def deleteHints (request, probId):
     if request.method == "POST":
@@ -173,7 +228,21 @@ def deleteHints (request, probId):
         hints = Hint.objects.filter(problem_id=probId).order_by('order')
         for i in range(len(hints)):
             hints[i].order = i+1
+            if not hints[i].givesAnswer:
+                hints[i].name = 'Hint ' + str(i+1);
             hints[i].save()
+    return redirect("qauth_edit_prob",probId=probId)
+
+
+def deleteMedia (request, probId):
+    if request.method == "POST":
+        post = request.POST
+        # hints are given as an array of ids
+        mediaIds = post.getlist('data[]')
+        for mid in mediaIds:
+            mf = get_object_or_404(ProblemMediaFile,pk=mid)
+            deleteMediaFile(mf.filename)
+            mf.delete()
     return redirect("qauth_edit_prob",probId=probId)
 
 def getLayouts (request):

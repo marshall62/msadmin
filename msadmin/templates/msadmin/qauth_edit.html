@@ -36,33 +36,35 @@
     <script language="javascript">
 
         var theProblem = null; // a problem object obtained from AJAX call when page loads
+        var theHint = null; // the hint currently being edited in a dialog box
         var answerType = "shortanswer"; // the currently selected answerType
         var choiceLabels = ["a", "b", "c", "d", "e"];
         var numChoices = 0; // keeps track of how many multi choice answers fields there are.
         var numAnswers = 0; // keeps track of how many short answer fields there are.
 
+        var mediaURL = "{{ mediaURL }}";
 
-        function validateProblem () {
-            // some multi-choice answer must be marked correct
-            if (answerType == 'multichoice') {
-                var numChecked = $('#multichoicetablebody tr td input[name="correctChoice"]:checked').length;
-                if (numChecked != 1) {
-                    alert("You must select a single multiple choice response to as the correct answer!");
-                    return false;
-                }
-            }
-            if (false) {
-                alert("Form is not valid");
-                return false;
-            }
-            else return true;
+
+        function createPulldownOption (value, label, description) {
+            return {label: label+(description ? ("  "+description) : ""), value: value};
         }
 
-        // Called when the user clicks the hyperlink of a hint.
+
+
+
+        ////  Functions that support Hints
+
+
+        function validateHint () {
+            return true;
+        }
+
+        // Called when the user clicks the edit icon of a hint.
         // Will get the hint JSON from the server and will pop up the dialog to edit it.
         function editHint2 (id) {
             var url_mask = "{% url 'qauth_get_hint' hintId=12345 %}".replace(/12345/, id.toString());
             $.get(url_mask, function(data) {
+                theHint= data;
                 $('#hid').val(id);
                 $('#hname').val(data.name);
                 $('#haudioResource').val(data.audioResource);
@@ -70,6 +72,25 @@
                 $('#order').val(data.order);
                 $('#hoverText').val(data.hoverText);
                 $('#givesAnswer').prop('checked',data.givesAnswer);
+                if (data.audioResource) {
+                    $('#haudioResource').val(data.audioResource);
+                    $('#hintAudioMP3').attr('src',mediaURL+theProblem.name+ "/" +data.audioResource +".mp3");
+                    $('#hintAudio').show();
+                    var audio = $('#haudioPlayer');
+                    audio[0].load();
+                    console.log("hint audio is " +mediaURL+theProblem.name+ "/" +data.audioResource +".mp3");
+                    console.log($('#hintAudioMP3').attr('src'));
+                }
+                else
+                    $('#hintAudio').hide();
+                if (data.imageURL) {
+                    $('#himage').attr('src',mediaURL+theProblem.name+ "/"+data.imageURL);
+                    $('#himageURL').val(data.imageURL);
+                    $('#himageDiv').show();
+                }
+                else {
+                    $('#himageDiv').hide();
+                }
                 showHintDialog();
 
             });
@@ -78,38 +99,119 @@
         // Called when the user clicks the + hint button to add a new hint.
         // Clears the dialog fields and pops it up.
         function addHint () {
+
+            var numHints = theProblem.numHints + 1;
+            theHint = {order: theProblem.numHints, name: 'Hint ' + numHints};
             $('#hid').val('');
-            $('#hname').val('');
+            $('#hname').val('Hint ' + numHints);
             $('#haudioResource').val('');
             $('#hstatement').val('');
             $('#order').val('');
             $('#hoverText').val('');
             $('#givesAnswer').prop('checked',false);
+            $('#himageURL').val('');
             showHintDialog();
+        }
+
+
+        //  If an existing row is edited with the hint dialog, this is called after the save AJAX returns the
+        // updated info about the hint.   The statement html is updated.
+        function updateHintRow (hint) {
+
+            rowN = hint.order
+            console.log('updating row ' + rowN);
+            // the givesAnswer, hovertext, statementHTML, name can change.  Only name, statementHTML is in table row
+            var rows = $('tr', $('#hinttbody'));
+            var r = rows.eq(rowN);
+            var td = r.find('.statement'); // td containing HTML of statement
+            td.html(hint.statementHTML);
+            // set the check mark about giving answer appropriately
+            td = r.find('.givesAnswer');
+            // if the hints gives the answer we want a check in the row; else remove if there is one
+            if (hint.givesAnswer) {
+                console.log('adding check');
+                $('span',td).remove();
+                td.append('<span class="glyphicon glyphicon-ok"></span>');
+            }
+            else {
+                console.log('removing check');
+                $('span',td).remove();
+            }
+            removeHintAlert(rowN); // eliminate any alerts in the row.  validation of hints will happen afer this runs.
+
+        }
+
+        function getHintRowNumber (hintId) {
+
+            // the givesAnswer, hovertext, statementHTML, name can change.  Only name, statementHTML is in table row
+            var rows = $('tr', $('#hinttbody'));
+            var foundAt=-1;
+            rows.each(function (i) {
+                if ($('td:contains('+hintId+')', $(this)).length > 0) {
+                    foundAt=i;
+                    return false; // exits the iteration
+                }
+            });
+            return foundAt;
+        }
+
+
+        // When the hint dialog is saved an ajax call gets back the new hints JSON and then calls this function
+        // to add a new row to the hint table.
+{#        function addHintRow (hint) {#}
+{#            var tr = '<tr id="' +hint.id+ '" class="dnd"><td class="givesAnswer"><input type="checkbox"></td><td>'#}
+{#                +hint.id+ '</td><td class="name"><a href="#" class="hint-edit-icon" onClick="editHint2(' +hint.id+ ')">'#}
+{#                +hint.name+ '</a></td><td class="statement"> ' + hint.statementHTML + '</td></tr>';#}
+{#            $('#hinttbody').append(tr);#}
+{#        }#}
+
+        // When the hint dialog is saved an ajax call gets back the new hints JSON and then calls this function
+        // to add a new row to the hint table.
+        function addHintRow2 (hint) {
+            var editIcon = '<a href="#hinttbody" class="hint-edit-icon" onClick="editHint2(' +hint.id+ ')"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a>';
+            var tr = '<tr id="' +hint.id+ '" class="dnd"><td><input type="checkbox"></td>' +
+                '<td class="edit-hint">' +editIcon + '</td>' +
+                '<td class="hint-id">' + hint.id + '</td>' +
+                '<td class="givesAnswer">' + (hint.givesAnswer ? '<span class="glyphicon glyphicon-ok"></span>' : '') + '</td>' +
+                '<td class="statement"> ' + hint.statementHTML + '</td></tr>';
+            $('#hinttbody').append(tr);
         }
 
         // When dialog save button is clicked, save the hint.
         // Closes the dialog after the save POST has been sent to the server
-        function saveHint (probId) {
-            var id = $('#hid').val();
-            var name = $('#hname').val();
-            var statement = $('#hstatement').val();
-            var order = $('#order').val();
-            var givesAnswer = $('#givesAnswer').prop("checked");
-            var hoverText = $('#hoverText').val();
+        function saveHint () {
+            var form = $('#hintForm')[0]; // get the Javascript obj for the hint form
+            var data = new FormData(form); // put all the form fields into data
+            var probId = theProblem.id;
+            // get the row # of this hint
+            var rown = getHintRowNumber(theHint.id);
+            data.append('order',rown);
+
             var url_mask = "{% url 'qauth_save_hint' probId=12345 %}".replace(/12345/, probId.toString());
-            var audioResource = $('#haudioResource').val();
+            // note processData and contentType are both false to correctly send post with files.
             $.ajax({
                 url: url_mask,
                 type: "POST",
-                data: {id: id, name: name, statementHTML: statement, audioResource:audioResource, order: order, hoverText: hoverText, givesAnswer: givesAnswer },
+                data: data,
+                processData: false,
+                contentType: false,
                 error: function (a,b,c) {
                     console.log("Failed to write to server! " + a.responseText + b);
                     console.log(a);
                     alert("Failed to write to server! " + a.responseText + b);
                 },
                 success: function (data) {
-                    location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+                    console.log("JSON returned "+ data);
+
+                    if (theHint.id)
+                        updateHintRow(data);
+
+                    else {
+                        theProblem.numHints++;
+                        addHintRow2(data);
+                    }
+
+                    validateHints();
                 }
             });
             $('#hintDialog').modal('toggle');
@@ -117,6 +219,139 @@
 
         }
 
+        // every time a drag and drop of a hint row is completed we update the server with the full list of hints in the
+        // order that they now are.   .
+        function saveHintsToServer () {
+            var rows = $('tr', $('#hinttbody'));
+            var ids = [];
+            rows.each(function () {
+                // get the ID out of the td
+                var id = $('.hint-id', $(this)).html();
+                ids.push(id);
+            });
+            var data = {hintIds: ids}
+            // post hint sequence to the server
+            var url_mask = "{% url 'qauth_save_hints' probId=12345 %}".replace(/12345/, theProblem.id.toString());
+            // note processData and contentType are both false to correctly send post with files.
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: data,
+                error: function (a,b,c) {
+                    console.log("Failed to write to server! " + a.responseText + b);
+                    console.log(a);
+                    alert("Failed to write to server! " + a.responseText + b);
+                },
+                success: function (data) {
+                }
+            });
+        }
+
+        // Puts a message below the hint table so user knows there is an error in the hints.
+        function setHintErrorMessage (msg) {
+            if (msg) {
+                $('#hintErrorMessages').html(msg);
+            }
+            else
+                $('#hintErrorMessages').html('');
+        }
+
+
+        // add an alert symbol next to the hint ID in row N
+        // resulting td will be like:
+        // <td class="edit-hint"><a><span class="glyphicon-alert"></span></a> <span style="padding-left"> <a class="hint-edit-icon"><span glyphicon-pencil</a>
+        function setHintAlert (rowN, msg) {
+            console.log("setting hint alert at row " + rowN + msg );
+            var rows = $('tr', $('#hinttbody'));
+            var r = rows.eq(rowN);
+            var td = r.find('.edit-hint'); // td containing with class "edit-hint
+            var xalert = $('.glyphicon-alert',td).length;
+            // see if there is already an alert there
+            if (xalert > 0)
+                return;
+            var iconATag = td.find('a'); // the <a> tag within td
+            var alertIcon = '<a href="#hinttbody"><span style="color: red" class="glyphicon glyphicon-alert" data-toggle="tooltip" data-original-title="'+msg+'"></span></a>';
+
+            td.html(alertIcon + '<span style="padding-left:10px">');
+            td.append(iconATag);
+            $('[data-toggle="tooltip"]',td).tooltip({
+                placement : 'top'
+            });
+
+        }
+
+
+
+        // remove the alert icon and spacing from the td of the hint edit-icon
+        function removeHintAlert (rowN) {
+            var rows = $('tr', $('#hinttbody'));
+            var r = rows.eq(rowN);
+            var td = r.find('.edit-hint'); // get the edit-hint td
+            // eliminate all children that are not the edit icon
+            td.children().each(function (x) {
+                if (!$(this).hasClass('hint-edit-icon'))
+                    $(this).remove();
+            });
+
+        }
+
+        // The drag and drop of hint rows allows for invalid things like:
+        // a show-answer hint not at the end
+        // If a situation like this is found, put an alert symbol next to the offending hint.
+        // Must return true/false if valid/not valid
+        function validateHints () {
+            var numRows = $('#hinttbody tr').length;
+            var answerError = false;
+            if (numRows > 0) {
+                var rows = $('tr', $('#hinttbody'));
+                var i = 0, foundAt = -1;
+
+                console.log('Validating hints ' + numRows);
+                // find the <a class="hint-edit-icon  that contains the hints name
+                rows.each(function () {
+                    // remove any alert in this row first
+                    removeHintAlert(i);
+                    // get the <td class="givesAnswer" and see if it contains an <span> tag which is an indication that it has the
+                    // check icon indicating that this hint gives the answer.
+                    var tdga = $(this).find(".givesAnswer > span");
+                    console.log(tdga);
+                    if (tdga.length > 0)
+                        if (i != numRows-1) {
+                            setHintAlert(i, "The hint that gives the answer must be the last one in the sequence.");
+                            answerError = true;
+                        }
+                    i++;
+                });
+                if (answerError) {
+                    setHintErrorMessage('Only the last hint can give the answer.');
+                    return false;
+                }
+                // if valid remove any alert that might be in the last (Show Answer row)
+                removeHintAlert(numRows-1);
+                setHintErrorMessage(null);
+                return true;
+
+            }
+            else return true;
+        }
+
+        // go through each hint row and set its name to "Hint i" .  Do not change name of
+        // hint with name "Show Answer"
+        function relabelHints () {
+            var n=1;
+            $('#hinttbody').find('tr').each(function () {
+                var row = $(this);
+
+                var name = row.find('.hint-edit-icon')
+                if (name.html() != 'Show Answer') {
+                    name.html('Hint ' + n);
+                    n++;
+                }
+
+            });
+        }
+
+        // Delete all the selected hints
         function deleteSelectedHints (probId) {
             if (confirm("Are you sure you want to delete the selected hints?")) {
                 var ids = [];
@@ -126,6 +361,9 @@
                     if (row.find('input[type="checkbox"]').is(':checked') ) {
                         var rid = row.attr('id');
                         ids.push(rid);
+                        theProblem.numHints--;
+                        row.remove();
+
                     }
                 });
 
@@ -141,7 +379,7 @@
                         alert("Failed to delete hints " + a.responseText + b);
                     },
                     success: function (data) {
-                        location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+{#                        location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());#}
                     }
                 });
             }
@@ -152,9 +390,77 @@
             $('#hintDialog').modal('show');
         }
 
-        function createPulldownOption (value, label, description) {
-            return {label: label+(description ? ("  "+description) : ""), value: value};
+        ////////  End of Functions that operate on Hints //////////////
+
+
+        //////////////  Functions that work on media table /////////////////
+
+
+        function removeMediaTableRow (n) {
+            document.getElementById("mediatbody").deleteRow(n);
         }
+
+        function sortNumberDesc (a, b) {
+            return b-a;
+        }
+
+        function deleteSelectedMedia () {
+            if (confirm("Are you sure you want to delete the selected media files?")) {
+                var ids = [];
+                var newRowNums = [];
+                var probId = theProblem.id;
+                var rowNum = 0;
+                $('#mediatbody').find('tr').each(function () {
+
+                    var row = $(this);
+                    if (row.find('input[type="checkbox"]').is(':checked') ) {
+                        var rid = row.attr('id');
+                        if (rid)
+                            ids.push(rid);
+                        else
+                            newRowNums.push(rowNum);
+                    }
+                    rowNum++;
+                });
+                // new to reverse sort the list of rowNums so that when we delete a row by number the
+                // indexes of the remaining rows to delete are valid
+                newRowNums.sort(sortNumberDesc);
+                for (i of newRowNums)
+                    removeMediaTableRow(i);
+                if (ids.length > 0) {
+
+                    var url_mask = "{% url 'qauth_delete_media' probId=12345 %}".replace(/12345/, probId.toString());
+                    $.ajax({
+                        url: url_mask,
+                        type: "POST",
+                        data: {data: ids },
+                        error: function (a,b,c) {
+                            console.log("Failed to delete hints! " + a.responseText + b);
+                            console.log(a);
+                            alert("Failed to delete hints " + a.responseText + b);
+                        },
+                        success: function (data) {
+                            location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+                        }
+                    });
+                }
+            }
+        }
+
+
+
+        function addMediaRow () {
+            console.log("add media row");
+            var tddel = "<td><input type='checkbox'></td>";
+            var tdid = "<td></td>";
+            var tdfname = "<td></td>";
+            var tdupload = '<td><input name="mediaFiles[]" type="file"></td></td>';
+            var tr = "<tr>" + tddel + tdid + tdfname + tdupload + "</tr>";
+            $('#mediaTable > tbody:last-child').append(tr);
+        }
+
+
+        ///////  Functions that operate on the answer table ////////////////////
 
         function addMultiChoiceRows (n) {
             var numRows = $('#multichoicetablebody tr').length;
@@ -295,22 +601,20 @@
         }
 
         // no longer using checkboxes on rows to indicate deleting
-        function deleteCheckedMultiChoiceRows () {
-            var numRows = $('#multichoicetablebody tr').length;
+{#        function deleteCheckedMultiChoiceRows () {#}
+{#            var numRows = $('#multichoicetablebody tr').length;#}
+{##}
+{#            var numChecked = $('#multichoicetablebody tr td input[name="deleteChoice"]:checked').length;#}
+{#            if ((numRows-numChecked) < 2) {#}
+{#                alert("A multi choice problem should have at least 2 choices.");#}
+{#                return;#}
+{#            }#}
+{#            numChoices -= numChecked;#}
+{#            $('#multichoicetablebody tr').has('input[name="deleteChoice"]:checked').remove();#}
+{#            labelChoices();#}
+{#        }#}
 
-            var numChecked = $('#multichoicetablebody tr td input[name="deleteChoice"]:checked').length;
-            if ((numRows-numChecked) < 2) {
-                alert("A multi choice problem should have at least 2 choices.");
-                return;
-            }
-            numChoices -= numChecked;
-            $('#multichoicetablebody tr').has('input[name="deleteChoice"]:checked').remove();
-            labelChoices();
-        }
 
-        function deleteCheckedShortAnswerRows () {
-
-        }
 
         function exposeMultiChoiceControls () {
             $('#multichoices').show();
@@ -322,11 +626,45 @@
             $('#shortAnswer').show();
         }
 
+
+        ////////   Functions that operate on the problem /////////////
+
+
+
+
+        function validateProblem () {
+            // some multi-choice answer must be marked correct
+            if (answerType == 'multichoice') {
+
+                if (numChoices < 2) {
+                    alert("A multi choice problem must have at least two answer choices!");
+                    return false;
+                }
+                var numChecked = $('#multichoicetablebody tr td input[name="correctChoice"]:checked').length;
+                if (numChecked != 1) {
+                    alert("You must select a single multiple choice response to as the correct answer!");
+                    return false;
+                }
+            }
+            else {
+                if (numAnswers < 1) {
+                    alert("A short answer problem must have at least one answer!");
+                    return false;
+                }
+            }
+            if (false) {
+                alert("Form is not valid");
+                return false;
+            }
+            else return true;
+        }
+
         // Callback function.  When this HTML file opens on an existing problem, an AJAX call is made to get the JSON
         // of the problem.  The JSON data is sent to this function to initialize internal state in the page's javascript
         function problemInit (data) {
             theProblem = data;
             answerType = theProblem.questType;
+            validateHints();
             if (answerType == 'multichoice') {
                 numChoices = theProblem.answers.length;
                 numAnswers = 0;
@@ -342,9 +680,13 @@
                 exposeShortAnswerControls();
         }
 
+
+        ///////////   The main function called at page load time /////////////////
+
         // loads the pulldowns with their options
+        // The main function runs when the page is onReady
         $(function () {
-{#            test('hi there');#}
+
             $('[data-toggle="tooltip"]').tooltip({
                 placement : 'top'
             });
@@ -352,10 +694,7 @@
             // This will be replaced by appropriate controls if we are loading an existing problem
             exposeShortAnswerControls()
 
-            // delete Choice button in the multichoice table click handling
-{#            $('.delChoice').click(function(x) {#}
-{#                deleteMultiChoiceRow($(this));#}
-{#            });#}
+
             $('#addChoice').click(function (x) {
                 addMultiChoiceRows(1);
             });
@@ -364,7 +703,38 @@
             $('#addAnswer').click(function (x) {
                 addShortAnswerRows(1);
             });
+            // If the gives-answer checkbox gets checked, set the hint name to Show Answer
+{#            $('#givesAnswer').click(function (x) {#}
+{#                if ($('#givesAnswer').prop('checked') && theProblem.numHints == theHint.order) {#}
+{#                    $('#hname').val('Show Answer');#}
+{#                }#}
+{#                else if ($('#givesAnswer').prop('checked')) {#}
+{#                    alert("Only the last hint in the sequence can show the answer.");#}
+{#                    $('#givesAnswer').prop('checked',false);#}
+{#                }#}
+{##}
+{#                else {#}
+{#                    $('#hname').val('Hint ' + theHint.order);#}
+{#                }#}
+{#            });#}
+            $('#hinttbody').sortable();
+            $( ".dnd" ).droppable({
+                drop: function( event, ui ) {
 
+                }
+            });
+            $('.dnd').on('drop',function (event, ui) {
+
+            });
+            $( "#hinttbody" ).on( "sortstop", function( event, ui ) {
+                validateHints();
+                saveHintsToServer(); // save hints to server even if not valid because model has to be kept consistent
+            } );
+
+
+            $('#hintSave').click(function (x) {
+                saveHint();
+            })
             // rather than do a $('.delChoice').click() to handle clicks on the elements with delChoice class
             // we use this method of listening for click events on elements with this class.  This is necessary
             // because elements with the delChoice class are added dynamically and they won't be handled correctly
@@ -393,7 +763,7 @@
                     if (numChoices == 0)
                         addMultiChoiceRows(2);
                 }
-            })
+            });
 
 {#            mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});#}
 
@@ -509,6 +879,12 @@
             </div>
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
+            {% if problem.audioResource %}
+                <audio controls>
+                    <source src="{{ mediaURL }}{{ problem.name }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+            {% endif %}
         </div>
 
         <br>
@@ -525,6 +901,9 @@
             </div>
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else the name of the file you upload which can be referenced as {[myfile.jpg]}"></span></a>
+            {% if problem.imageURL %}
+                <img onmouseover="this.removeAttribute('width'); this.removeAttribute('height');" onmouseout="this.width='50'; this.height='50';" width="50" height="50" src="{{ mediaURL }}{{ problem.name }}/{{ problem.getImageURL }}">
+            {% endif %}
         </div>
         <br>
 
@@ -661,32 +1040,88 @@
 
     </form>
 
-    {% if hints %}
+
     <h3>Hints</h3>
 {#        <div class="input-group">#}
-        <button type="submit" class="btn btn-link" onclick="addHint()">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-        <button type="submit" class="btn btn-link" onclick="deleteSelectedHints({{ problem.id }})">
-            <span class="glyphicon glyphicon-minus"></span>
-        </button>
+        <a id="addHint" onclick="addHint()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span></a>
+        &nbsp; &nbsp;
+        &nbsp; &nbsp;
+        <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>
+        &nbsp; &nbsp;
+        Drag and Drop rows to reorder hints
+
+{#        <button type="submit" class="btn btn-link" onclick="addHint()">#}
+{#            <span class="glyphicon glyphicon-plus"></span>#}
+{#        </button>#}
+{#        <button type="submit" class="btn btn-link" onclick="deleteSelectedHints({{ problem.id }})">#}
+{#            <span class="glyphicon glyphicon-minus"></span>#}
+{#        </button>#}
 {#        <span class="input-group-addon">Action</span>#}
 {#        <select class="form-control" style="width:auto;"><option>Add</option><option>Delete Selected</option></select>#}
 {#        </div>#}
-        <table id="hintTable" class="table table-bordered">
+        <table id="hintTable" class="table table-bordered pagin-table">
         <thead>
-            <tr><td style="width: 60px"></td><th style="width: 60px">ID</th><th style="width: 60px">name</th><th style="width: 200px">statement</th></tr>
+            <tr><td style="width: 30px">Delete</td><th style="width: 60px">Edit</th><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th >statement</th></tr>
         </thead>
         <tbody id="hinttbody">
 {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
         {% for h in hints %}
-            <tr id="{{ h.id }}"><td><input type="checkbox"></td><td>{{ h.id }}</td><td><a href="#" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td><td> {{ h.statementHTML }}</td></tr>
+
+            <tr id="{{ h.id }}" class="dnd">
+                <td>
+                    <input type="checkbox"></td>
+                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }})"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
+                <td class="hint-id">{{ h.id }}</td>
+
+                <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+
+{#                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td>#}
+                <td class="statement"> {{ h.statementHTML }}</td>
+            </tr>
         {% endfor %}
         </tbody>
         </table>
+        <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>
+        <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>
+        <p style="color: red" id="hintErrorMessages"></p>
+
+
+    {% if problem.getMediaFiles %}
+        <p>
+            <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <h3>Media Files</h3>
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body" >
+                <p class="card-text">These files are usable within the problem statement and hint statements.  They can be included in a statement by copy/pasting from the Ref file name (e.g. {[myfile.jpg]} )</p>
+        <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=problem.id %}">
+        {#        <div class="input-group">#}
+        {% csrf_token %}
+
+
+            <a id="addMedia" onclick="addMediaRow()" href="#mediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
+
+
+            <table id="mediaTable" class="table table-bordered">
+            <thead>
+            <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
+            </thead>
+            <tbody id="mediatbody">
+            {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
+            {% for f in problem.getMediaFiles %}
+                <tr id="{{ f.id }}"><td><input type="checkbox"></td><td>{{ f.id }}</td><td>{[{{ f.filename }}]}</td>
+                <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Media Files</button>
+        <button class="btn btn-primary" onClick="deleteSelectedMedia({{ problem.id }})">Delete Selected Media Files</button>
+        </form>
+        </div>
+        </div>
     {% endif %}
-
-
 
 
     <!-- Modal Dialog that will come up when hint name is clicked-->
@@ -700,46 +1135,60 @@
                     <h4 id="param-dialog-title" class="modal-title">Edit Hint</h4>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                    <form role="form">
+                    <form id='hintForm' role="form" method="post" enctype="multipart/form-data" onsubmit="return validateHint();" action="{% url 'qauth_save_hint' probId=problem.id %}">
+
+                        {% csrf_token %}
                         <div class="form-group">
                             <label for="hid">ID</label>
-                            <input type="text" class="form-control" id="hid" readonly>
+                            <input type="text" name="id" class="form-control" id="hid" readonly>
                         </div>
-                        <div class="form-group">
-                            <label for="hname">Name</label>
-                            <input type="text" class="form-control" id="hname" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="order">Order</label>
-                            <input type="text" class="form-control" id="order" readonly>
-                        </div>
+{#                        <div class="form-group">#}
+{#                            <label for="hname">Name</label>#}
+{#                            <input type="text"  class="form-control" id="hname" name="name" readonly>#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="order">Order</label>#}
+{#                            <input type="text" class="form-control" id="order" name="order" readonly>#}
+{#                        </div>#}
                         <div class="form-group">
                             <label for="hstatement">Statement</label>
-                            <textarea id="hstatement" class="form-control" rows="6" cols="50"></textarea>
+                            <textarea id="hstatement" name="statementHTML" class="form-control" rows="6" cols="50"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="hoverText">Hover Text</label>
-                            <input type="text" class="form-control" id="hoverText">
+                            <input type="text" name="hoverText" class="form-control" id="hoverText">
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" value="" id="givesAnswer" checked>Gives Answer</label>
+                            <label><input type="checkbox" name="givesAnswer" value="" id="givesAnswer" checked>Gives Answer</label>
                         </div>
 
                         <div class="form-group">
                             <label for="haudioResource">Audio Resource</label>
                             <div class="form-inline">
 
-                                <input type="text" class="form-control" readonly id="haudioResource">
-                                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="haudioFile" type="file">
-
+                                <input type="text" name="audioResource" class="form-control" readonly id="haudioResource">
+                                <input class="form-control mb-2 mr-sm-2 mb-sm-0"  name="audioFile" type="file">
+                                <div id="hintAudio">
+                                    <audio id="haudioPlayer" controls>
+                                        <source id="hintAudioMP3" src="" type="audio/mpeg">
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                </div>
                             </div>
                         </div>
+
+
                         <div class="form-group">
-                            <label for="haudioResource">Image</label>
+                            <label for="himageURL">Image</label>
+                            <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="An image file that goes with this hint.  Refer to it in hint's statement as {[file.jpg]} to embed in the hint statement or as {[file.jpg overlay]} to replace the problem figure"></span></a>
                             <div class="form-inline">
 
-                                <input type="text" class="form-control" readonly id="himageURL">
-                                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="haudioFile" type="file">
+                                <input type="text" name="imageURL" class="form-control" readonly id="himageURL">
+                                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
+
+                                <div id="himageDiv">
+                                    <img id="himage" onmouseover="this.removeAttribute('width'); this.removeAttribute('height');" onmouseout="this.width='50'; this.height='50';" width="50" height="50" src="">
+                                </div>
 
                             </div>
                         </div>
@@ -747,7 +1196,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button onClick="saveHint({{ problem.id }});" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+{#                    <button onClick="saveHint({{ problem.id }});" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>#}
+{#                    <button id="hintSave" onClick="$('#hintForm').submit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>#}
+                    <button id="hintSave" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
                     <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

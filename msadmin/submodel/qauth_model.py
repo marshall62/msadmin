@@ -78,6 +78,10 @@ class Problem (models.Model):
         else:
             return ''
 
+    def getHints (self):
+        hints = Hint.objects.filter(problem=self)
+        return hints
+
     def getAnswers (self):
         answers = ProblemAnswer.objects.filter(problem=self).order_by('order')
         anslist = [ x for x in answers]
@@ -89,9 +93,23 @@ class Problem (models.Model):
             anslist.append(loneAns)
         return anslist
 
+    def getMediaFiles (self):
+        files = ProblemMediaFile.objects.filter(problem=self)
+        return files;
+
+    # Because the imageURL is stored in the db as {[myimage.jpg]} or http://somepath/myimage.jpg we need to return
+    # just myimage.jpg in the first case.
+    def getImageURL (self):
+        if self.imageURL.find('{[') == 0:
+            return self.imageURL[2:-2]
+        else:
+            return self.imageURL
+
+
     def toJSON (self):
         d = {}
         d['id'] = self.pk
+        d['name'] = self.name
         d['questType'] = self.questType
         d['isMultiChoice'] = self.isMultiChoice()
         d['isShortAnswer'] = self.isShortAnswer()
@@ -99,6 +117,7 @@ class Problem (models.Model):
         d['answers'] = [a.toJSON() for a in self.getAnswers()]
 
         d['answer'] = self.answer
+        d['numHints'] = len(self.getHints())
         return d
 
 
@@ -135,6 +154,7 @@ class Hint (models.Model):
     name = models.CharField(max_length=100)
     statementHTML = models.TextField()
     audioResource = models.CharField(max_length=100)
+    imageURL = models.CharField(max_length=100)
     hoverText = models.CharField(max_length=200)
     order = models.IntegerField()
     givesAnswer = models.BooleanField()
@@ -145,6 +165,18 @@ class Hint (models.Model):
 
     def __str__ (self):
         return self.name
+
+    def toJSON (self):
+        d = {}
+        d['id'] = self.pk
+        d['name'] = self.name
+        d['statementHTML'] = self.statementHTML
+        d['audioResource'] = self.audioResource
+        d['order'] = self.order
+        d['hoverText'] = self.hoverText
+        d['givesAnswer'] = self.givesAnswer
+        d['imageURL'] = self.imageURL
+        return d
 
 class ProblemLayout (models.Model):
     problemFormat = models.TextField()
@@ -160,4 +192,17 @@ class ProblemLayout (models.Model):
         d['id'] = self.pk
         d['name'] = self.name
         d['description'] = self.description
+        return d
+
+class ProblemMediaFile (models.Model):
+    filename = models.CharField(max_length=100)
+    problem = models.ForeignKey('Problem',db_column='probId')
+
+    class Meta:
+        db_table = "problemmediafile"
+
+    def toJSON (self):
+        d = {}
+        d['id'] = self.pk
+        d['filename'] = self.filename
         return d
