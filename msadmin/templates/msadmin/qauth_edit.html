@@ -1040,7 +1040,7 @@
 
     </form>
 
-
+    {% if probId != -1 %}
     <h3>Hints</h3>
 {#        <div class="input-group">#}
         <a id="addHint" onclick="addHint()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span></a>
@@ -1084,6 +1084,7 @@
         <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>
         <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>
         <p style="color: red" id="hintErrorMessages"></p>
+    {% endif %}
 
 
     {% if problem.getMediaFiles %}
@@ -1123,7 +1124,8 @@
         </div>
     {% endif %}
 
-
+{#    Don't want a hint dialog if this is a new problem.   Wait until it has an id.#}
+    {% if probId != -1 %}
     <!-- Modal Dialog that will come up when hint name is clicked-->
     <div class="modal fade" id="hintDialog" role="dialog">
         <div class="modal-dialog">
@@ -1135,7 +1137,7 @@
                     <h4 id="param-dialog-title" class="modal-title">Edit Hint</h4>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                    <form id='hintForm' role="form" method="post" enctype="multipart/form-data" onsubmit="return validateHint();" action="{% url 'qauth_save_hint' probId=problem.id %}">
+                    <form id='hintForm' role="form" method="post" enctype="multipart/form-data" onsubmit="return validateHint();" action="{% url 'qauth_save_hint' probId=probId %}">
 
                         {% csrf_token %}
                         <div class="form-group">
@@ -1205,6 +1207,6 @@
 
         </div>
     </div>
-
+    {% endif %}
 
 {% endblock %}
