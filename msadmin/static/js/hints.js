@@ -29,8 +29,11 @@ function editHint2 (id) {
             var audio = $('#haudioPlayer');
             audio[0].load();
         }
-        else
+        else {
             $('#hintAudio').hide();
+            $('#haudioResource').val('');
+            $('#haudioFile').val('');
+        }
         if (data.imageURL) {
             $('#himage').attr('src',mediaURL+'problem_'+theProblem.id+ "/"+data.imageURL);
             $('#himageURL').val(data.imageURL);
@@ -39,6 +42,8 @@ function editHint2 (id) {
         }
         else {
             $('#himageDiv').hide();
+            $('#himageURL').val('');
+            $('#himageFile').val('');
         }
         showHintDialog();
 
@@ -54,11 +59,17 @@ function addHint () {
     $('#hid').val('');
     $('#hname').val('Hint ' + numHints);
     $('#haudioResource').val('');
+    $('#haudioFile').val('');
+    $('#hintAudioMP3').attr('src','' );
+    $('#hintAudio').hide();
     $('#hstatement').val('');
     $('#order').val('');
     $('#hoverText').val('');
     $('#givesAnswer').prop('checked',false);
     $('#himageURL').val('');
+    $('#himageFile').val('');
+    $('#himage').attr('src','');
+    $('#himageDiv').hide();
     showHintDialog();
 }
 
@@ -319,7 +330,7 @@ function deleteSelectedHints (probId) {
                 alert("Failed to delete hints " + a.responseText + b);
             },
             success: function (data) {
-               // location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
+               validateHints();
             }
         });
     }
