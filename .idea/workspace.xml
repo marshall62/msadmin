@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/answers.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/hints.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/media.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qaviews.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/urls.py" afterPath="$PROJECT_DIR$/msadmin/urls.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -51,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/msadmin/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="173">
-              <caret line="15" column="70" lean-forward="false" selection-start-line="15" selection-start-column="70" selection-end-line="15" selection-end-column="70" />
+              <caret line="15" column="116" lean-forward="false" selection-start-line="15" selection-start-column="92" selection-end-line="15" selection-end-column="116" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -59,34 +60,72 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="1111" column="26" lean-forward="false" selection-start-line="1111" selection-start-column="26" selection-end-line="1111" selection-end-column="26" />
+            <state relative-caret-position="363">
+              <caret line="610" column="55" lean-forward="false" selection-start-line="610" selection-start-column="55" selection-end-line="610" selection-end-column="55" />
               <folding>
-                <element signature="e#44197#44203#1#HTML" expanded="true" />
-                <element signature="e#44204#44210#1#HTML" expanded="true" />
-                <element signature="e#44219#44225#1#HTML" expanded="true" />
-                <element signature="e#44226#44232#1#HTML" expanded="true" />
-                <element signature="e#44449#44455#1#HTML" expanded="true" />
-                <element signature="e#44456#44462#1#HTML" expanded="true" />
-                <element signature="e#45167#45186#0#HTML" expanded="true" />
-                <element signature="e#45202#45221#0#HTML" expanded="true" />
-                <element signature="e#45235#45254#0#HTML" expanded="true" />
-                <element signature="e#45266#45285#0#HTML" expanded="true" />
-                <element signature="e#46684#46702#0#HTML" expanded="true" />
-                <marker date="1512429411969" expanded="false" signature="44963:44974" ph="..." />
+                <element signature="e#21061#21067#1#HTML" expanded="true" />
+                <element signature="e#21068#21074#1#HTML" expanded="true" />
+                <element signature="e#21083#21089#1#HTML" expanded="true" />
+                <element signature="e#21090#21096#1#HTML" expanded="true" />
+                <element signature="e#21313#21319#1#HTML" expanded="true" />
+                <element signature="e#21320#21326#1#HTML" expanded="true" />
+                <element signature="e#22031#22050#0#HTML" expanded="true" />
+                <element signature="e#22066#22085#0#HTML" expanded="true" />
+                <element signature="e#22099#22118#0#HTML" expanded="true" />
+                <element signature="e#22130#22149#0#HTML" expanded="true" />
+                <element signature="e#23548#23566#0#HTML" expanded="true" />
+                <marker date="1512495223760" expanded="false" signature="21827:21838" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="media.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadmin/static/js/media.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="98">
+              <caret line="50" column="59" lean-forward="false" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
+              <folding>
+                <element signature="n#!!doc;n#saveMediaFiles#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="answers.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadmin/static/js/answers.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="413">
+              <caret line="165" column="30" lean-forward="true" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
+              <folding>
+                <element signature="n#!!doc;n#addMultiChoiceRows#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hints.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadmin/static/js/hints.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="398">
+              <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+              <folding>
+                <element signature="n#!!doc;n#validateHint#0" expanded="false" />
+                <marker date="1512495223764" expanded="true" signature="7564:7574" ph="..." />
+                <marker date="1512495223764" expanded="true" signature="7715:7732" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="338">
-              <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="52" />
+              <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -94,21 +133,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
-              <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="148" column="67" lean-forward="true" selection-start-line="148" selection-start-column="67" selection-end-line="148" selection-end-column="67" />
+            <state relative-caret-position="188">
+              <caret line="54" column="6" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -117,8 +146,8 @@
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/submodel/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1713">
-              <caret line="26" column="42" lean-forward="false" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+            <state relative-caret-position="342">
+              <caret line="199" column="6" lean-forward="false" selection-start-line="199" selection-start-column="6" selection-end-line="199" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -132,14 +161,12 @@
         <option value="CSS File" />
         <option value="HTML File" />
         <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>qauth</find>
-      <find>prob_create</find>
-      <find>prob</find>
       <find>qauth_save_hint</find>
       <find>numAnswers</find>
       <find>shortAnswer</find>
@@ -149,13 +176,10 @@
       <find>prob/cre</find>
       <find>CONTENT</find>
       <find>hasShort</find>
-      <find>TEMPLA</find>
       <find>handle_up</find>
       <find>failed to delete</find>
       <find>delete</find>
       <find>deleteSelected</find>
-      <find>{{ MED</find>
-      <find>deleteMedia</find>
       <find>showHint</find>
       <find>getHint</find>
       <find>hintAudioM</find>
@@ -163,10 +187,16 @@
       <find>deleteSele</find>
       <find>Form</find>
       <find>deleteSelectedM</find>
-      <find>FormData</find>
-      <find>deleteMe</find>
-      <find>saveProblemMe</find>
       <find>saveMedia</find>
+      <find>{{ MED</find>
+      <find>TEMPLA</find>
+      <find>saveProblemMe</find>
+      <find>deleteMedia</find>
+      <find>POST</find>
+      <find>deleteMe</find>
+      <find>JsonRes</find>
+      <find>FormData</find>
+      <find>url</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -228,8 +258,11 @@
         <option value="$PROJECT_DIR$/msadmin/urls.py" />
         <option value="$PROJECT_DIR$/msadminsite/settings.py" />
         <option value="$PROJECT_DIR$/msadmin/submodel/qauth_model.py" />
+        <option value="$PROJECT_DIR$/msadmin/static/js/answers.js" />
         <option value="$PROJECT_DIR$/msadmin/qaviews.py" />
+        <option value="$PROJECT_DIR$/msadmin/static/js/media.js" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html" />
+        <option value="$PROJECT_DIR$/msadmin/static/js/hints.js" />
       </list>
     </option>
   </component>
@@ -250,8 +283,8 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="92" />
-    <option name="y" value="70" />
-    <option name="width" value="1436" />
+    <option name="y" value="69" />
+    <option name="width" value="1568" />
     <option name="height" value="989" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -932,7 +965,7 @@
       <workItem from="1508856090590" duration="7759000" />
       <workItem from="1510058230268" duration="15267000" />
       <workItem from="1510584917404" duration="61943000" />
-      <workItem from="1511193998724" duration="95686000" />
+      <workItem from="1511193998724" duration="106458000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1123,14 +1156,21 @@
       <option name="project" value="LOCAL" />
       <updated>1512414366033</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="worked on file upload so that it will hopefully work on server">
+      <created>1512429804800</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1512429804800</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="764856000" />
+    <option name="totallyTimeSpent" value="775628000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="92" y="70" width="1436" height="989" extended-state="0" />
+    <frame x="92" y="69" width="1568" height="989" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1142,9 +1182,9 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2799097" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26880223" sideWeight="0.46092504" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24617347" sideWeight="0.46092504" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.75179" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26880223" sideWeight="0.53907496" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24617347" sideWeight="0.53907496" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14922349" sideWeight="0.54618937" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20880681" sideWeight="0.4055944" order="5" side_tool="true" content_ui="tabs" />
@@ -1184,7 +1224,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed url to admin" />
     <MESSAGE value="lots of additions" />
     <MESSAGE value="Have all the functionality in the tree view of a strategy working" />
     <MESSAGE value="added images&#10;" />
@@ -1209,7 +1248,8 @@
     <MESSAGE value="fixed bugs with create-problem so that hint stuff isn't included" />
     <MESSAGE value="media file stuff has to be included for a problem without media" />
     <MESSAGE value="test short answer has one answer&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="test short answer has one answer&#10;" />
+    <MESSAGE value="worked on file upload so that it will hopefully work on server" />
+    <option name="LAST_COMMIT_MESSAGE" value="worked on file upload so that it will hopefully work on server" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1227,7 +1267,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="227" />
+      <option name="time" value="236" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1236,21 +1276,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/db/models/fields/related.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="942" column="0" lean-forward="false" selection-start-line="942" selection-start-column="0" selection-end-line="942" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/readme.txt" />
-    <entry file="file://$PROJECT_DIR$/msadmin/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="12" column="35" lean-forward="false" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/shortcuts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -1569,31 +1594,23 @@
         <state relative-caret-position="229">
           <caret line="59" column="39" lean-forward="false" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="39" />
           <folding>
-            <element signature="e#2233#2252#0#HTML" expanded="true" />
+            <element signature="e#2233#2252#0#HTML" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="148" column="67" lean-forward="true" selection-start-line="148" selection-start-column="67" selection-end-line="148" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
+        <state relative-caret-position="188">
+          <caret line="54" column="6" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/submodel/qauth_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1713">
-          <caret line="26" column="42" lean-forward="false" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+        <state relative-caret-position="342">
+          <caret line="199" column="6" lean-forward="false" selection-start-line="199" selection-start-column="6" selection-end-line="199" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -1601,9 +1618,70 @@
     <entry file="file://$PROJECT_DIR$/msadmin/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
-          <caret line="15" column="70" lean-forward="false" selection-start-line="15" selection-start-column="70" selection-end-line="15" selection-end-column="70" />
+          <caret line="15" column="116" lean-forward="false" selection-start-line="15" selection-start-column="92" selection-end-line="15" selection-end-column="116" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/static/js/answers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="165" column="30" lean-forward="true" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
+          <folding>
+            <element signature="n#!!doc;n#addMultiChoiceRows#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/static/js/media.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="50" column="59" lean-forward="false" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
+          <folding>
+            <element signature="n#!!doc;n#saveMediaFiles#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="610" column="55" lean-forward="false" selection-start-line="610" selection-start-column="55" selection-end-line="610" selection-end-column="55" />
+          <folding>
+            <element signature="e#21061#21067#1#HTML" expanded="true" />
+            <element signature="e#21068#21074#1#HTML" expanded="true" />
+            <element signature="e#21083#21089#1#HTML" expanded="true" />
+            <element signature="e#21090#21096#1#HTML" expanded="true" />
+            <element signature="e#21313#21319#1#HTML" expanded="true" />
+            <element signature="e#21320#21326#1#HTML" expanded="true" />
+            <element signature="e#22031#22050#0#HTML" expanded="true" />
+            <element signature="e#22066#22085#0#HTML" expanded="true" />
+            <element signature="e#22099#22118#0#HTML" expanded="true" />
+            <element signature="e#22130#22149#0#HTML" expanded="true" />
+            <element signature="e#23548#23566#0#HTML" expanded="true" />
+            <marker date="1512495223760" expanded="false" signature="21827:21838" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/static/js/hints.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+          <folding>
+            <element signature="n#!!doc;n#validateHint#0" expanded="false" />
+            <marker date="1512495223764" expanded="true" signature="7564:7574" ph="..." />
+            <marker date="1512495223764" expanded="true" signature="7715:7732" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1611,30 +1689,9 @@
     <entry file="file://$PROJECT_DIR$/msadmin/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="338">
-          <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="52" />
+          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qauth_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="1111" column="26" lean-forward="false" selection-start-line="1111" selection-start-column="26" selection-end-line="1111" selection-end-column="26" />
-          <folding>
-            <element signature="e#44197#44203#1#HTML" expanded="true" />
-            <element signature="e#44204#44210#1#HTML" expanded="true" />
-            <element signature="e#44219#44225#1#HTML" expanded="true" />
-            <element signature="e#44226#44232#1#HTML" expanded="true" />
-            <element signature="e#44449#44455#1#HTML" expanded="true" />
-            <element signature="e#44456#44462#1#HTML" expanded="true" />
-            <element signature="e#45167#45186#0#HTML" expanded="true" />
-            <element signature="e#45202#45221#0#HTML" expanded="true" />
-            <element signature="e#45235#45254#0#HTML" expanded="true" />
-            <element signature="e#45266#45285#0#HTML" expanded="true" />
-            <element signature="e#46684#46702#0#HTML" expanded="true" />
-            <marker date="1512429411969" expanded="false" signature="44963:44974" ph="..." />
           </folding>
         </state>
       </provider>

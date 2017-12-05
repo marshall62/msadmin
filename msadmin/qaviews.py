@@ -88,8 +88,20 @@ def save_problem_media (request, probId):
                 pmf = ProblemMediaFile(filename=f.name,problem=p)
                 pmf.save()
                 handle_uploaded_file(probId,f)
-                #saveMedia(probId, f.name, f)
-    return redirect("qauth_edit_prob",probId=probId)
+
+        # hints are given as an array of ids
+        mediaIds = post.getlist('deleteIds[]')
+        for mid in mediaIds:
+            mf = get_object_or_404(ProblemMediaFile,pk=mid)
+            print("Deleting file:"+mf.filename)
+            deleteMediaFile(probId,mf.filename)
+            print("Deleting media obj id:" + str(mf.pk))
+            mf.delete()
+        mediaFiles = ProblemMediaFile.objects.filter(problem_id=probId)
+        a = [f.toJSON() for f in mediaFiles]
+        return JsonResponse(a, safe=False)
+
+
 
 def save_problem (request):
     if request.method == "POST":
