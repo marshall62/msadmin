@@ -1,6 +1,6 @@
 from django.db import models
 from .submodel import machine_model
-from .submodel import qauth_model
+
 
 # A class used to hold all possible params and default values for an intervention selector
 # This is used to populate pulldown menus so that user can only choose legal values for parameters.

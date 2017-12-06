@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.core.files.storage import FileSystemStorage
 import os
 import sys
-from .submodel.qauth_model import *
+from .qauth_model import *
 from msadminsite.settings import MEDIA_URL,MEDIA_ROOT
 
 # CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
@@ -139,15 +139,15 @@ def save_problem (request):
 
         if not id:
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                    imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
-                    questType=questType, audioResource=audioResource, layout_id=layoutId)
+                        imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
+                        questType=questType, audioResource=audioResource, layout_id=layoutId)
 
 
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                            status=status,standardId=standardId,clusterId=clusterId,form=form,
-                            questType=questType, layout_id=layoutId)
+                        status=status,standardId=standardId,clusterId=clusterId,form=form,
+                        questType=questType, layout_id=layoutId)
             # if no audio or image file are given we don't want to overwrite the problem's audio or image with NULL
             # because it may have these files and we don't want problem-save eliminating them
             if imageURL:

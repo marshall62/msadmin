@@ -19,4 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'',include('msadmin.urls')),
+    url(r'^qauth/',include('msadmin.qa.urls')),
+    url(r'^testauth/',include('msadmin.testauth.urls')),
 ]

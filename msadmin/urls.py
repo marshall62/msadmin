@@ -1,27 +1,17 @@
 from django.conf.urls import url
 
 from . import views
-from . import qaviews
 from . import json
 from . import modelUpdate
+from msadmin.qa.qaviews import reactTest
 from django.conf import settings
+from django.conf.urls import include, url
 from django.conf.urls.static import static
+
 
 urlpatterns = [
     url(r'^$', views.main, name='main'),
-    url(r'^reactTest/$', qaviews.reactTest, name='reactTest'),
-    url(r'^qauth/$', qaviews.main, name='qauth_main'),
-    url(r'^qauth/prob/create/$', qaviews.create_problem, name='qauth_create_prob'),
-    url(r'^qauth/prob/save/$', qaviews.save_problem, name='qauth_save_prob'),
-    url(r'^qauth/prob/save/prob/(?P<probId>\d+)/media/$', qaviews.save_problem_media, name='qauth_save_problem_media'),
-    url(r'^qauth/prob/edit/(?P<probId>\d+)/$', qaviews.edit_problem, name='qauth_edit_prob'),
-    url(r'^qauth/problem/(?P<probId>\d+)/$', qaviews.getProblemJSON, name='qauth_get_problem'),
-    url(r'^qauth/hint/(?P<hintId>\d+)/$', qaviews.getHint, name='qauth_get_hint'),
-    url(r'^qauth/prob/(?P<probId>\d+)/hint/save/$', qaviews.saveHint, name='qauth_save_hint'),
-    url(r'^qauth/prob/(?P<probId>\d+)/hints/save/$', qaviews.saveHints, name='qauth_save_hints'),
-    url(r'^qauth/prob/(?P<probId>\d+)/hint/delete/$', qaviews.deleteHints, name='qauth_delete_hints'),
-    url(r'^qauth/prob/(?P<probId>\d+)/media/delete/$', qaviews.deleteMedia, name='qauth_delete_media'),
-    url(r'^qauth/layouts/$', qaviews.getLayouts, name='qauth_layouts'),
+    url(r'^reactTest/$', reactTest, name='reactTest'),
     url(r'^validate_generic_structure/$', views.validate_generic, name='validate_generic'),
     url(r'^validate_class_tutoring/$', views.validate_class_tutoring, name='validate_class_tutoring'),
     url(r'^classes/(?P<teacherId>.+)/$', views.class_list_by_teacher, name='class_list_by_teacher'),
@@ -56,3 +46,17 @@ urlpatterns = [
 
 if settings.DEBUG is True:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Old QA urls
+# url(r'^qauth/$', qaviews.main, name='qauth_main'),
+# url(r'^qauth/prob/create/$', qaviews.create_problem, name='qauth_create_prob'),
+# url(r'^qauth/prob/save/$', qaviews.save_problem, name='qauth_save_prob'),
+# url(r'^qauth/prob/save/prob/(?P<probId>\d+)/media/$', qaviews.save_problem_media, name='qauth_save_problem_media'),
+# url(r'^qauth/prob/edit/(?P<probId>\d+)/$', qaviews.edit_problem, name='qauth_edit_prob'),
+# url(r'^qauth/problem/(?P<probId>\d+)/$', qaviews.getProblemJSON, name='qauth_get_problem'),
+# url(r'^qauth/hint/(?P<hintId>\d+)/$', qaviews.getHint, name='qauth_get_hint'),
+# url(r'^qauth/prob/(?P<probId>\d+)/hint/save/$', qaviews.saveHint, name='qauth_save_hint'),
+# url(r'^qauth/prob/(?P<probId>\d+)/hints/save/$', qaviews.saveHints, name='qauth_save_hints'),
+# url(r'^qauth/prob/(?P<probId>\d+)/hint/delete/$', qaviews.deleteHints, name='qauth_delete_hints'),
+# url(r'^qauth/prob/(?P<probId>\d+)/media/delete/$', qaviews.deleteMedia, name='qauth_delete_media'),
+# url(r'^qauth/layouts/$', qaviews.getLayouts, name='qauth_layouts')
