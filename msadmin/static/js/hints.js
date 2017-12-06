@@ -37,14 +37,23 @@ function editHint2 (id) {
         if (data.imageURL) {
             $('#himage').attr('src',mediaURL+'problem_'+theProblem.id+ "/"+data.imageURL);
             $('#himageURL').val(data.imageURL);
+            $('#himageFilename').text(data.imageURL);
             $('#himageFile').val('');
             $('#himageDiv').show();
         }
         else {
             $('#himageDiv').hide();
             $('#himageURL').val('');
+            $('#himageFilename').text('');
             $('#himageFile').val('');
         }
+        var opts = ['0','1','2'];
+        var placement = data.placement;
+        var fileid = data.imageFileId;
+        var filename = data.imageFilename;
+        console.log("mounting " );
+        mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"imagePlacement", selectedOption:placement, options: opts});
+
         showHintDialog();
 
     });
@@ -68,8 +77,12 @@ function addHint () {
     $('#givesAnswer').prop('checked',false);
     $('#himageURL').val('');
     $('#himageFile').val('');
+    $('#himageFilename').text(''); // an <a> tag that has the filename
     $('#himage').attr('src','');
     $('#himageDiv').hide();
+    var opts = ['0','1','2'];
+    mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"imagePlacement", selectedOption:"{{ '0' }}", options: opts});
+
     showHintDialog();
 }
 
@@ -257,7 +270,6 @@ function validateHints () {
         var rows = $('tr', $('#hinttbody'));
         var i = 0, foundAt = -1;
 
-        console.log('Validating hints ' + numRows);
         // find the <a class="hint-edit-icon  that contains the hints name
         rows.each(function () {
             // remove any alert in this row first
@@ -265,7 +277,6 @@ function validateHints () {
             // get the <td class="givesAnswer" and see if it contains an <span> tag which is an indication that it has the
             // check icon indicating that this hint gives the answer.
             var tdga = $(this).find(".givesAnswer > span");
-            console.log(tdga);
             if (tdga.length > 0)
                 if (i != numRows-1) {
                     setHintAlert(i, "The hint that gives the answer must be the last one in the sequence.");

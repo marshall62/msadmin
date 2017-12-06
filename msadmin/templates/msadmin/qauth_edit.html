@@ -605,17 +605,29 @@
                         <div class="form-group">
                             <label for="himageURL">Image</label>
                             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="An image file that goes with this hint.  Refer to it in hint's statement as {[file.jpg]} to embed in the hint statement or as {[file.jpg overlay]} to replace the problem figure"></span></a>
+
+
+                            <div class="input-group">
+                                <span class="input-group-addon">Full Image URL</span>
+                                <input type="text" name="imageURL" class="form-control" id="himageURL">
+
+                            </div>
+
                             <div class="form-inline">
 
-                                <input type="text" name="imageURL" class="form-control" readonly id="himageURL">
+
                                 <input id="himageFile" class="form-control mb-2 mr-sm-2 mb-sm-0" name="imageFile" type="file">
 
                                 <div id="himageDiv">
                                     <img id="himage" onmouseover="this.removeAttribute('width'); this.removeAttribute('height');" onmouseout="this.width='50'; this.height='50';" width="50" height="50" src="">
                                 </div>
+                                <a id="himageFilename"></a>
 
                             </div>
                         </div>
+{#                        An image placement selector.  When a hint dialog comes up, this will be given its attributes and select options #}
+                        <div id="my-pulldown5"></div>
+
 
                     </form>
                 </div>

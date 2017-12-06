@@ -43,7 +43,7 @@ python manage.py createsuperuser
 
 marshall
 marshall62@gmail.com
-t0mand3rs
+my password to login to Mr Charlie  (on rose it is my user /pw for rose)
 
 
 Development stuff:
@@ -109,7 +109,7 @@ http://rose.cs.umass.edu/msadmin/classes/
 http://rose.cs.umass.edu/msadmin/class/1022/
 http://rose.cs.umass.edu/msadmin/admin/
 
-superuser: marshall / t0mand3rs
+superuser: marshall / mr charlie password
 
 
 Updating the db:
@@ -158,8 +158,7 @@ python manage.py migrate creates some tables which needs my marshall account in 
 python manage.py createsuperuser
 
 marshall
-marshall62@gmail.com
-t0mand3rs
+marshall62@gmail.com my mr charlie password
 
 Test:
 python manage.py runserver

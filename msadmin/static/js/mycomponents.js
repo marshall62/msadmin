@@ -6,8 +6,6 @@ function test (msg) {
 
 // Given a props object , build a select element containing options that can be stuck inside the elt.
 function injectPulldownIntoElement (props, elt) {
-    console.log("props are");
-    console.log(props);
     var div = document.createElement('div');
     div.className = 'input-group';
     var inner = '<span class="input-group-addon">' +props.label+ '</span>';
@@ -40,18 +38,14 @@ function getPulldownProps (eltId, options) {
 
 function mountPulldownComponent (mountingEltId, props) {
     var elt = document.getElementById(mountingEltId);
+    // remove anything that might be inside the div from previous mountings
+    console.log("Removing old content from " + mountingEltId);
+    while (elt.firstChild) {
+        elt.removeChild(elt.firstChild);
+    }
     if (elt) {
-        // var myprops = getPulldownProps(mountingEltId, options);
         injectPulldownIntoElement(props, document.getElementById(mountingEltId));
-        // React.render(
-        //     <div>
-        //
-        //         <MyPulldown myName={myprops.myName} label={myprops.label} options={myprops.options}
-        //                     selectedOption={myprops.selectedOption} onChange={(e) => myFn(e) }/>
-        //
-        //     </div>,
-        //     document.getElementById(mountingEltId)
-        // );
+
     }
 
 }

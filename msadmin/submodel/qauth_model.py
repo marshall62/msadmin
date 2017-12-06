@@ -162,6 +162,9 @@ class Hint (models.Model):
     order = models.IntegerField()
     givesAnswer = models.BooleanField()
     problem = models.ForeignKey('Problem',db_column='problemId')
+    # The foreign key to the problem media table is allowed to be null
+    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
+    placement = models.IntegerField()
 
     class Meta:
         db_table = "hint"
@@ -179,6 +182,10 @@ class Hint (models.Model):
         d['hoverText'] = self.hoverText
         d['givesAnswer'] = self.givesAnswer
         d['imageURL'] = self.imageURL
+        d['placement'] = self.placement
+        if self.imageFile:
+            d['imageFilename'] = self.imageFile.filename
+            d['imageFileId'] = self.imageFile.id
         return d
 
 class ProblemLayout (models.Model):

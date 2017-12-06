@@ -12,7 +12,12 @@ cd /mnt/net/django/msadmin
 git pull
 
 hand-merge the safe copy of settings.py with the one being moved using scp.
+---------------------
+I have a deploy.sh script that does moving of static resources into apache.  Run it in mnt/net/django/msadmin by
+./deploy.sh
 
+OR DO:
+-------------------
 Set
 export STATIC_ROOT='/mnt/net/http/msadmin_static/'
 
@@ -31,6 +36,7 @@ restart apache.
 sudo /etc/init.d/httpd restart
 
 deactivate // will leave the virtualenv
+-----------------
 
 URLS to test:
 http://rose.cs.umass.edu/msadmin/classes/
