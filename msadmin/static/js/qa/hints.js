@@ -34,25 +34,17 @@ function editHint2 (id) {
             $('#haudioResource').val('');
             $('#haudioFile').val('');
         }
-        if (data.imageURL) {
-            $('#himage').attr('src',mediaURL+'problem_'+theProblem.id+ "/"+data.imageURL);
-            $('#himageURL').val(data.imageURL);
-            $('#himageFilename').text(data.imageURL);
-            $('#himageFile').val('');
-            $('#himageDiv').show();
-        }
-        else {
-            $('#himageDiv').hide();
-            $('#himageURL').val('');
-            $('#himageFilename').text('');
-            $('#himageFile').val('');
-        }
-        var opts = ['0','1','2'];
+        if (hintImageControls)
+            $('#hintImageControls').empty();
+        // problemDir is a global set in quath_edit.html
+        hintImageControls = new ImageControls(theHint.imageURL,theHint.imageFilename,theHint.imageFileId,problemDir);
+        hintImageControls.mountComponent('hintImageControls',{imageFileName: 'imageFile',delImageClassName: 'a_hint_delete_img'});
+        var opts = [{label: 'Inside hint statement', value:'0'},{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
         var placement = data.placement;
         var fileid = data.imageFileId;
         var filename = data.imageFilename;
         console.log("mounting " );
-        mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"imagePlacement", selectedOption:placement, options: opts});
+        mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
 
         showHintDialog();
 
@@ -346,6 +338,25 @@ function deleteSelectedHints (probId) {
         });
     }
 }
+
+function removeHintImage (hintImageControls) {
+    if (confirm("Do you want to delete the hint image")) {
+        var url_mask = REMOVE_HINT_IMAGE_URL.replace('12345',theHint.id);
+        $.ajax({
+            url: url_mask,
+            type: "DELETE",
+            error: function (a,b,c) {
+                alert("Failed to get problem " + a.responseText + b);
+            },
+            success: function (data) {
+                console.log("successful delete of hint image");
+                hintImageControls.removeImagePreview();
+            }
+        });
+    }
+}
+
+
 
 // opens the hint dialog
 function showHintDialog () {

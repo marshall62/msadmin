@@ -23,7 +23,7 @@ function addMultiChoiceRows (n) {
             "</div></td>";
 
         var tr="<tr>" + tddel + tdlab + tdradio + tdtxt + "</tr>";
-
+        // TODO the delete X buttons dynamically added do not get their tooltips.  Must toggle on somehow.
         $('#multichoicetable > tbody:last-child').append(tr);
     }
     numChoices += n;
@@ -48,6 +48,7 @@ function addShortAnswerRows (n) {
         var tr="<tr>" + tddel + tdtxt + "</tr>";
 
         $('#shortanswertable > tbody:last-child').append(tr);
+
         numAnswers++
     }
 }

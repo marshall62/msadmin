@@ -2,6 +2,7 @@
 *~
 __pycache__
 myenv
+fileUploads
 db.sqlite3
 /msadminsite/settings.py
 .DS_Store

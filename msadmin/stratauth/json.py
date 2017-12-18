@@ -1,16 +1,14 @@
-from django.http import HttpResponse
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
-from msadmin.forms import ClassForm
-from .models import StrategyComponent, ClassSCParam, LC, Strategy_Class, SC_Class
-from .models import Strategy
-from .models import Class
-from .models import ClassISParam
-from .models import InterventionSelector
-from .models import ClassSCISMap
-from .models import SCISMap
+from msadmin.stratauth.models import Class
+from msadmin.stratauth.models import ClassISParam
+from msadmin.stratauth.models import ClassSCISMap
+from msadmin.stratauth.models import InterventionSelector
+from msadmin.stratauth.models import SCISMap
+from msadmin.stratauth.models import Strategy
+from msadmin.stratauth.models import StrategyComponent, ClassSCParam, LC, Strategy_Class, SC_Class
+
 
 def get_strategy_json (request, classId, strategyId):
     c = get_object_or_404(Class, pk=classId)

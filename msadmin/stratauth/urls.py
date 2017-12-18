@@ -1,13 +1,7 @@
 from django.conf.urls import url
 
-from . import views
-from . import json
-from . import modelUpdate
 from msadmin.qa.qaviews import reactTest
-from django.conf import settings
-from django.conf.urls import include, url
-from django.conf.urls.static import static
-
+from msadmin.stratauth import views, modelUpdate, json
 
 urlpatterns = [
     url(r'^$', views.main, name='main'),
@@ -31,21 +25,20 @@ urlpatterns = [
     url(r'^class/(?P<classId>\d+)/otherClass/(?P<otherClassId>\d+)/strategy/(?P<stratId>\d+)$', views.add_class_other_class_strategy, name='add-other-class-strategy'),
     url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/remove$', views.remove_class_strategy, name='remove-class-strategy'),
     url(r'^class/(?P<classId>\d+)/sc/(?P<scId>\d+)/is/(?P<isId>\d+)/activate/(?P<isActive>\w+)$', views.class_activate_is, name='intervention-selector-activate'),
-    url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/json/$',json.get_strategy_json, name='strategy-json'),
-    url(r'^class_is_param/(?P<isParamId>\d+)/json/$',json.get_is_param_json, name='class_is_param_detail'),
-    url(r'^class_sc_param/(?P<scParamId>\d+)/json/$',json.get_sc_param_json, name='class_sc_param_detail'),
-    url(r'^class_is_param/(?P<isParamId>\d+)/save/$',modelUpdate.save_is_param, name='class_is_param_save'),
-    url(r'^class_sc_param/(?P<scParamId>\d+)/save/$',modelUpdate.save_sc_param, name='class_sc_param_save'),
-    url(r'^class_is/(?P<isId>\d+)/(?P<strategyId>\d+)/save/$',modelUpdate.save_is, name='class_is_save'),
-    url(r'^class_is_param/(?P<isParamId>\d+)/active/save/$',modelUpdate.save_is_param_active, name='class_is_param_active_save'),
-    url(r'^class_sc_param/(?P<scParamId>\d+)/active/save/$',modelUpdate.save_sc_param_active, name='class_sc_param_active_save'),
-    url(r'^class_intervSel/(?P<isId>\d+)/active/save/$',modelUpdate.save_intervSel_active, name='class_intervSel_active_save'),
-    url(r'^class/(?P<classId>\d+)/is/(?P<isId>\d+)/sc/(?P<scId>\d+)/strategy/(?P<strategyId>\d+)/json/$',json.get_is, name='class_is_detail')
+    url(r'^class/(?P<classId>\d+)/strategy/(?P<strategyId>\d+)/json/$', json.get_strategy_json, name='strategy-json'),
+    url(r'^class_is_param/(?P<isParamId>\d+)/json/$', json.get_is_param_json, name='class_is_param_detail'),
+    url(r'^class_sc_param/(?P<scParamId>\d+)/json/$', json.get_sc_param_json, name='class_sc_param_detail'),
+    url(r'^class_is_param/(?P<isParamId>\d+)/save/$', modelUpdate.save_is_param, name='class_is_param_save'),
+    url(r'^class_sc_param/(?P<scParamId>\d+)/save/$', modelUpdate.save_sc_param, name='class_sc_param_save'),
+    url(r'^class_is/(?P<isId>\d+)/(?P<strategyId>\d+)/save/$', modelUpdate.save_is, name='class_is_save'),
+    url(r'^class_is_param/(?P<isParamId>\d+)/active/save/$', modelUpdate.save_is_param_active, name='class_is_param_active_save'),
+    url(r'^class_sc_param/(?P<scParamId>\d+)/active/save/$', modelUpdate.save_sc_param_active, name='class_sc_param_active_save'),
+    url(r'^class_intervSel/(?P<isId>\d+)/active/save/$', modelUpdate.save_intervSel_active, name='class_intervSel_active_save'),
+    url(r'^class/(?P<classId>\d+)/is/(?P<isId>\d+)/sc/(?P<scId>\d+)/strategy/(?P<strategyId>\d+)/json/$', json.get_is, name='class_is_detail')
 
 ]
 
-if settings.DEBUG is True:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 # Old QA urls
 # url(r'^qauth/$', qaviews.main, name='qauth_main'),

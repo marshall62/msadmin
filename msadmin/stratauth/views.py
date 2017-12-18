@@ -1,22 +1,15 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, render_to_response
 from django.shortcuts import redirect
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 
-from msadmin.forms import ClassForm
-from .models import StrategyComponent
-from .models import Strategy
-from .models import Class
-from .models import SCISMap
-from .dbops.classops import *
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from msadmin.dbops.classops import *
 
 
 # Create your views here.
 def strategy_list(request):
     strategies = Strategy.objects.all()
 
-    return render(request, 'msadmin/strategy_list.html', {'strategies': strategies})
+    return render(request, 'msadmin/sa/strategy_list.html', {'strategies': strategies})
 
 # Shows the main page of the site
 def main(request):
@@ -27,7 +20,7 @@ def main(request):
 def sc_detail (request, pk):
     sc = get_object_or_404(StrategyComponent, pk=pk)
     # sc = StrategyComponent.ojects.get(pk=pk)
-    return render(request, 'msadmin/strategycomponent.html', {'strategycomponent': sc})
+    return render(request, 'msadmin/sa/strategycomponent.html', {'strategycomponent': sc})
 
 # Create your views here.
 def class_list(request):
@@ -35,7 +28,7 @@ def class_list(request):
     teachers = Teacher.objects.all().order_by('lname', 'fname')
     # classes = Class.objects.filter(teacher='David Marshall').order_by('teacher', 'name')
 
-    return render(request, 'msadmin/class_list.html', {'classes': classes, 'teachers': teachers})
+    return render(request, 'msadmin/sa/class_list.html', {'classes': classes, 'teachers': teachers})
 
 # Create your views here.
 def class_list_by_teacher(request, teacherId):
@@ -50,7 +43,7 @@ def class_list_by_teacher(request, teacherId):
     else:
         classes = Class.objects.all().order_by('teacher', 'name')
 
-    return render(request, 'msadmin/class_list.html', {'classes': classes, 'teacherId': teacherId, 'teachers': teachers})
+    return render(request, 'msadmin/sa/class_list.html', {'classes': classes, 'teacherId': teacherId, 'teachers': teachers})
 
 
 
@@ -81,15 +74,15 @@ def class_detail (request, pk):
     tutorSCs = StrategyComponent.objects.filter(type=StrategyComponent.TUTOR)
     lcs = LC.objects.all()
     # sc = StrategyComponent.ojects.get(pk=pk)
-    return render(request,'msadmin/class.html',
-                              {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
+    return render(request, 'msadmin/sa/class.html',
+                  {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
 
 
 
 
 def strategy_detail (request, pk):
     strat = get_object_or_404(Strategy, pk=pk)
-    return render(request, 'msadmin/strategy.html', {'strategy': strat})
+    return render(request, 'msadmin/sa/strategy.html', {'strategy': strat})
 
 # Given a strategy-component, return a list of lists.
 # like: [ [intervSel-1 [param-1, param-2,...]],  [intervSel-2 [param-1, param-2... ]] ]
@@ -113,7 +106,7 @@ def configure_class_strategy (request, classId, strategyId):
     # st = get_object_or_404(Strategy, pk=strategyId)
     clstrat = get_object_or_404(Strategy_Class, pk=strategyId)
 
-    return render(request, 'msadmin/class_strategy2.html',
+    return render(request, 'msadmin/sa/class_strategy2.html',
                   {'class': cl, 'classStrategy': clstrat})
 
 def add_class_strategy (request, classId, strategyId):
@@ -188,7 +181,7 @@ def validate_class_tutoring (request):
     return validateClassTutoringStrategies(request)
 
 def test (request):
-    return render(request,'msadmin/test.html')
+    return render(request, 'msadmin/test.html')
 
 def blee (request):
     return HttpResponse("Blee")

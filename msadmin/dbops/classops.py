@@ -1,5 +1,8 @@
-from msadmin.models import *
 from django.db import transaction
+
+from msadmin.stratauth.models import *
+
+
 #When a strategy is added to a class we use the following two functions to copy data from tables
 # that define defaults into class-specific tables.
 

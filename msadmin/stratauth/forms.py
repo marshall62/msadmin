@@ -1,7 +1,7 @@
 from django import forms
 
-from .models import Class
-from .models import Strategy
+from msadmin.stratauth.models import Class
+
 
 # The Class page should show the fields of the class
 # with a list of strategies displayed as links.  Additional strategies can be added.

@@ -1,17 +1,13 @@
-from django.http import HttpResponse
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
-from msadmin.forms import ClassForm
-from .models import StrategyComponent, ClassSCParam, Strategy_Class, LC, SC_Class
-from .models import Strategy
-from .models import Class
-from .models import ClassISParam
-from .models import ClassSCParam
-from .models import InterventionSelector
-from .models import ClassSCISMap
-from .models import SCISMap
+from msadmin.stratauth.models import Class
+from msadmin.stratauth.models import ClassISParam
+from msadmin.stratauth.models import ClassSCISMap
+from msadmin.stratauth.models import ClassSCParam
+from msadmin.stratauth.models import InterventionSelector
+from msadmin.stratauth.models import SCISMap
+from msadmin.stratauth.models import StrategyComponent, Strategy_Class, LC, SC_Class
 
 
 # An AJAX post request coming from a dialog box that allows edit of class-is-param.

@@ -5,7 +5,7 @@ class Problem (models.Model):
     nickname = models.CharField(max_length=200)
     questType = models.CharField(max_length=45)
     statementHTML = models.TextField()
-    audioResource = models.CharField(max_length=100)
+    audioResource = models.CharField(max_length=100) # deprecating in favor of audioFile below
     answer = models.TextField()
     imageURL = models.TextField(max_length=100)
     status = models.CharField(max_length=50)
@@ -13,6 +13,8 @@ class Problem (models.Model):
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
     layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
+    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
+    audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True)
 
     MULTI_CHOICE="multichoice"
     SHORT_ANSWER="shortanswer"
@@ -36,8 +38,8 @@ class Problem (models.Model):
     class Meta:
         db_table = "problem"
 
-    def isReadAloud (self):
-        return self.audioResource == 'question'
+    # def isReadAloud (self):
+    #     return self.audioResource != None or self.audioFile != None
 
     def isMultiChoice (self):
         return self.questType==Problem.MULTI_CHOICE
@@ -51,8 +53,8 @@ class Problem (models.Model):
     def isShortAnswer (self):
         return self.questType==Problem.SHORT_ANSWER
 
-    def getReadAloud (self):
-        return 'hasAudio' if self.isReadAloud() else 'noAudio'
+    # def getReadAloud (self):
+    #     return 'hasAudio' if self.isReadAloud() else 'noAudio'
 
     def getStatus3 (self):
         if self.status == 'ready' or self.status == 'testable':
@@ -215,4 +217,5 @@ class ProblemMediaFile (models.Model):
         d = {}
         d['id'] = self.pk
         d['filename'] = self.filename
+        d['probId'] = self.problem.pk
         return d

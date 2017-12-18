@@ -1,5 +1,5 @@
 from django.db import models
-from .submodel import machine_model
+from msadmin.submodel import machine_model
 
 
 # A class used to hold all possible params and default values for an intervention selector

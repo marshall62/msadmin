@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'',include('msadmin.urls')),
+    url(r'^stratauth/', include('msadmin.stratauth.urls')),
     url(r'^qauth/',include('msadmin.qa.urls')),
     url(r'^testauth/',include('msadmin.testauth.urls')),
 ]
+# This adds the ability to get to static media (e.g. uploaded files) using URLS like
+# <img src="{{ MEDIA_URL }}{{ problem.getProblemDir }}{{ problem.getImageURL }}"
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

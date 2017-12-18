@@ -33,13 +33,30 @@ function saveMediaFiles () {
             console.log(a);
             alert("Failed to process media " + a.responseText + b);
         },
+        // Gets back an object like {mediaFiles : [list of ProblemMediaFile objects], notDeleted: [list of ProblemMediaFile objects]}
         success: function (data) {
             $('#mediatbody').empty();
-            for (f of data)
+            for (f of data.mediaFiles)
                 addMediaRow(f);
+            addMediaFileMessage(data.notDeleted, data.refs);
         }
     });
 
+}
+
+function addMediaFileMessage (mfs, refs) {
+    var msg = 'The following media files cannot be deleted because they are still referenced by the problem or one of its hints:<br><ul>';
+    if (mfs.length == 0) {
+        msg = "Successfully deleted.";
+    }
+    else {
+        for (i in mfs) {
+            var g = mfs[i].filename + " is referenced in: " + refs[i];
+            msg += "<li>" + g + "</li>";
+        }
+        msg += "</ul>"
+    }
+    $('#mediaFileErrorMessages').html(msg);
 }
 
 function addMediaRow (data = null) {
@@ -72,43 +89,6 @@ function processSelectedMediaFileIds () {
 }
 
 
-// function deleteSelectedMedia () {
-//     if (confirm("Are you sure you want to delete the selected media files?")) {
-//         var deleteIds = [];
-//
-//         var probId = theProblem.id;
-//         $('#mediatbody').find('tr').each(function () {
-//
-//             var row = $(this);
-//             if (row.find('input[type="checkbox"]').is(':checked') ) {
-//                 var rid = row.attr('id');
-//                 if (rid) {
-//                     deleteIds.push(rid);
-//                     row.remove();
-//                 }
-//
-//             }
-//         });
-//
-//         if (deleteIds.length > 0) {
-//
-//             var url_mask = "{% url 'qauth_delete_media' probId=12345 %}".replace(/12345/, probId.toString());
-//             $.ajax({
-//                 url: url_mask,
-//                 type: "POST",
-//                 data: {data: deleteIds },
-//                 error: function (a,b,c) {
-//                     console.log("Failed to delete media! " + a.responseText + b);
-//                     console.log(a);
-//                     alert("Failed to delete media " + a.responseText + b);
-//                 },
-//                 success: function (data) {
-//                     // location.href = "{% url 'qauth_edit_prob' probId=12345 %}".replace(/12345/, probId.toString());
-//                 }
-//             });
-//         }
-//     }
-// }
 
 
 
