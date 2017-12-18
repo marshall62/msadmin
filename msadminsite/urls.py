@@ -17,9 +17,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+import msadmin.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', msadmin.views.main, name='msadmin_main'),
+    url(r'^signup/$', msadmin.views.signup, name='msadmin_signup'),
+    url(r'^login/$', msadmin.views.login, name='msadmin_login'),
     url(r'^stratauth/', include('msadmin.stratauth.urls')),
     url(r'^qauth/',include('msadmin.qa.urls')),
     url(r'^testauth/',include('msadmin.testauth.urls')),
