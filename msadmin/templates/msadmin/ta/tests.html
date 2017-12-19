@@ -1,0 +1,73 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block page-css %}
+    <style>
+
+        .modal-header, h4, .close {
+            background-color: #889400;
+            color:black !important;
+            text-align: center;
+            font-size: 30px;
+        }
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+        .bs-example{
+            margin: 50px;
+        }
+        .bs-example a{
+            font-size: 22px;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block page-js %}
+    <script type="application/javascript">
+
+        const TEST_URL = "{% url 'testauth_tests_main' %}";
+
+        function addTest() {
+            document.location.href = "{% url 'testauth_tests_new' %}";
+        }
+
+        function doSave () {
+            document.getElementById("myform").submit();
+        }
+
+        $(document).ready(function () {
+            $("#addTestButton").click(addTest);
+            $("#saveButton").click(doSave);
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+<a href="<%= pageContext %>/questions">View All Questions</a>
+<br><br>
+Here are the Pre/Post tests
+
+<form id="myform" action="{% url 'testauth_tests_main' %}", method="post">
+
+    <table>
+        <tr><td>Del</td> <td></td ><td><a id="addTestButton" class='btn btn-delete btn-primary btn-xs'>Add Test</a></td> <td></td></tr>
+        {% for test in tests %}
+        <tr>
+            <td> <input type="checkbox" name="removeTest" value="{{ test.id }}"></td>
+            <td>{{ test.id }}</td>
+            <td> &nbsp;<a href="{% url 'testauth_tests_getTest' testId=test.id %}">{{ test.name }} </a>  </td>
+            <td>{% if not test.isActive %}
+                inactive
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a id="saveButton" class='btn btn-delete btn-primary btn-xs'>Save</a>
+</form>
+
+
+{% endblock %}
