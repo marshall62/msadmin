@@ -1,0 +1,53 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<!-- See for doc on view helpers https://github.com/tanema/express-helpers/wiki
+ The path to get to this page is http ... questions/preview?qid...  or http... tests/preview?tid&qid
+ -->
+
+{#<a href="<%= pageContext %>/questions/<%= qid %>">Edit This Question</a>#}
+<a href="{% url 'ta_questions_gp_page' qobj.id %}">Edit This Question</a>
+{% if tid %}
+<a href="{% url 'ta_tests_gp_page' testId=tid %}">Edit This Test</a>
+{% endif %}
+
+<br>
+{% if qobj.image %}
+<img src="">
+{% endif %}
+
+<br>
+{# the safe switch below turns off Django's automatic escaping of HTML tags #}
+{{ qobj.description|safe }}
+<br>  <br>
+{% if qobj.isShortAnswer %}
+<input type="text" name="answer">
+{% elif qobj.isLongAnswer %}
+    <textarea name="answer"></textarea>
+{% else %}
+<table>
+    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="a"> </td> <td> {{ qobj.aChoice }}  </td></tr>
+    {% if qobj.bChoice %}
+    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="b">  </td> <td> {{ qobj.bChoice }}  </td></tr>
+    {% endif %}
+    {% if qobj.cChoice %}
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="c">  </td> <td> {{ qobj.cChoice }}  </td></tr>
+    {% endif %}
+    {% if qobj.dChoice %}
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="d">  </td> <td> {{ qobj.dChoice }}  </td></tr>
+    {% endif %}
+    {% if qobj.eChoice %}
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="e">  </td> <td> {{ qobj.eChoice }}  </td></tr>
+    {% endif %}
+
+</table>
+{% endif %}
+<br>
+{% if tid and qid %}
+<a href="{% url 'ta_tests_question_preview_page' testId=tid qId=qid %}">Next Question</a>
+{% endif %}
+
+
+{% endblock %}

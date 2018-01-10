@@ -27,38 +27,37 @@
 {% block page-js %}
     <script type="application/javascript">
 
-        const TEST_URL = "{% url 'testauth_tests_main' %}";
 
         function addTest() {
-            document.location.href = "{% url 'testauth_tests_new' %}";
+            document.location.href = "{% url 'ta_tests_new_page' %}";
         }
 
-        function doSave () {
-            document.getElementById("myform").submit();
-        }
+{#        function doSave () {#}
+{#            document.getElementById("myform").submit();#}
+{#        }#}
 
         $(document).ready(function () {
             $("#addTestButton").click(addTest);
-            $("#saveButton").click(doSave);
+{#            $("#saveButton").click(doSave);#}
         });
 
     </script>
 {% endblock %}
 
 {% block content %}
-<a href="<%= pageContext %>/questions">View All Questions</a>
+<a href="{% url 'ta_questions_all_page' %}">View All Questions</a>
 <br><br>
 Here are the Pre/Post tests
 
-<form id="myform" action="{% url 'testauth_tests_main' %}", method="post">
-
+<form id="myform" action="{% url 'ta_tests_remove_page' %}" method="post">
+    {% csrf_token %}
     <table>
         <tr><td>Del</td> <td></td ><td><a id="addTestButton" class='btn btn-delete btn-primary btn-xs'>Add Test</a></td> <td></td></tr>
         {% for test in tests %}
         <tr>
-            <td> <input type="checkbox" name="removeTest" value="{{ test.id }}"></td>
+            <td> <input type="checkbox" name="removeTest[]" value="{{ test.id }}"></td>
             <td>{{ test.id }}</td>
-            <td> &nbsp;<a href="{% url 'testauth_tests_getTest' testId=test.id %}">{{ test.name }} </a>  </td>
+            <td> &nbsp;<a href="{% url 'ta_tests_gp_page' testId=test.id %}">{{ test.name }} </a>  </td>
             <td>{% if not test.isActive %}
                 inactive
                 {% endif %}
@@ -66,7 +65,7 @@ Here are the Pre/Post tests
         </tr>
         {% endfor %}
     </table>
-    <a id="saveButton" class='btn btn-delete btn-primary btn-xs'>Save</a>
+    <button id="saveButton" class='btn btn-delete btn-primary btn-xs'>Save</button>
 </form>
 
 

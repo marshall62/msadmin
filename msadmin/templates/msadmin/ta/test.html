@@ -1,0 +1,492 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block page-css %}
+    <style>
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        .main {
+            width: 100%;
+            height: 95%;
+            /*outline: solid 1px red;*/
+            margin: 0;
+            padding: 0;
+            /*background:darkseagreen;*/
+        }
+
+        .header {
+            width: 100%;
+            height: 5%;
+            /*outline: solid 1px red;*/
+            margin: 0;
+            padding: 0;
+            /*background:cornflowerblue;*/
+        }
+
+        .ui-sortable tr {
+            cursor: pointer;
+        }
+
+        .ui-sortable tr:hover {
+            background: rgba(244, 251, 17, 0.45);
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #4f88d9;
+            border-color: #4f88d9;
+        }
+
+        .modal-header, h4, .close {
+            background-color: #889400;
+            color:black !important;
+            text-align: center;
+            font-size: 30px;
+        }
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block page-js %}
+    <script type="application/javascript">
+
+        var tid = '{{ test.id }}';
+
+        var newQuestionCounter = 0;
+        var dAndDEnabled = true;
+
+        function validateTest() {
+            return true;
+        }
+
+        function serverGetTestAllQuestions(cb) {
+            // make AJAX call to get a list of all questions as objects like {id, description}
+{#            $.getJSON("<%= pageContext %>/tests/" + tid + "/allQuestions", function (data) {#}
+            var url_mask = "{% url 'ta_tests_questions_json' testId=12345 %}";
+            url_mask= url_mask.replace('12345',tid)
+
+            $.getJSON(url_mask, function (data) {
+                console.log(data);
+                var allQuestions = data.qids;
+                cb(allQuestions);
+            });
+
+        }
+
+        function serverGetAllQuestions(qids) {
+            // make AJAX call to get a list of all questions as objects like {id, description}
+            var url = "{% url 'ta_questions_all_json' %}";
+{#            $.getJSON("<%= pageContext %>/questions/getAll", function (data) {#}
+            $.getJSON(url, function (data) {
+                var allQuestions = data.questions;
+                var tbody = document.getElementById("allQuestionsTable").getElementsByTagName('tbody')[0]
+                for (var i = 0; i < allQuestions.length; i++)
+                    addQuestionRow1( allQuestions[i], qids, tbody);
+            });
+
+        }
+
+        function serverSaveQuestionOrder(ids) {
+            // make AJAX call to save a new ordering of the questions in a test
+            var url_mask = "{% url 'ta_tests_questions_order_json' testId=12345%}";
+            url_mask= url_mask.replace('12345',tid);
+{#            $.ajax("<%= pageContext %>/tests/" + tid + "/questionOrder/",#}
+            $.ajax(url_mask,
+                {
+                    method: "POST",
+                    data: {ids: ids},
+                    error: function (a, status, err) {
+                        alert("error trying to update question order! " + err);
+                    }
+                });
+        }
+
+        // ajax call to remove the question from the test
+        function serverTestRemoveQuestion(tid, qid) {
+            var url_mask = "{% url 'ta_tests_questions_del_json' testId=12345 qId=6789 %}";
+            url_mask= url_mask.replace('12345',tid);
+            url_mask= url_mask.replace('6789',qid);
+{#            $.ajax("<%= pageContext %>/tests/" + tid + "/removeQuestion/" + qid,#}
+            $.ajax(url_mask,
+                {
+                    method: "DELETE",
+                    success: function (data, status, x) {
+                        // json returned will be list of questions
+                        removeRow(qid);
+                    },
+
+                    error: function (a, status, err) {
+                        alert("error! " + err);
+                    }
+                });
+        }
+
+        // adds questions to the test.  Expects nothing back.
+        function serverAddQuestionsToTest(idlist) {
+            var url_mask = "{% url 'ta_tests_questions_add' testId=12345%}";
+            url_mask= url_mask.replace('12345',tid);
+{#            $.ajax("<%= pageContext %>/tests/" + tid + "/addQuestions",#}
+            // gets back a list of the questions in the test as JSON
+            $.ajax(url_mask,
+                {
+                    method: "POST",
+                    data: {ids: idlist},
+                    error: function (a, status, err) {
+                        alert("error trying to add questions! " + err);
+                    }
+                });
+        }
+
+        // cur URL is like http:.../tests/102 and this loads http:.../tests/102
+        // but cancel could also be clicked on a new test which doesnt have ID yet.
+{#        function fetchTest(tid) {#}
+{#            if (tid)#}
+{#                document.location.href = tid;#}
+{#            else#}
+{#                document.location.href = 'new';   // just load a new test form#}
+{#        }#}
+
+        // cur URL is like http:.../tests/102 .  Will goto URL http .../questions/preview?tid=tid
+        function previewTest() {
+{#            document.location.href = "<%= pageContext %>/tests/preview?tid=<%=tid%>" ;#}
+            var url_mask = "{% url 'ta_tests_preview_page' testId=12345%}";
+            url_mask= url_mask.replace('12345',tid);
+            document.location.href = url_mask ;
+        }
+
+
+        function removeQuestion(tid, qid) {
+            var r = confirm("Are you sure you want to remove this question from the test?");
+            if (r) {
+                serverTestRemoveQuestion(tid, qid);
+            }
+        }
+
+        // GIven the qid, find the row its in and remove it
+        function removeRow(qid) {
+            var row = $('#questionTable tr').filter(function () {
+                return $.trim($('td', this).eq(0).text()) == qid;
+            });
+            row.remove();
+        }
+
+
+        // Add a question  to the table.  Given the list of qids in the table already so we can check that
+        // we don't insert it again.
+        // questionObj is {id, description}
+        function addQuestionRow1( questionObj, qids, tbody) {
+
+            // if its already in the test, don't put it in the allQuestions table.
+            if (qids && qids.length > 0 && qids.indexOf(questionObj.id) != -1)
+                return;
+            //var tbody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            var newrow = tbody.insertRow(tbody.rows.length);
+            newrow.id = questionObj.id;
+            var c1 = newrow.insertCell(0);   // radio button
+            var c2 = newrow.insertCell(1);   // id
+            var c3 = newrow.insertCell(2);   //  description
+            c1.innerHTML = "<input type='checkbox'>";
+            c2.innerHTML = questionObj.id;
+            c3.innerHTML = "<a title='" + questionObj.hoverText + "'>" + questionObj.description + "</a>";
+        }
+
+
+        function popupQuestions() {
+            window.open("<%= pageContext %>/questions", "", "width=500,height=600,toolbar=yes,scrollbars=yes,resizable=yes");
+        }
+
+        //After drag completes with a drop, this is called to send the list of qids to the server
+        function renumber_table(tableID) {
+            var ids = [];
+            var MyRows = $(tableID).find('tbody').find('tr');
+            for (var i = 0; i < MyRows.length; i++) {
+                var qid = $(MyRows[i]).find('td:eq(0)').html();
+                ids.push(qid);
+            }
+            serverSaveQuestionOrder(ids);
+
+
+        }
+
+        // create a new question in this test
+        function createQuestion() {
+            // returns a page that is a question editor (for a question in THIS TEST)
+            var url_mask = "{% url 'ta_tests_question_new_page' testId=12345%}";
+            url_mask= url_mask.replace('12345',tid);
+{#            window.location.href = '<%= pageContext %>/questions/new?testId='+tid;#}
+            window.location.href = url_mask;
+        }
+
+        // first get all the current tests qids
+        function addQuestion_a() {
+            serverGetTestAllQuestions(addQuestion_b);
+        }
+
+        //  second get ALL the questions in the db
+        function addQuestion_b(qids) {
+            serverGetAllQuestions(qids);
+            // pop up the dialog while all the questions are being fetched
+            $('#selectQuestionsDialog').modal('show');
+        }
+
+        // When user clicks addQuestion button this handles it.  First we get the qids of the current test from the server.
+        // THen we get the list of all questions in the database and show all of them except the ones in the current test in a dialog.
+        function addQuestion() {
+            addQuestion_a();
+        }
+
+
+        // Go through the dialog's table that list all questions in the db and get the ids of all checked rows.  Then add each of these questions to the
+        // table that represents the questions in the test.
+        function addQuestionsToTest() {
+            var selectedIds = [];
+            var qobjs = [];
+            $('#allQuestionsTable').find('tr').each(function () {
+                var row = $(this);
+
+                if (row.find('input[type="checkbox"]').is(':checked')) {
+                    var id = this.cells[1].innerHTML;
+                    var descr = this.cells[2].innerHTML;
+                    qobjs.push({id: id, description: descr});
+                    selectedIds.push(id);
+                }
+            });
+            serverAddQuestionsToTest(selectedIds);
+            for (var i = 0; i < qobjs.length; i++) {
+                addQuestionToTable(qobjs[i]);
+
+            }
+
+        }
+
+
+
+        // Once a dialog has shown with table rows we clear the tbody of the table when the dialog closes
+        // so the next time the dialog is shown the table can be repopulated without the old rows.
+        function clearTableRows (tableId) {
+            var old_tbody = document.getElementById(tableId).getElementsByTagName('tbody')[0]
+            var new_tbody = document.createElement('tbody');
+            old_tbody.parentNode.replaceChild(new_tbody, old_tbody)
+        }
+
+
+{#        function saveTest () {#}
+{#            document.getElementById("testForm").submit();#}
+{#        }#}
+
+        // Given a q like {id: 10, descr: 'hidklf'},  add a row to the question table.
+        function addQuestionToTable(q) {
+            var tab = document.getElementById("questionTable");
+            var tbody = tab.getElementsByTagName('tbody')[0]
+            var r = tbody.insertRow(tbody.rows.length);
+
+            var c = r.insertCell(0);
+            c.innerHTML = q.id;
+            var d = r.insertCell(1);
+            // construct a link to the test question
+{#            var qurl = '<%= pageContext %>' + '/questions/' + q.id;#}
+            var url_mask = "{% url 'ta_questions_gp_page' qId=12345 %}";
+            url_mask = url_mask.replace('12345',q.id);
+{#            var qurl = '<%= pageContext %>' + '/questions/' + q.id;#}
+            var x = q.description;
+            // q.descr is a string like <a title=.. - insert the href=qurl into it
+            var s = x.substring(0, 3) + 'href="' + url_mask + '" ' + x.substring(3);
+            d.innerHTML = s;
+            var e = r.insertCell(2);
+            e.innerHTML = "<a onclick='removeQuestion(" +tid+ ", " + q.id + ")' class='btn btn-delete btn-primary btn-xs'>Delete</a>";
+            var f = r.insertCell(3);
+            var g = r.insertCell(4);
+        }
+
+
+        // Need to prevent the ENTER key from submitting the form
+        $(document).ready(function () {
+            //Helper function to keep table row from visually collapsing during drag operations
+            var fixHelperModified = function (e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            };
+
+            var wWidth = $(window).width();
+            var dWidth = wWidth * 0.8;
+            var wHeight = $(window).height();
+            var dHeight = wHeight * 0.8;
+            $('#main').css("height", document.documentElement.clientHeight);
+
+            $('#questionDialogSave').click (function () {
+                addQuestionsToTest();
+                clearTableRows("allQuestionsTable");
+                $('#selectQuestionsDialog').modal('toggle');
+            });
+            $('#questionDialogCancel').click (function () {
+                clearTableRows("allQuestionsTable");
+                $('#selectQuestionsDialog').modal('toggle');
+            });
+            $("#addQuestionButton").click(addQuestion);
+            $("#createQuestionButton").click(createQuestion);
+{#            $("#saveTestButton").click(saveTest);#}
+            $("#previewTestButton").click(previewTest);
+
+            $('#questionTable tbody').sortable({
+                helper: fixHelperModified,
+                stop: function (event, ui) {
+                    renumber_table('#questionTable')
+                }
+            }).disableSelection();
+
+// prevent submission of the form when hitting enter key
+            $('#testForm').on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="header" class="header">
+{#        <a href="<%= pageContext %>/tests">View All Tests</a> &nbsp; &nbsp; <a href="../questions">View All Questions</a>#}
+        <a href="{% url 'ta_tests_all_page' %}">View All Tests</a> &nbsp; &nbsp; <a href="{% url 'ta_questions_all_page' %}">View All Questions</a>
+        <br><br>
+    </div>
+    <div id="main" class="main">
+        <!-- See for doc on view helpers https://github.com/tanema/express-helpers/wiki -->
+        <!--<form id="testForm" method="post" action="<%= tid %>" onsubmit="return validateTest()">-->
+        <form id="testForm" method="post"
+              {% if test %}
+              action="{% url 'ta_tests_gp_page' testId=test.id %}"
+              {% else %}
+              action="{% url 'ta_tests_all_page' %}"
+              {% endif %}
+              onsubmit="return validateTest()">
+            {% csrf_token %}
+            <div id="inputs" style="height: 15vh;">
+                Test ID: {{ test.id }}
+                <br>
+{#                Name: <%- text_field_tag("name", {"value": test.name}) %>#}
+                Name: <input type="text" name="name" value="{{ test.name }}">
+                <br>
+                Active:
+                {% if test.isActive %}
+                <input type="checkbox" name="isActive" checked>
+                {% else %}
+                <input type="checkbox" name="isActive">
+                {% endif %}
+                <!--Questions size: <%= test.questions.length %>-->
+                <br>
+                {% if test.id %}
+                <a id="addQuestionButton" class='btn btn-delete btn-primary btn-xs'>Add Question</a>
+                <a id="createQuestionButton" class='btn btn-delete btn-primary btn-xs'>Create New Question</a>
+                {% endif %}
+            </div>
+            {% if test.id %}
+            <div id="content" style="overflow: auto; height: 55vh; width: 100%;">
+
+                <!--<a onclick="addQuestionRow()" class='btn btn-delete btn-primary btn-xs'>Add Question</a>-->
+                <!--<table id="questionTable" class="table table-bordered pagin-table">-->
+                <table id="questionTable" class="table table-striped" style="display:block;">
+                    <thead>
+                    <tr>
+                        <!--<th>Priority</th>  -->
+                        <th>QID</th>
+                        <th>Description (drag and drop rows to reorder)</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for q in questions %}
+
+                    <!--<tr id="row-<%= i %>" >-->
+                    <tr>
+                        <!--<td class="order"><%= i %></td>-->
+                        <!--<td> <%- checkbox_tag('removeQuestion', {"value": q.id}) %></td>-->
+                        <td> {{ q.id }} </td>
+
+
+                        <td><a title="{{ q.hoverText }}" href="{% url 'ta_questions_gp_page' qId=q.id %}">{{ q.description }}</a>
+                        </td>
+                        <td><a onclick="removeQuestion({{ test.id }}, {{ q.id }})" class='btn btn-delete btn-primary btn-xs'>Delete</a>
+                        </td>
+                        <!--<td><input type="hidden" name="questionIds" value="<%= q.id %>"></td>-->
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+            {% endif %}
+            <br>
+            <div id="buttons" style="height: 15vh;">
+
+                {% if not test.id %}
+                    <button id="saveTestButton" class='btn btn-delete btn-primary btn-xs'>Save Test</button>
+                {% else %}
+                    <button id="saveTestButton"  class='btn btn-delete btn-primary btn-xs'>Save Test</button>
+{#                    type="button" prevents the button from submitting the form #}
+                    <button type="button" id="previewTestButton" class='btn btn-primary btn-xs'>Preview Test</button>
+                {% endif %}
+
+                {% if message %}
+                    {{ message }}
+                {% endif %}
+                <br>
+
+
+                <br><br>
+                <!--<%- submit_tag("Save") %>-->
+                <!--<input type="button" value="Cancel" onclick="fetchTest(<%= test.id %>)" name="reset">-->
+            </div>
+        </form>
+
+    </div>
+
+    <div id="selectQuestionsDialog" class="modal fade" role="dialog" title="Select Questions to Add to Test">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="param-dialog-title" class="modal-title">Select Questions</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;overflow: auto; height: 55vh; width: 100%;">
+                    <table id="allQuestionsTable" class="table table-striped" style="display:block;">
+                        <thead>
+                        <tr>
+                            <th>select</th>
+                            <th>ID</th>
+                            <th>Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="questionDialogSave" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button id="questionDialogCancel" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

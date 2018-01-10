@@ -4,7 +4,7 @@ from msadmin.qa.qaviews import reactTest
 from msadmin.stratauth import views, modelUpdate, json
 
 urlpatterns = [
-    url(r'^$', views.main, name='main'),
+    url(r'^$', views.main, name='strat_main'),
     url(r'^reactTest/$', reactTest, name='reactTest'),
     url(r'^validate_generic_structure/$', views.validate_generic, name='validate_generic'),
     url(r'^validate_class_tutoring/$', views.validate_class_tutoring, name='validate_class_tutoring'),

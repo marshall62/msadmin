@@ -13,7 +13,7 @@ def strategy_list(request):
 
 # Shows the main page of the site
 def main(request):
-    return render(request, 'msadmin/main.html', {})
+    return render(request, 'msadmin/sa/main.html', {})
 
 
 

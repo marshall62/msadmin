@@ -1,0 +1,16 @@
+{% extends 'msadmin/base.html' %}
+{% block page-js %}
+    <script language="JavaScript">
+
+    </script>
+
+{%  endblock %}
+
+{% block content %}
+    <ul >
+
+        <li><a href="{% url 'class_list' %}"><span class="glyphicon glyphicon-log-out"></span> Class Selection</a></li>
+        <li><a href="{% url 'admin:index' %}msadmin">Admin for Base Strategy Components</a></li>
+        <li><a href="{% url 'validate_generic' %}">Validate Strategy Components</a></li>
+    </ul>
+{% endblock %}

@@ -6,10 +6,6 @@ def main (request):
     print("here")
     return render(request, 'msadmin/main.html', {})
 
-def signup (request):
-    print('signup')
-    return HttpResponse("Sign up page")
+def util (request):
+    return render(request, 'msadmin/util.html', {})
 
-def login (request):
-    print('login')
-    return HttpResponse("Login page")

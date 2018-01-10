@@ -1,0 +1,226 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block page-css %}
+    <style>
+    </style>
+{% endblock %}
+
+{% block page-js %}
+    <script type="application/javascript">
+
+        var hasQuestion = "{{ question }}" != "None" ; // will be true/false if an existing question is being edited by this page.
+        function validateQuestion() {
+            // TODO need to make sure multichoices don't have holes.
+            return true;
+        }
+
+        function saveQ() {
+            $("#myform").submit();
+        }
+
+        function fetchQuestion(qid) {
+            if (qid)
+                document.location.href = "{% url 'ta_questions_gp_page' qId='12345' %}".replace('12345',qid);
+            else
+                document.location.href = "{% url 'ta_questions_new_page' %}";
+        }
+
+        // Will go to the URL http  ../questions/preview? qid = qid
+        function previewQuestion(qid) {
+            var url = "{% url 'testauth_questions_previewQuestion' qId=12345 %}";
+            url = url.replace('12345',qid);
+            document.location.href = url;
+        }
+
+        function changeType() {
+            var sel = document.getElementById("typeSelector");
+//            Will be one of: multiChoice, shortAnswer, longAnswer
+            var strUser = sel.options[sel.selectedIndex].value;
+            if (strUser == 'multiChoice') {
+                document.getElementById("correctAnswer").style.display = "none";
+                var e = document.getElementById('multiChoices');
+                e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+            }
+            else if (strUser == 'shortAnswer') {
+                document.getElementById("correctAnswer").style.display = "block";
+                var e = document.getElementById('multiChoices');
+                e.style.display = 'none';
+            }
+            else if (strUser == 'longAnswer') {
+                document.getElementById("correctAnswer").style.display = "block";
+                var e = document.getElementById('multiChoices');
+                e.style.display = 'none';
+            }
+        }
+
+        $(document).ready(function () {
+{#            $('#saveQButton').click(saveQ);#}
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="header" class="header">
+        {#        <a href="<%= pageContext %>/tests">View All Tests</a> &nbsp; &nbsp; <a href="../questions">View All Questions</a>#}
+        <a href="{% url 'ta_tests_all_page' %}">View All Tests</a> &nbsp; &nbsp; <a href="{% url 'ta_questions_all_page' %}">View All Questions</a>
+        <br><br>
+    </div>
+    <br>
+    <!-- See for doc on view helpers https://github.com/tanema/express-helpers/wiki -->
+    <form id="myform" method="post" enctype="multipart/form-data"
+
+          {% if question %}
+          action="{% url 'ta_questions_gp_page' qId=question.id %}"
+          {% else %}
+          action="{% url 'ta_questions_all_page' %}"
+          {% endif %}
+          onsubmit="return validateQuestion()">
+        {% csrf_token %}
+        <!-- if this page is built with a testId, then send it in as a hidden input when the form is
+         submitted. -->
+    {#    If this editor is being presented to add a new question to a given test, the testId will be bound #}
+        {% if testId %}
+        <input type="hidden" name="testId" value="{{ testId }}"/>
+        {% endif %}
+
+        Question ID:{% if question %} {{ question.id }} {% endif %}
+        <br>
+
+
+        Name: <input type="text" name="name" value="{% if question %}{{ question.name }}{% endif %}">
+        <br>
+
+
+        Type:
+        <select id="typeSelector" onchange="changeType();" value='{% if question %} {{ question.type }} {% endif %}' id='type'
+                name='type'>
+            {% if question and question.isMultiChoice  %}
+            <option value='multiChoice' selected='selected'>Multiple Choice</option>
+            {% else %}
+            <option value='multiChoice'>Multiple Choice</option>
+            {% endif %}
+            {% if question and question.isShortAnswer or not question %}
+            <option value='shortAnswer' selected='selected'>Short Answer</option>
+            {% else %}
+            <option value='shortAnswer'>Short Answer</option>
+            {% endif %}
+            {% if question and question.isLongAnswer %}
+            <option value='longAnswer' selected='selected'>Text Answer</option>
+            {% else %}
+            <option value='longAnswer'>Text Answer</option>
+            {% endif %}
+
+        </select>
+        <br/>
+
+
+        Hover Text: <input type="text" name="hoverText" value="{% if question %}{{ question.hoverText }}{% endif %}">
+        <br>
+
+        <div {% if question.isMultiChoice %}style="display:none"{% endif %} id="correctAnswer">
+            Correct Answer: <input type="text" name="answer" value="{% if question %}{{ question.answer }}{% endif %}">
+        </div>
+
+
+        <br/>
+
+{#        Image file: <%- file_field_tag("image", {"value": 5}) %>#}
+        Image file: <input type="file" name="image">
+
+        <br/>
+        {% if question.image %}
+            <img src="{{ question.image.url }}">
+            <br>
+            <input type="checkbox" name="removeImage" value="remove">Remove the image from this question
+
+            <br>
+            <br>
+        {% endif %}
+        Description:
+        <br/>
+        <textarea class="form-control" cols="80" name="description">{% if question %}{{ question.description }}{% endif %}</textarea>
+{#        <%- text_area_tag('descr', qobj.descr) %>#}
+        <br/>
+
+
+        Warn Student to answer time:
+        <select name="warnTime" value="">
+            <option {% if question and question.waitTimeSecs == "30"%}selected="selected"{% endif %} value="30">30 secs</option>
+            <option {% if question and question.waitTimeSecs == "60"%}selected="selected"{% endif %} value="60">1 min</option>
+            <option {% if question and question.waitTimeSecs == "120"%}selected="selected"{% endif %} value="120">2 min</option>
+            <option {% if question and question.waitTimeSecs == "180"%}selected="selected"{% endif %} value="180">3 min</option>
+            <option {% if question and question.waitTimeSecs == "300"%}selected="selected"{% endif %} value="300">5 min</option>
+            <option {% if question and question.isWaitUnlimited %}selected="selected"{% endif %} value="unlimited">No time limit</option>
+        </select>
+
+        <br/>
+        <br/>
+        <div id="multiChoices" {% if not question.isMultiChoice %} style="display:none" {% endif %} >
+
+        Multiple choices (select the one that is the correct answer):
+        <table>
+            <tr>
+                <td> <input type="radio" name="multiChoiceCorrectAnswer" value="a" {% if question.answer == 'a' %} checked> {% endif %}</td>
+                <td>Choice A:</td>
+                <td><input type="text" name="aAns" size="60" value="{{ question.aChoice }}"></td>
+            </tr>
+            <tr>
+                <td> <input type="radio" name="multiChoiceCorrectAnswer" value="b" {% if question.answer == 'b' %} checked> {% endif %}</td>
+                <td>Choice B:</td>
+                <td><input type="text" name="bAns" size="60" value="{{ question.bChoice }}"></td>
+            </tr>
+
+            <tr>
+                <td> <input type="radio" name="multiChoiceCorrectAnswer" value="c" {% if question.answer == 'c' %} checked> {% endif %}</td>
+                <td>Choice C:</td>
+                <td><input type="text" name="cAns" size="60" value="{{ question.cChoice }}"></td>
+            </tr>
+
+            <tr>
+                <td> <input type="radio" name="multiChoiceCorrectAnswer" value="d" {% if question.answer == 'd' %} checked> {% endif %}</td>
+                <td>Choice D:</td>
+                <td><input type="text" name="dAns" size="60" value="{{ question.dChoice }}"></td>
+            </tr>
+
+
+            <tr>
+                <td> <input type="radio" name="multiChoiceCorrectAnswer" value="e" {% if question.answer == 'e' %} checked> {% endif %}</td>
+                <td>Choice E:</td>
+                <td><input type="text" name="eAns" size="60" value="{{ question.eChoice }}"></td>
+            </tr>
+
+
+        </table>
+        <br>
+{#        <% if (!qobj.answer) { %>#}
+    {% if not question.answer %}
+        <input type="radio" name="multiChoiceCorrectAnswer" value="noneCorrect" checked>
+                There is no correct answer
+    {% else %}
+        <input type="radio" name="multiChoiceCorrectAnswer" value="noneCorrect" >
+                There is no correct answer
+    {% endif %}
+        <br/>
+        </div>
+
+
+            <!-- insert here -->
+            <br/>
+            {% if question %}
+            <a  class='btn btn-delete btn-primary btn-xs' href="{% url 'ta_questions_preview_page' qId=question.id %}">Preview Question</a>
+            {% endif %}
+
+            <br/>
+            <br>
+            <button id="saveQButton"  class='btn btn-delete btn-primary btn-xs'>Save</button>
+            <a id="cancelQButton" onclick="fetchQuestion({{ question.id }})"
+               class='btn btn-delete btn-primary btn-xs'>Cancel</a>
+
+
+        </div>
+    </form>
+
+
+{% endblock %}

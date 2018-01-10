@@ -6,7 +6,7 @@ class Question (models.Model):
     url = models.CharField(max_length=100)
     answer = models.CharField(max_length=100)
     ansType = models.IntegerField()
-    problemSet = models.ForeignKey('ProblemSet',db_column='problemSet')
+    # problemSet = models.ForeignKey('ProblemSet',db_column='problemSet')
 
     aChoice = models.CharField(max_length=200)
     bChoice = models.CharField(max_length=200)
@@ -21,20 +21,35 @@ class Question (models.Model):
     comment = models.CharField(max_length=100)
     waitTimeSecs = models.IntegerField()
     hoverText = models.CharField(max_length=150)
+    image = models.ImageField()
 
-    MULTI_CHOICE="multichoice"
-    SHORT_ANSWER="shortanswer"
+    MULTI_CHOICE=1
+    SHORT_ANSWER=0
+    LONG_ANSWER=2
+    UNLIMITED =0
 
     class Meta:
         db_table = "prepostproblem"
 
-class TestQuestionMap (models.Model):
-    question = models.ForeignKey('Question',db_column='probId')
-    test = models.ForeignKey('Test',db_column='testId')
-    position = models.IntegerField()
+    def isMultiChoice (self):
+        return self.ansType==Question.MULTI_CHOICE
 
-    class Meta:
-        db_table = "prepostproblemtestmap"
+    def isShortAnswer (self):
+        return self.ansType==Question.SHORT_ANSWER
+
+    def isLongAnswer (self):
+        return self.ansType==Question.LONG_ANSWER
+
+    def isWaitUnlimited (self):
+        return self.waitTimeSecs == Question.UNLIMITED
+
+    def toJSON (self):
+        d = {"id": self.id}
+        d['name'] = self.name
+        d['description'] = self.description
+        d['hoverText'] = self.hoverText
+        return d
+
 
 class Test (models.Model):
     name = models.CharField(max_length=100)
@@ -43,3 +58,23 @@ class Test (models.Model):
 
     class Meta:
         db_table = "preposttest"
+
+    def getQuestions (self):
+        # return self.questions.order_by('position')
+        return self.questions.order_by('link2Test')
+
+    def addQuestion (self, q):
+        c = self.questions.count()
+        # uses 0-based positioning to add a new question to the map
+        m = TestQuestionMap(test=self,question=q,position=c)
+        m.save()
+
+class TestQuestionMap (models.Model):
+    question = models.ForeignKey(Question,db_column='probId', related_name='link2Test')
+    test = models.ForeignKey(Test,db_column='testId')
+    position = models.IntegerField()
+
+    class Meta:
+        db_table = "prepostproblemtestmap"
+        ordering = ('position',)
+        unique_together = (('question', 'test'),)  # workaround for there not being a single primary key

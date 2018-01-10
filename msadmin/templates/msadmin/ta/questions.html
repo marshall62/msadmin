@@ -1,0 +1,63 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block page-css %}
+    <style>
+    </style>
+{% endblock %}
+
+{% block page-js %}
+    <script type="application/javascript">
+        function addQuestion() {
+            var form = document.getElementById("myform");
+            form.action = "{% url 'ta_questions_new_page' %}";
+            form.method = "GET";
+            form.submit();
+        }
+
+        function doSave () {
+            var form = document.getElementById("myform");
+            form.submit();
+        }
+
+        //
+        $(document).ready(function () {
+            $("#addQuestionButton").click(addQuestion);
+            $("#saveButton").click(doSave);
+        });
+
+    </script>
+{% endblock %}
+{% block content %}
+
+<a href="{% url 'ta_tests_all_page' %}">View All Tests</a>
+<br><br>
+Here are all the Pre/Post questions
+
+<form id="myform" action="{% url 'ta_questions_remove_page' %}", method="post">
+    {% csrf_token %}
+    <a id="addQuestionButton" class='btn btn-delete btn-primary btn-xs'>Create New Question</a>
+
+    <br>
+
+
+    <div id="content" style="overflow: auto; height: 70vh; width: 100%;">
+        <table class="table table-striped">
+            <thead><th>Del</th><th>QID</th><th>Description</th></thead>
+            <tbody>
+            {% for question in questions %}
+            <tr>
+                <td> <input type="checkbox" name="removeQuestion[]" value="{{ question.id }}" %></td>
+                <td>{{ question.id }}</td>
+                <td> <a title="{{ question.hoverText }}" href="{% url 'ta_questions_gp_page' qId=question.id %}"> {{ question.description }} </a>  </td>
+            </tr>
+           {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+    <a id="saveButton" class='btn btn-delete btn-primary btn-xs'>Save</a>
+
+</form>
+
+{% endblock %}

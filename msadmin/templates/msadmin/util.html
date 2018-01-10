@@ -1,0 +1,11 @@
+{% extends 'msadmin/base.html' %}
+{% block content %}
+    <ul >
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span>Create User</a></li>
+        <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-user"></span>Administrate All Tables</a></li>
+        <li><a href="{% url 'admin:index' %}auth"><span class="glyphicon glyphicon-user"></span>Administrate Users</a></li>
+
+    </ul>
+
+
+{% endblock %}
