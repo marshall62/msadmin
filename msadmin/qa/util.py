@@ -17,7 +17,7 @@ def handle_uploaded_file(probId, f):
     # if attempting to upload a file that is already there, it proceeds and overwrites it.
     path = MEDIA_ROOT
     dirName = getProblemDirName(probId)
-    fullPath = os.path.join(path,dirName,f.name)
+    fullPath = os.path.join(path,"html5Probs",dirName,f.name)
     os.makedirs(os.path.dirname(fullPath), exist_ok=True)
     with open(fullPath, 'wb+') as destination:
         for chunk in f.chunks():
@@ -32,7 +32,7 @@ def deleteMediaFile (probId, fileName):
     base_url = fs.base_url
     file_permissions_mode = fs.file_permissions_mode
     directory_permissions_mode = fs.directory_permissions_mode
-    newloc = os.path.join(location, getProblemDirName(probId))
+    newloc = os.path.join(location, "html5Probs", getProblemDirName(probId))
     # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
     fs2 = FileSystemStorage(location=newloc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
     if fs2.exists(fileName):

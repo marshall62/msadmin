@@ -4,6 +4,9 @@ from msadminsite.settings import MEDIA_ROOT
 import os
 from django.core.files.storage import FileSystemStorage
 from .models import *
+from msadminsite.settings import SURVEYS_QUEST_DIRNAME
+
+# settings.py has the name of the dir where survey media should be stored.
 
 
 def main (request):
@@ -50,7 +53,7 @@ def all_json (request):
 # URL GET pages/questions/new
 # return a page that shows an empty question form
 def newQuestion_page (request):
-    return render(request, 'msadmin/ta/question.html', {})
+    return render(request, 'msadmin/ta/question.html', {'SURVEYS_DIR': SURVEYS_QUEST_DIRNAME + '/'})
 
 def getQuestion (qid):
     q = get_object_or_404(Question,pk=qid)
@@ -110,9 +113,8 @@ def writeQuestion (qid, postData, files):
 
 def handle_uploaded_file(qid, f):
     # if attempting to upload a file that is already there, it proceeds and overwrites it.
-    path = MEDIA_ROOT
     dirName = Question.DIR_PREFIX + qid
-    fullPath = os.path.join(path,dirName,f.name)
+    fullPath = os.path.join(MEDIA_ROOT, SURVEYS_QUEST_DIRNAME,dirName,f.name)
     os.makedirs(os.path.dirname(fullPath), exist_ok=True)
     with open(fullPath, 'wb+') as destination:
         for chunk in f.chunks():
@@ -126,7 +128,7 @@ def deleteMediaFile (qid, fileName):
     base_url = fs.base_url
     file_permissions_mode = fs.file_permissions_mode
     directory_permissions_mode = fs.directory_permissions_mode
-    newloc = os.path.join(location, Question.DIR_PREFIX + qid)
+    newloc = os.path.join(location, SURVEYS_QUEST_DIRNAME, Question.DIR_PREFIX + qid)
     # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
     fs2 = FileSystemStorage(location=newloc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
     if fs2.exists(fileName):
@@ -153,7 +155,7 @@ def gpdQuestion (request, qId):
 def gpQuestion_page (request, qId):
     q= gpdQuestion(request, qId)
     message = "Question successfully saved"
-    return render(request, 'msadmin/ta/question.html', {'question': q, 'message': message})
+    return render(request, 'msadmin/ta/question.html', {'question': q, 'message': message, 'SURVEYS_DIR': SURVEYS_QUEST_DIRNAME+"/"})
 
 # GIven a list of question objects, return JSON that is a list of their ids and a list of the objects.
 def questions_json (questions):
@@ -169,9 +171,8 @@ def questions_json (questions):
 # so that a "next question" button can be placed in the page.
 def questionPreview_page (request, qId, testId=None):
     qobj = getQuestion(qId)
-    if not testId:
-        models = {'qobj': qobj}
-    else:
+    models = {'qobj': qobj, 'SURVEYS_DIR': SURVEYS_QUEST_DIRNAME + '/'}
+    if testId:
         t = get_object_or_404(Test,pk=testId)
         qs = t.getQuestions()
         # find the next problem after the current one in the test
@@ -181,9 +182,10 @@ def questionPreview_page (request, qId, testId=None):
                 nextQ = qs[i+1] if i != len(qs)-1 else None
                 break
         if nextQ:
-            models = {'qobj': qobj, 'tid': testId, 'qid': nextQ.id }
-        else: models = {'qobj': qobj, 'tid': testId }
-
+            models['tid'] = testId
+            models['qid'] = nextQ.id
+        else:
+            models['tid'] = testId
 
     return render(request,'msadmin/ta/questionPreview.html', models)
 

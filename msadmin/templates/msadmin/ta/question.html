@@ -131,7 +131,7 @@
 
         <br/>
         {% if question.imageFilename %}
-            <img src="{{ MEDIA_URL }}{{ question.getDir }}/{{ question.imageFilename }}">
+            <img src="{{ MEDIA_URL }}{{ SURVEYS_DIR }}{{ question.getDir }}/{{ question.imageFilename }}">
             <br>
             <input type="checkbox" name="removeImage" value="remove">Remove the image from this question
 

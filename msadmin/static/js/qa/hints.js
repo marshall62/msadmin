@@ -10,7 +10,7 @@ function validateHint () {
 
 // Called when the user clicks the edit icon of a hint.
 // Will get the hint JSON from the server and will pop up the dialog to edit it.
-function editHint2 (id) {
+function editHint2 (id, problemPath) {
     var url_mask = GET_HINT_URL.replace(/12345/, id.toString());
     $.get(url_mask, function(data) {
         theHint= data;
@@ -23,7 +23,7 @@ function editHint2 (id) {
         $('#givesAnswer').prop('checked',data.givesAnswer);
         if (data.audioResource) {
             $('#haudioResource').val(data.audioResource);
-            $('#hintAudioMP3').attr('src',mediaURL+ 'problem_'+theProblem.id+ "/" +data.audioResource );
+            $('#hintAudioMP3').attr('src',problemPath + "/" +data.audioResource );
             $('#haudioFile').val('');
             $('#hintAudio').show();
             var audio = $('#haudioPlayer');

@@ -47,8 +47,8 @@
 
         var hintImageControls;  // an object that needs to be global because it gets manipulated by callbacks in hints.js
 
-        var mediaURL = "{{ MEDIA_URL }}";
-        var problemDir = "{{ MEDIA_URL }}{{ problem.getProblemDir }}"
+{#        var mediaURL = "{{ MEDIA_URL }}";#}
+        var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}"
 
         // create constant URLs that will be used by supporting javascript files
         const SAVE_MEDIA_URL = "{% url 'qauth_save_problem_media' probId=12345 %}";
@@ -262,7 +262,7 @@
             var imgURL = ('{{ problem.imageURL }}' != 'None') ? '{{ problem.imageURL }}' : null; // full URL to external images.
             var imgFilename = ('{{ problem.imageFile.filename }}'.length > 0) ? '{{ problem.imageFile.filename }}' : null;
             var imgFileId = ('{{ problem.imageFile.id }}'.length > 0) ? '{{ problem.imageFile.id }}' : null;
-            var imgURI = '{{ MEDIA_URL }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
+            var imgURI = '{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
 
             var problemImageControls = new ImageControls(imgURL,imgFilename,imgFileId,imgURI);
             problemImageControls.mountComponent('problemImageControls',{imageFileName:'imageFile', delImageClassName: 'a_problem_delete_img'});
@@ -411,7 +411,7 @@
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
             {% if problem.audioResource %}
                 <audio id="problem_audio_player" controls>
-                    <source src="{{ mediaURL }}{{ problem.getProblemDir }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
+                    <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
                     Your browser does not support the audio tag.
                 </audio>
                 <a class="remove_problem_audio" href="#">
@@ -589,7 +589,7 @@
             <tr id="{{ h.id }}" class="dnd">
                 <td>
                     <input type="checkbox"></td>
-                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }})"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
+                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
                 <td class="hint-id">{{ h.id }}</td>
 
                 <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>

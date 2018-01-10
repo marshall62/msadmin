@@ -6,9 +6,11 @@ from django.shortcuts import render, get_object_or_404
 
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
-from msadminsite.settings import MEDIA_URL
+from msadminsite.settings import QUICKAUTH_PROB_DIRNAME
 from .qauth_model import *
 
+# settings.py has the name of the dir where quickAuth problems should be stored.
+QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
 
 # CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
 
@@ -25,12 +27,12 @@ def reactTest(request):
 # support for AJAX call from a checkbox next to a intervention-selector node in the jstree
 # It will set the isActive field in the class_sc_is_map table to true or false.
 def create_problem (request):
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1})
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'qaDir': QA_DIR})
 
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'mediaURL': MEDIA_URL})
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'qaDir': QA_DIR})
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead
