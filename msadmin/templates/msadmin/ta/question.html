@@ -130,8 +130,8 @@
         Image file: <input type="file" name="image">
 
         <br/>
-        {% if question.image %}
-            <img src="{{ question.image.url }}">
+        {% if question.imageFilename %}
+            <img src="{{ MEDIA_URL }}{{ question.getDir }}/{{ question.imageFilename }}">
             <br>
             <input type="checkbox" name="removeImage" value="remove">Remove the image from this question
 

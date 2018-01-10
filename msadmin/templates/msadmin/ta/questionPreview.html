@@ -14,8 +14,8 @@
 {% endif %}
 
 <br>
-{% if qobj.image %}
-<img src="">
+{% if qobj.imageFilename %}
+    <img src="{{ MEDIA_URL }}{{ qobj.getDir }}/{{ qobj.imageFilename }}">
 {% endif %}
 
 <br>

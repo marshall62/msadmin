@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
-
+from msadminsite.settings import MEDIA_ROOT
+import os
+from django.core.files.storage import FileSystemStorage
 from .models import *
 
 
@@ -22,7 +24,7 @@ def all_page (request):
         if testId:
             t = get_object_or_404(Test,pk=testId)
             t.addQuestion(q)
-        writeQuestion(q.id,request.POST)
+        writeQuestion(q.id,request.POST, request.FILES)
         return redirect("ta_questions_gp_page",qId=q.id)
 
 
@@ -54,7 +56,7 @@ def getQuestion (qid):
     q = get_object_or_404(Question,pk=qid)
     return q
 
-def writeQuestion (qid, postData):
+def writeQuestion (qid, postData, files):
     q = get_object_or_404(Question,pk=qid)
 
     name = postData['name']
@@ -94,11 +96,43 @@ def writeQuestion (qid, postData):
         q.answer=answer
     # TODO add image upload into blob
     # image = postData['image']
+    if 'image' in files:
+        imgFile = files['image']
+        handle_uploaded_file(qid, imgFile)
+        q.imageFilename = imgFile.name
     if 'removeImage' in postData:
-        q.image = None
+        filename = q.imageFilename
+        deleteMediaFile(qid,filename)
+        q.imageFilename = None
     q.name = name
     q.save()
     return q
+
+def handle_uploaded_file(qid, f):
+    # if attempting to upload a file that is already there, it proceeds and overwrites it.
+    path = MEDIA_ROOT
+    dirName = Question.DIR_PREFIX + qid
+    fullPath = os.path.join(path,dirName,f.name)
+    os.makedirs(os.path.dirname(fullPath), exist_ok=True)
+    with open(fullPath, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return True
+
+def deleteMediaFile (qid, fileName):
+    # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
+    fs = FileSystemStorage()
+    location = fs.location
+    base_url = fs.base_url
+    file_permissions_mode = fs.file_permissions_mode
+    directory_permissions_mode = fs.directory_permissions_mode
+    newloc = os.path.join(location, Question.DIR_PREFIX + qid)
+    # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
+    fs2 = FileSystemStorage(location=newloc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    if fs2.exists(fileName):
+        fs2.delete(fileName)
+
+
 
 def deleteQuestion (qid):
     q = get_object_or_404(Question,pk=qid)
@@ -111,7 +145,7 @@ def gpdQuestion (request, qId):
     elif request.method == "DELETE":
         deleteQuestion(qId)
     elif request.method == "POST":
-        q = writeQuestion(qId,request.POST)
+        q = writeQuestion(qId,request.POST,request.FILES)
     return q
 
 # URL: GET/POST /pages/questions/<qId>

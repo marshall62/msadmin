@@ -21,12 +21,13 @@ class Question (models.Model):
     comment = models.CharField(max_length=100)
     waitTimeSecs = models.IntegerField()
     hoverText = models.CharField(max_length=150)
-    image = models.ImageField()
+    imageFilename = models.CharField(max_length=100)
 
     MULTI_CHOICE=1
     SHORT_ANSWER=0
     LONG_ANSWER=2
     UNLIMITED =0
+    DIR_PREFIX ='surveyq_'
 
     class Meta:
         db_table = "prepostproblem"
@@ -42,6 +43,9 @@ class Question (models.Model):
 
     def isWaitUnlimited (self):
         return self.waitTimeSecs == Question.UNLIMITED
+
+    def getDir (self):
+        return 'surveyq_' + str(self.id)
 
     def toJSON (self):
         d = {"id": self.id}
