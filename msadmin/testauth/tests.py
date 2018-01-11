@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.http import JsonResponse
 from .models import *
 from .questions import questions_json
+from .accessors import fetchTest
 
 
 def main (request):
@@ -28,9 +29,7 @@ def newTest_page (request):
     # the test.html page must handle null inputs and create a blank form.
     return render(request, 'msadmin/ta/test.html', {})
 
-def getTest (testId):
-    t = get_object_or_404(Test, pk=testId)
-    return t
+
 
 def deleteTest (testId):
     t = get_object_or_404(Test, pk=testId)
@@ -49,7 +48,7 @@ def writeTest (testId, postData):
 # perform the various GET/POST/DELETE operations for a given testId and post inputs
 def gpdTest (request, testId):
     if request.method == "GET":
-        t = getTest(testId)
+        t = fetchTest(testId)
     elif request.method == "POST":
         t = writeTest(testId, request.POST)
     elif request.method == "DELETE":
@@ -96,7 +95,7 @@ def addTestQuestions_json (request, testId):
     if request.method == "POST":
         post = request.POST
         qids = post.getlist('ids[]')
-        t = getTest(testId)
+        t = fetchTest(testId)
         qs = t.getQuestions()
         pos = len(qs) # positions are 0 based in db so position of new ones starts at cur length
         for id in qids:
@@ -114,7 +113,7 @@ def testQuestions_json (request, testId):
 
 # Return json like {qids: [1,2,3,], questions: [{id: 1, name='a'}, {id...}]}
 def getTestQuestion_json (testId):
-    t = getTest(testId)
+    t = fetchTest(testId)
     # qs = t.questions.all().order_by('position');
     # TODO this needs to return a list of questions in order of position.
     qs = t.getQuestions()
@@ -124,7 +123,7 @@ def getTestQuestion_json (testId):
 # URL GET /pages/tests/<testId>/preview
 # redirects to test question previewer for the first question in the test
 def testPreview_page (request, testId):
-    t = getTest(testId)
+    t = fetchTest(testId)
     q = t.getQuestions().first()
     return redirect('ta_tests_question_preview_page', testId=testId, qId=q.id)
 

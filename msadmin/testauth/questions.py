@@ -4,6 +4,7 @@ from msadminsite.settings import MEDIA_ROOT
 import os
 from django.core.files.storage import FileSystemStorage
 from .models import *
+from .accessors import fetchTest
 from msadminsite.settings import SURVEYS_QUEST_DIRNAME
 
 # settings.py has the name of the dir where survey media should be stored.
@@ -25,7 +26,8 @@ def all_page (request):
         q.save()
         # Put the question in the test if testId is present
         if testId:
-            t = get_object_or_404(Test,pk=testId)
+            t = fetchTest(testId)
+            # t = get_object_or_404(Test,pk=testId)
             t.addQuestion(q)
         writeQuestion(q.id,request.POST, request.FILES)
         return redirect("ta_questions_gp_page",qId=q.id)
@@ -39,7 +41,7 @@ def deleteQuestions_page (request):
         payload = request.POST
         qids = payload.getlist('removeQuestion[]')
         for qid in qids:
-            q = get_object_or_404(Question,pk=qid)
+            q = getQuestion(qid)
             q.delete()
     return redirect('ta_questions_all_page')
 
@@ -60,7 +62,7 @@ def getQuestion (qid):
     return q
 
 def writeQuestion (qid, postData, files):
-    q = get_object_or_404(Question,pk=qid)
+    q = getQuestion(qid)
 
     name = postData['name']
     type = postData['type']
@@ -137,7 +139,7 @@ def deleteMediaFile (qid, fileName):
 
 
 def deleteQuestion (qid):
-    q = get_object_or_404(Question,pk=qid)
+    q = getQuestion(qid)
     q.delete()
 
 # handle the GET/POST/DEL operations on questions.
@@ -173,7 +175,7 @@ def questionPreview_page (request, qId, testId=None):
     qobj = getQuestion(qId)
     models = {'qobj': qobj, 'SURVEYS_DIR': SURVEYS_QUEST_DIRNAME + '/'}
     if testId:
-        t = get_object_or_404(Test,pk=testId)
+        t = fetchTest(testId)
         qs = t.getQuestions()
         # find the next problem after the current one in the test
         nextQ = None
