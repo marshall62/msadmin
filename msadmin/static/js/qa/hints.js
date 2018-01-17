@@ -39,16 +39,19 @@ function editHint2 (id, problemPath) {
         // problemDir is a global set in quath_edit.html
         hintImageControls = new ImageControls(theHint.imageURL,theHint.imageFilename,theHint.imageFileId,problemDir);
         hintImageControls.mountComponent('hintImageControls',{imageFileName: 'imageFile',delImageClassName: 'a_hint_delete_img'});
-        var opts = [{label: 'Inside hint statement', value:'0'},{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
-        var placement = data.placement;
         var fileid = data.imageFileId;
         var filename = data.imageFilename;
         console.log("mounting " );
-        mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
-
+        mountImagePlacementPulldown(data.placement);
         showHintDialog();
 
     });
+}
+
+function mountImagePlacementPulldown (placement) {
+    var opts = [{label: 'Inside hint statement', value:'0'},{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
+    mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
+
 }
 
 // Called when the user clicks the + hint button to add a new hint.
@@ -72,9 +75,7 @@ function addHint () {
     $('#himageFilename').text(''); // an <a> tag that has the filename
     $('#himage').attr('src','');
     $('#himageDiv').hide();
-    var opts = ['0','1','2'];
-    mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"imagePlacement", selectedOption:"{{ '0' }}", options: opts});
-
+    mountImagePlacementPulldown('2');
     showHintDialog();
 }
 

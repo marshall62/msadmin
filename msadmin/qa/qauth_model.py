@@ -166,7 +166,7 @@ class Hint (models.Model):
     problem = models.ForeignKey('Problem',db_column='problemId')
     # The foreign key to the problem media table is allowed to be null
     imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
-    placement = models.IntegerField()
+    placement = models.IntegerField() # 0,1,2
 
     class Meta:
         db_table = "hint"
