@@ -3,11 +3,13 @@ import os
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
+from datetime import datetime
 
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
 from msadminsite.settings import QUICKAUTH_PROB_DIRNAME
 from .qauth_model import *
+from .util import deleteMediaDir, write_file
 
 # settings.py has the name of the dir where quickAuth problems should be stored.
 QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
@@ -57,6 +59,8 @@ def saveMedia(probId, name, file):
         fs2.delete(file.name)
     fs2.save(file.name, file)
 
+def getLoggedInUsername():
+    return "dave"
 
 def save_problem (request):
     if request.method == "POST":
@@ -68,9 +72,10 @@ def save_problem (request):
         # answer = post['answer']
         imageURL = post['imageURL']
         status = post['status']
-        standardId = post['standardId']
-        clusterId = post['clusterId']
+        # standardId = post['standardId']
+        # clusterId = post['clusterId']
         questType = post['questType']
+        problemFormat = post['problemFormat']
         correctAnswer=None
         if questType == Problem.MULTI_CHOICE:
             correctAnswer = post['correctChoice']
@@ -80,32 +85,51 @@ def save_problem (request):
             correctAnswer = None # want all the answers to go into the problemAnswers table - not into problem.answer
         audioResource = post['audioResource']
         layoutId = post['layout']
+        # authorNotes = post['authorNotes']
+        # creator = post['creator']
+        # lastModifier = post['lastModifier']
+        # example = post['example']
+        # try:
+        #     example = int(example)
+        # except: example = None
+        #
+        # video = post['video']
+        # try:
+        #     video = int(video)
+        # except: video = None
+
         audioResource = 'question' if audioResource == 'hasAudio' else None
         form= 'quickAuth'
+        # If an image file is uploaded, create a new imageURL of {[filename.jpg]}
         if 'imageFile' in request.FILES:
             imgFile = request.FILES['imageFile']
-            imageURL = None
-
+            imageURL = '{[' + imgFile.name + ']}'
+        # if an audio file is uploaded create a new audioResource of {[sound.mp3]}
         if 'audioFile' in request.FILES:
             audFile = request.FILES['audioFile']
-            audioResource= audFile.name.split('.')[0] # get rid of the file extension e.g.
+            audioResource= '{['+audFile.name+']}'
 
-
+        user = getLoggedInUsername()
         if not id:
+            now = datetime.now()
+            # We can't rely on mysql CURRENT_TIME to work on the created_at field because it is old version of MySQL
+            # not supporting two columns with CURRENT_TIME defaults.  So set it manually and let the lastModTime be
+            # handled automatically
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                        imageURL=imageURL,status=status,standardId=standardId,clusterId=clusterId,form=form,
-                        questType=questType, audioResource=audioResource, layout_id=layoutId)
+                        imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
+                        questType=questType, audioResource=audioResource, layout_id=layoutId,
+                        creator=user,lastModifier=user,created_at=now)
 
 
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                        status=status,standardId=standardId,clusterId=clusterId,form=form,
-                        questType=questType, layout_id=layoutId)
-            # if no audio or image file are given we don't want to overwrite the problem's audio or image with NULL
-            # because it may have these files and we don't want problem-save eliminating them
+                        status=status,form=form, problemFormat=problemFormat,
+                        questType=questType, layout_id=layoutId,lastModifier=user)
+            # if imageURL is given set it and clear the problem imagefile
             if imageURL:
                 p.imageURL=imageURL
+                p.imageFile=None
             if audioResource:
                 p.audioResource=audioResource
         p.save()
@@ -145,6 +169,12 @@ def deleteHints (request, probId):
         for hid in hintIds:
             h = get_object_or_404(Hint,pk=hid)
             h.delete()
+            # delete all the rows in the PMF for this hint
+            mfs = ProblemMediaFile.objects.filter(problem_id=probId, hint=h)
+            for f in mfs:
+                f.delete()
+            # Blow away all the files in the hint dir and then delete the dir.
+            deleteMediaDir(probId,hid)
         # after deleting there may be holes in the ordering sequence, so we renumber all the remaining hints
         # 1-based ordering is used
         hints = Hint.objects.filter(problem_id=probId).order_by('order')

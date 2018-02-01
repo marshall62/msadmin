@@ -35,6 +35,8 @@
     <script type="text/javascript" src="{% static 'js/qa/hints.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/media.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/answers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sprintf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/util.js' %}"></script>
 
     <script language="javascript">
 
@@ -46,12 +48,14 @@
         var numAnswers = 0; // keeps track of how many short answer fields there are.
 
         var hintImageControls;  // an object that needs to be global because it gets manipulated by callbacks in hints.js
+        var hintEditMode; // set to either NEW_HINT or EXISTING_HINT
 
 {#        var mediaURL = "{{ MEDIA_URL }}";#}
         var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}"
 
         // create constant URLs that will be used by supporting javascript files
         const SAVE_MEDIA_URL = "{% url 'qauth_save_problem_media' probId=12345 %}";
+        const SAVE_META_INFO_URL = "{% url 'qauth_save_problem_meta_info' probId=12345 %}";
         const SAVE_HINTS_URL = "{% url 'qauth_save_hints' probId=12345 %}";
         const SAVE_HINT_URL = "{% url 'qauth_save_hint' probId=12345 %}";
         const GET_HINT_URL = "{% url 'qauth_get_hint' hintId=12345 %}";
@@ -60,11 +64,45 @@
         const REMOVE_PROBLEM_IMAGE_URL = "{% url 'qauth_remove_problem_image' probId=12345 %}";
         const REMOVE_PROBLEM_AUDIO = "{% url 'qauth_remove_problem_audio' probId=12345 %}";
         const REMOVE_HINT_AUDIO = "{% url 'qauth_remove_hint_audio' hintId=67890%}";
+        const NEW_HINT = 0;
+        const EXISTING_HINT = 1;
 
+        const PREVIEW_URL = "http://tutor.mathspring.org/woj/WoAdmin?action=AdminGetQuickAuthSkeleton&probId=%s&teacherId=-1&reload=true&zoom=1";
+        const LAYOUT_TOOL_URL = "http://tutor.mathspring.org/woj/WoAdmin?action=AdminEditProblemFormat&problemId=%s";
 
 
         function createPulldownOption (value, label, description) {
             return {label: label+(description ? ("  "+description) : ""), value: value};
+        }
+
+        function saveProblemMetaInfo() {
+            var form = $('#metainfoForm')[0]; // get the Javascript obj for the hint form
+            var data = new FormData(form); // put all the form fields into data
+            var probId = theProblem.id;
+            var url = SAVE_META_INFO_URL.replace('12345', theProblem.id);
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                error: function (a, b, c) {
+                    console.log("Failed to write to server! " + a.responseText + b);
+                    console.log(a);
+                    $('#metaInfoMessages').html("Failed to write meta info server! " + a.responseText + b);
+                },
+                success: function (data) {
+                    var updTime = data.lastWriteTime;
+                    $('#lastWriteTimeId').val(updTime);
+                    var msg = data.message;
+                    if (msg) {
+                        $('#metaInfoMessages').html(msg);
+                    }
+                    else
+                        $('#metaInfoMessages').html('');
+                }
+            });
+
         }
 
 
@@ -186,10 +224,15 @@
             $('#audioResource').val('');
         }
 
-{#        // Need to get rid of the div that holds all the problem image preview stuff#}
-{#        function removeProblemImageElements () {#}
-{#            $('#problemImagePreview').remove();#}
-{#        }#}
+        function showPreview () {
+            var url = sprintf(PREVIEW_URL,theProblem.id);
+            window.open(url);
+        }
+
+        function openLayoutTool () {
+            var url = sprintf(LAYOUT_TOOL_URL,theProblem ? theProblem.id : "");
+            window.open(url);
+        }
 
 
 
@@ -238,10 +281,17 @@
             })
             $('.remove_hint_audio').click(function () {
                 removeHintAudio();
-            })
+            });
             $('#hintSave').click(function (x) {
-                saveHint();
-            })
+                saveHint(false);
+
+            });
+            $('#previewButton').click(function (x) {
+                showPreview();
+            });
+            $('#hintSaveExit').click(function (x) {
+                saveHint(true);
+            });
             // rather than do a $('.delChoice').click() to handle clicks on the elements with delChoice class
             // we use this method of listening for click events on elements with this class.  This is necessary
             // because elements with the delChoice class are added dynamically and they won't be handled correctly
@@ -300,9 +350,11 @@
             {% if probId != -1 %}
                 mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
                 mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+                mountPulldownComponent('my-pulldown6',{label:"Usable as Example", myId:"usableExample", myName:"usableAsExample", selectedOption:"{{ problem.usableAsExample }}", options:[{value:'True',label:'Yes'}, {value:'False',label:'No'}]});
             {% else %}
                 mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"shortanswer", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
                 mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"testable", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+
             {% endif %}
             var url_mask;
             url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
@@ -331,7 +383,7 @@
                 success: function (data) {
                     var layoutOpts = data;
                     var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
-                    mountPulldownComponent('my-pulldown4',{label:"Layout", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
+                    mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
 
                 }
             });
@@ -355,26 +407,30 @@
         {% csrf_token %}
 
         <div class="form-group">
+            <div class="row">
+                <div class="col col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        {% if probId == -1 %}
+                            <input id="id" type="text" class="form-control" name="id" readonly placeholder="--">
+                        {% else %}
+                            <input id="id" type="text" class="form-control" name="id" readonly value = "{{ problem.id }}" placeholder="--">
+                        {% endif %}
 
-        <div class="input-group">
-            <span class="input-group-addon">ID</span>
-            {% if probId == -1 %}
-                <input id="id" type="text" class="form-control" name="id" readonly placeholder="--">
-            {% else %}
-                <input id="id" type="text" class="form-control" name="id" readonly value = "{{ problem.id }}" placeholder="--">
-            {% endif %}
+                    </div>
+                </div>
+                <div class="col col-sm-5">
+                    <div class="input-group ">
+                        <span class="input-group-addon">Name</span>
+                        {% if probId == -1 %}
+                            <input id="name" type="text" class="form-control" name="name" placeholder="Problem Name">
+                        {% else %}
+                            <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
+                        {% endif %}
 
-        </div>
-        <br>
-        <div class="input-group">
-            <span class="input-group-addon">Name</span>
-            {% if probId == -1 %}
-                <input id="name" type="text" class="form-control" name="name" placeholder="Problem Name">
-            {% else %}
-                <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
-            {% endif %}
-
-        </div>
+                    </div>
+                </div>
+            </div>
         <br>
         <div class="input-group">
             <span class="input-group-addon">Nick Name</span>
@@ -411,7 +467,7 @@
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
             {% if problem.audioResource %}
                 <audio id="problem_audio_player" controls>
-                    <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.audioResource }}.mp3" type="audio/mpeg">
+                    <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
                     Your browser does not support the audio tag.
                 </audio>
                 <a class="remove_problem_audio" href="#">
@@ -516,135 +572,234 @@
                 </tbody>
             </table>
         </div>
-
         <br>
+{#        Status pulldown #}
+        <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
+        </div>
 
-
-        <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}"></div>
-
-        <br/>
-
-        <div id="my-pulldown4"></div>
-
-        <br/>
-
-        <div class="form-inline">
-            <div class="input-group">
-                <span class="input-group-addon">Standard ID</span>
-                {% if probId == -1 %}
-                    <input id="standardId" type="text" class="form-control" name="standardId" placeholder="">
-                {% else %}
-                    <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
-                {% endif %}
-
+{#        Layout controls#}
+        <br>
+        <div class="row">
+            <div class="col col-sm-6">
+                <div id="my-pulldown4"></div>
             </div>
-
-
-            <div class="input-group">
-                <span class="input-group-addon">Cluster ID</span>
-                {% if probId == -1 %}
-                    <input id="clusterId" type="text" class="form-control" name="clusterId" placeholder="">
-                {% else %}
-                    <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
-                {% endif %}
-
+            <div class="col col-sm-2">
+                <a onclick="openLayoutTool()" class="btn btn-primary">Layout Tool</a>
+            </div>
+            <div class="col col-xs-2">
+                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Use the layout tool to create a layout and copy/paste the string into the layout field below"></span></a>
             </div>
         </div>
         <br>
 
 
+        <div class="input-group">
+            <span class="input-group-addon">Layout</span>
+            {% if probId == -1 or problem.problemFormat == None %}
+                <input type="text" class="form-control" name="problemFormat" placeholder="Layout string from Layout Tool goes here">
+            {% else %}
+                <input type="text" class="form-control" name="problemFormat"  value = "{{ problem.problemFormat }}">
+            {% endif %}
+            <span class="input-group-addon">
+                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Copy/paste from layout tool"></span></a>
+            </span>
+
+        </div>
+
+
+
+
+        <br/>
+
+
+        <br>
         <button id="saveButton" class="btn btn-primary">Save</button>
+        {% if probId != -1 %}
         <button id="previewButton" class="btn btn-primary">Preview</button>
+        {% endif %}
         </div>
 
     </form>
 
-    {% if probId != -1 %}
-    <h3>Hints</h3>
-{#        <div class="input-group">#}
-        <a id="addHint" onclick="addHint()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span></a>
-        &nbsp; &nbsp;
-        &nbsp; &nbsp;
-        <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>
-        &nbsp; &nbsp;
-        Drag and Drop rows to reorder hints
-
-{#        <button type="submit" class="btn btn-link" onclick="addHint()">#}
-{#            <span class="glyphicon glyphicon-plus"></span>#}
-{#        </button>#}
-{#        <button type="submit" class="btn btn-link" onclick="deleteSelectedHints({{ problem.id }})">#}
-{#            <span class="glyphicon glyphicon-minus"></span>#}
-{#        </button>#}
-{#        <span class="input-group-addon">Action</span>#}
-{#        <select class="form-control" style="width:auto;"><option>Add</option><option>Delete Selected</option></select>#}
-{#        </div>#}
-        <table id="hintTable" class="table table-bordered pagin-table">
-        <thead>
-            <tr><td style="width: 30px">Delete</td><th style="width: 60px">Edit</th><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th >statement</th></tr>
-        </thead>
-        <tbody id="hinttbody">
-{#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
-        {% for h in hints %}
-
-            <tr id="{{ h.id }}" class="dnd">
-                <td>
-                    <input type="checkbox"></td>
-                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
-                <td class="hint-id">{{ h.id }}</td>
-
-                <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
-
-{#                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td>#}
-                <td class="statement"> {{ h.statementHTML }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-        <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>
-        <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>
-        <p style="color: red" id="hintErrorMessages"></p>
-    {% endif %}
 
 
     {% if probId != -1 %}
-        <p>
-            <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                <h3>Media Files</h3>
-            </a>
-        </p>
-        <div class="collapse" id="collapseExample">
-            <div class="card card-body" >
-                <p class="card-text">These files are usable within the problem statement and hint statements.  They can be included in a statement by copy/pasting from the Ref file name (e.g. {[myfile.jpg]} )</p>
-        <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=problem.id %}">
-        {#        <div class="input-group">#}
-        {% csrf_token %}
+        <div class="container"></div>
+        <div id="probTabs" class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a  href="#tab1" data-toggle="tab">Hints</a>
+                </li>
+                <li><a href="#tab2" data-toggle="tab">Media Files</a>
+                </li>
+                <li><a href="#tab3" data-toggle="tab">Meta Info</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <a id="addHint" onclick="addHint()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span></a>
+{#                    <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>#}
+                    &nbsp; &nbsp;
+                    Drag and Drop rows to reorder hints
+
+                    <table id="hintTable" class="table table-bordered pagin-table">
+                        <thead>
+                        <tr><td style="width: 30px">Delete</td><th style="width: 60px">Edit</th><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th >statement</th></tr>
+                        </thead>
+                        <tbody id="hinttbody">
+                                put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints
+                        {% for h in hints %}
+
+                            <tr id="{{ h.id }}" class="dnd">
+                                <td>
+                                    <input type="checkbox"></td>
+                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
+                                <td class="hint-id">{{ h.id }}</td>
+
+                                <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+
+                                                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td>
+                                <td class="statement"> {{ h.statementHTML }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Save Changes to Hints</a>
+{#                    <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
+{#                    <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
+                    <p style="color: red" id="hintErrorMessages"></p>
+                </div>
+
+                <div class="tab-pane" id="tab2">
+                    <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=problem.id %}">
+                        {#        <div class="input-group">#}
+                        {% csrf_token %}
 
 
-            <a id="addMedia" onclick="addMediaRow()" href="#mediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
+                        <a id="addMedia" onclick="addMediaRow()" href="#mediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
 
 
-            <table id="mediaTable" class="table table-bordered">
-            <thead>
-            <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
-            </thead>
-            <tbody id="mediatbody">
-            {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
-            {% for f in problem.getMediaFiles %}
-                <tr id="{{ f.id }}"><td><input type="checkbox"></td><td>{{ f.id }}</td><td>{[{{ f.filename }}]}</td>
-                <td></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div style="color:red;" id="mediaFileErrorMessages">
+                        <table id="mediaTable" class="table table-bordered">
+                            <thead>
+                            <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
+                            </thead>
+                            <tbody id="mediatbody">
+                            {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
+                            {% for f in problem.getMediaFiles %}
+                                <tr id="{{ f.id }}"><td><input type="checkbox"></td><td>{{ f.id }}</td><td>{[{{ f.filename }}]}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="color:red;" id="mediaFileErrorMessages">
 
+                        </div>
+                        {#        save will submit the form, deleting will ajax the ids to server but will keep the page where it is#}
+                        {#        <button  class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Changes to Media Files</button>#}
+                        <a href="#mediaTable" class="btn btn-primary" onClick="saveMediaFiles()">Save Changes to Media Files</a>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab3">
+                    <form id="metainfoForm">
+                    <br> <div class="form-inline">
+                    <div class="input-group">
+                        <span class="input-group-addon">Standard ID</span>
+                            <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
+                    </div>
+
+
+                    <div class="input-group">
+                        <span class="input-group-addon">Cluster ID</span>
+                            <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
+
+                    </div>
+                </div>
+                    <br>
+                    <div class="form-inline">
+                        <div class="input-group">
+                            <span class="input-group-addon">Video ID</span>
+                                <input id="videoId" type="text" class="form-control" name="video" value = "{{ problem.video }}">
+
+                        </div>
+
+
+                        <div class="input-group">
+                            <span class="input-group-addon">Example ID</span>
+                                <input id="exampleId" type="text" class="form-control" name="example" value = "{{ problem.example }}">
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col col-sm-4">
+{#                             Pulldown menu for IsAllowedAsExample #}
+                                <div id="my-pulldown6"></div>
+                        </div>
+
+
+
+                        <div class="col col-sm-6">
+                            {#                             Snapshot file uploader #}
+                            <div class="input-group">
+                                <span class="input-group-addon">Snapshot Image</span>
+                                <input id="snapshotfilename" type="text" class="form-control" placeholder="" readonly name="snapshotFilename" value = "{{ problem.screenshotURL }}">
+                            </div>
+                            <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row">
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Creator</span>
+                                    <input id="creatorId" type="text" class="form-control" name="creator" value = "{{ problem.creator }}">
+
+                            </div>
+                        </div>
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Last Modifier</span>
+                                    <input id="lastModifierId" type="text" class="form-control" name="lastModifier" value = "{{ problem.lastModifier }}">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col col-sm-5">
+                            <div class="input-group" >
+                                <span class="input-group-addon">Cr. Time</span>
+                                    <input id="crTimeId" type="text" readonly class="form-control" name="creationTime" value = "{{ problem.created_at }}">
+
+                            </div>
+                        </div>
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Last Wr. Time</span>
+                                    <input id="lastWriteTimeId" type="text" readonly class="form-control" name="lastWriteTime" value = "{{ problem.updated_at }}">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">Notes</span>
+                            <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{{ problem.authorNotes }}</textarea>
+
+                    </div>
+                    <br>
+                        <a href="#metainfoForm" class="btn btn-primary" onClick="saveProblemMetaInfo()">Save Meta Info</a>
+                        <p style="color: red" id="metaInfoMessages"></p>
+
+                    </form>
+                </div>
+            </div>
         </div>
-{#        save will submit the form, deleting will ajax the ids to server but will keep the page where it is#}
-{#        <button  class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Changes to Media Files</button>#}
-        <a href="#mediaTable" class="btn btn-primary" onClick="saveMediaFiles()">Save Changes to Media Files</a>
-        </form>
-        </div>
-        </div>
+
+
     {% endif %}
 
 {#    Don't want a hint dialog if this is a new problem.   Wait until it has an id.#}
@@ -672,46 +827,104 @@
                             <label for="hstatement">Statement</label>
                             <textarea id="hstatement" name="statementHTML" class="form-control" rows="6" cols="50"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="hoverText">Hover Text</label>
-                            <input type="text" name="hoverText" class="form-control" id="hoverText">
-                        </div>
+{#                        <div class="form-group">#}
+{#                            <label for="hoverText">Hover Text</label>#}
+{#                            <input type="text" name="hoverText" class="form-control" id="hoverText">#}
+{#                        </div>#}
                         <div class="checkbox">
                             <label><input type="checkbox" name="givesAnswer" value="" id="givesAnswer" checked>Gives Answer</label>
                         </div>
 
-                        <div class="form-group">
-                            <label for="haudioResource">Audio Resource</label>
-                            <div class="form-inline">
+{#                        First Accordian for Main Image and audio #}
+                        <div id="accordion" role="tablist">
+                            <div class="card">
+                                <div class="card-header" role="tab" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <a data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true" aria-controls="collapseOne">
+                                            Main Hint Image and Audio
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-4">
+                                                <label for="haudioFile">Audio Resource</label>
+                                                <input id="haudioFile" class="form-control-file"  name="audioFile" type="file">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="hintAudio">
+                                            <audio class="col-sm-6" id="haudioPlayer" controls>
+                                                <source id="hintAudioMP3" src="" type="audio/mpeg">
+                                                Your browser does not support the audio tag.
+                                            </audio>
+                                            <a id="haudioFilename"></a>
+                                            <a id="removeHintAudio" class="remove_hint_audio" href="#">
+                                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the hint"></span>
+                                            </a>
+                                        </div>
 
-                                <input type="text" name="audioResource" class="form-control" readonly id="haudioResource">
-                                <input id="haudioFile" class="form-control mb-2 mr-sm-2 mb-sm-0"  name="audioFile" type="file">
-                                <div id="hintAudio">
-                                    <audio id="haudioPlayer" controls>
-                                        <source id="hintAudioMP3" src="" type="audio/mpeg">
-                                        Your browser does not support the audio tag.
-                                    </audio>
-                                    <a class="remove_hint_audio" href="#">
-                                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the hint"></span>
-                                    </a>
+                        {#                        This div is injected with image controls when the dialog opens #}
+                                        <label for="hintImageControls">Main Image</label>
+                                        <div id="hintImageControls" class="form-group"></div>
+                                        <div class="form-group row">
+                                            <div class="col col-md-8">
+                                                <div id="my-pulldown5"></div>
+                                            </div>
+                                            <div class="col col-xs-1">
+                                                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Sets where the hints figure is placed.  It can replace the problem figure or be in the hint figure block (the default)"></span></a>
+                                            </div>
+
+                            {#                        An image placement selector.  When a hint dialog comes up, this will be given its attributes and select options #}
+
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            {#                        SEcond Accordian for media files table #}
 
-{#                        This div is injected with image controls when the dialog opens #}
-                        <div id="hintImageControls" class="form-group">
-                        </div>
-                        <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Sets where the hints figure is placed.  Either in the hint statement, replace the problem figure, or in the hint figure block (the default)"></span></a>
-{#                        An image placement selector.  When a hint dialog comes up, this will be given its attributes and select options #}
-                        <div id="my-pulldown5"></div>
+                            <div class="card">
+                                <div class="card-header" role="tab" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" href="#collapseTwo" role="button" aria-expanded="false" aria-controls="collapseTwo">
+                                            Other Hint Media
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <p class="card-text">These files are usable within this hint.  They can be included in the statement by copy/pasting from the Ref file name (e.g. {[myfile.jpg]} )</p>
 
+                                        <a id="addMedia" onclick="addHintMediaFile()" href="#hmediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
+
+
+                                        <table id="hmediaTable" class="table table-bordered">
+                                            <thead>
+                                            <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
+                                            </thead>
+                                            <tbody id="hmediatbody">
+                                            </tbody>
+                                        </table>
+                                        <div style="color:red;" id="hmediaFileErrorMessages">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
 
                     </form>
                 </div>
+
+
                 <div class="modal-footer">
 {#                    <button onClick="saveHint({{ problem.id }});" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>#}
 {#                    <button id="hintSave" onClick="$('#hintForm').submit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>#}
-                    <button id="hintSave" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button id="hintSave" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span>Save and Continue</button>
+                    <button id="hintSaveExit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save and Exit</button>
                     <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -720,4 +933,11 @@
     </div>
     {% endif %}
 
+
+
 {% endblock %}
+
+{#  Dialog that previews the problem #}
+
+
+

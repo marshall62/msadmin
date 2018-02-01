@@ -10,7 +10,7 @@ function injectPulldownIntoElement (props, elt) {
     var div = document.createElement('div');
     div.className = 'input-group';
     var inner = '<span class="input-group-addon">' +props.label+ '</span>';
-    var s = {width: 'auto'};
+    // var s = {width: 'auto'};
     inner += '<select id="' +props.myId+ '" name="' +props.myName+ '" class="form-control" >';
     for (var opt of props.options) {
         var ovalu = opt.value;
@@ -24,7 +24,7 @@ function injectPulldownIntoElement (props, elt) {
 
     elt.appendChild(div);
     // must set style of select after html is added to the div
-    document.getElementById(props.myId).style.width = 'auto';
+    // document.getElementById(props.myId).style.width = 'auto';
 }
 
 
@@ -163,7 +163,7 @@ class ImageControls {
         // note:  We don't need to hold any of these elements in instance variables.
         var span = '<span class="input-group-addon">Image URL</span>';
         var fileInputTag = '<input class="form-control mb-2 mr-sm-2 mb-sm-0" name="' +props.imageFileName+ '" type="file">';
-        var helpIcon = '<a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else the name of the file you upload which can be referenced as {[myfile.jpg]}"></span></a>';
+        var helpIcon = '<a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else you may upload an image file"></span></a>';
         inpDiv.append(span); // a label saying "Image URL"
         this.inputImageURL = $(inputImageURLTag).appendTo(inpDiv);
         this.inputFile = $(fileInputTag).appendTo(mainDiv);
@@ -181,9 +181,10 @@ class ImageControls {
         }
     }
 
+
     getRemoveImageControls (className) {
         // span goes inside <a>
-        var spanDeleteImageIconTag = '<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this image from the problem"></span>';
+        var spanDeleteImageIconTag = '<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this image"></span>';
         var adeleteImageTag = '<a class="' +className+ '" href="#">' + spanDeleteImageIconTag + "</a>";
         return adeleteImageTag;
     }

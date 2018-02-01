@@ -8,48 +8,106 @@ function validateHint () {
     return true;
 }
 
+function loadHintDialogAudio (theHint, hintPath) {
+    if (theHint.audioResource) {
+        // $('#haudioResource').val(theHint.audioResource);
+        $('#haudioFilename').text(theHint.audioResource);
+        $('#hintAudioMP3').attr('src',hintPath  +theHint.audioResource );
+        $('#haudioFile').val('');
+        $('#hintAudio').show();
+        var audio = $('#haudioPlayer');
+        audio[0].load();
+    }
+    else {
+        $('#hintAudio').hide();
+        // $('#haudioResource').val('');
+        $('#haudioFile').val('');
+    }
+}
+
+function loadHintDialogImage (theHint, hintPath) {
+    if (hintImageControls)
+        $('#hintImageControls').empty();
+    // problemDir is a global set in quath_edit.html
+    hintImageControls = new ImageControls(theHint.imageURL,theHint.imageFilename,theHint.imageFileId,hintPath);
+    hintImageControls.mountComponent('hintImageControls',{imageFileName: 'imageFile',delImageClassName: 'a_hint_delete_img'});
+
+}
+
+function addHintMediaFiles (mfs) {
+    $('#hmediatbody').empty();
+    for (mf of mfs) {
+        addHintMediaFile(mf);
+        // $('#hmediatbody').append("<tr><td><input type='checkbox'></td><td>" +mf.id+ "</td><td>{[" +mf.filename+ "]}</td><td></td></tr>")
+    }
+}
+
+function addHintMediaFile (data=null) {
+    var tddel = sprintf("<td><input name='deletehMediaFile[]' value='%s' type='checkbox'></td>",data?data.id:'');
+    var tdid = data ? "<td>" + data.id+ "</td>" : "<td></td>";
+    var tdfname = data ? "<td>{[" + data.filename + "]}</td>" : "<td></td>";
+    var tdupload = data ? "<td></td>" : '<td><input name="hmediaFiles[]" type="file"></td></td>';
+    var tr = ( data ? "<tr id='" + data.id + "'>" : "<tr>" ) + tddel + tdid + tdfname + tdupload + "</tr>";
+    $('#hmediaTable > tbody:last-child').append(tr);
+
+}
+
+function loadHintDialogData(id, theHint, problemPath) {
+    var hintPath= problemPath+"hint_"+theHint.id + "/";
+    $('#hid').val(id);
+    $('#hname').val(theHint.name);
+    // $('#haudioResource').val(theHint.audioResource);
+    // Adds the audioResource (filename) to the <a> tag contents which includes a clickable delete icon
+    // $('#removeHintAudio').append(theHint.audioResource);
+    $('#hstatement').val(theHint.statementHTML);
+    $('#order').val(theHint.order);
+    $('#hoverText').val(theHint.hoverText);
+    $('#givesAnswer').prop('checked',theHint.givesAnswer);
+    loadHintDialogAudio(theHint,hintPath);
+    loadHintDialogImage(theHint, hintPath);
+    // add rows to hint's media files table
+    addHintMediaFiles(theHint.mediaFiles);
+    // console.log("mounting " );
+    mountImagePlacementPulldown(theHint.placement);
+    setHintErrorMessage('');
+    // close all accordions before opening
+    $('.collapse').collapse('hide')
+}
+
+
+
 // Called when the user clicks the edit icon of a hint.
 // Will get the hint JSON from the server and will pop up the dialog to edit it.
 function editHint2 (id, problemPath) {
+    hintEditMode = EXISTING_HINT;
     var url_mask = GET_HINT_URL.replace(/12345/, id.toString());
     $.get(url_mask, function(data) {
         theHint= data;
-        $('#hid').val(id);
-        $('#hname').val(data.name);
-        $('#haudioResource').val(data.audioResource);
-        $('#hstatement').val(data.statementHTML);
-        $('#order').val(data.order);
-        $('#hoverText').val(data.hoverText);
-        $('#givesAnswer').prop('checked',data.givesAnswer);
-        if (data.audioResource) {
-            $('#haudioResource').val(data.audioResource);
-            $('#hintAudioMP3').attr('src',problemPath + "/" +data.audioResource );
-            $('#haudioFile').val('');
-            $('#hintAudio').show();
-            var audio = $('#haudioPlayer');
-            audio[0].load();
-        }
-        else {
-            $('#hintAudio').hide();
-            $('#haudioResource').val('');
-            $('#haudioFile').val('');
-        }
-        if (hintImageControls)
-            $('#hintImageControls').empty();
-        // problemDir is a global set in quath_edit.html
-        hintImageControls = new ImageControls(theHint.imageURL,theHint.imageFilename,theHint.imageFileId,problemDir);
-        hintImageControls.mountComponent('hintImageControls',{imageFileName: 'imageFile',delImageClassName: 'a_hint_delete_img'});
-        var fileid = data.imageFileId;
-        var filename = data.imageFilename;
-        console.log("mounting " );
-        mountImagePlacementPulldown(data.placement);
+        loadHintDialogData(id, theHint, problemPath);
         showHintDialog();
 
     });
 }
 
+// WHen the user clicks the save and continue button within the hint dialog,
+// we call the server to get the latest hint JSON, and then refresh the fields
+// that may be stale: audio, image, and media files.
+function refreshHintDialog (id, problemPath) {
+    var url_mask = GET_HINT_URL.replace(/12345/, id.toString());
+    $.get(url_mask, function(data) {
+        theHint= data;
+        $('#hid').val(theHint.id); // new hints need to have their ID put in
+        var hintPath= problemPath+"hint_"+theHint.id + "/";
+        loadHintDialogAudio(theHint,hintPath);
+        loadHintDialogImage(theHint,hintPath);
+        // add rows to hint's media files table
+        addHintMediaFiles(theHint.mediaFiles);
+
+    });
+}
+
 function mountImagePlacementPulldown (placement) {
-    var opts = [{label: 'Inside hint statement', value:'0'},{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
+    var opts = [{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
     mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
 
 }
@@ -57,12 +115,12 @@ function mountImagePlacementPulldown (placement) {
 // Called when the user clicks the + hint button to add a new hint.
 // Clears the dialog fields and pops it up.
 function addHint () {
-
+    hintEditMode = NEW_HINT;
     var numHints = theProblem.numHints + 1;
     theHint = {order: theProblem.numHints, name: 'Hint ' + numHints};
     $('#hid').val('');
     $('#hname').val('Hint ' + numHints);
-    $('#haudioResource').val('');
+    // $('#haudioResource').val('');
     $('#haudioFile').val('');
     $('#hintAudioMP3').attr('src','' );
     $('#hintAudio').hide();
@@ -75,8 +133,18 @@ function addHint () {
     $('#himageFilename').text(''); // an <a> tag that has the filename
     $('#himage').attr('src','');
     $('#himageDiv').hide();
+    $('#hmediatbody').empty();
+    if (hintImageControls)
+        $('#hintImageControls').empty();
+    hintImageControls = new ImageControls(null,null,null,null);
+    hintImageControls.mountComponent('hintImageControls',{imageFileName: 'imageFile',delImageClassName: 'a_hint_delete_img'});
+
     mountImagePlacementPulldown('2');
     showHintDialog();
+    setHintErrorMessage('');
+    // close all accordions before opening
+    $('.collapse').collapse('hide')
+
 }
 
 
@@ -125,7 +193,8 @@ function getHintRowNumber (hintId) {
 // When the hint dialog is saved an ajax call gets back the new hints JSON and then calls this function
 // to add a new row to the hint table.
 function addHintRow2 (hint) {
-    var editIcon = '<a href="#hinttbody" class="hint-edit-icon" onClick="editHint2(' +hint.id+ ')"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a>';
+    // problemDir is a global defined in qauth_edit.html - it points to the directory for the problem
+    var editIcon = '<a href="#hinttbody" class="hint-edit-icon" onClick="editHint2(' +hint.id+ ', problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a>';
     var tr = '<tr id="' +hint.id+ '" class="dnd"><td><input type="checkbox"></td>' +
         '<td class="edit-hint">' +editIcon + '</td>' +
         '<td class="hint-id">' + hint.id + '</td>' +
@@ -134,16 +203,21 @@ function addHintRow2 (hint) {
     $('#hinttbody').append(tr);
 }
 
+
+
 // When dialog save button is clicked, save the hint.
-// Closes the dialog after the save POST has been sent to the server
-function saveHint () {
+// Closes the dialog if isExit is true.
+// Closes after POST has been sent to the server but before results return
+// Shows an hourglass icon, and does not close the dialog until results
+// are returned from the server.
+function saveHint (isExit) {
     var form = $('#hintForm')[0]; // get the Javascript obj for the hint form
     var data = new FormData(form); // put all the form fields into data
     var probId = theProblem.id;
     // get the row # of this hint
     var rown = getHintRowNumber(theHint.id);
     data.append('order',rown);
-
+    setWaitCursor(true); // change cursor to hourglass while waiting for save.
     var url_mask = SAVE_HINT_URL.replace(/12345/, probId.toString());
     // note processData and contentType are both false to correctly send post with files.
     $.ajax({
@@ -156,24 +230,37 @@ function saveHint () {
             console.log("Failed to write to server! " + a.responseText + b);
             console.log(a);
             alert("Failed to write to server! " + a.responseText + b);
+            setWaitCursor(false);
         },
         success: function (data) {
-            console.log("JSON returned "+ data);
-
-            if (theHint.id)
-                updateHintRow(data);
-
-            else {
+            // Expects {'hint': hintJSON, success: 0|1, 'message': text}
+            // Whenever either save button is clicked we make modifications to the Hints table
+            // display in the problem (either add a row or update an existing row).
+            // If the dialog is being exited, we validate hints and take the dialog down.
+            // If the dialog is continued, we refresh its fields with new hint data from the server.
+            theHint = data.hint;
+            message = data.message;
+            succeeded = data.success==1; // errors deleting media files => 0
+            if (hintEditMode == NEW_HINT) {
                 theProblem.numHints++;
-                addHintRow2(data);
+                addHintRow2(theHint);
+                hintEditMode = EXISTING_HINT;
             }
+            else {
+                updateHintRow(theHint);
+            }
+            if (isExit && succeeded) {
+                validateHints();
+                $('#hintDialog').modal('toggle');
+            }
+            else {
+                refreshHintDialog(theHint.id, problemDir);
+                setHintErrorMessage(message);
+            }
+            setWaitCursor(false);
 
-            validateHints();
         }
     });
-    $('#hintDialog').modal('toggle');
-
-
 }
 
 // every time a drag and drop of a hint row is completed we update the server with the full list of hints in the
@@ -207,10 +294,10 @@ function saveHintsToServer () {
 // Puts a message below the hint table so user knows there is an error in the hints.
 function setHintErrorMessage (msg) {
     if (msg) {
-        $('#hintErrorMessages').html(msg);
+        $('#hmediaFileErrorMessages').html(msg);
     }
     else
-        $('#hintErrorMessages').html('');
+        $('#hmediaFileErrorMessages').html('');
 }
 
 

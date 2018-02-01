@@ -33,37 +33,22 @@ function saveMediaFiles () {
             console.log(a);
             alert("Failed to process media " + a.responseText + b);
         },
-        // Gets back an object like {mediaFiles : [list of ProblemMediaFile objects], notDeleted: [list of ProblemMediaFile objects]}
+        // Gets back an object like {mediaFiles : [list of ProblemMediaFile objects], message: text}
         success: function (data) {
             $('#mediatbody').empty();
             for (f of data.mediaFiles)
                 addMediaRow(f);
-            addMediaFileMessage(data.notDeleted, data.refs);
+            $('#mediaFileErrorMessages').html(data.message);
         }
     });
 
 }
 
-function addMediaFileMessage (mfs, refs) {
-    var msg = 'The following media files cannot be deleted because they are still referenced by the problem or one of its hints:<br><ul>';
-    if (mfs.length == 0) {
-        msg = "Successfully deleted.";
-    }
-    else {
-        for (i in mfs) {
-            var g = mfs[i].filename + " is referenced in: " + refs[i];
-            msg += "<li>" + g + "</li>";
-        }
-        msg += "</ul>"
-    }
-    $('#mediaFileErrorMessages').html(msg);
-}
 
 function addMediaRow (data = null) {
-    console.log("add media row");
     var tddel = "<td><input type='checkbox'></td>";
     var tdid = data ? "<td>" + data.id+ "</td>" : "<td></td>";
-    var tdfname = data ? "<td>" + data.filename + "</td>" : "<td></td>";
+    var tdfname = data ? "<td>{[" + data.filename + "]}</td>" : "<td></td>";
     var tdupload = data ? "<td></td>" : '<td><input name="mediaFiles[]" type="file"></td></td>';
     var tr = ( data ? "<tr id='" + data.id + "'>" : "<tr>" ) + tddel + tdid + tdfname + tdupload + "</tr>";
     $('#mediaTable > tbody:last-child').append(tr);
