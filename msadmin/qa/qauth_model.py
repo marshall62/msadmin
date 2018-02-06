@@ -103,6 +103,17 @@ class Problem (models.Model):
         else:
             return 'dead'
 
+
+    def getDifficulty (self):
+        d = ProblemDifficulty.objects.get(problem_id=self.id)
+        # I don't know what to do with this number
+        if d and d.diff_level >= 0:
+            l=d.diff_level * 10
+        else:
+            l=-1
+        return str(int(l))
+
+
     def getLayoutId (self):
         if self.layout:
             return self.layout.id
@@ -188,6 +199,12 @@ class Problem (models.Model):
     def __str__ (self):
         return self.name
 
+class ProblemDifficulty (models.Model):
+    diff_level = models.FloatField(db_column="diff_level")
+    problem = models.ForeignKey('Problem',db_column='problemId')
+
+    class Meta:
+        db_table = "overallprobdifficulty"
 
 class ProblemAnswer (models.Model):
     val = models.TextField()

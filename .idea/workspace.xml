@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/sprintf.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/util.js" />
+    <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="Made changes to images and audio to be compatible with my changes to Mathspring support for same">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/json.py" afterPath="$PROJECT_DIR$/msadmin/qa/json.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/urls.py" afterPath="$PROJECT_DIR$/msadmin/qa/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/util.py" afterPath="$PROJECT_DIR$/msadmin/qa/util.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" afterPath="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/qa/media.js" afterPath="$PROJECT_DIR$/msadmin/static/js/qa/media.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" afterPath="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,14 +47,24 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="131" column="32" lean-forward="false" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
+            <state relative-caret-position="387">
+              <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="177">
+              <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -81,8 +82,8 @@
       <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="271" column="34" lean-forward="false" selection-start-line="271" selection-start-column="34" selection-end-line="271" selection-end-column="34" />
+            <state relative-caret-position="237">
+              <caret line="153" column="85" lean-forward="false" selection-start-line="153" selection-start-column="85" selection-end-line="153" selection-end-column="85" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -102,23 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="123" column="5" lean-forward="false" selection-start-line="123" selection-start-column="5" selection-end-line="123" selection-end-column="5" />
-              <folding>
-                <element signature="e#0#62#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="158" column="37" lean-forward="false" selection-start-line="158" selection-start-column="37" selection-end-line="158" selection-end-column="37" />
+            <state relative-caret-position="266">
+              <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -136,11 +125,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2487">
-              <caret line="615" column="69" lean-forward="false" selection-start-line="615" selection-start-column="69" selection-end-line="615" selection-end-column="69" />
+            <state relative-caret-position="247">
+              <caret line="576" column="20" lean-forward="true" selection-start-line="576" selection-start-column="20" selection-end-line="576" selection-end-column="20" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#0;n#form#0;n#div#2;n#div#0;n#div#1;n#!!top" expanded="true" />
@@ -193,9 +182,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>problem_</find>
-      <find>refr</find>
-      <find>Mode</find>
       <find>SAVE_HINT_URL</find>
       <find>getHintMediaRe</find>
       <find>createRe</find>
@@ -220,9 +206,12 @@
       <find>sprintf</find>
       <find>createRef</find>
       <find>Layout</find>
-      <find>qauth_save</find>
       <find>pulldown6</find>
       <find>Preview</find>
+      <find>scree</find>
+      <find>my-pulldown3</find>
+      <find>my-pulldown7</find>
+      <find>qauth_save</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -294,9 +283,9 @@
         <option value="$PROJECT_DIR$/msadmin/qa/util.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/media.js" />
         <option value="$PROJECT_DIR$/msadmin/qa/json.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
+        <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
       </list>
     </option>
   </component>
@@ -475,6 +464,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="fileUploads" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fileUploads" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="problemSnapshots" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1026,7 +1033,7 @@
       <workItem from="1510584917404" duration="61943000" />
       <workItem from="1511193998724" duration="174453000" />
       <workItem from="1513378969689" duration="127965000" />
-      <workItem from="1515792399252" duration="125950000" />
+      <workItem from="1515792399252" duration="133497000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1308,11 +1315,18 @@
       <option name="project" value="LOCAL" />
       <updated>1516219365269</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Made changes to images and audio to be compatible with my changes to Mathspring support for same">
+      <created>1517502642339</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1517502642339</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1097538000" />
+    <option name="totallyTimeSpent" value="1105085000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="519" y="68" width="1300" height="1012" extended-state="0" />
@@ -1369,7 +1383,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added db triggers.sql&#10;" />
     <MESSAGE value="Added beginnings of quickAuth auth tool and added a nav bar." />
     <MESSAGE value="Added hint dialog and a pulldown component built in JS" />
     <MESSAGE value="fixed navbar" />
@@ -1394,7 +1407,8 @@
     <MESSAGE value="refactored out hardwiring of directory names of media for quickAuth and surveys and added two vars in settings.py to get them from" />
     <MESSAGE value="took care of a minor dependency on fetchTest . put in accessors.py" />
     <MESSAGE value="qa:  made empty hint dialog have correct default image placement of 2." />
-    <option name="LAST_COMMIT_MESSAGE" value="qa:  made empty hint dialog have correct default image placement of 2." />
+    <MESSAGE value="Made changes to images and audio to be compatible with my changes to Mathspring support for same" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made changes to images and audio to be compatible with my changes to Mathspring support for same" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1412,7 +1426,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="339" />
+      <option name="time" value="343" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1738,14 +1752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/contrib/staticfiles/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
@@ -1816,36 +1822,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="271" column="34" lean-forward="false" selection-start-line="271" selection-start-column="34" selection-end-line="271" selection-end-column="34" />
+        <state relative-caret-position="237">
+          <caret line="153" column="85" lean-forward="false" selection-start-line="153" selection-start-column="85" selection-end-line="153" selection-end-column="85" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
+    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="158" column="37" lean-forward="false" selection-start-line="158" selection-start-column="37" selection-end-line="158" selection-end-column="37" />
+        <state relative-caret-position="177">
+          <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="131" column="32" lean-forward="false" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2487">
-          <caret line="615" column="69" lean-forward="false" selection-start-line="615" selection-start-column="69" selection-end-line="615" selection-end-column="69" />
+        <state relative-caret-position="247">
+          <caret line="576" column="20" lean-forward="true" selection-start-line="576" selection-start-column="20" selection-end-line="576" selection-end-column="20" />
           <folding>
             <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#form#0;n#div#2;n#div#0;n#div#1;n#!!top" expanded="true" />
@@ -1853,6 +1849,24 @@
             <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#div#1;n#div#1;n#div#3;n#form#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#0;n#div#1;n#div#1;n#div#3;n#form#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#3;n#form#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -72,6 +72,7 @@ def save_problem (request):
         # answer = post['answer']
         imageURL = post['imageURL']
         status = post['status']
+        initDifficulty = post['difficulty']
         # standardId = post['standardId']
         # clusterId = post['clusterId']
         questType = post['questType']
@@ -119,13 +120,23 @@ def save_problem (request):
                         imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
                         questType=questType, audioResource=audioResource, layout_id=layoutId,
                         creator=user,lastModifier=user,created_at=now)
-
-
+            # When the problem is created set the diff level if one is given , else set to .5
+            if initDifficulty != -1:
+                d = ProblemDifficulty(diff_level=int(initDifficulty)*.1,problem=p)
+                d.save()
+            else:
+                d = ProblemDifficulty(diff_level=0.5,problem=p)
+                d.save()
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
                         questType=questType, layout_id=layoutId,lastModifier=user)
+            # if saving existing problem and valid diff level is sent, change it
+            if initDifficulty != -1:
+                d = ProblemDifficulty.objects.get(problem_id=p.id)
+                d.diff_level = int(initDifficulty) * .1
+                d.save()
             # if imageURL is given set it and clear the problem imagefile
             if imageURL:
                 p.imageURL=imageURL

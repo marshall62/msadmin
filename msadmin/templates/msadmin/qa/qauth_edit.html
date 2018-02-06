@@ -350,10 +350,14 @@
             {% if probId != -1 %}
                 mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
                 mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+                mountPulldownComponent('my-pulldown7',{label:"Difficulty", myId:"difficulty", myName:"difficulty", selectedOption:"{{ problem.getDifficulty }}", options:[{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
+                    {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]});
                 mountPulldownComponent('my-pulldown6',{label:"Usable as Example", myId:"usableExample", myName:"usableAsExample", selectedOption:"{{ problem.usableAsExample }}", options:[{value:'True',label:'Yes'}, {value:'False',label:'No'}]});
             {% else %}
                 mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"shortanswer", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
                 mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"testable", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
+                mountPulldownComponent('my-pulldown7',{label:"Difficulty", myId:"difficulty", myName:"difficulty", selectedOption:"-1", options:[{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
+                    {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]});
 
             {% endif %}
             var url_mask;
@@ -573,10 +577,17 @@
             </table>
         </div>
         <br>
-{#        Status pulldown #}
-        <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
+{#       difficulty and  Status pulldowns #}
+        <div class="row">
+            <div class="col col-sm-4">
+                <div id="my-pulldown7" >
+                </div>
+            </div>
+            <div class="col col-sm-4">
+                <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
+                </div>
+            </div>
         </div>
-
 {#        Layout controls#}
         <br>
         <div class="row">
