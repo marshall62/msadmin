@@ -148,7 +148,7 @@ def save_problem_meta_info (request, probId):
             ext = filename.split(".")[1]
             filename = "problem_"+probId+"."+ext
             write_file(SNAPSHOT_DIRNAME, file, filename)
-            p.setFields(screenshotURL=filename)
+            # p.setFields(screenshotURL=filename)
 
         p.setFields(standardId=standardId,clusterId=clusterId,
                    authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,

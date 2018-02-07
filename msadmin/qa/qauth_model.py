@@ -25,10 +25,9 @@ class Problem (models.Model):
     lastModifier = models.TextField(max_length=50) # should be an admin ID when login to system is implemented
     video = models.IntegerField() # this will require navigators & selectors.  Allow hand entry of video.ID now
     example = models.IntegerField() # this will require navigators & selectors.  Allow hand entry of problem.ID now
-    screenshotURL = models.CharField(max_length=200) # The filename living in MEDIA_ROOT/SNAPSHOT_DIRNAME/<filename>
+    # screenshotURL = models.CharField(max_length=200) # The filename living in MEDIA_ROOT/SNAPSHOT_DIRNAME/<filename>
                                                     # derived from the file upload of snapshotFile to json.py
-
-
+    hasSnapshot = models.BooleanField()
 
 
     MULTI_CHOICE="multichoice"
@@ -67,13 +66,14 @@ class Problem (models.Model):
                 self.example=kwargs['example']
             if 'video' in kwargs:
                 self.video=kwargs['video']
-            if 'screenshotURL' in kwargs:
-                self.screenshotURL=kwargs['screenshotURL']
+            # if 'screenshotURL' in kwargs:
+            #     self.screenshotURL=kwargs['screenshotURL']
             if 'usableAsExample' in kwargs:
                 self.usableAsExample=kwargs['usableAsExample']
             if 'problemFormat' in kwargs:
                 self.problemFormat=kwargs['problemFormat']
-
+            if 'hasSnapshot' in kwargs:
+                self.hasSnapshot=kwargs['hasSnapshot']
 
 
     class Meta:

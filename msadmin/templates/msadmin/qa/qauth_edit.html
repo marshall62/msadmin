@@ -748,14 +748,17 @@
                                 <div id="my-pulldown6"></div>
                         </div>
 
-
+                        <div class="col col-sm-2">
+                            {#                             Pulldown menu for IsAllowedAsExample #}
+                            <input type="checkbox" readonly {% if problem.hasSnapshot %} checked {% endif %}> Has Snapshot</input>
+                        </div>
 
                         <div class="col col-sm-6">
                             {#                             Snapshot file uploader #}
-                            <div class="input-group">
-                                <span class="input-group-addon">Snapshot Image</span>
-                                <input id="snapshotfilename" type="text" class="form-control" placeholder="" readonly name="snapshotFilename" value = "{{ problem.screenshotURL }}">
-                            </div>
+{#                            <div class="input-group">#}
+{#                                <span class="input-group-addon">Snapshot Image</span>#}
+{#                                <input id="snapshotfilename" type="text" class="form-control" placeholder="" readonly name="snapshotFilename" value = "{{ problem.screenshotURL }}">#}
+{#                            </div>#}
                             <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
                         </div>
                     </div>
