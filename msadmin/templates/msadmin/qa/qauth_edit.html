@@ -754,15 +754,15 @@
                         </div>
 
                         <div class="col col-sm-6">
-                            {#                             Snapshot file uploader #}
-{#                            <div class="input-group">#}
-{#                                <span class="input-group-addon">Snapshot Image</span>#}
-{#                                <input id="snapshotfilename" type="text" class="form-control" placeholder="" readonly name="snapshotFilename" value = "{{ problem.screenshotURL }}">#}
-{#                            </div>#}
                             <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
                         </div>
                     </div>
-
+                    <br>
+                    {% if problem.hasSnapshot %}
+                        <img src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
+                             onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
+                             onmouseout="this.width='70'; this.height='70';" width="70" height="70">
+                    {% endif %}
                     <br>
                     <div class="row">
                         <div class="col col-sm-5">

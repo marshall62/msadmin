@@ -162,6 +162,10 @@ class Problem (models.Model):
         else:
             return self.imageURL
 
+
+    def getSnapshotFilename (self):
+        return "problem_" + str(self.id) + ".jpg"
+
     # return the audioResource as a filename without the {[]} around it
     def getAudioFile (self):
         if len(self.audioResource) >= 4:
