@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
-
+from django.db import connection
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
 from msadminsite.settings import QUICKAUTH_PROB_DIRNAME, SNAPSHOT_DIRNAME
@@ -120,24 +120,19 @@ def save_problem (request):
                         imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
                         questType=questType, audioResource=audioResource, layout_id=layoutId,
                         creator=user,lastModifier=user,created_at=now)
-            # When the problem is created set the diff level if one is given , else set to .5
-            # if initDifficulty != -1:
-            #     d = ProblemDifficulty(diff_level=int(initDifficulty)*.1,problem=p)
-            #     d.save()
-            # else:
-            #     d = ProblemDifficulty(diff_level=0.5,problem=p)
-            #     d.save()
+            p.save()
+            if initDifficulty != -1:
+                insertProblemDifficulty(str(p.pk),initDifficulty)
+
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
                         questType=questType, layout_id=layoutId,lastModifier=user)
-            # if saving existing problem and valid diff level is sent, change it
-            # if initDifficulty != -1:
-            #     d = ProblemDifficulty.objects.get(problem=p)
-            #     if d:
-            #         d.diff_level = int(initDifficulty) * .1
-            #         d.save()
+            if initDifficulty != -1 and selectProblemDifficulty(id):
+                updateProblemDifficulty(id,initDifficulty)
+            else: insertProblemDifficulty(id,initDifficulty)
+
             # if imageURL is given set it and clear the problem imagefile
             if imageURL:
                 p.imageURL=imageURL
@@ -198,3 +193,22 @@ def deleteHints (request, probId):
     return redirect("qauth_edit_prob",probId=probId)
 
 
+def updateProblemDifficulty (probId, diffSetting):
+    difflev = int(diffSetting) * 0.1
+    with connection.cursor() as cursor:
+        cursor.execute("UPDATE overallprobdifficulty SET diff_level = %s WHERE problemId = %s", [difflev, probId])
+
+
+def insertProblemDifficulty (probId, diffSetting):
+    difflev = int(diffSetting) * 0.1
+    with connection.cursor() as cursor:
+        cursor.execute("INSERT into overallprobdifficulty (problemId, diff_level) VALUES (%s, %s)", [probId, difflev])
+
+
+def selectProblemDifficulty (probId):
+    with connection.cursor() as cursor:
+        cursor.execute("select diff_level from overallprobdifficulty where problemId= %s", [probId])
+        row = cursor.fetchone()
+        if row:
+            return row[0]
+        else: return None

@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,13 +45,20 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="36" column="143" lean-forward="false" selection-start-line="36" selection-start-column="127" selection-end-line="36" selection-end-column="143" />
+            <state relative-caret-position="350">
+              <caret line="134" column="0" lean-forward="true" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <marker date="1518280268660" expanded="true" signature="8557:8626" ph="UPDATE overa... " />
+                <marker date="1518280268660" expanded="true" signature="8802:8868" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1518280268660" expanded="true" signature="8802:8875" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1518280268660" expanded="true" signature="8802:8896" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1518280268660" expanded="true" signature="8813:8868" ph="UPDATE overa... " />
+                <marker date="1518280268660" expanded="true" signature="9001:9065" ph="select diff_... overallprobdifficulty" />
+                <marker date="1518280268660" expanded="true" signature="9024:9046" ph="INSERT into overallprobdifficulty... " />
               </folding>
             </state>
           </provider>
@@ -96,7 +101,7 @@
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
+            <state relative-caret-position="1257">
               <caret line="175" column="0" lean-forward="true" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
               <folding />
             </state>
@@ -115,7 +120,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="251">
@@ -201,8 +206,8 @@
       <find>my-pulldown3</find>
       <find>my-pulldown7</find>
       <find>scree</find>
-      <find>qauth_save</find>
       <find>snapshot</find>
+      <find>qauth_save</find>
       <find>screenshotU</find>
     </findStrings>
     <replaceStrings>
@@ -275,9 +280,9 @@
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/media.js" />
         <option value="$PROJECT_DIR$/msadminsite/settings.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/json.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
+        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
       </list>
     </option>
   </component>
@@ -1118,7 +1123,7 @@
       <workItem from="1510584917404" duration="61943000" />
       <workItem from="1511193998724" duration="174453000" />
       <workItem from="1513378969689" duration="127965000" />
-      <workItem from="1515792399252" duration="138766000" />
+      <workItem from="1515792399252" duration="140281000" />
     </task>
     <task id="LOCAL-00001" summary="fixed url to admin">
       <created>1493999529860</created>
@@ -1428,11 +1433,18 @@
       <option name="project" value="LOCAL" />
       <updated>1518015568244</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="added preview of snapshot">
+      <created>1518278804523</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1518278804523</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1110354000" />
+    <option name="totallyTimeSpent" value="1111869000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="117" y="68" width="1338" height="1012" extended-state="0" />
@@ -1489,7 +1501,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added hint dialog for creating and editing hints.  Also added delete of hint functionality" />
     <MESSAGE value="Fixed bug in admin so that SCIS maps can be created" />
     <MESSAGE value="Added file upload to the qauth problems." />
     <MESSAGE value="Got short answer and multi choice controls working" />
@@ -1514,7 +1525,8 @@
     <MESSAGE value="Added prelim implementation of problem difficulty" />
     <MESSAGE value="commented out ProbDifficulty insertions because the queries are failing" />
     <MESSAGE value="removed screenshotURL and snapshot URL textfield in meta area of problem" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed screenshotURL and snapshot URL textfield in meta area of problem" />
+    <MESSAGE value="added preview of snapshot" />
+    <option name="LAST_COMMIT_MESSAGE" value="added preview of snapshot" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1532,7 +1544,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="343" />
+      <option name="time" value="346" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1944,24 +1956,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="36" column="143" lean-forward="false" selection-start-line="36" selection-start-column="127" selection-end-line="36" selection-end-column="143" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="175" column="0" lean-forward="true" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="251">
@@ -1975,6 +1969,31 @@
             <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#3;n#form#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
             <marker date="1518184791688" expanded="false" signature="40750:40757" ph="×" />
             <marker date="1518184791688" expanded="false" signature="40920:40938" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1257">
+          <caret line="175" column="0" lean-forward="true" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="134" column="0" lean-forward="true" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1518280268660" expanded="true" signature="8557:8626" ph="UPDATE overa... " />
+            <marker date="1518280268660" expanded="true" signature="8802:8868" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1518280268660" expanded="true" signature="8802:8875" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1518280268660" expanded="true" signature="8802:8896" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1518280268660" expanded="true" signature="8813:8868" ph="UPDATE overa... " />
+            <marker date="1518280268660" expanded="true" signature="9001:9065" ph="select diff_... overallprobdifficulty" />
+            <marker date="1518280268660" expanded="true" signature="9024:9046" ph="INSERT into overallprobdifficulty... " />
           </folding>
         </state>
       </provider>
