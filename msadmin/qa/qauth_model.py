@@ -113,6 +113,19 @@ class Problem (models.Model):
             l=-1
         return str(int(l))
 
+    def getDifficultyProbNum (self):
+        d = ProblemDifficulty.objects.get(problem_id=self.id)
+        # I don't know what to do with this number
+        if d and d.totalProbs and d.totalProbs >= 0:
+            return d.totalProbs
+        else:
+            return 0
+
+    # The difficulty pulldown menu (pulldown7) should be disabled if the overallprobdifficulty table has a totalProbs > 0
+    # THis indicates that the difficulty level in the table is based on actual users stats.
+    def isDifficultyDisabled (self):
+        return self.getDifficultyProbNum() > 0
+
 
     def getLayoutId (self):
         if self.layout:
@@ -205,6 +218,7 @@ class Problem (models.Model):
 
 class ProblemDifficulty (models.Model):
     diff_level = models.FloatField(db_column="diff_level")
+    totalProbs = models.IntegerField()
     problem = models.ForeignKey('Problem',db_column='problemId')
 
     class Meta:

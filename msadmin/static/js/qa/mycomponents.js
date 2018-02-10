@@ -11,7 +11,8 @@ function injectPulldownIntoElement (props, elt) {
     div.className = 'input-group';
     var inner = '<span class="input-group-addon">' +props.label+ '</span>';
     // var s = {width: 'auto'};
-    inner += '<select id="' +props.myId+ '" name="' +props.myName+ '" class="form-control" >';
+    var disable = props.isDisabled ? "disabled" : ""
+    inner += '<select id="' +props.myId+ '" name="' +props.myName+ '" class="form-control" ' +disable+ ' >';
     for (var opt of props.options) {
         var ovalu = opt.value;
         if (props.selectedOption == ovalu)
