@@ -1,4 +1,5 @@
 from django.db import models
+from django.db import connection
 
 class Problem (models.Model):
     name = models.CharField(max_length=50)
@@ -121,10 +122,9 @@ class Problem (models.Model):
         else:
             return 0
 
-    # The difficulty pulldown menu (pulldown7) should be disabled if the overallprobdifficulty table has a totalProbs > 0
-    # THis indicates that the difficulty level in the table is based on actual users stats.
+    # The difficulty pulldown menu (pulldown7) should be disabled if the probstats table n > 0 (no row means 0)
     def isDifficultyDisabled (self):
-        return self.getDifficultyProbNum() > 0
+        return self.getStatsNumShown() and self.getStatsNumShown() > 0
 
 
     def getLayoutId (self):
@@ -185,6 +185,16 @@ class Problem (models.Model):
             return self.audioResource[2:-2]
         else:
             return self.audioResource
+
+    # returns the number of times a problem has had its stats updated.  If no row exists, then
+    # None
+    def getStatsNumShown (self):
+        with connection.cursor() as cursor:
+            cursor.execute("select n from probstats where probId= %s", [self.pk])
+            row = cursor.fetchone()
+            if row:
+                return row[0]
+            else: return None
 
 
     def toJSON (self):
