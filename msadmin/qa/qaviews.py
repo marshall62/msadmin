@@ -7,7 +7,7 @@ from datetime import datetime
 
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
-from msadminsite.settings import QUICKAUTH_PROB_DIRNAME
+from msadminsite.settings import QUICKAUTH_PROB_DIRNAME, SNAPSHOT_DIRNAME
 from .qauth_model import *
 from .util import deleteMediaDir, write_file
 
@@ -34,7 +34,7 @@ def create_problem (request):
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'qaDir': QA_DIR})
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead

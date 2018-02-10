@@ -759,9 +759,12 @@
                     </div>
                     <br>
                     {% if problem.hasSnapshot %}
-                        <img src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
-                             onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
-                             onmouseout="this.width='70'; this.height='70';" width="70" height="70">
+                        <div class="form-group">
+                            <label for="snapshotPreview">Snapshot Image</label>
+                            <img id="snapshotPreview" src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
+                                 onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
+                                 onmouseout="this.width='70'; this.height='70';" width="70" height="70">
+                        </div>
                     {% endif %}
                     <br>
                     <div class="row">
