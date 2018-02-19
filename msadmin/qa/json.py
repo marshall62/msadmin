@@ -4,7 +4,7 @@ from msadminsite.settings import SNAPSHOT_DIRNAME
 from .util import  write_file
 import re
 
-from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, ProblemLayout
+from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
 
 
@@ -283,7 +283,7 @@ def deleteMedia (request, probId):
 
 
 def getLayouts (request):
-    layouts = ProblemLayout.objects.all()
+    layouts = FormatTemplate.objects.all()
     # create a list of layout objects in json
     a = [l.toJSON() for l in layouts]
     return JsonResponse(a,safe=False)

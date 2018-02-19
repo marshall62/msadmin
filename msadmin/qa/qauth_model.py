@@ -13,7 +13,8 @@ class Problem (models.Model):
     standardId = models.CharField(max_length=45)
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
-    layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
+    # layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
+    layout = models.ForeignKey('FormatTemplate',db_column='layoutID')
     imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
     audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True)
     created_at = models.DateTimeField(db_column='createTimestamp', auto_now_add=True)
@@ -320,6 +321,26 @@ class ProblemLayout (models.Model):
         d['name'] = self.name
         d['description'] = self.description
         return d
+
+
+class FormatTemplate (models.Model):
+    description = models.CharField(max_length=100)
+    problemFormat = models.TextField()
+    enabled = models.BooleanField()
+
+    class Meta:
+        db_table = "quickauthformattemplates"
+
+    # A little confusing.  The description field serves as a name.   The problemFormat field has the whole string of formatting commands.
+    #  The name is put in a pulldown menu.   Right now the names are things like "template 1" , "template 2".  This is because I don't understand
+    # the problemFormat string well enough to translate it to a meaningful name that describes what the format is doing.
+    def toJSON (self):
+        d = {}
+        d['id'] = self.pk
+        d['name'] = self.description
+        d['description'] = self.problemFormat
+        return d
+
 
 class ProblemMediaFile (models.Model):
     filename = models.CharField(max_length=100)

@@ -85,7 +85,7 @@ def save_problem (request):
             answers = post.getlist('shortanswer[]')
             correctAnswer = None # want all the answers to go into the problemAnswers table - not into problem.answer
         audioResource = post['audioResource']
-        layoutId = post['layout']
+        layoutTemplateId = post['layout']
         # authorNotes = post['authorNotes']
         # creator = post['creator']
         # lastModifier = post['lastModifier']
@@ -118,7 +118,7 @@ def save_problem (request):
             # handled automatically
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
-                        questType=questType, audioResource=audioResource, layout_id=layoutId,
+                        questType=questType, audioResource=audioResource, layout_id=layoutTemplateId,
                         creator=user,lastModifier=user,created_at=now)
             p.save()
             if initDifficulty != -1:
@@ -128,7 +128,7 @@ def save_problem (request):
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
-                        questType=questType, layout_id=layoutId,lastModifier=user)
+                        questType=questType, layout_id=layoutTemplateId,lastModifier=user)
             if initDifficulty != -1 and selectProblemDifficulty(id):
                 updateProblemDifficulty(id,initDifficulty)
             else: insertProblemDifficulty(id,initDifficulty)
