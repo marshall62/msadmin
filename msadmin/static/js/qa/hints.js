@@ -70,6 +70,7 @@ function loadHintDialogData(id, theHint, problemPath) {
     // console.log("mounting " );
     mountImagePlacementPulldown(theHint.placement);
     setHintErrorMessage('');
+    $('#hintSaveMessage').html('');
     // close all accordions before opening
     $('.collapse').collapse('hide')
 }
@@ -239,8 +240,9 @@ function saveHint (isExit) {
             // If the dialog is being exited, we validate hints and take the dialog down.
             // If the dialog is continued, we refresh its fields with new hint data from the server.
             theHint = data.hint;
-            message = data.message;
-            succeeded = data.success==1; // errors deleting media files => 0
+            var message = data.message;
+            var savemessage = data.saveMessage;
+            var succeeded = data.success==1; // errors deleting media files => 0
             if (hintEditMode == NEW_HINT) {
                 theProblem.numHints++;
                 addHintRow2(theHint);
@@ -257,6 +259,7 @@ function saveHint (isExit) {
                 refreshHintDialog(theHint.id, problemDir);
                 setHintErrorMessage(message);
             }
+            $('#hintSaveMessage').html(savemessage);
             setWaitCursor(false);
 
         }

@@ -1,5 +1,5 @@
 import os
-
+import re
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
@@ -163,10 +163,37 @@ def save_problem (request):
         else:
             deleteProblemAnswers(p)
             saveProblemShortAnswers(p, correctAnswer, answers)
-    return redirect("qauth_edit_prob",probId=probId)
+    # return redirect("qauth_edit_prob",probId=probId)
+    hints = Hint.objects.filter(problem=p).order_by('order')
+    msg = validateMediaRefs(p)
+    errors = True
+    if not msg:
+        msg = 'Saved successfully'
+        errors = False
 
+    return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
-
+# Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
+def validateMediaRefs (problem):
+    mediaFiles = problem.getMediaFiles()
+    p = r'\{\[(.*?)\]\}'
+    match = re.findall(p,problem.statementHTML)
+    unresolved = []
+    for ref in match:
+        found = False
+        for f in mediaFiles:
+            if ref.strip() == f.filename:
+                found = True
+                break
+        if not found:
+            unresolved.append(ref)
+    if len(unresolved) > 0:
+        s = "Warning: The following media files were referenced in the statement but are not uploaded in the media files section: <ul style='color: red'>"
+        for f in unresolved:
+            s += "<li>" + f + "</li>"
+        s += "</ul>"
+        return s
+    return None
 
 def deleteHints (request, probId):
     if request.method == "POST":

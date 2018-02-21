@@ -129,6 +129,7 @@
                     return false;
                 }
             }
+            // validate that the media refs in the statement refer to a file in the media files list.
             if (false) {
                 alert("Form is not valid");
                 return false;
@@ -405,6 +406,7 @@
     <h3>Create a new math problem</h3>
     {% else %}
     <h3>Edit a math problem</h3>
+    {% if errors %}<span style="color:red;">There are errors that must be corrected. See message below</span>{% endif %}
     {% endif %}
 
     <form method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_prob' %}">
@@ -629,6 +631,10 @@
         <button id="previewButton" class="btn btn-primary">Preview</button>
         {% endif %}
         </div>
+
+        {% if message %}
+            <p style="color: red" id="problemMessage">{% autoescape off %}{{ message }}{% endautoescape %}</p>
+        {% endif %}
 
     </form>
 
@@ -932,7 +938,7 @@
 
 
                         </div>
-
+                    <p style="color:red;"  id="hintSaveMessage"></p>
                     </form>
                 </div>
 

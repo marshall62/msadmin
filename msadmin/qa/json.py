@@ -184,7 +184,7 @@ def saveHints (request, probId):
 # Produce a message describing why the media files (pmfs) cannot be deleted from the hint
 def produceHintMediaDeleteMessage (hint, pmfs):
     if len(pmfs) == 0:
-        return "Saved."
+        return ""
     str= "The following media files cannot be deleted from the hint:<ul>"
     for f in pmfs:
         str += createRefMessage(hint.imageFile_id,hint.audioFile_id,f)
@@ -261,12 +261,43 @@ def saveHint (request, probId):
     # finally process any delete requests that are included as media file ids
     delHintMediaFileIds = post.getlist('deletehMediaFile[]') # ids of selected media files to delete
     fails = processHintDeleteMediaFiles(delHintMediaFileIds, h) # returns PMF objs that couldn't be deleted
-    msg = produceHintMediaDeleteMessage(h,fails) # Produce error message about why media couldn't delete
+    mediaDelMsg = produceHintMediaDeleteMessage(h,fails) # Produce error message about why media couldn't delete
+    hintSaveMsg = validateMediaRefs(h)
+    if not hintSaveMsg:
+        hintSaveMsg = "Saved"
+
     json = h.toJSON()
-    success = 1 if len(fails) == 0 else 0
-    d = {'hint': json, 'success': success, 'message': msg}
+    success = 1 if len(fails) == 0 and not hintSaveMsg else 0
+    d = {'hint': json, 'success': success, 'message': mediaDelMsg, 'saveMessage': hintSaveMsg}
     return JsonResponse(d)
     # return redirect("qauth_edit_prob",probId=probId)
+
+
+# Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
+def validateMediaRefs (hint):
+    mediaFiles = hint.getMediaFiles()
+    p = r'\{\[[ ]*([^,]*?)[ ]*\]\}'
+    q = r'\{\[[ ]*([^,]*?)[ ]*,.*?\]\}'
+    r = p + '|' + q
+    match = re.findall(r,hint.statementHTML)
+    # results are a list of of tuples like [('', 'blee.jpg'), ('bar.jpg', ''), ...]
+    unresolved = []
+    for ref in match:
+        found = False
+        ref = ref[0] if ref[0] != '' else ref[1]
+        for f in mediaFiles:
+            if ref == f.filename:
+                found = True
+                break
+        if not found:
+            unresolved.append(ref)
+    if len(unresolved) > 0:
+        s = "Saved.<br>Warning: The following media files were referenced in the statement but are not uploaded in the media files section: <ul style='color: red'>"
+        for f in unresolved:
+            s += "<li>" + f + "</li>"
+        s += "</ul>"
+        return s
+    return None
 
 
 def deleteMedia (request, probId):
