@@ -163,15 +163,15 @@ def save_problem (request):
         else:
             deleteProblemAnswers(p)
             saveProblemShortAnswers(p, correctAnswer, answers)
-    # return redirect("qauth_edit_prob",probId=probId)
-    hints = Hint.objects.filter(problem=p).order_by('order')
-    msg = validateMediaRefs(p)
-    errors = True
-    if not msg:
-        msg = 'Saved successfully'
-        errors = False
+        # return redirect("qauth_edit_prob",probId=probId)
+        hints = Hint.objects.filter(problem=p).order_by('order')
+        msg = validateMediaRefs(p)
+        errors = True
+        if not msg:
+            msg = 'Saved successfully'
+            errors = False
 
-    return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+        return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
 def validateMediaRefs (problem):

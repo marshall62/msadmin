@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from msadmin.login import login
 import msadmin.views
 
 urlpatterns = [
-    url(r'^login/$', auth_views.login, name='login'), # uses template in msadmin/registration/login.html
-    # url(r'^', include('django.contrib.auth.urls'), name='login'),
+    # url(r'^login/$', auth_views.login, name='login'), # uses template in msadmin/registration/login.html
+    url(r'^login/$', login, name='login'), # uses template in msadmin/registration/login.html
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^$', msadmin.views.main, name='msadmin_main'),
