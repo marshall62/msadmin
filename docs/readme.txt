@@ -65,6 +65,8 @@ Edit /etc/httpd/conf.d/wsgi.conf to use this new venv
 
 Update the database to be compatible with django 2
 
+Make sure the MathspringServer db user has ALTER privileges on db!
+
 source /env-msadmin-py345-dj2/bin/activate
 () python3 manage.py migrate
 

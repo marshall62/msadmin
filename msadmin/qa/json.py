@@ -263,11 +263,10 @@ def saveHint (request, probId):
     fails = processHintDeleteMediaFiles(delHintMediaFileIds, h) # returns PMF objs that couldn't be deleted
     mediaDelMsg = produceHintMediaDeleteMessage(h,fails) # Produce error message about why media couldn't delete
     hintSaveMsg = validateMediaRefs(h)
-    if not hintSaveMsg:
-        hintSaveMsg = "Saved"
-
     json = h.toJSON()
     success = 1 if len(fails) == 0 and not hintSaveMsg else 0
+    if not hintSaveMsg:
+        hintSaveMsg = "Saved"
     d = {'hint': json, 'success': success, 'message': mediaDelMsg, 'saveMessage': hintSaveMsg}
     return JsonResponse(d)
     # return redirect("qauth_edit_prob",probId=probId)
