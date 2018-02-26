@@ -17,6 +17,60 @@ Debian and Ubuntu use it to provide both python-mysqldb andpython3-mysqldb packa
 5.   (env) pip3 install mysqlclient
 6.   (env) pip3 install django
 7    (env) deactivate
+---------------------------------------------------------------------
+NOtes on Upgrading to Django 2.0 on 2/26/18:
+
+Mr Charlie:
+
+cd /srv/fastdisk/dev/pythondev/msadmin
+virtualenv -p python3 dj2-env
+source dj2-env/bin/activate
+() pip3 install mysqlclient
+() pip3 install -U Django
+() deactivate
+Make Intellij project use this virtualenv:
+Project Structure | Project | + | Python SDK | Add local | navigate to dj2-env/bin/python3.5
+Name this python SDK something like dj2-env
+Make sure project and modules all use this SDK
+Verified that project is running with the correct django.   Run python in venv:
+
+import django
+
+print(django.VERSION) in some code and checking it prints 2.0.2
+
+Place a similar line somewhere in server code and run webapp.  Make sure it is 2.0.2
+
+Had to modify the ForeignKeys to have on_delete=models.PROTECT and some have related_model="+" where there is confusion about backward refs
+Finally,  Django gives message that there 1 unapplied migration and so I followed its instructions and did
+source dj2-env/bin/activate
+() python3 manage.py migrate
+I get this error:
+?: (mysql.W002) MySQL Strict Mode is not set for database connection 'default'
+	HINT: MySQL's Strict Mode fixes many data integrity problems in MySQL, such as data truncation upon insertion, by escalating warnings into errors. It is strongly recommended you activate it. See: https://docs.djangoproject.com/en/2.0/ref/databases/#mysql-sql-mode
+But I find that the database is defined in settings.py and has the below which is supposed to take care of this problem.
+'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+
+
+On Rose (upgrade to Django 2)
+
+cd /mnt/net/django/msadmin
+virtualenv env-msadmin-py345-dj2
+source /env-msadmin-py345-dj2/bin/activate
+() pip3 install mysqlclient
+() pip3 install -U Django
+() deactivate
+
+Edit /etc/httpd/conf.d/wsgi.conf to use this new venv
+
+Update the database to be compatible with django 2
+
+source /env-msadmin-py345-dj2/bin/activate
+() python3 manage.py migrate
+
+restart httpd
+
+---------------------------------------------
 
 TO use this python environment:
 
@@ -164,10 +218,16 @@ Test:
 python manage.py runserver
 Can only hit the localhost:8000
 
-Set up mod_wsgi for apache as in /httpd/conf.d/wsgi.conf
+Set up mod_wsgi for apache as in /etc/httpd/conf.d/wsgi.conf
 (last line is specific for centos)
 WSGISocketPrefix /var/run/wsgi
 
+Note that the wsgi.conf has the path to the virtualenv that will run
+WSGIDaemonProcess rose.cs.umass.edu python-home=/mnt/net/django/msadmin/env-msad
+min-py3-4 python-path=/mnt/net/django/msadmin
+
+2/24/18 Upgraded to Django 2 and created a new virtualenv
+ /env-msadmin-py34-dj2
 
 The static directory should be served by apache because it is CSS.
 

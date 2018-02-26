@@ -74,8 +74,8 @@ class Test (models.Model):
         m.save()
 
 class TestQuestionMap (models.Model):
-    question = models.ForeignKey(Question,db_column='probId', related_name='link2Test')
-    test = models.ForeignKey(Test,db_column='testId')
+    question = models.ForeignKey(Question,db_column='probId', related_name='link2Test', on_delete=models.PROTECT)
+    test = models.ForeignKey(Test,db_column='testId', on_delete=models.PROTECT)
     position = models.IntegerField()
 
     class Meta:

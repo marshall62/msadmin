@@ -11,7 +11,7 @@ class ISParamBase (models.Model):
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=1000)
     description = models.CharField(max_length=500)
-    interventionSelector = models.ForeignKey('InterventionSelector',db_column='intervention_selector_id')
+    interventionSelector = models.ForeignKey('InterventionSelector',db_column='intervention_selector_id', on_delete=models.PROTECT)
 
     class Meta:
         db_table = "is_param_base"
@@ -214,10 +214,10 @@ class StrategyComponent(models.Model):
 class Strategy (models.Model):
     name = models.CharField(max_length=45)
     # THe use of the related_name is a response to a compile error.  I don't fully understand.
-    lesson = models.ForeignKey(StrategyComponent,db_column='lesson_sc_id',related_name='StrategyLesson')
-    login = models.ForeignKey(StrategyComponent,db_column='login_sc_id',related_name='StrategyLogin')
-    tutor = models.ForeignKey(StrategyComponent,db_column='tutor_sc_id',related_name='StrategyTutor')
-    lc = models.ForeignKey('LC',db_column='lcid')
+    lesson = models.ForeignKey(StrategyComponent,db_column='lesson_sc_id',related_name='StrategyLesson', on_delete=models.PROTECT)
+    login = models.ForeignKey(StrategyComponent,db_column='login_sc_id',related_name='StrategyLogin', on_delete=models.PROTECT)
+    tutor = models.ForeignKey(StrategyComponent,db_column='tutor_sc_id',related_name='StrategyTutor', on_delete=models.PROTECT)
+    lc = models.ForeignKey('LC',db_column='lcid', on_delete=models.PROTECT)
     description = models.TextField();
 
     class Meta:
@@ -235,9 +235,9 @@ class Strategy (models.Model):
 #  TODO Need to be able to change the learning companion that is assigned to the strategy for a class.
 class Strategy_Class (models.Model):
     # Note:  A custom strategy made from components will not refer to a strategy it can be None (or null in the strategyId column)
-    strategy = models.ForeignKey(Strategy, db_column="strategyId", null=True)
-    theClass = models.ForeignKey('Class', db_column="classId")
-    lc = models.ForeignKey('LC',db_column='lcid')
+    strategy = models.ForeignKey(Strategy, db_column="strategyId", null=True, on_delete=models.PROTECT)
+    theClass = models.ForeignKey('Class', db_column="classId", on_delete=models.PROTECT)
+    lc = models.ForeignKey('LC',db_column='lcid', on_delete=models.PROTECT)
     name = models.CharField(max_length=60)
     description = models.TextField();
 
@@ -270,9 +270,9 @@ class Strategy_Class (models.Model):
 
 
 class SC_Class (models.Model):
-    theClass = models.ForeignKey('Class', db_column='classId')
-    sc = models.ForeignKey(StrategyComponent, db_column='scId')
-    classStrategy = models.ForeignKey('Strategy_Class', db_column="strategy_class_id")
+    theClass = models.ForeignKey('Class', db_column='classId', on_delete=models.PROTECT)
+    sc = models.ForeignKey(StrategyComponent, db_column='scId', on_delete=models.PROTECT)
+    classStrategy = models.ForeignKey('Strategy_Class', db_column="strategy_class_id", on_delete=models.PROTECT)
 
     class Meta:
         db_table = "sc_class"
@@ -330,8 +330,8 @@ class SC_Class (models.Model):
 # figure out how to override the Model constructor.   They all break in various ways.
 class SCISMap (models.Model):
 
-    strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id")
-    interventionSelector = models.ForeignKey(InterventionSelector, db_column="intervention_selector_id")
+    strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id", on_delete=models.PROTECT)
+    interventionSelector = models.ForeignKey(InterventionSelector, db_column="intervention_selector_id", on_delete=models.PROTECT)
     config = models.TextField(db_column='config',blank=True)
 
     # def __init__ (self, *args, **kwargs):
@@ -377,8 +377,8 @@ class InterventionSelectorParam(models.Model):
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=1000)
     isActive = models.BooleanField()
-    baseParam = models.ForeignKey(ISParamBase, db_column="paramid")
-    scismap = models.ForeignKey(SCISMap, db_column="sc_is_map_id",verbose_name="StrategyComponent:InterventionSelector")
+    baseParam = models.ForeignKey(ISParamBase, db_column="paramid", on_delete=models.PROTECT)
+    scismap = models.ForeignKey(SCISMap, db_column="sc_is_map_id",verbose_name="StrategyComponent:InterventionSelector", on_delete=models.PROTECT)
 
     def getPossibleValues (self):
         return self.baseParam.getPossibleValues()
@@ -421,8 +421,8 @@ def firstN (str,n):
     return str[0:n]
 
 class SCParamMap (models.Model):
-    strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id")
-    param = models.ForeignKey(StrategyComponentParam, db_column="sc_param_id")
+    strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id", on_delete=models.PROTECT)
+    param = models.ForeignKey(StrategyComponentParam, db_column="sc_param_id", on_delete=models.PROTECT)
 
     class Meta:
         db_table = "sc_param_map"
@@ -474,9 +474,9 @@ https://github.com/simone/django-compositekey
 '''
 
 class ClassSCParam (models.Model):
-    scParam = models.ForeignKey(StrategyComponentParam, db_column="sc_param_id",verbose_name="Strategy Component Param")
-    theClass = models.ForeignKey(Class, db_column="classId",verbose_name="Class")
-    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class Strategy Component")
+    scParam = models.ForeignKey(StrategyComponentParam, db_column="sc_param_id",verbose_name="Strategy Component Param", on_delete=models.PROTECT)
+    theClass = models.ForeignKey(Class, db_column="classId",verbose_name="Class", on_delete=models.PROTECT)
+    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class Strategy Component", on_delete=models.PROTECT)
     isActive = models.BooleanField()
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=200)
@@ -488,11 +488,11 @@ class ClassSCParam (models.Model):
         return str(self.theClass.name) + ":" + self.classSC.sc.name + "::" + self.name + "=" + self.value
 
 class ClassISParam (models.Model):
-    isParam = models.ForeignKey(ISParamBase, db_column="is_param_id",verbose_name="Intervention Selector Param")
+    isParam = models.ForeignKey(ISParamBase, db_column="is_param_id",verbose_name="Intervention Selector Param", on_delete=models.PROTECT)
     # Defined to allow Null in this fk
-    scisParam = models.ForeignKey(InterventionSelectorParam, db_column="scis_param_id",verbose_name="Intervention Selector Param")
-    theClass = models.ForeignKey(Class, db_column="classId", verbose_name="Class")
-    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class Strategy Component")
+    scisParam = models.ForeignKey(InterventionSelectorParam, db_column="scis_param_id",verbose_name="Intervention Selector Param", on_delete=models.PROTECT)
+    theClass = models.ForeignKey(Class, db_column="classId", verbose_name="Class", on_delete=models.PROTECT)
+    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class Strategy Component", on_delete=models.PROTECT)
     name = models.CharField(max_length=45)
     value = models.CharField(max_length=1000)
     isActive = models.BooleanField(db_column='isActive')
@@ -527,11 +527,11 @@ class ClassISParam (models.Model):
         return d
 
 class ClassSCISMap (models.Model):
-    ismap = models.ForeignKey(SCISMap, db_column="sc_is_map_id", verbose_name="Strategy Component: Intervention Selector")
-    theClass = models.ForeignKey(Class, db_column="classId", verbose_name="Class")
+    ismap = models.ForeignKey(SCISMap, db_column="sc_is_map_id", verbose_name="Strategy Component: Intervention Selector", on_delete=models.PROTECT)
+    theClass = models.ForeignKey(Class, db_column="classId", verbose_name="Class", on_delete=models.PROTECT)
     isActive = models.BooleanField()
     config = models.TextField()
-    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class SC")
+    classSC = models.ForeignKey(SC_Class, db_column="sc_class_id", verbose_name="Class SC", on_delete=models.PROTECT)
 
     class Meta:
         db_table = "class_sc_is_map"
@@ -541,7 +541,7 @@ class ClassSCISMap (models.Model):
 
 # Some Base ISParams have legal values.  This is a record of a legal value for a param.
 class ISParamValue (models.Model):
-    isParam = models.ForeignKey(ISParamBase, db_column="isparamid",verbose_name="Base IS Param")
+    isParam = models.ForeignKey(ISParamBase, db_column="isparamid",verbose_name="Base IS Param", on_delete=models.PROTECT)
     value = models.CharField(max_length=500)
 
     class Meta:
@@ -552,8 +552,8 @@ class ISParamValue (models.Model):
         return intsel.name + ": " + self.isParam.name + "=" + self.value
 
 class LC2Ruleset (models.Model):
-    lc = models.ForeignKey("LC",db_column="lcid")
-    ruleset = models.ForeignKey("Ruleset",db_column="rulesetid")
+    lc = models.ForeignKey("LC",db_column="lcid", on_delete=models.PROTECT)
+    ruleset = models.ForeignKey("Ruleset",db_column="rulesetid", on_delete=models.PROTECT)
     class Meta:
         db_table="lc_ruleset_map"
 

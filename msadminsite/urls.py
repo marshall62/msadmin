@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,8 +24,10 @@ import msadmin.views
 
 urlpatterns = [
     # url(r'^login/$', auth_views.login, name='login'), # uses template in msadmin/registration/login.html
-    url(r'^login/$', login, name='login'), # uses template in msadmin/registration/login.html
-    url(r'^logout/$', auth_views.logout, name='logout'),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    # url(r'^login/$', login, name='login'), # uses template in msadmin/registration/login.html
+    # url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^$', msadmin.views.main, name='msadmin_main'),
     url(r'^util_main/$',msadmin.views.util,name='util_main'),

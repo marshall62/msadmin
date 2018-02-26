@@ -30,13 +30,13 @@ class Machine (models.Model):
 
 
 class Machine2Part (models.Model):
-    machine = models.ForeignKey(Machine,db_column='machineId')
-    part = models.ForeignKey(Part,db_column='partId')
+    machine = models.ForeignKey(Machine,db_column='machineId', on_delete=models.PROTECT)
+    part = models.ForeignKey(Part,db_column='partId', on_delete=models.PROTECT)
     class Meta:
         db_table = "machine2part"
 
 class Machine2Owner (models.Model):
-    machine = models.ForeignKey(Machine,db_column='machineId')
-    owner = models.ForeignKey(Owner,db_column='ownerId')
+    machine = models.ForeignKey(Machine,db_column='machineId', on_delete=models.PROTECT)
+    owner = models.ForeignKey(Owner,db_column='ownerId', on_delete=models.PROTECT)
     class Meta:
         db_table = "machine2owner"

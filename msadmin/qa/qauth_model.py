@@ -14,9 +14,9 @@ class Problem (models.Model):
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
     # layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
-    layout = models.ForeignKey('FormatTemplate',db_column='layoutID')
-    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
-    audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True)
+    layout = models.ForeignKey('FormatTemplate',db_column='layoutID', on_delete=models.PROTECT)
+    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True, on_delete=models.PROTECT, related_name='+')
+    audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True, on_delete=models.PROTECT, related_name='+')
     created_at = models.DateTimeField(db_column='createTimestamp', auto_now_add=True)
     updated_at = models.DateTimeField(db_column='modTimestamp',auto_now=True)
     authorNotes = models.TextField()
@@ -230,7 +230,7 @@ class Problem (models.Model):
 class ProblemDifficulty (models.Model):
     diff_level = models.FloatField(db_column="diff_level")
     totalProbs = models.IntegerField()
-    problem = models.ForeignKey('Problem',db_column='problemId')
+    problem = models.ForeignKey('Problem',db_column='problemId', on_delete=models.PROTECT)
 
     class Meta:
         db_table = "overallprobdifficulty"
@@ -241,7 +241,7 @@ class ProblemAnswer (models.Model):
     hintText = models.CharField(max_length=200)
     order = models.IntegerField()
     bindingPosition = models.IntegerField()
-    problem = models.ForeignKey('Problem',db_column='probId')
+    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)
 
     class Meta:
         db_table = "problemanswers"
@@ -262,10 +262,10 @@ class Hint (models.Model):
     hoverText = models.CharField(max_length=200)
     order = models.IntegerField()
     givesAnswer = models.BooleanField()
-    problem = models.ForeignKey('Problem',db_column='problemId')
+    problem = models.ForeignKey('Problem',db_column='problemId', on_delete=models.PROTECT)
     # The foreign key to the problem media table is allowed to be null
-    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True)
-    audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True)
+    imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True, on_delete=models.PROTECT, related_name='+')
+    audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True, on_delete=models.PROTECT, related_name='+')
     placement = models.IntegerField() # 0,1,2
 
     DIR_PREFIX="hint_"
@@ -344,8 +344,8 @@ class FormatTemplate (models.Model):
 
 class ProblemMediaFile (models.Model):
     filename = models.CharField(max_length=100)
-    problem = models.ForeignKey('Problem',db_column='probId')
-    hint = models.ForeignKey('Hint',db_column='hintId',null=True)
+    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)
+    hint = models.ForeignKey('Hint',db_column='hintId',null=True, on_delete=models.PROTECT)
 
     class Meta:
         db_table = "problemmediafile"
