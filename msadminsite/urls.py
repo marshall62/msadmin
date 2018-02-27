@@ -19,14 +19,19 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from msadmin.login import login
+from msadmin.login import doLogin, doLogout, doPWReset, MyLoginView
 import msadmin.views
 
 urlpatterns = [
     # url(r'^login/$', auth_views.login, name='login'), # uses template in msadmin/registration/login.html
     # path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    # url(r'^login/$', login, name='login'), # uses template in msadmin/registration/login.html
+    # path ('login/',auth_views.LoginView.as_view(template_name='registration/login.html'),name='login'),
+    path ('login/', MyLoginView.as_view(),name='login'),
+    path ('logout/',auth_views.LogoutView.as_view(template_name='registration/logo.html'),name='logout'),
+    path ('password_reset/',auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form1.html'),name='password_reset'),
+    # url(r'^login/$', doLogin, name='login'), # uses template in msadmin/registration/login.html
+    # url(r'^logout/$', doLogout, name='logout'), # uses template in msadmin/registration/login.html
+    # url(r'^password_reset/$', doPWReset, name='password_reset'), # uses template in msadmin/registration/login.html
     # url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^$', msadmin.views.main, name='msadmin_main'),

@@ -6,7 +6,7 @@ import re
 
 from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
-
+from django.contrib.auth.decorators import login_required
 
 def getProblemMediaRefs (problem, mediaFile):
     refs = findRefsInMain(problem.imageFile_id, problem.audioFile_id,mediaFile)
@@ -104,6 +104,7 @@ def produceDeleteResults (p, fails):
     d = {'mediaFiles': mfs, 'notDeleted': nd, 'refs': ndmsgs}
     return d
 
+@login_required
 def save_problem_media (request, probId):
     if request.method == "POST":
         post = request.POST
@@ -121,6 +122,7 @@ def save_problem_media (request, probId):
 
 # URL: POST /problem/<id>/metaInfo
 # write the fields into the problem table and return nothing.
+@login_required
 def save_problem_meta_info (request, probId):
     if request.method == 'POST':
         post = request.POST
@@ -158,7 +160,7 @@ def save_problem_meta_info (request, probId):
         d = {'message': "Meta info Saved", 'lastWriteTime': p.updated_at}
         return JsonResponse(d)
 
-
+@login_required
 def getHint (request, hintId):
     h = get_object_or_404(Hint,pk=hintId)
     d = h.toJSON()
@@ -167,6 +169,7 @@ def getHint (request, hintId):
 
 # when the user drag and drops the hints to re-order them, we get a post with the new sequence order of ids.
 #  This means re-ordering the hints in the db
+@login_required
 def saveHints (request, probId):
     if request.method == "POST":
         post = request.POST
@@ -192,6 +195,7 @@ def produceHintMediaDeleteMessage (hint, pmfs):
     return str
 
 # When the user clicks save in the hint dialog this is called with the form inputs
+@login_required
 def saveHint (request, probId):
     if request.method == "POST":
         post = request.POST
@@ -298,7 +302,7 @@ def validateMediaRefs (hint):
         return s
     return None
 
-
+@login_required
 def deleteMedia (request, probId):
     if request.method == "POST":
         post = request.POST
@@ -311,14 +315,14 @@ def deleteMedia (request, probId):
     return JsonResponse({})
     # return redirect("qauth_edit_prob",probId=probId)
 
-
+@login_required
 def getLayouts (request):
     layouts = FormatTemplate.objects.all()
     # create a list of layout objects in json
     a = [l.toJSON() for l in layouts]
     return JsonResponse(a,safe=False)
 
-
+@login_required
 def getProblemJSON (request, probId):
     p = get_object_or_404(Problem,pk=probId)
     js = p.toJSON()
@@ -326,6 +330,7 @@ def getProblemJSON (request, probId):
 
 # This doesn't delete the image file.  It just dis-associates the image from the problem.
 # If its an imageFile we set the ID to null. If its an imageURL, we set it to null
+@login_required
 def removeProblemImage (request, probId):
     if request.method == "DELETE":
         p = get_object_or_404(Problem,pk=probId)
@@ -336,6 +341,7 @@ def removeProblemImage (request, probId):
 
 # This doesn't delete the audio file.  It just dis-associates the audio from the problem.
 # We set the audioResource and audioFile to None
+@login_required
 def removeProblemAudio (request, probId):
     if request.method == "DELETE":
         p = get_object_or_404(Problem,pk=probId)
@@ -346,6 +352,7 @@ def removeProblemAudio (request, probId):
 
 # This doesn't delete the audio file.  It just dis-associates the audio from the hint.
 # We set the audioResource and audioFile to None
+@login_required
 def removeHintAudio (request, hintId):
     if request.method == "DELETE":
         p = get_object_or_404(Hint,pk=hintId)
@@ -356,6 +363,7 @@ def removeHintAudio (request, hintId):
 
 # This doesn't delete files.  It just dis-associates the image from the hint
 # by setting the hints imageURL and imageFile to be null
+@login_required
 def removeHintImage (request, hintId):
     if request.method == "DELETE":
         h = get_object_or_404(Hint,pk=hintId)

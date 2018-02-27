@@ -10,13 +10,16 @@ from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProb
 from msadminsite.settings import QUICKAUTH_PROB_DIRNAME, SNAPSHOT_DIRNAME
 from .qauth_model import *
 from .util import deleteMediaDir, write_file
-
+from django.contrib.auth.decorators import login_required
 # settings.py has the name of the dir where quickAuth problems should be stored.
 QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
 
 # CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
 
+#@staff_member_required   will increase the security of a view function
+
 # Shows the main page of the site
+@login_required
 def main (request):
     probs = Problem.get_quickAuth_problems()
     return render(request, 'msadmin/qa/qauth_main.html', {'problems': probs})
@@ -28,9 +31,11 @@ def reactTest(request):
 
 # support for AJAX call from a checkbox next to a intervention-selector node in the jstree
 # It will set the isActive field in the class_sc_is_map table to true or false.
+@login_required
 def create_problem (request):
     return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'qaDir': QA_DIR})
 
+@login_required
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
@@ -38,6 +43,7 @@ def edit_problem (request, probId):
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead
+@login_required
 def saveMedia(probId, name, file):
     # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
     fs = FileSystemStorage()
@@ -62,6 +68,7 @@ def saveMedia(probId, name, file):
 def getLoggedInUsername():
     return "dave"
 
+@login_required
 def save_problem (request):
     if request.method == "POST":
         post = request.POST
@@ -110,7 +117,8 @@ def save_problem (request):
             audFile = request.FILES['audioFile']
             audioResource= '{['+audFile.name+']}'
 
-        user = getLoggedInUsername()
+        # user = getLoggedInUsername()
+        uname = request.user.username
         if not id:
             now = datetime.now()
             # We can't rely on mysql CURRENT_TIME to work on the created_at field because it is old version of MySQL
@@ -119,7 +127,7 @@ def save_problem (request):
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
                         questType=questType, audioResource=audioResource, layout_id=layoutTemplateId,
-                        creator=user,lastModifier=user,created_at=now)
+                        creator=uname,lastModifier=uname,created_at=now)
             p.save()
             if initDifficulty != -1:
                 insertProblemDifficulty(str(p.pk),initDifficulty)
@@ -128,7 +136,7 @@ def save_problem (request):
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
-                        questType=questType, layout_id=layoutTemplateId,lastModifier=user)
+                        questType=questType, layout_id=layoutTemplateId,lastModifier=uname)
             if initDifficulty != -1 and selectProblemDifficulty(id):
                 updateProblemDifficulty(id,initDifficulty)
             else: insertProblemDifficulty(id,initDifficulty)
@@ -195,6 +203,7 @@ def validateMediaRefs (problem):
         return s
     return None
 
+@login_required
 def deleteHints (request, probId):
     if request.method == "POST":
         post = request.POST

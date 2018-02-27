@@ -1,65 +1,21 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script
-            src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-            crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'css/strategy.css' %}">
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    {#     Goto https://www.google.com/fonts to get fonts like this! #}
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
-
-    {% block page-css %}
-    {% endblock %}
-    {% block ajax-js %}
-    {% endblock %}
-    {% block page-js %}
-    {% endblock %}
-
-    <meta charset="UTF-8">
-    <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
-    <title>Mathspring Admin Tool</title>
-
-
-</head>
-<body>
-<div class="page-header">
-    <div style="left: 0;">
-        <img src="{% static 'images/apple-touch-icon.png' %}" width="60" height="60">
-    </div>
-    <div style="position: absolute; top: 10px; width: 600px; height: 50px; left: 120px;"> <h1><a href="/">MathSpring Admin Tool</a></h1></div>
-
-</div>
-<nav class="navbar "  >
-    <div class="container-fluid">
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="{% url 'util_main'%}">Utilities</a></li>
-            <li class="active"><a href="{% url 'strat_main'%}">Tutoring Strategies</a></li>
-            <li class="active"><a href="{% url 'qauth_main'%}">Math Problems</a></li>
-            <li class="active"><a href="{% url 'testauth_main'%}">Surveys</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-        </ul>
-    </div>
-</nav>
-
-
-<div class="content container">
-    <div class="row">
-        <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
+{% extends 'msadmin/base0.html' %}
+{% block navbar %}
+    <nav class="navbar "  >
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{% url 'util_main'%}">Utilities</a></li>
+                <li class="active"><a href="{% url 'strat_main'%}">Tutoring Strategies</a></li>
+                <li class="active"><a href="{% url 'qauth_main'%}">Math Problems</a></li>
+                <li class="active"><a href="{% url 'testauth_main'%}">Surveys</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li>User: {{ user.get_username }}</li>
+                    <li><a href="{% url 'logout'%}?next={{request.path}}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+{#                {% else %}#}
+{#                    <li><a href="{% url 'login'%}?next={{request.path}}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>#}
+                {% endif %}
+            </ul>
         </div>
-    </div>
-</div>
-</body>
-
-</body>
-</html>
+    </nav>
+{% endblock %}
