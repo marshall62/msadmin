@@ -1,4 +1,5 @@
 {% extends 'msadmin/base0.html' %}
+{% load util %}
 {% block navbar %}
     <nav class="navbar "  >
         <div class="container-fluid">
@@ -7,6 +8,9 @@
                 <li class="active"><a href="{% url 'strat_main'%}">Tutoring Strategies</a></li>
                 <li class="active"><a href="{% url 'qauth_main'%}">Math Problems</a></li>
                 <li class="active"><a href="{% url 'testauth_main'%}">Surveys</a></li>
+                {% if request.user|has_group:"userAuthor" %}
+                    <li class="active"><a href="{% url 'users_main'%}">Users</a></li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}

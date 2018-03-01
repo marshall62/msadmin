@@ -1,0 +1,36 @@
+{% extends "msadmin/base_ajax.html" %}
+
+{% block content %}
+    <p>Register a new author</p>
+
+
+    {% if form.errors %}
+        <p>{{ form.error_messages }}</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'users_main' %}">
+        {% csrf_token %}
+
+        <div>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </div>
+        <div>
+            <td>{{ form.email.label_tag }}</td>
+            <td>{{ form.email }}</td>
+        </div>
+        <div>
+            <td>{{ form.password1.label_tag }}</td>
+            <td>{{ form.password1 }}</td>
+        </div>
+        <div>
+            <td>{{ form.password2.label_tag }}</td>
+            <td>{{ form.password2 }}</td>
+        </div>
+        <div>
+            <input type="submit" value="register" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+    {{ success }}
+    </form>
+{% endblock %}

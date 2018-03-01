@@ -1,19 +1,39 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
+
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from msadminsite.settings import SESSION_INACTIVITY_TIMEOUT_MIN
 import django
 
-class MyLoginView (auth_views.LoginView):
-    template_name= "registration/login.html"
-    name="login"
 
-    # Override the superclass so that we can set a timeout on the session.
-    def form_valid(self, form):
-        """Security check complete. Log the user in."""
-        result = super().form_valid(form)
-        self.request.session.set_expiry(60 * SESSION_INACTIVITY_TIMEOUT_MIN)
-        return result
+class UserCreateForm(UserCreationForm):
+    username = forms.CharField(required = True, max_length = 30)
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required = False, max_length = 30)
+    last_name = forms.CharField(required = False, max_length = 30)
+
+    # class Meta:
+    #     model = User
+    #     fields = ("username", "email", "password1", "password2")
+
+    def clean(self, *args, **kwargs):
+        """
+        Normal cleanup + username generation.
+        """
+        cleaned_data = super(UserCreationForm, self).clean(*args, **kwargs)
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        user.email = self.cleaned_data["email"]
+        # user.first_name = self.cleaned_data['first_name']
+        # user.last_name = self.cleaned_data['last_name']
+        if commit:
+            user.save()
+        return user
 
 ######## Unused stuff below
 
