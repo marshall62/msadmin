@@ -28,9 +28,11 @@
     <textarea name="answer"></textarea>
 {% else %}
 <table>
-    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="a"> </td> <td> {{ qobj.aChoice|safe }}  </td></tr>
+    {% if qobj.aChoice %}
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="a"> </td> <td> {{ qobj.aChoice|safe }}  </td></tr>
+    {% endif %}
     {% if qobj.bChoice %}
-    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="b">  </td> <td> {{ qobj.bChoice|safe }}  </td></tr>
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="b">  </td> <td> {{ qobj.bChoice|safe }}  </td></tr>
     {% endif %}
     {% if qobj.cChoice != None %}
         <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="c">  </td> <td> {{ qobj.cChoice|safe }}  </td></tr>

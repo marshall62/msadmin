@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -135,17 +135,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questionPreview.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="questionPreview.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
-              <caret line="34" column="31" lean-forward="false" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+              <caret line="34" column="8" lean-forward="false" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="373">
@@ -313,9 +313,9 @@
         <option value="$PROJECT_DIR$/msadmin/users/views.py" />
         <option value="$PROJECT_DIR$/docs/todo.txt" />
         <option value="$PROJECT_DIR$/msadmin/testauth/util/migrate_images.py" />
-        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
         <option value="$PROJECT_DIR$/msadmin/testauth/questions.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" />
+        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
       </list>
     </option>
   </component>
@@ -1067,14 +1067,7 @@
       <workItem from="1519656256075" duration="1627000" />
       <workItem from="1519659657349" duration="368000" />
       <workItem from="1519662932594" duration="34979000" />
-      <workItem from="1520526745087" duration="10479000" />
-    </task>
-    <task id="LOCAL-00012" summary="FIxed some bugs">
-      <created>1504874277662</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1504874277662</updated>
+      <workItem from="1520526745087" duration="10577000" />
     </task>
     <task id="LOCAL-00013" summary="Added ability to copy a strategy from another class">
       <created>1505759087165</created>
@@ -1412,11 +1405,18 @@
       <option name="project" value="LOCAL" />
       <updated>1520890802554</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="set fields empty fields to None.">
+      <created>1520892368967</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1520892368967</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1189631000" />
+    <option name="totallyTimeSpent" value="1189729000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1965,14 +1965,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="34" column="31" lean-forward="false" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
@@ -1985,6 +1977,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="34" column="8" lean-forward="false" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="8" />
           <folding />
         </state>
       </provider>
