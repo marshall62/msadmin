@@ -28,18 +28,18 @@
     <textarea name="answer"></textarea>
 {% else %}
 <table>
-    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="a"> </td> <td> {{ qobj.aChoice }}  </td></tr>
+    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="a"> </td> <td> {{ qobj.aChoice|safe }}  </td></tr>
     {% if qobj.bChoice %}
-    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="b">  </td> <td> {{ qobj.bChoice }}  </td></tr>
+    <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="b">  </td> <td> {{ qobj.bChoice|safe }}  </td></tr>
     {% endif %}
     {% if qobj.cChoice %}
-        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="c">  </td> <td> {{ qobj.cChoice }}  </td></tr>
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="c">  </td> <td> {{ qobj.cChoice|safe }}  </td></tr>
     {% endif %}
     {% if qobj.dChoice %}
-        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="d">  </td> <td> {{ qobj.dChoice }}  </td></tr>
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="d">  </td> <td> {{ qobj.dChoice|safe }}  </td></tr>
     {% endif %}
     {% if qobj.eChoice %}
-        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="e">  </td> <td> {{ qobj.eChoice }}  </td></tr>
+        <tr><td> <input type="radio" name="multiChoiceCorrectAnswer" value="e">  </td> <td> {{ qobj.eChoice|safe }}  </td></tr>
     {% endif %}
 
 </table>
