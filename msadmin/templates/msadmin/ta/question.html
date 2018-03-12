@@ -164,12 +164,20 @@
             <tr>
                 <td> <input type="radio" name="multiChoiceCorrectAnswer" value="a" {% if question.answer == 'a' %} checked> {% endif %}</td>
                 <td>Choice A:</td>
-                <td><input type="text" name="aAns" size="60" value="{{ question.aChoice }}"></td>
+                {% if question.aChoice %}
+                    <td><input type="text" name="aAns" size="60" value="{{ question.aChoice }}"></td>
+                {% else %}
+                    <td><input type="text" name="aAns" size="60"></td>
+                {% endif %}
             </tr>
             <tr>
                 <td> <input type="radio" name="multiChoiceCorrectAnswer" value="b" {% if question.answer == 'b' %} checked> {% endif %}</td>
                 <td>Choice B:</td>
-                <td><input type="text" name="bAns" size="60" value="{{ question.bChoice }}"></td>
+                {% if question.bChoice %}
+                    <td><input type="text" name="bAns" size="60" value="{{ question.bChoice }}"></td>
+                {% else %}
+                    <td><input type="text" name="bAns" size="60"></td>
+                {% endif %}
             </tr>
 
             <tr>

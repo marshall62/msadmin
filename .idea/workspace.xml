@@ -145,21 +145,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="questions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
-              <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
+            <state relative-caret-position="373">
+              <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="question.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="question.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="198" column="32" lean-forward="false" selection-start-line="198" selection-start-column="32" selection-end-line="198" selection-end-column="32" />
+            <state relative-caret-position="122">
+              <caret line="169" column="53" lean-forward="false" selection-start-line="169" selection-start-column="53" selection-end-line="169" selection-end-column="53" />
               <folding />
             </state>
           </provider>
@@ -1067,14 +1067,7 @@
       <workItem from="1519656256075" duration="1627000" />
       <workItem from="1519659657349" duration="368000" />
       <workItem from="1519662932594" duration="34979000" />
-      <workItem from="1520526745087" duration="9572000" />
-    </task>
-    <task id="LOCAL-00011" summary="Worked in the ability to create a custom strategies for a class by selecting 3 components.">
-      <created>1502806188052</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1502806188052</updated>
+      <workItem from="1520526745087" duration="10479000" />
     </task>
     <task id="LOCAL-00012" summary="FIxed some bugs">
       <created>1504874277662</created>
@@ -1412,11 +1405,18 @@
       <option name="project" value="LOCAL" />
       <updated>1520890210541</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="set fields empty fields to None.">
+      <created>1520890802554</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1520890802554</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1188724000" />
+    <option name="totallyTimeSpent" value="1189631000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1482,7 +1482,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a main page for the site." />
     <MESSAGE value="Started building testauth (port from node.js) into the site." />
     <MESSAGE value="Finished port of pretest survey author" />
     <MESSAGE value="added image upload and preview to Questions" />
@@ -1507,7 +1506,8 @@
     <MESSAGE value="made testauth question preview show HTML in multichoices" />
     <MESSAGE value="check c,d,e choices to be != None" />
     <MESSAGE value="Set multi choice answers to None if not provided" />
-    <option name="LAST_COMMIT_MESSAGE" value="Set multi choice answers to None if not provided" />
+    <MESSAGE value="set fields empty fields to None." />
+    <option name="LAST_COMMIT_MESSAGE" value="set fields empty fields to None." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1530,7 +1530,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="380" />
+      <option name="time" value="381" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1973,18 +1973,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
+        <state relative-caret-position="122">
+          <caret line="169" column="53" lean-forward="false" selection-start-line="169" selection-start-column="53" selection-end-line="169" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
+    <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="198" column="32" lean-forward="false" selection-start-line="198" selection-start-column="32" selection-end-line="198" selection-end-column="32" />
+        <state relative-caret-position="373">
+          <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
           <folding />
         </state>
       </provider>
