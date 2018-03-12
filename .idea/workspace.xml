@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/testauth/questions.py" afterPath="$PROJECT_DIR$/msadmin/testauth/questions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -145,11 +145,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="508">
               <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="question.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="467">
+              <caret line="198" column="32" lean-forward="false" selection-start-line="198" selection-start-column="32" selection-end-line="198" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -170,16 +180,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="285">
               <caret line="19" column="42" lean-forward="false" selection-start-line="19" selection-start-column="42" selection-end-line="19" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="12" lean-forward="false" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -276,7 +276,6 @@
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/tests.html" />
         <option value="$PROJECT_DIR$/msadmin/testauth/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/test.html" />
-        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" />
         <option value="$PROJECT_DIR$/msadmin/testauth/accessors.py" />
         <option value="$PROJECT_DIR$/msadmin/testauth/tests.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/util.js" />
@@ -316,6 +315,7 @@
         <option value="$PROJECT_DIR$/msadmin/testauth/util/migrate_images.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
         <option value="$PROJECT_DIR$/msadmin/testauth/questions.py" />
+        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html" />
       </list>
     </option>
   </component>
@@ -1067,14 +1067,7 @@
       <workItem from="1519656256075" duration="1627000" />
       <workItem from="1519659657349" duration="368000" />
       <workItem from="1519662932594" duration="34979000" />
-      <workItem from="1520526745087" duration="9044000" />
-    </task>
-    <task id="LOCAL-00010" summary="Beginning of documentation by adding a docs folder.">
-      <created>1500316040884</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1500316040884</updated>
+      <workItem from="1520526745087" duration="9572000" />
     </task>
     <task id="LOCAL-00011" summary="Worked in the ability to create a custom strategies for a class by selecting 3 components.">
       <created>1502806188052</created>
@@ -1412,11 +1405,18 @@
       <option name="project" value="LOCAL" />
       <updated>1520889312881</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="Set multi choice answers to None if not provided">
+      <created>1520890210541</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1520890210541</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1188196000" />
+    <option name="totallyTimeSpent" value="1188724000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1482,7 +1482,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="moved URLs to subfiles.  Finished doing packaging on both server and client sides.   Also created an ImageControl component to clean up some of the operations on images." />
     <MESSAGE value="Added a main page for the site." />
     <MESSAGE value="Started building testauth (port from node.js) into the site." />
     <MESSAGE value="Finished port of pretest survey author" />
@@ -1507,7 +1506,8 @@
     <MESSAGE value="added check for survey question multiChoiceCorrectAnswer" />
     <MESSAGE value="made testauth question preview show HTML in multichoices" />
     <MESSAGE value="check c,d,e choices to be != None" />
-    <option name="LAST_COMMIT_MESSAGE" value="check c,d,e choices to be != None" />
+    <MESSAGE value="Set multi choice answers to None if not provided" />
+    <option name="LAST_COMMIT_MESSAGE" value="Set multi choice answers to None if not provided" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1539,13 +1539,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/myenv/lib/python3.5/site-packages/django/contrib/staticfiles/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="56" column="18" lean-forward="false" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/static/js/qa/media.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
@@ -1984,6 +1977,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="508">
           <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/question.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="198" column="32" lean-forward="false" selection-start-line="198" selection-start-column="32" selection-end-line="198" selection-end-column="32" />
           <folding />
         </state>
       </provider>
