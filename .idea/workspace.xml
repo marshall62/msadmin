@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/testauth/questions.py" afterPath="$PROJECT_DIR$/msadmin/testauth/questions.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -135,21 +135,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questionPreview.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="questionPreview.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="41" column="112" lean-forward="false" selection-start-line="41" selection-start-column="112" selection-end-line="41" selection-end-column="112" />
+            <state relative-caret-position="375">
+              <caret line="34" column="31" lean-forward="false" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="questions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="78" column="60" lean-forward="false" selection-start-line="78" selection-start-column="60" selection-end-line="78" selection-end-column="60" />
+            <state relative-caret-position="508">
+              <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -314,8 +314,8 @@
         <option value="$PROJECT_DIR$/msadmin/users/views.py" />
         <option value="$PROJECT_DIR$/docs/todo.txt" />
         <option value="$PROJECT_DIR$/msadmin/testauth/util/migrate_images.py" />
-        <option value="$PROJECT_DIR$/msadmin/testauth/questions.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html" />
+        <option value="$PROJECT_DIR$/msadmin/testauth/questions.py" />
       </list>
     </option>
   </component>
@@ -335,7 +335,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="415" />
+    <option name="x" value="482" />
     <option name="y" value="70" />
     <option name="width" value="1355" />
     <option name="height" value="1012" />
@@ -522,7 +522,7 @@
       <recent name="$PROJECT_DIR$/msadmin/templates/" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.migrate_images">
+  <component name="RunManager" selected="Django server.Django-2 login page">
     <configuration default="false" name="mondrian" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -547,7 +547,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/dj2-env/bin/python3.5" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/msadmin/testauth/util" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -951,12 +951,12 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Django-2 Server" type="Python.DjangoServer" factoryName="Django server">
+    <configuration default="false" name="Django-2 login page" type="Python.DjangoServer" factoryName="Django server">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="msadminsite.settings" />
+        <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/dj2-env/bin/python3.5" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -975,12 +975,12 @@
       <option name="customRunCommand" value="" />
       <method />
     </configuration>
-    <configuration default="false" name="Django Server" type="Python.DjangoServer" factoryName="Django server">
+    <configuration default="false" name="Django qa" type="Python.DjangoServer" factoryName="Django server">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="msadminsite.settings" />
+        <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/myenv/bin/python3.5" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -1018,8 +1018,8 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Django server.Django-2 Server" />
-      <item index="1" class="java.lang.String" itemvalue="Django server.Django Server" />
+      <item index="0" class="java.lang.String" itemvalue="Django server.Django-2 login page" />
+      <item index="1" class="java.lang.String" itemvalue="Django server.Django qa" />
       <item index="2" class="java.lang.String" itemvalue="Python.test" />
       <item index="3" class="java.lang.String" itemvalue="Python.mondrian" />
       <item index="4" class="java.lang.String" itemvalue="Python.migrate_images" />
@@ -1067,21 +1067,7 @@
       <workItem from="1519656256075" duration="1627000" />
       <workItem from="1519659657349" duration="368000" />
       <workItem from="1519662932594" duration="34979000" />
-      <workItem from="1520526745087" duration="7816000" />
-    </task>
-    <task id="LOCAL-00008" summary="Eliminated the need for ClassStrategyMap and made sure all class-related tables have a FK to class_sc.  Made deletes of strategies depend only on foreign key cascades rather than&#10;explicit delete operations in code.">
-      <created>1500309892011</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1500309892011</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Added a transaction around the addClassStrategy operation so that a failure during the creation will rollback all insertions.">
-      <created>1500315290134</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1500315290134</updated>
+      <workItem from="1520526745087" duration="9044000" />
     </task>
     <task id="LOCAL-00010" summary="Beginning of documentation by adding a docs folder.">
       <created>1500316040884</created>
@@ -1412,11 +1398,25 @@
       <option name="project" value="LOCAL" />
       <updated>1520888198628</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="made testauth question preview show HTML in multichoices">
+      <created>1520888987344</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1520888987344</updated>
+    </task>
+    <task id="LOCAL-00058" summary="check c,d,e choices to be != None">
+      <created>1520889312881</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1520889312881</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1186968000" />
+    <option name="totallyTimeSpent" value="1188196000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1428,7 +1428,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="415" y="70" width="1355" height="1012" extended-state="0" />
+    <frame x="482" y="70" width="1355" height="1012" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1437,17 +1437,17 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34238487" sideWeight="0.27579495" order="18" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14854828" sideWeight="0.45381063" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2420242" sideWeight="0.79026216" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27942795" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27942795" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20442805" sideWeight="0.58625954" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20442805" sideWeight="0.5859247" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.75179" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3179318" sideWeight="0.7242051" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20442805" sideWeight="0.41374046" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20442805" sideWeight="0.4140753" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14922349" sideWeight="0.54618937" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20880681" sideWeight="0.4055944" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278328" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3278328" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30062112" sideWeight="0.46977812" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32549942" sideWeight="0.49120122" order="19" side_tool="false" content_ui="tabs" />
@@ -1482,8 +1482,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="updated readme" />
-    <MESSAGE value="added testauth menuitem and created packages and separate url confs for qa, testauth.  Remaining to put strategy stuff into stratauth" />
     <MESSAGE value="moved URLs to subfiles.  Finished doing packaging on both server and client sides.   Also created an ImageControl component to clean up some of the operations on images." />
     <MESSAGE value="Added a main page for the site." />
     <MESSAGE value="Started building testauth (port from node.js) into the site." />
@@ -1507,7 +1505,9 @@
     <MESSAGE value="Initial login and session stuff added to site." />
     <MESSAGE value="Set up a user creation page available to users in userAuthor group" />
     <MESSAGE value="added check for survey question multiChoiceCorrectAnswer" />
-    <option name="LAST_COMMIT_MESSAGE" value="added check for survey question multiChoiceCorrectAnswer" />
+    <MESSAGE value="made testauth question preview show HTML in multichoices" />
+    <MESSAGE value="check c,d,e choices to be != None" />
+    <option name="LAST_COMMIT_MESSAGE" value="check c,d,e choices to be != None" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1530,7 +1530,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="379" />
+      <option name="time" value="380" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1797,6 +1797,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
           <caret line="134" column="20" lean-forward="false" selection-start-line="134" selection-start-column="20" selection-end-line="134" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1905,14 +1906,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/testauth/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1155">
-          <caret line="77" column="78" lean-forward="false" selection-start-line="77" selection-start-column="78" selection-end-line="77" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../utils/migrate_resources.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8280">
@@ -1971,18 +1964,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
+    <entry file="file://$PROJECT_DIR$/msadmin/testauth/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="78" column="60" lean-forward="false" selection-start-line="78" selection-start-column="60" selection-end-line="78" selection-end-column="60" />
+        <state relative-caret-position="1155">
+          <caret line="77" column="78" lean-forward="false" selection-start-line="77" selection-start-column="78" selection-end-line="77" selection-end-column="78" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/ta/questionPreview.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="41" column="112" lean-forward="false" selection-start-line="41" selection-start-column="112" selection-end-line="41" selection-end-column="112" />
+        <state relative-caret-position="375">
+          <caret line="34" column="31" lean-forward="false" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="508">
+          <caret line="99" column="30" lean-forward="true" selection-start-line="99" selection-start-column="30" selection-end-line="99" selection-end-column="30" />
           <folding />
         </state>
       </provider>

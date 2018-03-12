@@ -21,7 +21,9 @@ def all_page (request):
         qs = Question.objects.all()
         return render(request,'msadmin/ta/questions.html',{'questions': qs})
     elif request.method == "POST":
-        testId = request.POST['testId'] # may be present if saving a new question within a test
+        testId=None
+        if 'testId' in request.POST:
+            testId = request.POST['testId'] # may be present if saving a new question within a test
         q = Question(ansType=0)
         q.save()
         # Put the question in the test if testId is present
@@ -70,11 +72,11 @@ def writeQuestion (qid, postData, files):
     answer = postData['answer']
     description = postData['description']
     warnTime = postData['warnTime']
-    aAns = postData['aAns']
-    bAns = postData['bAns']
-    cAns = postData['cAns']
-    dAns = postData['dAns']
-    eAns = postData['eAns']
+    aAns = postData['aAns'] if postData['aAns'].strip() != '' else None
+    bAns = postData['bAns'] if postData['bAns'].strip() != '' else None
+    cAns = postData['cAns'] if postData['cAns'].strip() != '' else None
+    dAns = postData['dAns'] if postData['dAns'].strip() != '' else None
+    eAns = postData['eAns'] if postData['eAns'].strip() != '' else None
     if 'multiChoiceCorrectAnswer' in postData:
         correctChoice = postData['multiChoiceCorrectAnswer']
     q.name=name
