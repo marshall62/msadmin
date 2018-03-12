@@ -75,7 +75,8 @@ def writeQuestion (qid, postData, files):
     cAns = postData['cAns']
     dAns = postData['dAns']
     eAns = postData['eAns']
-    correctChoice = postData['multiChoiceCorrectAnswer']
+    if 'multiChoiceCorrectAnswer' in postData:
+        correctChoice = postData['multiChoiceCorrectAnswer']
     q.name=name
     if type == 'multiChoice':
         q.ansType = Question.MULTI_CHOICE

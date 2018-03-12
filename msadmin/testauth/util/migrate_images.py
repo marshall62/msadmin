@@ -1,5 +1,6 @@
 import os
 import shutil
+import png
 # sudo apt-get install python-mysqldb
 import MySQLdb
 
@@ -31,6 +32,7 @@ def migrateSurvey (db, cur, id):
     blob = res[2]
     if blob:
         write_file(blob,DIR+'problem_'+id + '.jpg')
+        write_file(blob,DIR+'problem_'+id + '.png')
     else:
         print("problem " + id + " has no image blob")
 
@@ -43,7 +45,9 @@ def migrateSurveys (db, cur):
         name = row[1]
         blob = row[2]
         if blob:
-            write_file(blob,DIR+'problem_'+id + '.jpg')
+            write_file(blob,DIR+'jpg/'+'problem_'+id + '.jpg')
+            write_file(blob,DIR+'png/'+'problem_'+id + '.png')
+            write_file(blob,DIR+'gif/'+'problem_'+id + '.gif')
             print("Wrote image for problem " + id)
         else:
             print("problem " + id + " has no image blob")
@@ -57,8 +61,8 @@ def migrateSurveys (db, cur):
 def main():
     db = getConnection('localhost')
     if db:
-        migrateSurvey(db,db.cursor(),197)
-        # migrateSurveys(db,db.cursor())
+        # migrateSurvey(db,db.cursor(),220)
+        migrateSurveys(db,db.cursor())
         db.close()
 
 

@@ -1,0 +1,13 @@
+3-level standard selector
+
+multi-select topics for problem
+
+add lastWriter, creator, lastWriteTime, createTime to hint.
+
+Mathspring:  Check to see if teacher creation with invalid fields (e.g. user exists) gives error back to dialog.
+
+Mathspring:  Make sure uses of problem snapshots are working and fix to have URL within mscontent.
+
+Db:  A beta db that MSAdmin talks to and that woj talks to.
+Just need a forward migration script to push necessary tables from beta db to production and disallow use of beta for
+collection of student data.
