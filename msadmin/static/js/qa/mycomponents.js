@@ -38,12 +38,18 @@ function getPulldownProps (eltId, options) {
     return obj;
 }
 
-function mountPulldownComponent (mountingEltId, props) {
+function clearPulldown (mountingEltId) {
     var elt = document.getElementById(mountingEltId);
     // remove anything that might be inside the div from previous mountings
     while (elt.firstChild) {
         elt.removeChild(elt.firstChild);
     }
+}
+
+
+function mountPulldownComponent (mountingEltId, props) {
+    var elt = document.getElementById(mountingEltId);
+    clearPulldown(mountingEltId);
     if (elt) {
         injectPulldownIntoElement(props, document.getElementById(mountingEltId));
 

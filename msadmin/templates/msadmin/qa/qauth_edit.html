@@ -21,6 +21,16 @@
             text-decoration: none;
             margin: 0 10px;
         }
+
+         .dropdown-submenu {
+             position: relative;
+         }
+
+        .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -1px;
+        }
     </style>
 {% endblock %}
 
@@ -52,6 +62,8 @@
 
 {#        var mediaURL = "{{ MEDIA_URL }}";#}
         var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}"
+
+        var allStandards = null; // will be set to JSON by AJAX call when page loads
 
         // create constant URLs that will be used by supporting javascript files
         const SAVE_MEDIA_URL = "{% url 'qauth_save_problem_media' probId=12345 %}";
@@ -135,6 +147,97 @@
                 return false;
             }
             else return true;
+        }
+
+
+        // WHen this page loads it sends an AJAX request to get all the common core standards as an ordered dictionary.
+        // The standards ultimately populate 4 pulldown menus (my-pulldown8, 9, 10, 11).
+        // This function extracts the grades out of the standards and builds the first pulldown menu (8).
+        // The other menus get values stuck in them when an option from grade pulldown is selected.
+        // The standards JSON object is a Python OrderedDict such that the keys of this ORderedDict are the grades.
+        // Thus the fields of the JSON object are the grades.
+        function getStandardGradeOptions(standards) {
+            var options = [];
+            options.push(createPulldownOption("---","---"));
+            for (var s of standards) {
+                var gr = s[0];
+                options.push(createPulldownOption(gr,gr));
+            }
+            return options;
+        }
+
+        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
+        // options for each field in this object.
+        function getStandardClusterOptions (standards, grade) {
+            var gr;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    gr = s[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---","---"));
+            for (var c of gr) {
+                var cluster= c[0];
+                options.push(createPulldownOption(cluster,cluster));
+            }
+            return options;
+        }
+
+        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
+        // options for each field in this object.
+        function getStandardCategoryOptions (standards, grade, cluster) {
+            var clusters, cats;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    clusters = s[1];
+                    break;
+                }
+            }
+            for (var c of clusters) {
+                var clust = c[0];
+                if (cluster == clust) {
+                    cats = c[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---","---"));
+            for (var cat of cats)
+                options.push(createPulldownOption(cat[0],cat[0]));
+            return options;
+        }
+
+        function getStandardGroupOptions (standards, grade, cluster, categ) {
+            var clusters, cats,groups;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    clusters = s[1];
+                    break;
+                }
+            }
+            for (var c of clusters) {
+                var clust = c[0];
+                if (cluster == clust) {
+                    cats = c[1];
+                    break;
+                }
+            }
+            for (var cat of cats) {
+                if (cat[0] == categ) {
+                    groups = cat[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---","---"));
+            if (groups.length > 0) {
+                for (var g of groups)
+                    options.push(createPulldownOption(g,g));
+                return options;
+            }
+            else return [{val:"---", label:"---"}];
         }
 
 
@@ -235,6 +338,99 @@
             window.open(url);
         }
 
+        function initializeLayoutPulldown () {
+            var url_mask = "{% url 'qauth_layouts' %}";
+            $.ajax({
+                url: url_mask,
+                type: "GET",
+                error: function (a,b,c) {
+                    alert("Failed to get layouts " + a.responseText + b);
+                },
+                success: function (data) {
+                    var layoutOpts = data;
+                    var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
+                    mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
+
+                }
+            });
+        }
+
+
+        // If a new category is chosen, populate the group pulldown based on the children of the new category
+        function resetCategoryChildren () {
+            var grade = $('#stdGrade').val();
+            var cluster = $('#stdCluster').val();
+            var categ = $('#stdCategory').val();
+            opts = getStandardGroupOptions(allStandards,grade,cluster, categ);
+            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup", options: opts});
+
+        }
+
+        function resetClusterChildren () {
+            var grade = $('#stdGrade').val();
+            var cluster = $('#stdCluster').val();
+            opts = getStandardCategoryOptions(allStandards,grade,cluster);
+            mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",options: opts});
+            opts = [{val:"---", label:"---"}];
+            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",options: opts});
+            $('#stdCategory').change(resetCategoryChildren);
+
+        }
+
+        function resetGradeChildren () {
+            var grade = $('#stdGrade').val();
+            var opts = getStandardClusterOptions(allStandards,grade);
+            mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
+            opts = [{val:"---", label:"---"}];
+            mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",options: opts});
+            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",options: opts});
+            $('#stdCluster').change(resetClusterChildren);
+            $('#stdCategory').change(resetCategoryChildren);
+        }
+
+
+
+        function initializeStandardPulldowns () {
+            var url_mask = "{% url 'qauth_standards' %}";
+            $.ajax({
+                url: url_mask,
+                type: "GET",
+                error: function (a,b,c) {
+                    alert("Failed to get standards " + a.responseText + b);
+                },
+                success: function (data) {
+                    allStandards = data;
+                    var opts = getStandardGradeOptions(allStandards);
+                    {% if problem.getStandardGrade != None %}
+                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", selectedOption:"{{ problem.getStandardGrade }}", options: opts});
+                    {% else %}
+                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", options: opts});
+                    {% endif %}
+                    {% if problem.getStandardGrade != None %}
+                        {#  This populates the pulldowns with items from the lists#}
+                        opts = getStandardClusterOptions(allStandards, "{{ problem.getStandardGrade }}");
+                        mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", selectedOption:"{{ problem.getStandardCluster }}",options: opts});
+                        opts = getStandardCategoryOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardCluster }}");
+                        mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",selectedOption:"{{ problem.getStandardCategory }}", options: opts});
+                        opts = getStandardGroupOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardCluster }}", "{{ problem.getStandardCategory }}");
+                        mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",selectedOption:"{{ problem.getStandardGroup }}", options: opts});
+
+                    {% else %}
+                        {#  If its a new problem then only the Grade selector is populated.  #}
+                        opts = [{val:"---", label:"---"}];
+                        mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", options: opts});
+                        mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory", options: opts});
+                        mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup", options: opts});
+
+                    {% endif %}
+                    // Change listeners installed on pulldowns so that selections cause a cascade of resetting child pulldowns
+                    $('#stdGrade').change(resetGradeChildren);
+                    $('#stdCluster').change(resetClusterChildren);
+                    $('#stdCategory').change(resetCategoryChildren);
+                }
+            });
+
+        }
 
 
         ///////////   The main function called at page load time /////////////////
@@ -310,6 +506,13 @@
                 deleteHintImage();
 
             });
+
+            $('.dropdown-submenu a.test').on("click", function(e){
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
             var imgURL = ('{{ problem.imageURL }}' != 'None') ? '{{ problem.imageURL }}' : null; // full URL to external images.
             var imgFilename = ('{{ problem.imageFile.filename }}'.length > 0) ? '{{ problem.imageFile.filename }}' : null;
             var imgFileId = ('{{ problem.imageFile.id }}'.length > 0) ? '{{ problem.imageFile.id }}' : null;
@@ -346,8 +549,6 @@
                 }
             });
 
-{#            mountPulldownComponent('my-pulldown1',{label:"Read Aloud Audio", myId:"audioResource", myName:"audioResource", selectedOption:"{{ problem.getReadAloud }}",options:[{label: 'Has Audio', value:'hasAudio'}, {label: 'No Audio', value: 'noAudio'}]});#}
-
             {% if probId != -1 %}
                 mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
                 mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
@@ -378,22 +579,8 @@
                 }
             });
             {% endif %}
-            url_mask = "{% url 'qauth_layouts' %}";
-            $.ajax({
-                url: url_mask,
-                type: "GET",
-                error: function (a,b,c) {
-                    alert("Failed to get layouts " + a.responseText + b);
-                },
-                success: function (data) {
-                    var layoutOpts = data;
-                    var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
-                    mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
-
-                }
-            });
-
-
+            initializeLayoutPulldown();
+            initializeStandardPulldowns();
         });
 
 
@@ -720,101 +907,118 @@
                 </div>
                 <div class="tab-pane" id="tab3">
                     <form id="metainfoForm">
-                    <br> <div class="form-inline">
-                    <div class="input-group">
-                        <span class="input-group-addon">Standard ID</span>
-                            <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">
-                    </div>
+                        <br>
+{#                        <div class="form-inline">#}
+{#                            <div class="input-group">#}
+
+                            <div class="row">
+
+                                <div class="col col-sm-2">
+{#                                <span class="input-group-addon">Standard ID</span>#}
+                                    <div id="my-pulldown8">
+                                    </div>
+                                </div>
+                                <div class="col col-sm-2">
+                                    <div id="my-pulldown9">
+                                    </div>
+                                </div>
+                                <div class="col col-sm-2">
+                                    <div id="my-pulldown10">
+                                    </div>
+                                </div>
+                                <div class="col col-sm-2">
+                                    <div id="my-pulldown11">
+                                    </div>
+                                </div>
+{#                                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
+                            </div>
+{#                            <div class="input-group">#}
+{#                                <span class="input-group-addon">Cluster ID</span>#}
+{#                                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">#}
+{#                            </div>#}
+{#                        </div>#}
+                        <br>
+                        <div class="form-inline">
+                            <div class="input-group">
+                                <span class="input-group-addon">Video ID</span>
+                                    <input id="videoId" type="text" class="form-control" name="video" value = "{{ problem.video }}">
+
+                            </div>
 
 
-                    <div class="input-group">
-                        <span class="input-group-addon">Cluster ID</span>
-                            <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
+                            <div class="input-group">
+                                <span class="input-group-addon">Example ID</span>
+                                    <input id="exampleId" type="text" class="form-control" name="example" value = "{{ problem.example }}">
 
-                    </div>
-                </div>
-                    <br>
-                    <div class="form-inline">
-                        <div class="input-group">
-                            <span class="input-group-addon">Video ID</span>
-                                <input id="videoId" type="text" class="form-control" name="video" value = "{{ problem.video }}">
-
+                            </div>
                         </div>
+                        <br>
+                        <div class="row">
+                            <div class="col col-sm-4">
+    {#                             Pulldown menu for IsAllowedAsExample #}
+                                    <div id="my-pulldown6"></div>
+                            </div>
 
+                            <div class="col col-sm-2">
+                                {#                             Pulldown menu for IsAllowedAsExample #}
+                                <input type="checkbox" readonly {% if problem.hasSnapshot %} checked {% endif %}> Has Snapshot</input>
+                            </div>
 
-                        <div class="input-group">
-                            <span class="input-group-addon">Example ID</span>
-                                <input id="exampleId" type="text" class="form-control" name="example" value = "{{ problem.example }}">
-
+                            <div class="col col-sm-6">
+                                <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col col-sm-4">
-{#                             Pulldown menu for IsAllowedAsExample #}
-                                <div id="my-pulldown6"></div>
-                        </div>
-
-                        <div class="col col-sm-2">
-                            {#                             Pulldown menu for IsAllowedAsExample #}
-                            <input type="checkbox" readonly {% if problem.hasSnapshot %} checked {% endif %}> Has Snapshot</input>
-                        </div>
-
-                        <div class="col col-sm-6">
-                            <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
-                        </div>
-                    </div>
-                    <br>
-                    {% if problem.hasSnapshot %}
+                        <br>
+                        {% if problem.hasSnapshot %}
                         <div class="form-group">
                             <label for="snapshotPreview">Snapshot Image</label>
                             <img id="snapshotPreview" src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
                                  onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
                                  onmouseout="this.width='70'; this.height='70';" width="70" height="70">
                         </div>
-                    {% endif %}
-                    <br>
-                    <div class="row">
-                        <div class="col col-sm-5">
-                            <div class="input-group ">
-                                <span class="input-group-addon">Creator</span>
-                                    <input id="creatorId" type="text" class="form-control" name="creator" readonly value = "{{ problem.creator }}">
+                        {% endif %}
+                        <br>
+                        <div class="row">
+                            <div class="col col-sm-5">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">Creator</span>
+                                        <input id="creatorId" type="text" class="form-control" name="creator" readonly value = "{{ problem.creator }}">
 
+                                </div>
+                            </div>
+                            <div class="col col-sm-5">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">Last Modifier</span>
+                                        <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{{ problem.lastModifier }}">
+
+                                </div>
                             </div>
                         </div>
-                        <div class="col col-sm-5">
-                            <div class="input-group ">
-                                <span class="input-group-addon">Last Modifier</span>
-                                    <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{{ problem.lastModifier }}">
+                        <div class="row">
 
+                            <div class="col col-sm-5">
+                                <div class="input-group" >
+                                    <span class="input-group-addon">Cr. Time</span>
+                                        <input id="crTimeId" type="text" readonly class="form-control" name="creationTime" value = "{{ problem.created_at }}">
+
+                                </div>
+                            </div>
+                            <div class="col col-sm-5">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">Last Wr. Time</span>
+                                        <input id="lastWriteTimeId" type="text" readonly class="form-control" name="lastWriteTime" value = "{{ problem.updated_at }}">
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
 
-                        <div class="col col-sm-5">
-                            <div class="input-group" >
-                                <span class="input-group-addon">Cr. Time</span>
-                                    <input id="crTimeId" type="text" readonly class="form-control" name="creationTime" value = "{{ problem.created_at }}">
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Notes</span>
+                                <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{{ problem.authorNotes }}</textarea>
 
-                            </div>
                         </div>
-                        <div class="col col-sm-5">
-                            <div class="input-group ">
-                                <span class="input-group-addon">Last Wr. Time</span>
-                                    <input id="lastWriteTimeId" type="text" readonly class="form-control" name="lastWriteTime" value = "{{ problem.updated_at }}">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">Notes</span>
-                            <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{{ problem.authorNotes }}</textarea>
-
-                    </div>
-                    <br>
+                        <br>
                         <a href="#metainfoForm" class="btn btn-primary" onClick="saveProblemMetaInfo()">Save Meta Info</a>
                         <p style="color: red" id="metaInfoMessages"></p>
 

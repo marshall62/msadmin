@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import permission_required
 from msadminsite.settings import SESSION_INACTIVITY_TIMEOUT_MIN
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, MathspringAdminForm
 
 
 class MyLoginView (auth_views.LoginView):
@@ -24,13 +24,29 @@ class MyLoginView (auth_views.LoginView):
 @permission_required('users.can_add_user')
 def register(request):
     if request.method == 'POST':
-        f = CustomUserCreationForm(request.POST)
-        if f.is_valid():
-            f.save()
-            messages.success(request, 'Account created successfully')
-            return redirect('users_main')
+        if 'adminForm' in request.POST:
+            g = MathspringAdminForm(request.POST)
+            f = None
+        else:
+            f = CustomUserCreationForm(request.POST)
+            g = None
+
+        if f:
+            if f.is_valid():
+                f.save()
+                messages.success(request, 'MSAdmin Account created successfully')
+                return redirect('users_main')
+            else: g = MathspringAdminForm()
+
+        elif g:
+            if g.is_valid():
+                g.save()
+                messages.success(request, 'Mathspring Teacher Tools Account created successfully')
+                return redirect('users_main')
+            else: f = CustomUserCreationForm()
 
     else:
-        f = CustomUserCreationForm()
+        f = CustomUserCreationForm() # form for MS Admin user
+        g = MathspringAdminForm() # form for Mathspring Admin (old teacher tools) user
 
-    return render(request, 'registration/register_author.html', {'form': f})
+    return render(request, 'registration/register_author.html', {'form': f, 'form2': g})

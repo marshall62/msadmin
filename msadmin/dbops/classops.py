@@ -57,7 +57,7 @@ def copyStrategyComponentInterventionSelectorsToClass(aclass, strategyComponent,
     interventionSelectors = strategyComponent.interventionSelectors.all()
     # copy all their scis parameters into the class_is_params
     for intsel in interventionSelectors:
-        scismap = SCISMap.objects.filter(interventionSelector=intsel, strategyComponent=strategyComponent)
+        scismap = SCISMap.objects.filter(interventionSelector=intsel, strategyComponent=strategyComponent).first()
         scisParams = InterventionSelectorParam.objects.filter(scismap=scismap)
         # for bp in intsel.getBaseParams():
         # scisParams = intsel.getParams(strategyComponent)

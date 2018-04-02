@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
+
 from django.db import connection
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
@@ -39,6 +40,7 @@ def create_problem (request):
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
+
     return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # write the file to path/problem_probId/f.name
@@ -80,8 +82,7 @@ def save_problem (request):
         imageURL = post['imageURL']
         status = post['status']
         initDifficulty = post['difficulty']
-        # standardId = post['standardId']
-        # clusterId = post['clusterId']
+
         questType = post['questType']
         problemFormat = post['problemFormat']
         correctAnswer=None
@@ -248,3 +249,8 @@ def selectProblemDifficulty (probId):
         if row:
             return row[0]
         else: return None
+
+
+
+
+

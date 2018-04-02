@@ -1,10 +1,11 @@
 from django.http import JsonResponse
+from collections import OrderedDict
 from django.shortcuts import get_object_or_404
 from msadminsite.settings import SNAPSHOT_DIRNAME
 from .util import  write_file
 import re
 
-from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate
+from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
 from django.contrib.auth.decorators import login_required
 
@@ -126,8 +127,12 @@ def save_problem_media (request, probId):
 def save_problem_meta_info (request, probId):
     if request.method == 'POST':
         post = request.POST
-        standardId = post['standardId']
-        clusterId = post['clusterId']
+        grade = post['stdGrade']
+        cluster = post['stdCluster']
+        category = post['stdCategory']
+        group = post['stdGroup']
+        # standardId = post['standardId']
+        # clusterId = post['clusterId']
         authorNotes = post['authorNotes']
         creator = post['creator']
         lastModifier = post['lastModifier']
@@ -141,7 +146,20 @@ def save_problem_meta_info (request, probId):
         try:
             video = int(video)
         except: video = None
+        addMsg = ""
 
+        if grade not in ["---", 'undefined'] and cluster not in ["---", 'undefined'] and category not in ["---", 'undefined']:
+            standardId = grade+"."+cluster+"."+category
+            if group not in ["---", 'undefined']:
+                standardId += "." + group
+        else:
+            standardId = None
+
+
+        foundStd = Standard.objects.filter(id=standardId)
+        if not foundStd:
+            givenStd = (grade+"."+cluster+"."+category+"."+group).replace("undefined",'---')
+            addMsg = "Standard ID " + givenStd + " is not valid"
 
         p = get_object_or_404(Problem, pk=probId)
         if 'snapshotFile' in request.FILES:
@@ -152,12 +170,12 @@ def save_problem_meta_info (request, probId):
             write_file(SNAPSHOT_DIRNAME, file, filename)
             # p.setFields(screenshotURL=filename)
 
-        p.setFields(standardId=standardId,clusterId=clusterId,
+        p.setFields(standardId=standardId,
                    authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,
                    example=example,video=video, usableAsExample=(usableAsEx == 'True'))
         p.save()
 
-        d = {'message': "Meta info Saved", 'lastWriteTime': p.updated_at}
+        d = {'message': "Meta info Saved. " + addMsg, 'lastWriteTime': p.updated_at}
         return JsonResponse(d)
 
 @login_required
@@ -321,6 +339,80 @@ def getLayouts (request):
     # create a list of layout objects in json
     a = [l.toJSON() for l in layouts]
     return JsonResponse(a,safe=False)
+
+# A standard is GRADE.CLUSTER.CATEGORY[.GROUP]
+#
+# Builds a dictionary like:
+# {"1": {"G": {"RED": ["1", "2"], "BLUE": [], "GREEN": ["1","2.a", "2.b"]} "NS": {"YELLER": [], "ORANGE": []}},
+#  "2": {"G": {"RED": ["1", "2"], "BLUE": [], "GREEN": ["1","2.a", "2.b"]} "NS": {"YELLER": [], "ORANGE": []}},
+# ...
+#   "K" ...
+#   "H" ....
+# }
+def getStandardDict ():
+    stds = Standard.objects.all().order_by('grade', 'id')
+    stdDict = OrderedDict()
+    for std in stds:
+        id = std.id
+        grade = std.grade
+        idx = id.split('.')
+        if len(idx) >= 3:
+            # Create a standard code that doesn't have the grade in it.
+            if grade.lower() == 'h':
+                code = std.id
+            else:
+                code = std.id[2:]
+            if not grade in stdDict:
+                stdDict[grade] = OrderedDict()
+            codex = code.split('.')
+            clusterDict = stdDict[grade]
+            cluster = codex[0]
+            if not cluster in clusterDict:
+                clusterDict[cluster] = OrderedDict()
+            catDict = clusterDict[cluster]
+            cat = codex[1]
+            catDict[cat] = []
+            # THe group level is optional.  Will be an empty list if no groups for this category
+            if len(codex) > 2:
+                catDict[cat].append('.'.join(codex[2:]))
+
+    return stdDict
+
+'''
+Convert the OrderedDict to a list of lists like:
+[ [1, [gr1-clusters]],
+  [2, [....]]
+]
+[gr1-clusters] is
+[[G, [G-cats]], [MD, [MD-cats]] ...]
+
+[G-cats] is
+[[RED, []], [BLUE, [1,2.a,2.b]] ...]
+'''
+def convertDictToLists (standardsDict):
+    l = []
+    for grade in standardsDict:
+        v = standardsDict[grade] # v is a dict with clusters as keys
+        a = [grade, []]
+        l.append(a)
+        for cluster in v:
+            v2 = v[cluster] # v2 is a dict with categories as keys
+            b = [cluster, []]
+            a[1].append(b)
+            for cat in v2:
+                v3 = v2[cat] # v3 is a list of groups - it may be empty
+                c = [cat,v3]
+                b[1].append(c)
+
+    return l
+
+
+
+@login_required
+def getStandards (request):
+    stds = getStandardDict()
+    stdl = convertDictToLists(stds)
+    return JsonResponse(stdl,safe=False)
 
 @login_required
 def getProblemJSON (request, probId):

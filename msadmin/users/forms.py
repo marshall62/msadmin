@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Administrator
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -40,3 +41,42 @@ class CustomUserCreationForm(forms.Form):
             self.cleaned_data['password1']
         )
         return user
+
+
+class MathspringAdminForm (CustomUserCreationForm):
+
+    def clean_username(self):
+        validated = self.cleaned_data['username']
+        if validated:
+            try:
+                a = Administrator.objects.get(userName=validated)
+            except Administrator.DoesNotExist:
+                a = None
+            if a:
+                raise ValidationError("Username already exists!")
+            else: return validated
+
+
+    def pwHash (self, pw):
+        hpw = "";
+        x = 13;
+        for i in range(len(pw)):
+            num = (ord(pw[i]) * i+1 * x) % (ord("z") - ord("A"))
+            c = chr(ord("A") + num);
+            hpw += c;
+        return hpw
+
+    def clean_password2(self):
+        validated = super().clean_password2()
+        if validated:
+            password2 = self.pwHash(validated)
+            return password2
+        else:
+            raise ValidationError("Problem with pw2")
+
+    def save(self):
+        admin = Administrator(userName=self.cleaned_data['username'],
+                              email=self.cleaned_data['email'],
+                              pw2=self.cleaned_data['password2'])
+        admin.save()
+        return admin

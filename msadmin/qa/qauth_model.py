@@ -197,6 +197,34 @@ class Problem (models.Model):
                 return row[0]
             else: return None
 
+    def getStandardGrade (self):
+        if self.standardId:
+            std = Standard.objects.filter(id=self.standardId).first()
+            return std.grade
+        else:
+            return None
+
+    def getStandardCluster (self):
+        if self.standardId:
+            std = Standard.objects.filter(id=self.standardId).first()
+            return std.getCluster()
+        else:
+            return None
+
+    def getStandardCategory (self):
+        if self.standardId:
+            std = Standard.objects.filter(id=self.standardId).first()
+            return std.getCategory()
+        else:
+            return None
+
+    def getStandardGroup (self):
+        if self.standardId:
+            std = Standard.objects.filter(id=self.standardId).first()
+            return std.getGroup()
+        else:
+            return None
+
 
     def toJSON (self):
         d = {}
@@ -358,3 +386,39 @@ class ProblemMediaFile (models.Model):
         if self.hint:
             d['hintId'] = self.hint.pk
         return d
+
+class Standard (models.Model):
+    id = models.CharField(max_length=12, primary_key=True)
+    description = models.CharField(max_length=1000)
+    grade = models.CharField(max_length=5)
+    category = models.CharField(max_length=150)
+    clusterName = models.CharField(max_length=800)
+    clusterId = models.IntegerField()
+    idABC = models.CharField(max_length=15)
+
+    class Meta:
+        db_table = "standard"
+
+    def getCluster (self):
+        if self.grade.lower() == 'h':
+            return self.id.split('.')[0]
+        else:
+            return self.id.split('.')[1]
+
+    def getCategory (self):
+        if self.grade.lower() == 'h':
+            return self.id.split('.')[1]
+        else:
+            return self.id.split('.')[2]
+
+    def getGroup (self):
+        codex = self.id.split('.')
+        if self.grade.lower() == 'h' and len(codex) > 2:
+            return codex[2]
+        elif len(codex) > 3:
+            return codex[3]
+        else:
+            return None
+
+
+
