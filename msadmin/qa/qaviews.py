@@ -40,8 +40,15 @@ def create_problem (request):
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
-
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+    allTopics = Topic.objects.all()
+    # get the topics by filtering such that we look find the connected map with the given problem
+    inTopics = Topic.objects.filter(problemtopicmap__problem=prob)
+    if inTopics.count() > 0:
+        for t1 in inTopics:
+            for t2 in allTopics:
+                if t1.id == t2.id:
+                    t2.setSelected(True)
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead

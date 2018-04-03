@@ -5,7 +5,7 @@ from msadminsite.settings import SNAPSHOT_DIRNAME
 from .util import  write_file
 import re
 
-from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard
+from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard, Topic, ProblemTopicMap
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
 from django.contrib.auth.decorators import login_required
 
@@ -137,7 +137,11 @@ def save_problem_meta_info (request, probId):
         creator = post['creator']
         lastModifier = post['lastModifier']
         example = post['example']
+        topicIDs = None
+        if 'topic' in post:
+            topicIDs = post.getlist('topic')
         usableAsEx = post['usableAsExample']
+
         try:
             example = int(example)
         except: example = None
@@ -174,6 +178,24 @@ def save_problem_meta_info (request, probId):
                    authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,
                    example=example,video=video, usableAsExample=(usableAsEx == 'True'))
         p.save()
+
+        if topicIDs:
+            inTopics = ProblemTopicMap.objects.filter(problem=p)
+            oldTopicSet = set()
+            curTopicSet = set()
+            if inTopics.count() > 0:
+                for t in inTopics:
+                        oldTopicSet.add(t.topic_id)
+            for t in topicIDs:
+                curTopicSet.add(int(t))
+            topicsToRemove = oldTopicSet - curTopicSet
+            for t in topicsToRemove:
+                m = ProblemTopicMap.objects.filter(topic_id=t,problem=p).first()
+                m.delete()
+            topicsToAdd = curTopicSet - oldTopicSet
+            for t in topicsToAdd:
+                m = ProblemTopicMap(topic_id=t,problem=p)
+                m.save()
 
         d = {'message': "Meta info Saved. " + addMsg, 'lastWriteTime': p.updated_at}
         return JsonResponse(d)

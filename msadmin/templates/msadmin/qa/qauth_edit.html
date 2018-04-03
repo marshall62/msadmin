@@ -47,6 +47,11 @@
     <script type="text/javascript" src="{% static 'js/qa/answers.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/sprintf.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/util.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/chosen.proto.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/chosen.css' %}">
+{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'css/prism.css' %}">#}
 
     <script language="javascript">
 
@@ -513,6 +518,12 @@
                 e.preventDefault();
             });
 
+            $("#topicSelect").chosen({
+                no_results_text: "Oops, nothing found!",
+                width: "95%"
+            });
+{#            $("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
+
             var imgURL = ('{{ problem.imageURL }}' != 'None') ? '{{ problem.imageURL }}' : null; // full URL to external images.
             var imgFilename = ('{{ problem.imageFile.filename }}'.length > 0) ? '{{ problem.imageFile.filename }}' : null;
             var imgFileId = ('{{ problem.imageFile.id }}'.length > 0) ? '{{ problem.imageFile.id }}' : null;
@@ -905,6 +916,7 @@
                         <a href="#mediaTable" class="btn btn-primary" onClick="saveMediaFiles()">Save Changes to Media Files</a>
                     </form>
                 </div>
+
                 <div class="tab-pane" id="tab3">
                     <form id="metainfoForm">
                         <br>
@@ -938,6 +950,16 @@
 {#                            </div>#}
 {#                        </div>#}
                         <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">Topic</span>
+                        <select id="topicSelect" name="topic" data-placeholder="Choose Topics" class="chosen-select form-control" multiple tabindex="4">
+                            {% for t in allTopics %}
+                                <option value="{{ t.id }}" {% if t.isSelected %} selected {% endif %}>{{ t.description }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                    <br>
                         <div class="form-inline">
                             <div class="input-group">
                                 <span class="input-group-addon">Video ID</span>

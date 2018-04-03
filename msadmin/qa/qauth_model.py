@@ -421,4 +421,23 @@ class Standard (models.Model):
             return None
 
 
+class Topic (models.Model):
+    description = models.CharField(max_length=200)
+    selected = False # A non-db field that is used to mark if a problem is within a topic when a problem and set of topics sent to a template
 
+    class Meta:
+        db_table = "ProblemGroup"
+
+    def setSelected (self, b):
+        self.selected = b
+
+    def isSelected (self):
+        return self.selected
+
+
+class ProblemTopicMap (models.Model):
+    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)
+    topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "ProbProbGroup"
