@@ -394,6 +394,13 @@ class ProblemMediaFile (models.Model):
             d['hintId'] = self.hint.pk
         return d
 
+class Cluster (models.Model):
+    categoryCode = models.CharField(max_length=10)
+    clusterABCD = models.CharField(max_length=2)
+
+    class Meta:
+        db_table = "cluster"
+
 class Standard (models.Model):
     id = models.CharField(max_length=12, primary_key=True)
     description = models.CharField(max_length=1000)

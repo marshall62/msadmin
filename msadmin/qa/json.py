@@ -5,7 +5,8 @@ from msadminsite.settings import SNAPSHOT_DIRNAME
 from .util import  write_file
 import re
 
-from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard, Topic, ProblemTopicMap
+from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard, Topic, ProblemTopicMap, \
+    Cluster
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
 from django.contrib.auth.decorators import login_required
 
@@ -156,8 +157,12 @@ def save_problem_meta_info (request, probId):
         if grade not in ["---", 'undefined'] and domain not in ["---", 'undefined']  and cluster not in ["---", 'undefined'] and standard not in ["---", 'undefined']:
             if grade != 'H':
                 standardId = grade+"."+domain+"."+cluster+"."+standard
+                catCode = grade+"."+domain
+                clustABCD = cluster
             else:
                 standardId = domain+"."+cluster+"."+standard
+                catCode = domain+"."+cluster
+                clustABCD = standard
             if part not in ["---", 'undefined']:
                 standardId += "." + part
         else:
@@ -172,6 +177,11 @@ def save_problem_meta_info (request, probId):
         else:
             foundStd = foundStd.first()
             stdId = foundStd.id
+            clust = Cluster.objects.filter(categoryCode=catCode, clusterABCD=clustABCD)
+            if clust.count() > 0:
+                clustId = clust.first().id
+            else:
+                clustId = None
 
 
         p = get_object_or_404(Problem, pk=probId)
@@ -183,7 +193,7 @@ def save_problem_meta_info (request, probId):
             write_file(SNAPSHOT_DIRNAME, file, filename)
             # p.setFields(screenshotURL=filename)
 
-        p.setFields(standardId=stdId,
+        p.setFields(standardId=stdId,clusterId=clustId,
                    authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,
                    example=example,video=video, usableAsExample=(usableAsEx == 'True'))
         p.save()
