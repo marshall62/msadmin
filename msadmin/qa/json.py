@@ -128,9 +128,10 @@ def save_problem_meta_info (request, probId):
     if request.method == 'POST':
         post = request.POST
         grade = post['stdGrade']
+        domain = post['stdDomain']
         cluster = post['stdCluster']
-        category = post['stdCategory']
-        group = post['stdGroup']
+        standard = post['stdStandard']
+        part = post['stdPart']
         # standardId = post['standardId']
         # clusterId = post['clusterId']
         authorNotes = post['authorNotes']
@@ -152,18 +153,26 @@ def save_problem_meta_info (request, probId):
         except: video = None
         addMsg = ""
 
-        if grade not in ["---", 'undefined'] and cluster not in ["---", 'undefined'] and category not in ["---", 'undefined']:
-            standardId = grade+"."+cluster+"."+category
-            if group not in ["---", 'undefined']:
-                standardId += "." + group
+        if grade not in ["---", 'undefined'] and domain not in ["---", 'undefined']  and cluster not in ["---", 'undefined'] and standard not in ["---", 'undefined']:
+            if grade != 'H':
+                standardId = grade+"."+domain+"."+cluster+"."+standard
+            else:
+                standardId = domain+"."+cluster+"."+standard
+            if part not in ["---", 'undefined']:
+                standardId += "." + part
         else:
             standardId = None
 
 
-        foundStd = Standard.objects.filter(id=standardId)
-        if not foundStd:
-            givenStd = (grade+"."+cluster+"."+category+"."+group).replace("undefined",'---')
+        foundStd = Standard.objects.filter(idABC=standardId)
+        if foundStd.count() == 0:
+            givenStd = (grade+"."+domain+"."+cluster+"."+standard+"."+part).replace("undefined",'---')
             addMsg = "Standard ID " + givenStd + " is not valid"
+            stdId = None
+        else:
+            foundStd = foundStd.first()
+            stdId = foundStd.id
+
 
         p = get_object_or_404(Problem, pk=probId)
         if 'snapshotFile' in request.FILES:
@@ -174,7 +183,7 @@ def save_problem_meta_info (request, probId):
             write_file(SNAPSHOT_DIRNAME, file, filename)
             # p.setFields(screenshotURL=filename)
 
-        p.setFields(standardId=standardId,
+        p.setFields(standardId=stdId,
                    authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,
                    example=example,video=video, usableAsExample=(usableAsEx == 'True'))
         p.save()
@@ -372,59 +381,66 @@ def getLayouts (request):
 #   "H" ....
 # }
 def getStandardDict ():
-    stds = Standard.objects.all().order_by('grade', 'id')
-    stdDict = OrderedDict()
+    stds = Standard.objects.all().order_by('grade', 'idABC')
+    d = OrderedDict()
     for std in stds:
-        id = std.id
+        id = std.idABC
         grade = std.grade
         idx = id.split('.')
-        if len(idx) >= 3:
+        if len(idx) >= 4:
             # Create a standard code that doesn't have the grade in it.
             if grade.lower() == 'h':
-                code = std.id
+                code = std.idABC
             else:
-                code = std.id[2:]
-            if not grade in stdDict:
-                stdDict[grade] = OrderedDict()
+                code = std.idABC[2:]
+            if not grade in d:
+                d[grade] = OrderedDict()
             codex = code.split('.')
-            clusterDict = stdDict[grade]
-            cluster = codex[0]
+            domainDict = d[grade]
+            domain = codex[0]
+            if not domain in domainDict:
+                domainDict[domain] = OrderedDict()
+            clusterDict = domainDict[domain]
+            cluster = codex[1]
             if not cluster in clusterDict:
                 clusterDict[cluster] = OrderedDict()
-            catDict = clusterDict[cluster]
-            cat = codex[1]
-            catDict[cat] = []
-            # THe group level is optional.  Will be an empty list if no groups for this category
-            if len(codex) > 2:
-                catDict[cat].append('.'.join(codex[2:]))
+            stdDict = clusterDict[cluster]
+            std = codex[2]
+            if std not in stdDict:
+                stdDict[std] = []
+            if len(codex) > 3:
+                stdDict[std].append('.'.join(codex[3:]))
 
-    return stdDict
+    return d
 
 '''
 Convert the OrderedDict to a list of lists like:
-[ [1, [gr1-clusters]],
+[ [1, [gr1-domains]],
   [2, [....]]
 ]
-[gr1-clusters] is
-[[G, [G-cats]], [MD, [MD-cats]] ...]
+[gr1-domains] is
+[[G, [G-clusters]], [MD, [MD-clusters]] ...]
 
-[G-cats] is
-[[RED, []], [BLUE, [1,2.a,2.b]] ...]
+[G-clusters] is
+[[RED, [[A, [1,2]], [B, [1.a, 1.b]]]], [BLUE, ...
 '''
-def convertDictToLists (standardsDict):
+def convertDictToLists (dict):
     l = []
-    for grade in standardsDict:
-        v = standardsDict[grade] # v is a dict with clusters as keys
+    for grade in dict:
+        domainDict = dict[grade] # v is a dict with domains as keys
         a = [grade, []]
         l.append(a)
-        for cluster in v:
-            v2 = v[cluster] # v2 is a dict with categories as keys
-            b = [cluster, []]
+        for domain in domainDict:
+            clusterDict = domainDict[domain] # v2 is a dict with clusters as keys
+            b = [domain, []]
             a[1].append(b)
-            for cat in v2:
-                v3 = v2[cat] # v3 is a list of groups - it may be empty
-                c = [cat,v3]
+            for cluster in clusterDict:
+                stdDict = clusterDict[cluster] # v3 is a dict with stds as keys
+                c = [cluster, []]
                 b[1].append(c)
+                for std in stdDict:
+                    d = [std, stdDict[std]]
+                    c[1].append(d)
 
     return l
 

@@ -204,6 +204,13 @@ class Problem (models.Model):
         else:
             return None
 
+    def getStandardDomain (self):
+        if self.standardId:
+            std = Standard.objects.filter(id=self.standardId).first()
+            return std.getDomain()
+        else:
+            return None
+
     def getStandardCluster (self):
         if self.standardId:
             std = Standard.objects.filter(id=self.standardId).first()
@@ -211,17 +218,17 @@ class Problem (models.Model):
         else:
             return None
 
-    def getStandardCategory (self):
+    def getStandardStandard (self):
         if self.standardId:
             std = Standard.objects.filter(id=self.standardId).first()
-            return std.getCategory()
+            return std.getStandard()
         else:
             return None
 
-    def getStandardGroup (self):
+    def getStandardPart (self):
         if self.standardId:
             std = Standard.objects.filter(id=self.standardId).first()
-            return std.getGroup()
+            return std.getPart()
         else:
             return None
 
@@ -399,26 +406,34 @@ class Standard (models.Model):
     class Meta:
         db_table = "standard"
 
+    def getDomain (self):
+        if self.grade.lower() == 'h':
+            return self.idABC.split('.')[0]
+        else:
+            return self.idABC.split('.')[1]
+
     def getCluster (self):
         if self.grade.lower() == 'h':
-            return self.id.split('.')[0]
+            return self.idABC.split('.')[1]
         else:
-            return self.id.split('.')[1]
+            return self.idABC.split('.')[2]
 
-    def getCategory (self):
-        if self.grade.lower() == 'h':
-            return self.id.split('.')[1]
-        else:
-            return self.id.split('.')[2]
-
-    def getGroup (self):
-        codex = self.id.split('.')
+    def getStandard (self):
+        codex = self.idABC.split('.')
         if self.grade.lower() == 'h' and len(codex) > 2:
             return codex[2]
-        elif len(codex) > 3:
+        else:
             return codex[3]
+
+    def getPart (self):
+        codex = self.idABC.split('.')
+        if self.grade.lower() == 'h' and len(codex) > 3:
+            return ".".join(codex[3:])
+        elif len(codex) > 4:
+            return codex[4]
         else:
             return None
+
 
 
 class Topic (models.Model):

@@ -173,7 +173,7 @@
 
         // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
         // options for each field in this object.
-        function getStandardClusterOptions (standards, grade) {
+        function getStandardDomainOptions (standards, grade) {
             var gr;
             var options = [];
             for (var s of standards) {
@@ -183,67 +183,101 @@
                 }
             }
             options.push(createPulldownOption("---","---"));
-            for (var c of gr) {
-                var cluster= c[0];
-                options.push(createPulldownOption(cluster,cluster));
+            for (var d of gr) {
+                var domain= d[0];
+                options.push(createPulldownOption(domain,domain));
             }
             return options;
         }
 
         // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
         // options for each field in this object.
-        function getStandardCategoryOptions (standards, grade, cluster) {
-            var clusters, cats;
+        function getStandardClusterOptions (standards, grade, domain) {
+            var domains, clusters;
             var options = [];
             for (var s of standards) {
                 if (s[0] == grade) {
-                    clusters = s[1];
+                    domains = s[1];
                     break;
                 }
             }
-            for (var c of clusters) {
-                var clust = c[0];
-                if (cluster == clust) {
-                    cats = c[1];
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
                     break;
                 }
             }
             options.push(createPulldownOption("---","---"));
-            for (var cat of cats)
-                options.push(createPulldownOption(cat[0],cat[0]));
+            for (var clust of clusters)
+                options.push(createPulldownOption(clust[0],clust[0]));
             return options;
         }
 
-        function getStandardGroupOptions (standards, grade, cluster, categ) {
-            var clusters, cats,groups;
+        function getStandardStandardOptions (standards, grade, domain, cluster) {
+            var domains, clusters, stds;
             var options = [];
             for (var s of standards) {
                 if (s[0] == grade) {
-                    clusters = s[1];
+                    domains = s[1];
                     break;
                 }
             }
-            for (var c of clusters) {
-                var clust = c[0];
-                if (cluster == clust) {
-                    cats = c[1];
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
                     break;
                 }
             }
-            for (var cat of cats) {
-                if (cat[0] == categ) {
-                    groups = cat[1];
+            for (var clust of clusters) {
+                if (clust[0] == cluster) {
+                    stds = clust[1];
                     break;
                 }
             }
             options.push(createPulldownOption("---","---"));
-            if (groups.length > 0) {
-                for (var g of groups)
-                    options.push(createPulldownOption(g,g));
+            for (var s of stds)
+                options.push(createPulldownOption(s[0],s[0]));
+            return options;
+
+
+        }
+
+        function getStandardPartOptions (standards, grade, domain, cluster, standard) {
+            var domains, clusters, stds, parts;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    domains = s[1];
+                    break;
+                }
+            }
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
+                    break;
+                }
+            }
+            for (var clust of clusters) {
+                if (clust[0] == cluster) {
+                    stds = clust[1];
+                    break;
+                }
+            }
+            for (var std of stds) {
+                if (std[0] == standard) {
+                    parts = std[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---","---"));
+            if (parts.length > 0) {
+                for (var p of parts)
+                    options.push(createPulldownOption(p,p));
                 return options;
             }
             else return [{val:"---", label:"---"}];
         }
+
 
 
 
@@ -360,37 +394,52 @@
             });
         }
 
-
-        // If a new category is chosen, populate the group pulldown based on the children of the new category
-        function resetCategoryChildren () {
+        function resetStandardChildren () {
             var grade = $('#stdGrade').val();
-            var cluster = $('#stdCluster').val();
-            var categ = $('#stdCategory').val();
-            opts = getStandardGroupOptions(allStandards,grade,cluster, categ);
-            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup", options: opts});
-
+            var domain = $('#stdDomain').val();
+            var clust = $('#stdCluster').val();
+            var std = $('#stdStandard').val();
+            var opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
+            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart", options: opts});
         }
 
+
+        // If a new cluster is chosen, populate the standard pulldown based on the children of the new category
         function resetClusterChildren () {
             var grade = $('#stdGrade').val();
-            var cluster = $('#stdCluster').val();
-            opts = getStandardCategoryOptions(allStandards,grade,cluster);
-            mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",options: opts});
+            var domain = $('#stdDomain').val();
+            var clust = $('#stdCluster').val();
+            var opts = getStandardStandardOptions(allStandards,grade,domain, clust);
+            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard", options: opts});
             opts = [{val:"---", label:"---"}];
-            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",options: opts});
-            $('#stdCategory').change(resetCategoryChildren);
+            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
+            $('#stdStandard').change(resetStandardChildren);
+        }
+
+        function resetDomainChildren () {
+            var grade = $('#stdGrade').val();
+            var domain = $('#stdDomain').val();
+            var opts = getStandardClusterOptions(allStandards,grade,domain);
+            mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
+            opts = [{val:"---", label:"---"}];
+            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard",options: opts});
+            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
+            $('#stdCluster').change(resetClusterChildren);
+            $('#stdStandard').change(resetStandardChildren);
 
         }
 
         function resetGradeChildren () {
             var grade = $('#stdGrade').val();
-            var opts = getStandardClusterOptions(allStandards,grade);
-            mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
+            var opts = getStandardDomainOptions(allStandards,grade);
+            mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain",options: opts});
             opts = [{val:"---", label:"---"}];
-            mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",options: opts});
-            mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",options: opts});
+            mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
+            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard",options: opts});
+            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
+            $('#stdDomain').change(resetDomainChildren);
             $('#stdCluster').change(resetClusterChildren);
-            $('#stdCategory').change(resetCategoryChildren);
+            $('#stdStandard').change(resetStandardChildren);
         }
 
 
@@ -413,25 +462,29 @@
                     {% endif %}
                     {% if problem.getStandardGrade != None %}
                         {#  This populates the pulldowns with items from the lists#}
-                        opts = getStandardClusterOptions(allStandards, "{{ problem.getStandardGrade }}");
-                        mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", selectedOption:"{{ problem.getStandardCluster }}",options: opts});
-                        opts = getStandardCategoryOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardCluster }}");
-                        mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory",selectedOption:"{{ problem.getStandardCategory }}", options: opts});
-                        opts = getStandardGroupOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardCluster }}", "{{ problem.getStandardCategory }}");
-                        mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup",selectedOption:"{{ problem.getStandardGroup }}", options: opts});
+                        opts = getStandardDomainOptions(allStandards, "{{ problem.getStandardGrade }}");
+                        mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", selectedOption:"{{ problem.getStandardDomain }}",options: opts});
+                        opts = getStandardClusterOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}");
+                        mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",selectedOption:"{{ problem.getStandardCluster }}", options: opts});
+                        opts = getStandardStandardOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}", "{{ problem.getStandardCluster }}");
+                        mountPulldownComponent('my-pulldown11',{label:"Standard", myId:"stdStandard", myName:"stdStandard",selectedOption:"{{ problem.getStandardStandard }}", options: opts});
+                        opts = getStandardPartOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}", "{{ problem.getStandardCluster }}","{{ problem.getStandardStandard }}");
+                        mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",selectedOption:"{{ problem.getStandardPart }}", options: opts});
 
                     {% else %}
                         {#  If its a new problem then only the Grade selector is populated.  #}
                         opts = [{val:"---", label:"---"}];
-                        mountPulldownComponent('my-pulldown9',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", options: opts});
-                        mountPulldownComponent('my-pulldown10',{label:"Category", myId:"stdCategory", myName:"stdCategory", options: opts});
-                        mountPulldownComponent('my-pulldown11',{label:"Group", myId:"stdGroup", myName:"stdGroup", options: opts});
+                        mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", options: opts});
+                        mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", options: opts});
+                        mountPulldownComponent('my-pulldown11',{label:"Standard", myId:"stdStandard", myName:"stdStandard", options: opts});
+                        mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart", options: opts});
 
                     {% endif %}
                     // Change listeners installed on pulldowns so that selections cause a cascade of resetting child pulldowns
                     $('#stdGrade').change(resetGradeChildren);
+                    $('#stdDomain').change(resetDomainChildren);
                     $('#stdCluster').change(resetClusterChildren);
-                    $('#stdCategory').change(resetCategoryChildren);
+                    $('#stdStandard').change(resetStandardChildren);
                 }
             });
 
@@ -942,10 +995,14 @@
                                     <div id="my-pulldown11">
                                     </div>
                                 </div>
+                                <div class="col col-sm-2">
+                                    <div id="my-pulldown12">
+                                    </div>
+                                </div>
 {#                                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
                             </div>
 {#                            <div class="input-group">#}
-{#                                <span class="input-group-addon">Cluster ID</span>#}
+{#                                <span class="input-group-addon">Domain ID</span>#}
 {#                                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">#}
 {#                            </div>#}
 {#                        </div>#}
