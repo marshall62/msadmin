@@ -174,6 +174,7 @@ def save_problem_meta_info (request, probId):
             givenStd = (grade+"."+domain+"."+cluster+"."+standard+"."+part).replace("undefined",'---')
             addMsg = "Standard ID " + givenStd + " is not valid"
             stdId = None
+            clustId = None
         else:
             foundStd = foundStd.first()
             stdId = foundStd.id
