@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
@@ -256,6 +257,13 @@ def selectProblemDifficulty (probId):
         if row:
             return row[0]
         else: return None
+
+logger = logging.getLogger(__name__)
+def logDebugTest():
+    logger.debug("this is a debug message!")
+
+def logErrorTest():
+    logger.error("this is an error message!!")
 
 
 
