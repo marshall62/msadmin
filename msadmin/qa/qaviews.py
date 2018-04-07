@@ -13,6 +13,9 @@ from msadminsite.settings import QUICKAUTH_PROB_DIRNAME, SNAPSHOT_DIRNAME
 from .qauth_model import *
 from .util import deleteMediaDir, write_file
 from django.contrib.auth.decorators import login_required
+
+logger = logging.getLogger(__name__)
+
 # settings.py has the name of the dir where quickAuth problems should be stored.
 QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
 
@@ -40,6 +43,7 @@ def create_problem (request):
 @login_required
 def edit_problem (request, probId):
     prob = get_object_or_404(Problem, pk=probId)
+    logger.debug("Editing QA problem " +  probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
     allTopics = Topic.objects.all()
     # get the topics by filtering such that we look find the connected map with the given problem
@@ -83,6 +87,7 @@ def save_problem (request):
     if request.method == "POST":
         post = request.POST
         id = post['id']
+        logger.debug("Saving QA problem " +  id)
         name = post['name']
         nickname = post['nickname']
         statementHTML = post['statementHTML']
@@ -258,7 +263,7 @@ def selectProblemDifficulty (probId):
             return row[0]
         else: return None
 
-logger = logging.getLogger(__name__)
+
 def logDebugTest():
     logger.debug("this is a debug message!")
 
