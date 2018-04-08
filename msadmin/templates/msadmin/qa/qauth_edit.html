@@ -66,7 +66,11 @@
         var hintEditMode; // set to either NEW_HINT or EXISTING_HINT
 
 {#        var mediaURL = "{{ MEDIA_URL }}";#}
-        var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}"
+        {% if problem %}
+        var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}";
+        {% else %}
+        var problemDir = "{{ MEDIA_URL }}{{ qaDir }}";
+        {% endif %}
 
         var allStandards = null; // will be set to JSON by AJAX call when page loads
 
@@ -388,7 +392,12 @@
                 success: function (data) {
                     var layoutOpts = data;
                     var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
-                    mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
+                    {% if problem %}
+                        mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
+                    {% else %}
+                        mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", options: opts});
+                    {% endif %}
+
 
                 }
             });
@@ -455,12 +464,11 @@
                 success: function (data) {
                     allStandards = data;
                     var opts = getStandardGradeOptions(allStandards);
-                    {% if problem.getStandardGrade != None %}
+                    {% if problem and problem.getStandardGrade != None %}
                         mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", selectedOption:"{{ problem.getStandardGrade }}", options: opts});
-                    {% else %}
-                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", options: opts});
                     {% endif %}
-                    {% if problem.getStandardGrade != None %}
+{#                The assumption here is that if there is a grade, then other fields of the standard must be set because of validation when saving standards #}
+                    {% if problem and problem.getStandardGrade != None %}
                         {#  This populates the pulldowns with items from the lists#}
                         opts = getStandardDomainOptions(allStandards, "{{ problem.getStandardGrade }}");
                         mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", selectedOption:"{{ problem.getStandardDomain }}",options: opts});
@@ -471,8 +479,10 @@
                         opts = getStandardPartOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}", "{{ problem.getStandardCluster }}","{{ problem.getStandardStandard }}");
                         mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",selectedOption:"{{ problem.getStandardPart }}", options: opts});
 
-                    {% else %}
+                    {% elif probId != -1 %}
+                        opts = getStandardGradeOptions(allStandards);
                         {#  If its a new problem then only the Grade selector is populated.  #}
+                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", options: opts});
                         opts = [{val:"---", label:"---"}];
                         mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", options: opts});
                         mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", options: opts});
@@ -576,18 +586,23 @@
                 width: "95%"
             });
 {#            $("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
-
-            var imgURL = ('{{ problem.imageURL }}' != 'None') ? '{{ problem.imageURL }}' : null; // full URL to external images.
-            {% if problem.imageFile != None %}
+            {% if problem and problem.imageURL %}
+                var imgURL = '{{ problem.imageURL }}';
+            {% else %}
+                var imgURL = null;
+            {% endif %}
+            {% if problem and problem.imageFile != None %}
                 var imgFilename = '{{ problem.imageFile.filename }}';
                 var imgFileId = '{{ problem.imageFile.id }}';
             {% else %}
                 var imgFilename = null;
                 var imgFileId = null;
             {% endif %}
-
-            var imgURI = '{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
-
+            {% if problem %}
+                var imgURI = '{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
+            {% else %}
+                var imgURI = '{{ MEDIA_URL }}{{ qaDir }}';
+            {% endif %}
             var problemImageControls = new ImageControls(imgURL,imgFilename,imgFileId,imgURI);
             problemImageControls.mountComponent('problemImageControls',{imageFileName:'imageFile', delImageClassName: 'a_problem_delete_img'});
             // handle the click on the X next to a problem image to get rid of it.
@@ -728,7 +743,7 @@
             </div>
             <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
             <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
-            {% if problem.audioResource %}
+            {% if problem and problem.audioResource %}
                 <audio id="problem_audio_player" controls>
                     <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
                     Your browser does not support the audio tag.
@@ -843,7 +858,11 @@
                 </div>
             </div>
             <div class="col col-sm-4">
-                <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
+                {% if problem %}
+                    <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
+                {% else %}
+                    <div id="my-pulldown3" label="Status" myId="status" myName="status">
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -939,14 +958,18 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Save Changes to Hints</a>
+                    {% if problem %}
+                        <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Save Changes to Hints</a>
+                    {% else %}
+                        <a href="#hintTable" class="btn btn-primary">Save Changes to Hints</a>
+                    {% endif %}
 {#                    <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
 {#                    <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
                     <p style="color: red" id="hintErrorMessages"></p>
                 </div>
 
                 <div class="tab-pane" id="tab2">
-                    <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=problem.id %}">
+                    <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=probId %}">
                         {#        <div class="input-group">#}
                         {% csrf_token %}
 

@@ -6,7 +6,9 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
 
-from django.db import connection
+from django.db.models import ProtectedError
+
+from msadmin.qa.exc import UserException
 from msadmin.qa.util import handle_uploaded_file, deleteProblemAnswers, saveProblemMultiChoices, \
     saveProblemShortAnswers, getProblemDirName
 from msadminsite.settings import QUICKAUTH_PROB_DIRNAME, SNAPSHOT_DIRNAME
@@ -38,7 +40,8 @@ def reactTest(request):
 # It will set the isActive field in the class_sc_is_map table to true or false.
 @login_required
 def create_problem (request):
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'qaDir': QA_DIR})
+    allTopics = Topic.objects.all()
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'problem': None, 'hints': None, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 def getTopics (prob):
     allTopics = Topic.objects.all()
@@ -97,11 +100,22 @@ def save_problem (request):
         nickname = post['nickname']
         statementHTML = post['statementHTML']
         # answer = post['answer']
-        imageURL = post['imageURL']
-        status = post['status']
-        initDifficulty = post['difficulty']
-
-        questType = post['questType']
+        if 'imageURL' in post:
+            imageURL = post['imageURL']
+        else:
+            imageURL = None
+        if 'status' in post:
+            status = post['status']
+        else:
+            status = None
+        if 'difficulty' in post:
+            initDifficulty = post['difficulty']
+        else:
+            initDifficulty = -1
+        if 'questType' in post:
+            questType = post['questType']
+        else:
+            questType = None
         problemFormat = post['problemFormat']
         correctAnswer=None
         if questType == Problem.MULTI_CHOICE:
@@ -111,7 +125,9 @@ def save_problem (request):
             answers = post.getlist('shortanswer[]')
             correctAnswer = None # want all the answers to go into the problemAnswers table - not into problem.answer
         audioResource = post['audioResource']
-        layoutTemplateId = post['layout']
+        if 'layout' in post:
+            layoutTemplateId = post['layout']
+        else: layoutTemplateId = None
         # authorNotes = post['authorNotes']
         # creator = post['creator']
         # lastModifier = post['lastModifier']
@@ -158,7 +174,8 @@ def save_problem (request):
                         questType=questType, layout_id=layoutTemplateId,lastModifier=uname)
             if initDifficulty != -1 and selectProblemDifficulty(id):
                 updateProblemDifficulty(id,initDifficulty)
-            else: insertProblemDifficulty(id,initDifficulty)
+            elif initDifficulty != -1:
+                insertProblemDifficulty(id,initDifficulty)
 
             # if imageURL is given set it and clear the problem imagefile
             if imageURL:
@@ -223,28 +240,37 @@ def validateMediaRefs (problem):
     return None
 
 @login_required
+#TODO hint deletion often fails because the hint still refers to media files which must be deleted first.
+#If this exception happens django automatically keeps the user in the problem form and pops up an error dialog.   But
+# a better result would be to catch the ProtectedError and send the user a message that the deletion fails because media has to be
+# cleaned out first.
 def deleteHints (request, probId):
     if request.method == "POST":
         post = request.POST
         # hints are given as an array of ids
         hintIds = post.getlist('data[]')
-        for hid in hintIds:
-            h = get_object_or_404(Hint,pk=hid)
-            h.delete()
-            # delete all the rows in the PMF for this hint
-            mfs = ProblemMediaFile.objects.filter(problem_id=probId, hint=h)
-            for f in mfs:
-                f.delete()
-            # Blow away all the files in the hint dir and then delete the dir.
-            deleteMediaDir(probId,hid)
-        # after deleting there may be holes in the ordering sequence, so we renumber all the remaining hints
-        # 1-based ordering is used
-        hints = Hint.objects.filter(problem_id=probId).order_by('order')
-        for i in range(len(hints)):
-            hints[i].order = i+1
-            if not hints[i].givesAnswer:
-                hints[i].name = 'Hint ' + str(i+1);
-            hints[i].save()
+        try:
+            for hid in hintIds:
+                h = get_object_or_404(Hint,pk=hid)
+                h.delete()
+                # delete all the rows in the PMF for this hint
+                # TODO see msadmin.log.   If trying to delete a hint from the problem this will fail because
+                # of the media files.   Should we do the delete and automatically delete the media files?
+                mfs = ProblemMediaFile.objects.filter(problem_id=probId, hint_id=hid)
+                for f in mfs:
+                    f.delete()
+                # Blow away all the files in the hint dir and then delete the dir.
+                deleteMediaDir(probId,hid)
+            # after deleting there may be holes in the ordering sequence, so we renumber all the remaining hints
+            # 1-based ordering is used
+            hints = Hint.objects.filter(problem_id=probId).order_by('order')
+            for i in range(len(hints)):
+                hints[i].order = i+1
+                if not hints[i].givesAnswer:
+                    hints[i].name = 'Hint ' + str(i+1);
+                hints[i].save()
+        except ProtectedError as e:
+            raise UserException("Cannot delete the hint because it is using media that must be deleted first.  Please edit the hint and delete its media first!\n\n\n")
     return redirect("qauth_edit_prob",probId=probId)
 
 

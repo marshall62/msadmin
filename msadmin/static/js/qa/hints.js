@@ -396,6 +396,19 @@ function relabelHints () {
     });
 }
 
+// When the AJAX for removing hints comes back successfully this will remove the rows from the table.
+function doRemoveDeletedHints () {
+    $('#hintTable').find('tr').each(function () {
+        var row = $(this);
+        if (row.find('input[type="checkbox"]').is(':checked') ) {
+            var rid = row.attr('id');
+            theProblem.numHints--;
+            row.remove();
+
+        }
+    });
+}
+
 // Delete all the selected hints
 function deleteSelectedHints (probId) {
     if (confirm("Are you sure you want to delete the selected hints?")) {
@@ -406,9 +419,6 @@ function deleteSelectedHints (probId) {
             if (row.find('input[type="checkbox"]').is(':checked') ) {
                 var rid = row.attr('id');
                 ids.push(rid);
-                theProblem.numHints--;
-                row.remove();
-
             }
         });
 
@@ -424,7 +434,8 @@ function deleteSelectedHints (probId) {
                 alert("Failed to delete hints " + a.responseText + b);
             },
             success: function (data) {
-               validateHints();
+                doRemoveDeletedHints();
+                validateHints();
             }
         });
     }

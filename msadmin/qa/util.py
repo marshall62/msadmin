@@ -52,6 +52,8 @@ def deleteMediaDir (probId, hintId):
     # Create a new FileSystemStorage object based on the default one.  It uses the new directory for the problem.
     fs = FileSystemStorage(location=probLoc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
     fs2 = FileSystemStorage(location=hintLoc ,file_permissions_mode=file_permissions_mode,directory_permissions_mode=directory_permissions_mode)
+    if not fs.exists(Hint.getHintDirName(hintId)):
+        return
     stuff = fs.listdir(Hint.getHintDirName(hintId)) # returns a 2-tuple of lists ([dirs], [files])
     files = stuff[1]
     #deletes all the files in the hint dir
