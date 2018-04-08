@@ -40,11 +40,7 @@ def reactTest(request):
 def create_problem (request):
     return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'qaDir': QA_DIR})
 
-@login_required
-def edit_problem (request, probId):
-    prob = get_object_or_404(Problem, pk=probId)
-    logger.debug("Editing QA problem " +  probId)
-    hints = Hint.objects.filter(problem=prob).order_by('order')
+def getTopics (prob):
     allTopics = Topic.objects.all()
     # get the topics by filtering such that we look find the connected map with the given problem
     inTopics = Topic.objects.filter(problemtopicmap__problem=prob)
@@ -53,7 +49,16 @@ def edit_problem (request, probId):
             for t2 in allTopics:
                 if t1.id == t2.id:
                     t2.setSelected(True)
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+    return allTopics, inTopics
+
+@login_required
+def edit_problem (request, probId):
+    prob = get_object_or_404(Problem, pk=probId)
+    logger.debug("Editing QA problem " +  probId)
+    hints = Hint.objects.filter(problem=prob).order_by('order')
+    allTopics,inTopics = getTopics(prob)
+
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead
@@ -192,8 +197,8 @@ def save_problem (request):
         if not msg:
             msg = 'Saved successfully'
             errors = False
-
-        return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+        allTopics,inTopics = getTopics(p)
+        return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'allTopics': allTopics, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
 def validateMediaRefs (problem):
