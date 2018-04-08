@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,11 +45,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="46" column="53" lean-forward="true" selection-start-line="46" selection-start-column="53" selection-end-line="46" selection-end-column="53" />
+            <state relative-caret-position="189">
+              <caret line="206" column="40" lean-forward="false" selection-start-line="206" selection-start-column="32" selection-end-line="206" selection-end-column="40" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <marker date="1523128041357" expanded="true" signature="10555:10624" ph="UPDATE overa... " />
@@ -64,11 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7065">
-              <caret line="471" column="153" lean-forward="false" selection-start-line="471" selection-start-column="138" selection-end-line="471" selection-end-column="153" />
+            <state relative-caret-position="406">
+              <caret line="978" column="47" lean-forward="true" selection-start-line="978" selection-start-column="47" selection-end-line="978" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -139,8 +139,8 @@
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6015">
-              <caret line="402" column="0" lean-forward="false" selection-start-line="402" selection-start-column="0" selection-end-line="402" selection-end-column="0" />
+            <state relative-caret-position="-2085">
+              <caret line="3" column="6" lean-forward="false" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
               <folding>
                 <marker date="1522846934691" expanded="true" signature="7714:7754" ph="select n fro... probstats" />
               </folding>
@@ -162,8 +162,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mount</find>
-      <find>pulldown9</find>
       <find>pulldown</find>
       <find>pulldown8</find>
       <find>getStand</find>
@@ -192,6 +190,8 @@
       <find>resetG</find>
       <find>getStandardPart</find>
       <find>standard</find>
+      <find>message</find>
+      <find>filename</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -264,11 +264,11 @@
         <option value="$PROJECT_DIR$/msadmin/templatetags/util.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" />
-        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
         <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/json.py" />
         <option value="$PROJECT_DIR$/msadminsite/settings.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
+        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
       </list>
     </option>
   </component>
@@ -918,14 +918,7 @@
       <workItem from="1522164777571" duration="10360000" />
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
-      <workItem from="1523020465315" duration="4688000" />
-    </task>
-    <task id="LOCAL-00022" summary="Added file upload to the qauth problems.">
-      <created>1510589656430</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1510589656430</updated>
+      <workItem from="1523020465315" duration="7000000" />
     </task>
     <task id="LOCAL-00023" summary="Got short answer and multi choice controls working">
       <created>1510841635077</created>
@@ -1263,11 +1256,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523126065692</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="added some logging messages to QA handlers">
+      <created>1523128057016</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1523128057016</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1266848000" />
+    <option name="totallyTimeSpent" value="1269160000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1291,13 +1291,13 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27942795" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20795795" sideWeight="0.5604839" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20795795" sideWeight="0.56120825" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.75179" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20795795" sideWeight="0.43951613" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20795795" sideWeight="0.43879172" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14922349" sideWeight="0.54618937" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20880681" sideWeight="0.4055944" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.45434543" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3080308" sideWeight="0.74626863" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30062112" sideWeight="0.46977812" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32549942" sideWeight="0.49120122" order="19" side_tool="false" content_ui="tabs" />
@@ -1333,7 +1333,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="commented out ProbDifficulty insertions because the queries are failing" />
     <MESSAGE value="removed screenshotURL and snapshot URL textfield in meta area of problem" />
     <MESSAGE value="added preview of snapshot" />
     <MESSAGE value="added sql queries for dealing with problem_difficulty" />
@@ -1358,7 +1357,8 @@
     <MESSAGE value="added saving problem clusterID" />
     <MESSAGE value="fixed clustId bug" />
     <MESSAGE value="added some test logging to qaview" />
-    <option name="LAST_COMMIT_MESSAGE" value="added some test logging to qaview" />
+    <MESSAGE value="added some logging messages to QA handlers" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some logging messages to QA handlers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1423,6 +1423,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1440,6 +1441,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
           <caret line="160" column="13" lean-forward="false" selection-start-line="160" selection-start-column="13" selection-end-line="160" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1513,6 +1515,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="600">
           <caret line="40" column="18" lean-forward="false" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1527,6 +1530,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="12" lean-forward="false" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1555,6 +1559,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2535">
           <caret line="169" column="53" lean-forward="false" selection-start-line="169" selection-start-column="53" selection-end-line="169" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1643,6 +1648,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="12705">
           <caret line="863" column="0" lean-forward="false" selection-start-line="863" selection-start-column="0" selection-end-line="863" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1691,24 +1697,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="568">
           <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7065">
-          <caret line="471" column="153" lean-forward="false" selection-start-line="471" selection-start-column="138" selection-end-line="471" selection-end-column="153" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6015">
-          <caret line="402" column="0" lean-forward="false" selection-start-line="402" selection-start-column="0" selection-end-line="402" selection-end-column="0" />
-          <folding>
-            <marker date="1522846934691" expanded="true" signature="7714:7754" ph="select n fro... probstats" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1780,8 +1768,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="46" column="53" lean-forward="true" selection-start-line="46" selection-start-column="53" selection-end-line="46" selection-end-column="53" />
+        <state relative-caret-position="189">
+          <caret line="206" column="40" lean-forward="false" selection-start-line="206" selection-start-column="32" selection-end-line="206" selection-end-column="40" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <marker date="1523128041357" expanded="true" signature="10555:10624" ph="UPDATE overa... " />
@@ -1792,6 +1780,24 @@
             <marker date="1523128041357" expanded="true" signature="10999:11063" ph="select diff_... overallprobdifficulty" />
             <marker date="1523128041357" expanded="true" signature="11022:11044" ph="INSERT into overallprobdifficulty... " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2085">
+          <caret line="3" column="6" lean-forward="false" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+          <folding>
+            <marker date="1522846934691" expanded="true" signature="7714:7754" ph="select n fro... probstats" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="978" column="47" lean-forward="true" selection-start-line="978" selection-start-column="47" selection-end-line="978" selection-end-column="47" />
+          <folding />
         </state>
       </provider>
     </entry>

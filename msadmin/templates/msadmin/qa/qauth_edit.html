@@ -578,8 +578,14 @@
 {#            $("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
 
             var imgURL = ('{{ problem.imageURL }}' != 'None') ? '{{ problem.imageURL }}' : null; // full URL to external images.
-            var imgFilename = ('{{ problem.imageFile.filename }}'.length > 0) ? '{{ problem.imageFile.filename }}' : null;
-            var imgFileId = ('{{ problem.imageFile.id }}'.length > 0) ? '{{ problem.imageFile.id }}' : null;
+            {% if problem.imageFile != None %}
+                var imgFilename = '{{ problem.imageFile.filename }}';
+                var imgFileId = '{{ problem.imageFile.id }}';
+            {% else %}
+                var imgFilename = null;
+                var imgFileId = null;
+            {% endif %}
+
             var imgURI = '{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
 
             var problemImageControls = new ImageControls(imgURL,imgFilename,imgFileId,imgURI);
