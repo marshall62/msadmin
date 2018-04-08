@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/qa/exc.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/util.py" afterPath="$PROJECT_DIR$/msadmin/qa/util.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" afterPath="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,18 +48,28 @@
       <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="260" column="17" lean-forward="false" selection-start-line="260" selection-start-column="17" selection-end-line="260" selection-end-column="17" />
+            <state relative-caret-position="283">
+              <caret line="268" column="5" lean-forward="true" selection-start-line="268" selection-start-column="5" selection-end-line="268" selection-end-column="5" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1523217953252" expanded="true" signature="12267:12336" ph="UPDATE overa... " />
-                <marker date="1523217953252" expanded="true" signature="12512:12578" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523217953252" expanded="true" signature="12512:12585" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523217953252" expanded="true" signature="12512:12606" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523217953252" expanded="true" signature="12523:12578" ph="UPDATE overa... " />
-                <marker date="1523217953252" expanded="true" signature="12711:12775" ph="select diff_... overallprobdifficulty" />
-                <marker date="1523217953252" expanded="true" signature="12734:12756" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1523220261894" expanded="true" signature="12587:12656" ph="UPDATE overa... " />
+                <marker date="1523220261894" expanded="true" signature="12832:12898" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1523220261894" expanded="true" signature="12832:12905" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1523220261894" expanded="true" signature="12832:12926" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1523220261894" expanded="true" signature="12843:12898" ph="UPDATE overa... " />
+                <marker date="1523220261894" expanded="true" signature="13031:13095" ph="select diff_... overallprobdifficulty" />
+                <marker date="1523220261894" expanded="true" signature="13054:13076" ph="INSERT into overallprobdifficulty... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="shortcuts.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dj2-env/lib/python3.5/site-packages/django/shortcuts.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="139">
+              <caret line="35" column="15" lean-forward="true" selection-start-line="35" selection-start-column="15" selection-end-line="35" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -71,8 +77,8 @@
       <file leaf-file-name="hints.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/static/js/qa/hints.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-181">
-              <caret line="398" column="101" lean-forward="false" selection-start-line="398" selection-start-column="101" selection-end-line="398" selection-end-column="101" />
+            <state relative-caret-position="269">
+              <caret line="428" column="14" lean-forward="true" selection-start-line="428" selection-start-column="14" selection-end-line="428" selection-end-column="15" />
               <folding>
                 <marker date="1523218345502" expanded="true" signature="12539:12549" ph="..." />
                 <marker date="1523218345502" expanded="true" signature="12690:12707" ph="..." />
@@ -106,16 +112,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="181">
               <caret line="961" column="87" lean-forward="true" selection-start-line="961" selection-start-column="87" selection-end-line="961" selection-end-column="87" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="wsgi.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadminsite/wsgi.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -177,7 +173,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>topics</find>
       <find>allTopics</find>
       <find>filter</find>
       <find>Grade</find>
@@ -205,8 +200,9 @@
       <find>problem.im</find>
       <find>getLayoutId</find>
       <find>exists</find>
-      <find>insert</find>
       <find>Save Changes to H</find>
+      <find>insert</find>
+      <find>status</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -282,8 +278,8 @@
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
         <option value="$PROJECT_DIR$/msadmin/qa/util.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/exc.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" />
+        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
       </list>
     </option>
   </component>
@@ -1045,14 +1041,7 @@
       <workItem from="1522164777571" duration="10360000" />
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
-      <workItem from="1523020465315" duration="17919000" />
-    </task>
-    <task id="LOCAL-00026" summary="media file stuff has to be included for a problem without media">
-      <created>1512405220960</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1512405220960</updated>
+      <workItem from="1523020465315" duration="19561000" />
     </task>
     <task id="LOCAL-00027" summary="test short answer has one answer&#10;">
       <created>1512414366033</created>
@@ -1390,11 +1379,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523207830515</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="changed a bunch of stuff so we generate less errors including hint deletion messages.">
+      <created>1523218687826</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1523218687826</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1280079000" />
+    <option name="totallyTimeSpent" value="1281721000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1460,7 +1456,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="got problem difficulty set to be disabled if the problem has had its stats updated." />
     <MESSAGE value="Made problem difficulty depend on the probstats table which says if the problem has been use.d" />
     <MESSAGE value="Removed the use of the problemLayout table and now use the quickAuthformattemplates table." />
     <MESSAGE value="Added integrity checking of the media references in both the problem and hint statementHTML." />
@@ -1485,7 +1480,8 @@
     <MESSAGE value="trying to correct errors in qa template for filename" />
     <MESSAGE value="made args to qa_edit.html template same in both forwards to it" />
     <MESSAGE value="allowed problem layout to be null" />
-    <option name="LAST_COMMIT_MESSAGE" value="allowed problem layout to be null" />
+    <MESSAGE value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
+    <option name="LAST_COMMIT_MESSAGE" value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1513,7 +1509,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="450" />
+      <option name="time" value="452" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1522,14 +1518,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dj2-env/lib/python3.5/site-packages/django/contrib/auth/signals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dj2-env/lib/python3.5/site-packages/django/contrib/auth/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
@@ -1904,10 +1892,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dj2-env/lib/python3.5/site-packages/django/shortcuts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="35" column="15" lean-forward="true" selection-start-line="35" selection-start-column="15" selection-end-line="35" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/static/js/qa/hints.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-181">
-          <caret line="398" column="101" lean-forward="false" selection-start-line="398" selection-start-column="101" selection-end-line="398" selection-end-column="101" />
+        <state relative-caret-position="269">
+          <caret line="428" column="14" lean-forward="true" selection-start-line="428" selection-start-column="14" selection-end-line="428" selection-end-column="15" />
           <folding>
             <marker date="1523218345502" expanded="true" signature="12539:12549" ph="..." />
             <marker date="1523218345502" expanded="true" signature="12690:12707" ph="..." />
@@ -1917,17 +1913,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="260" column="17" lean-forward="false" selection-start-line="260" selection-start-column="17" selection-end-line="260" selection-end-column="17" />
+        <state relative-caret-position="283">
+          <caret line="268" column="5" lean-forward="true" selection-start-line="268" selection-start-column="5" selection-end-line="268" selection-end-column="5" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1523217953252" expanded="true" signature="12267:12336" ph="UPDATE overa... " />
-            <marker date="1523217953252" expanded="true" signature="12512:12578" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523217953252" expanded="true" signature="12512:12585" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523217953252" expanded="true" signature="12512:12606" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523217953252" expanded="true" signature="12523:12578" ph="UPDATE overa... " />
-            <marker date="1523217953252" expanded="true" signature="12711:12775" ph="select diff_... overallprobdifficulty" />
-            <marker date="1523217953252" expanded="true" signature="12734:12756" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1523220261894" expanded="true" signature="12587:12656" ph="UPDATE overa... " />
+            <marker date="1523220261894" expanded="true" signature="12832:12898" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1523220261894" expanded="true" signature="12832:12905" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1523220261894" expanded="true" signature="12832:12926" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1523220261894" expanded="true" signature="12843:12898" ph="UPDATE overa... " />
+            <marker date="1523220261894" expanded="true" signature="13031:13095" ph="select diff_... overallprobdifficulty" />
+            <marker date="1523220261894" expanded="true" signature="13054:13076" ph="INSERT into overallprobdifficulty... " />
           </folding>
         </state>
       </provider>

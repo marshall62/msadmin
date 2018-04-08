@@ -2,6 +2,7 @@ import os
 import re
 import logging
 from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponseServerError
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
@@ -270,7 +271,14 @@ def deleteHints (request, probId):
                     hints[i].name = 'Hint ' + str(i+1);
                 hints[i].save()
         except ProtectedError as e:
-            raise UserException("Cannot delete the hint because it is using media that must be deleted first.  Please edit the hint and delete its media first!\n\n\n")
+            files = e.protected_objects
+            names = ""
+            for f in files:
+                names += f.filename + "\n"
+
+            message = "\nThese media files are blocking hints from deletion:\n " + names
+            message += "\n\nCannot delete the hint because it is using media that must be deleted first.  \nPlease edit the hint and delete its media first!\n\n\n"
+            return HttpResponseServerError(message)
     return redirect("qauth_edit_prob",probId=probId)
 
 
