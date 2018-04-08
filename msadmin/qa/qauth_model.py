@@ -14,7 +14,7 @@ class Problem (models.Model):
     clusterId = models.CharField(max_length=45)
     form= models.CharField(max_length=50)
     # layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
-    layout = models.ForeignKey('FormatTemplate',db_column='layoutID', on_delete=models.PROTECT)
+    layout = models.ForeignKey('FormatTemplate',db_column='layoutID', on_delete=models.PROTECT,null=True)
     imageFile = models.ForeignKey('ProblemMediaFile',db_column='imageFileId',null=True, on_delete=models.PROTECT, related_name='+')
     audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True, on_delete=models.PROTECT, related_name='+')
     created_at = models.DateTimeField(db_column='createTimestamp', auto_now_add=True)
