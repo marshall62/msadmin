@@ -1,6 +1,13 @@
-3-level standard selector
+THe class page within strategies should be made more generally useful for configuring all elements of classes.
+Would like to be able to config the current system (e.g. set the pre/post test in the classconfig and turn on post test).
+Would like to be able to see its pedagogies.  Other things in the class config should be editable here with the strategy being an accordion area
+or separated from it better.
 
-multi-select topics for problem
+Need Topic editing where I can set intro and edit/save HTML as files on rose.  Means reading existing HTML files and putting code into editor window
+and resave.
+
+Need multiple CCSS on problem because multiple CCSS allows example and video selection to work well and will be better in general for understanding what the content is
+
 
 add lastWriter, creator, lastWriteTime, createTime to hint.
 

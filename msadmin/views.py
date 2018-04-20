@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def main (request):
-    print("here")
     return render(request, 'msadmin/main.html', {})
 
 @login_required

@@ -32,8 +32,9 @@ function injectPulldownIntoElement (props, elt) {
 function getPulldownProps (eltId, options) {
     var obj = {id: eltId};
     obj.options = options;
+    obj.selectId = document.getElementById(eltId).getAttribute("selectId");
     obj.label = document.getElementById(eltId).getAttribute("label");
-    obj.myName = document.getElementById(eltId).getAttribute("myName");
+    obj.name = document.getElementById(eltId).getAttribute("name");
     obj.selectedOption = document.getElementById(eltId).getAttribute("selectedOption");
     return obj;
 }
@@ -47,7 +48,9 @@ function clearPulldown (mountingEltId) {
 }
 
 
+
 function mountPulldownComponent (mountingEltId, props) {
+    var propsInTag = getPulldownProps(mountingEltId,props)
     var elt = document.getElementById(mountingEltId);
     clearPulldown(mountingEltId);
     if (elt) {
@@ -56,6 +59,22 @@ function mountPulldownComponent (mountingEltId, props) {
     }
 
 }
+
+
+/*
+ The pulldown menu needs to be done like:
+ <select id="myPulldown" label="Choose One" selectedOption="New York" onchange="stateSelected>
+ </select>
+
+
+
+// in jquery onload function:
+ $('#myPulldown').initialize(
+ {options: [{label: 'Connecticut', value: 'ct'}, {label: 'New York', value: 'ny'}]),
+  selectedOption:  'ct'
+  });
+
+ */
 
 
 class ImageControls {

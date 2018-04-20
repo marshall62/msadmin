@@ -7,6 +7,7 @@
                 <li class="active"><a href="{% url 'util_main'%}">Utilities</a></li>
                 <li class="active"><a href="{% url 'strat_main'%}">Tutoring Strategies</a></li>
                 <li class="active"><a href="{% url 'qauth_main'%}">Math Problems</a></li>
+                <li class="active"><a href="{% url 'topics_main'%}">Math Topics</a></li>
                 <li class="active"><a href="{% url 'testauth_main'%}">Surveys</a></li>
                 {% if request.user|has_group:"userAuthor" %}
                     <li class="active"><a href="{% url 'users_main'%}">Users</a></li>

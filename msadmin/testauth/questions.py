@@ -100,6 +100,9 @@ def writeQuestion (qid, postData, files):
         q.answer=correctChoice
     elif type=="multiChoice" and correctChoice == 'noneCorrect':
         q.answer=None
+    # empty text answers need to convert to null in the db field
+    elif answer.trim() == '':
+        q.answer=None
     else:
         q.answer=answer
     # TODO add image upload into blob

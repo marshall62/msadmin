@@ -1,0 +1,31 @@
+{% extends 'msadmin/base_ajax.html' %}
+
+{% block page-css %}
+{% endblock %}
+
+{% block page-js %}
+    <script language="javascript">
+
+        function editTopic () {
+            var t= $('#topic_selector').val() ;
+            var url_mask = "{% url 'topics_edit' topicId=12345 %}";
+            url_mask = url_mask.replace(/12345/,t);
+            window.location.href= url_mask;
+        }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <h3>Select a Topic to edit</h3>
+    <div class="input-group">
+        <span class="input-group-addon">Topic</span>
+        <select class="form-control" onchange="editTopic();" style="width:auto;" name='topic' id="topic_selector">
+            {% for t in topics %}
+                <option value="{{ t.id }}">{{ t.id }}:{{ t.description }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <h3><a href="{% url 'topics_create' %}">Create a new Topic</a></h3>
+
+{% endblock %}

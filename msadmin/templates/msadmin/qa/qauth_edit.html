@@ -42,6 +42,7 @@
     {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.3/react-bootstrap.min.js"></script>#}
 {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/JSXTransformer.js"></script>#}
     <script type="text/javascript" src="{% static 'js/qa/mycomponents.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/DMPulldown.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/hints.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/media.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/answers.js' %}"></script>
@@ -64,6 +65,7 @@
 
         var hintImageControls;  // an object that needs to be global because it gets manipulated by callbacks in hints.js
         var hintEditMode; // set to either NEW_HINT or EXISTING_HINT
+        var idCount=0;
 
 {#        var mediaURL = "{{ MEDIA_URL }}";#}
         {% if problem %}
@@ -99,6 +101,10 @@
         function saveProblemMetaInfo() {
             var form = $('#metainfoForm')[0]; // get the Javascript obj for the hint form
             var data = new FormData(form); // put all the form fields into data
+            console.log("stdGrades");
+            console.log(data.getAll("stdGrade"));
+            console.log("stdDomains");
+            console.log(data.getAll("stdDomain"));
             var probId = theProblem.id;
             var url = SAVE_META_INFO_URL.replace('12345', theProblem.id);
             $.ajax({
@@ -156,6 +162,82 @@
                 return false;
             }
             else return true;
+        }
+
+        //
+        function delCCSSRow (id) {
+            $('#'+id).remove();
+
+        }
+
+/*    Add a div to the end of the set of rows contained in the div #ccssSelectors
+   <div class="row">
+            <div class="col col-sm-2">
+                <div id="my-pulldown8">
+                </div>
+            </div>
+            <div class="col col-sm-2">
+                <div id="my-pulldown9">
+                </div>
+            </div>
+            <div class="col col-sm-2">
+                <div id="my-pulldown10">
+                </div>
+            </div>
+            <div class="col col-sm-2">
+                <div id="my-pulldown11">
+                </div>
+            </div>
+            <div class="col col-sm-2">
+                <div id="my-pulldown12">
+                </div>
+            </div>
+        </div> */
+        function addCCSSRow (std) {
+            var div_id=genId();
+            var gr_Id=genId();
+            var dom_Id=genId();
+            var clust_Id=genId();
+            var std_Id=genId();
+            var part_Id=genId();
+            $('#ccssSelectors').append('<div id="' +div_id+ '" class="row">'+
+{#                '<div class="col col-sm-1"><a onclick="delCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a></div>'+#}
+                '<a onclick="delCCSSRow(\'' +div_id+ '\')" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a>'+
+                '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Grade') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Domain') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(clust_Id,'stdCluster','Cluster') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(std_Id,'stdStandard','Std') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(part_Id,'stdPart','Part') + '</div>' +
+                '</div>');
+            var opts = getStandardGradeOptions(allStandards);
+
+            var ids = {grade:'#'+gr_Id, domain:'#'+dom_Id, cluster: '#'+clust_Id, standard: '#'+std_Id, part:'#'+part_Id};
+            $('#'+gr_Id).DMPulldown({options: opts, selectedOption: (std ? std.grade : null), onChange: function () { resetGradeChildren(ids) }});
+            if (std)
+                opts = getStandardDomainOptions(allStandards,std.grade);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+dom_Id).DMPulldown({options: opts, selectedOption: (std ? std.domain : null), onChange: function () { resetDomainChildren(ids) }});
+            if (std)
+                opts = getStandardClusterOptions(allStandards,std.grade,std.domain);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+clust_Id).DMPulldown({options: opts, selectedOption: (std ? std.cluster : null), onChange: function () { resetClusterChildren(ids) }});
+            if (std)
+                opts = getStandardStandardOptions(allStandards,std.grade,std.domain,std.cluster);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+std_Id).DMPulldown({options: opts, selectedOption: (std ? std.standard : null), onChange: function () { resetStandardChildren(ids) }});
+            if (std)
+                opts = getStandardPartOptions(allStandards,std.grade,std.domain,std.cluster,std.standard);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+part_Id).DMPulldown({options: opts, selectedOption: (std ? std.part : null)});
+
+        }
+
+        function genId () {
+            return 'pulldown_selector_id-' + ++idCount;
+        }
+
+        function pulldownDiv (id, name, label) {
+            return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
         }
 
 
@@ -403,58 +485,106 @@
             });
         }
 
-        function resetStandardChildren () {
-            var grade = $('#stdGrade').val();
-            var domain = $('#stdDomain').val();
-            var clust = $('#stdCluster').val();
-            var std = $('#stdStandard').val();
-            var opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
-            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart", options: opts});
+        function resetStandardChildren (stdPulldownIds) {
+            var grade = $(stdPulldownIds.grade).val();
+            var domain = $(stdPulldownIds.domain).val();
+            var clust = $(stdPulldownIds.cluster).val();
+            var std = $(stdPulldownIds.standard).val();
+            var opts = [{val:"---", label:"---"}];
+            if (std != "---")
+                opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
+            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
 
         // If a new cluster is chosen, populate the standard pulldown based on the children of the new category
-        function resetClusterChildren () {
-            var grade = $('#stdGrade').val();
-            var domain = $('#stdDomain').val();
-            var clust = $('#stdCluster').val();
-            var opts = getStandardStandardOptions(allStandards,grade,domain, clust);
-            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard", options: opts});
+        function resetClusterChildren (stdPulldownIds) {
+            var grade = $(stdPulldownIds.grade).val();
+            var domain = $(stdPulldownIds.domain).val();
+            var opts = [{val:"---", label:"---"}];
+            var clust = $(stdPulldownIds.cluster).val();
+            if (clust != "---")
+                opts = getStandardStandardOptions(allStandards,grade,domain, clust);
+            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
             opts = [{val:"---", label:"---"}];
-            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
-            $('#stdStandard').change(resetStandardChildren);
+            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
-        function resetDomainChildren () {
-            var grade = $('#stdGrade').val();
-            var domain = $('#stdDomain').val();
-            var opts = getStandardClusterOptions(allStandards,grade,domain);
-            mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
+        function resetDomainChildren (stdPulldownIds) {
+            var grade = $(stdPulldownIds.grade).val();
+            var opts = [{val:"---", label:"---"}];
+            var domain = $(stdPulldownIds.domain).val();
+            if (domain != "---")
+                opts = getStandardClusterOptions(allStandards,grade,domain);
+
+            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
             opts = [{val:"---", label:"---"}];
-            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard",options: opts});
-            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
-            $('#stdCluster').change(resetClusterChildren);
-            $('#stdStandard').change(resetStandardChildren);
+            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
+            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
 
         }
 
-        function resetGradeChildren () {
-            var grade = $('#stdGrade').val();
-            var opts = getStandardDomainOptions(allStandards,grade);
-            mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain",options: opts});
+        function resetGradeChildren (stdPulldownIds) {
+            var grade = $(stdPulldownIds.grade).val();
+            var opts;
+            if (grade == '---')
+                opts = [{val:"---", label:"---"}];
+            else opts = getStandardDomainOptions(allStandards,grade);
+
+            $(stdPulldownIds.domain).setDMPulldownOptions({options: opts});
             opts = [{val:"---", label:"---"}];
-            mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",options: opts});
-            mountPulldownComponent('my-pulldown11',{label:"Std", myId:"stdStandard", myName:"stdStandard",options: opts});
-            mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",options: opts});
-            $('#stdDomain').change(resetDomainChildren);
-            $('#stdCluster').change(resetClusterChildren);
-            $('#stdStandard').change(resetStandardChildren);
+            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
+            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
+            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
+
         }
 
+        function setStandardPulldowns (ids, std) {
+            var opts = getStandardGradeOptions(allStandards);
+            $(ids.grade).DMPulldown(
+                {
+                    selectedOption: std ? std.grade : null,
+                    options: opts,
+                    onChange: function () { resetGradeChildren(ids) }
+                }
+            );
+            opts = getStandardDomainOptions(allStandards, std.grade);
+            $(ids.domain).DMPulldown(
+                {
+                    options: opts,
+                    onChange: function () { resetDomainChildren(ids)} ,
+                    selectedOption: std ? std.domain : null
+                }
+            );
+            opts = getStandardClusterOptions(allStandards, std.grade,std.domain);
+            $(ids.cluster).DMPulldown(
+                {
+                    options: opts,
+                    onChange: function () { resetClusterChildren(ids)} ,
+                    selectedOption: std ? std.cluster : null
+                }
+            );
+            opts = getStandardStandardOptions(allStandards, std.grade,std.domain,std.cluster);
+            $(ids.standard).DMPulldown(
+                {
+                    options: opts,
+                    onChange: function () { resetStandardChildren(ids)} ,
+                    selectedOption: std ? std.standard : null
+                }
+            );
+            opts = getStandardPartOptions(allStandards, std.grade,std.domain,std.cluster,std.standard);
+            $(ids.part).DMPulldown(
+                {
+                    options: opts,
+                    selectedOption: std && std.part ? std.part : null
+                }
+            );
+        }
 
 
         function initializeStandardPulldowns () {
-            var url_mask = "{% url 'qauth_standards' %}";
+            var url_mask = "{% url 'qauth_standards' probId='12345' %}";
+            url_mask = url_mask.replace("12345", "{{ probId }}");
             $.ajax({
                 url: url_mask,
                 type: "GET",
@@ -462,39 +592,25 @@
                     alert("Failed to get standards " + a.responseText + b);
                 },
                 success: function (data) {
-                    allStandards = data;
+                    allStandards = data.allStandards;
+                    var primaryStandard = data.primaryStandard; // may be absent
+                    var probStandards = data.probStandards; // may be absent
                     var opts = getStandardGradeOptions(allStandards);
-                    {% if problem and problem.getStandardGrade != None %}
-                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", selectedOption:"{{ problem.getStandardGrade }}", options: opts});
-                    {% endif %}
-{#                The assumption here is that if there is a grade, then other fields of the standard must be set because of validation when saving standards #}
-                    {% if problem and problem.getStandardGrade != None %}
-                        {#  This populates the pulldowns with items from the lists#}
-                        opts = getStandardDomainOptions(allStandards, "{{ problem.getStandardGrade }}");
-                        mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", selectedOption:"{{ problem.getStandardDomain }}",options: opts});
-                        opts = getStandardClusterOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}");
-                        mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster",selectedOption:"{{ problem.getStandardCluster }}", options: opts});
-                        opts = getStandardStandardOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}", "{{ problem.getStandardCluster }}");
-                        mountPulldownComponent('my-pulldown11',{label:"Standard", myId:"stdStandard", myName:"stdStandard",selectedOption:"{{ problem.getStandardStandard }}", options: opts});
-                        opts = getStandardPartOptions(allStandards,"{{ problem.getStandardGrade }}","{{ problem.getStandardDomain }}", "{{ problem.getStandardCluster }}","{{ problem.getStandardStandard }}");
-                        mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart",selectedOption:"{{ problem.getStandardPart }}", options: opts});
+                    var stdPulldownIds = {
+                        grade: '#my-pulldown8',
+                        domain:'#my-pulldown9',
+                        cluster: '#my-pulldown10',
+                        standard: '#my-pulldown11',
+                        part: '#my-pulldown12'
+                    }
+                    // TODO The first CCSS row needs to be deleteable but this means some
+                    // additional work to make sure one CCSS is always remaining.
+                    setStandardPulldowns(stdPulldownIds,primaryStandard);
+                    if (probStandards)
+                        for (std of probStandards) {
+                            addCCSSRow(std);
+                        }
 
-                    {% elif probId != -1 %}
-                        opts = getStandardGradeOptions(allStandards);
-                        {#  If its a new problem then only the Grade selector is populated.  #}
-                        mountPulldownComponent('my-pulldown8',{label:"Grade", myId:"stdGrade", myName:"stdGrade", options: opts});
-                        opts = [{val:"---", label:"---"}];
-                        mountPulldownComponent('my-pulldown9',{label:"Domain", myId:"stdDomain", myName:"stdDomain", options: opts});
-                        mountPulldownComponent('my-pulldown10',{label:"Cluster", myId:"stdCluster", myName:"stdCluster", options: opts});
-                        mountPulldownComponent('my-pulldown11',{label:"Standard", myId:"stdStandard", myName:"stdStandard", options: opts});
-                        mountPulldownComponent('my-pulldown12',{label:"Part", myId:"stdPart", myName:"stdPart", options: opts});
-
-                    {% endif %}
-                    // Change listeners installed on pulldowns so that selections cause a cascade of resetting child pulldowns
-                    $('#stdGrade').change(resetGradeChildren);
-                    $('#stdDomain').change(resetDomainChildren);
-                    $('#stdCluster').change(resetClusterChildren);
-                    $('#stdStandard').change(resetStandardChildren);
                 }
             });
 
@@ -959,7 +1075,7 @@
                         </tbody>
                     </table>
                     {% if problem %}
-                        <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Save Changes to Hints</a>
+                        <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Delete Selected Hints</a>
                     {% else %}
                         <a href="#hintTable" class="btn btn-primary">Save Changes to Hints</a>
                     {% endif %}
@@ -1004,32 +1120,46 @@
                         <br>
 {#                        <div class="form-inline">#}
 {#                            <div class="input-group">#}
-
+                        <div id="ccssSelectors">
                             <div class="row">
+                                <a id="addMedia" onclick="addCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span></a>
 
+                            </div>
+                            <div class="row">
                                 <div class="col col-sm-2">
-{#                                <span class="input-group-addon">Standard ID</span>#}
-                                    <div id="my-pulldown8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Grade</span>
+                                        <select id="my-pulldown8" name='stdGrade' class="form-control"></select>
+                                    </div>
+
+                                </div>
+                                <div class="col col-sm-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Domain</span>
+                                        <select id="my-pulldown9" name='stdDomain' class="form-control"></select>
                                     </div>
                                 </div>
                                 <div class="col col-sm-2">
-                                    <div id="my-pulldown9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Cluster</span>
+                                        <select id="my-pulldown10" name='stdCluster' class="form-control"></select>
                                     </div>
                                 </div>
                                 <div class="col col-sm-2">
-                                    <div id="my-pulldown10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Std</span>
+                                        <select id="my-pulldown11" name='stdStandard' class="form-control"></select>
                                     </div>
                                 </div>
                                 <div class="col col-sm-2">
-                                    <div id="my-pulldown11">
-                                    </div>
-                                </div>
-                                <div class="col col-sm-2">
-                                    <div id="my-pulldown12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Part</span>
+                                        <select id="my-pulldown12" name='stdPart' class="form-control"></select>
                                     </div>
                                 </div>
 {#                                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
                             </div>
+                        </div>
 {#                            <div class="input-group">#}
 {#                                <span class="input-group-addon">Domain ID</span>#}
 {#                                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">#}

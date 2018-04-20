@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic Intro Preview</title>
+    <script language="JavaScript">
+
+
+        // test this by putting topic_39_intro into the input field and click submit.
+        function loadIntro () {
+
+            var topicName = document.getElementById("topicName").val;
+     //       var url = "http://rose.cs.umass.edu/mathspring/mscontent/topicIntros/topic_2_intro/topic_2_intro.html";
+            var url = "http://rose.cs.umass.edu/mathspring/mscontent/topicIntros/" +topicName+ "/" +topicName+ ".html";
+            var fr = document.getElementById("displayArea");
+            fr.src = url;
+
+        }
+
+    </script>
+</head>
+<body>
+<form>
+    <input id="topicName" type="text">
+    <button onclick="loadIntro()" id="submit_button">Submit</button>
+    <br>
+    <br>
+    <iframe id="displayArea" width="600" height="600" scrolling="no"></iframe>
+</form>
+
+</body>
+</html>

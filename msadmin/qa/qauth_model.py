@@ -441,10 +441,23 @@ class Standard (models.Model):
         else:
             return None
 
+    def toJSON (self):
+        d = {}
+        d['grade'] = self.grade
+        d['domain'] = self.getDomain()
+        d['cluster'] = self.getCluster()
+        d['standard'] = self.getStandard()
+        if self.getPart():
+            d['part'] = self.getPart()
+        return d
+
 
 
 class Topic (models.Model):
     description = models.CharField(max_length=200)
+    summary = models.CharField(max_length=100)
+    intro = models.CharField(max_length=100)
+    type = models.CharField(max_length=5)
     selected = False # A non-db field that is used to mark if a problem is within a topic when a problem and set of topics sent to a template
 
     class Meta:
@@ -456,6 +469,14 @@ class Topic (models.Model):
     def isSelected (self):
         return self.selected
 
+
+class ProblemStandardMap (models.Model):
+    probId= models.IntegerField()
+    stdId = models.CharField(max_length=12)
+    modtimestamp = models.DateTimeField(db_column='modTimestamp',auto_now=True)
+
+    class Meta:
+        db_table = "ProbStdMap"
 
 class ProblemTopicMap (models.Model):
     problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)

@@ -1,9 +1,19 @@
 import os
-
+import errno
 from django.core.files.storage import FileSystemStorage
 from msadmin.qa.qauth_model import Problem, Hint
 from msadmin.qa.qauth_model import ProblemAnswer,ProblemMediaFile
 from msadminsite.settings import MEDIA_ROOT,QUICKAUTH_PROB_DIRNAME
+
+def do_write_file_text (fullPath, text):
+    if not os.path.exists(os.path.dirname(fullPath)):
+        try:
+            os.makedirs(os.path.dirname(fullPath))
+        except OSError as exc: # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+    with open(fullPath, 'w') as destination:
+        destination.write(text)
 
 # Will write (or overwrite if exists) a file
 def do_write_file (fullPath, file, filename=None):

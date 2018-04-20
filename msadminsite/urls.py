@@ -42,6 +42,7 @@ urlpatterns = [
     # ),name='users_main'),
     url(r'^stratauth/', include('msadmin.stratauth.urls')),
     url(r'^qauth/',include('msadmin.qa.urls')),
+    url(r'^topics/',include('msadmin.topics.urls')),
     url(r'^testauth/',include('msadmin.testauth.urls'))
 ]
 # This adds the ability to get to static media (e.g. uploaded files) using URLS like

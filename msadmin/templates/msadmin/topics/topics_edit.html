@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% extends 'msadmin/base_ajax.html' %}
+{% load staticfiles %}
+
+{% block page-css %}
+{#    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">#}
+{% endblock %}
+
+{% block page-js %}
+    <!-- include summernote css/js -->
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script type="text/javascript" src="{% static 'js/qa/mycomponents.js' %}"></script>
+
+    <script language="JavaScript">
+
+    function validateTopic() {
+        return true;
+    }
+
+    function fillPulldowns (selectedType) {
+        var opts = [{label: "SWF", value: "swf"}, {label: "HTML", value: "html"}];
+
+        mountPulldownComponent('type_pulldown',{label:"Intro Type", myId:"introType", myName:"introType", selectedOption:selectedType, options: opts});
+
+    }
+
+    $(document).ready(function() {
+        fillPulldowns({% if topic %} '{{ topic.type }}' {% else %} 'swf' {% endif %});
+
+        $('#htmlText').summernote({
+            height: 400,
+            width: 600
+        });
+    });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" onsubmit="return validateTopic();" action="{% url 'topics_save' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <div class="row">
+            <div class="col col-sm-3">
+                <div class="input-group">
+                    <span class="input-group-addon">ID</span>
+                    {% if not topic %}
+                        <input id="id" type="text" class="form-control" name="id" readonly placeholder="--">
+                    {% else %}
+                        <input id="id" type="text" class="form-control" name="id" readonly value = "{{ topic.id }}" placeholder="--">
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="col col-sm-8">
+                <div class="input-group ">
+                    <span class="input-group-addon">Description</span>
+                    {% if not topic %}
+                        <input id="descr" type="text" class="form-control" name="descr" placeholder="Topic Description">
+                    {% else %}
+                        <input id="descr" type="text" class="form-control" name="descr" value = "{{ topic.description }}" placeholder="Topic Description">
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">Summary</span>
+            {% if not topic %}
+                <input id="summary" type="text" class="form-control" name="summary" placeholder="Summary">
+            {% else %}
+                <input id="summary" type="text" class="form-control" name="summary" value = "{{ topic.summary }}" placeholder="Summary">
+            {% endif %}
+
+        </div>
+        <br>
+        <div id="type_pulldown" class="input-group mb-2 mr-sm-2 mb-sm-0"></div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Intro</span>
+            {% if not topic %}
+                <input id="intro" type="text" class="form-control" name="intro" placeholder="--">
+            {% else %}
+                <input id="intro" type="text" class="form-control" name="intro" value = "{{ topic.intro }}" placeholder="--">
+            {% endif %}
+
+        </div>
+
+        <br>
+        <textarea id="htmlText" name="htmlText"></textarea>
+    </div>
+
+    <button id="saveButton" class="btn btn-primary">Save</button>
+</form>
+
+{% endblock %}
