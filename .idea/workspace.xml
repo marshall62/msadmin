@@ -2,27 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/static/js/DMPulldown.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/preview.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_main.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/topics/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/msadmin/topics/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/todo.txt" afterPath="$PROJECT_DIR$/docs/todo.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/json.py" afterPath="$PROJECT_DIR$/msadmin/qa/json.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/urls.py" afterPath="$PROJECT_DIR$/msadmin/qa/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/util.py" afterPath="$PROJECT_DIR$/msadmin/qa/util.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" afterPath="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/base.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/base0.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/base0.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/testauth/questions.py" afterPath="$PROJECT_DIR$/msadmin/testauth/questions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/views.py" afterPath="$PROJECT_DIR$/msadmin/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadminsite/urls.py" afterPath="$PROJECT_DIR$/msadminsite/urls.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -86,8 +67,18 @@
       <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="606" column="81" lean-forward="false" selection-start-line="606" selection-start-column="81" selection-end-line="606" selection-end-column="81" />
+            <state relative-caret-position="374">
+              <caret line="586" column="50" lean-forward="false" selection-start-line="586" selection-start-column="50" selection-end-line="586" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="369">
+              <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -169,16 +160,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DMPulldown.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/static/js/DMPulldown.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -193,7 +174,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>my-pulldown8</find>
       <find>problem.im</find>
       <find>getLayoutId</find>
       <find>exists</find>
@@ -223,6 +203,7 @@
       <find>DMPull</find>
       <find>url</find>
       <find>pulldown8</find>
+      <find>probSt</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -320,7 +301,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="90" />
-    <option name="y" value="52" />
+    <option name="y" value="53" />
     <option name="width" value="1191" />
     <option name="height" value="1012" />
   </component>
@@ -1031,14 +1012,7 @@
       <workItem from="1522164777571" duration="10360000" />
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
-      <workItem from="1523020465315" duration="74921000" />
-    </task>
-    <task id="LOCAL-00028" summary="worked on file upload so that it will hopefully work on server">
-      <created>1512429804800</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1512429804800</updated>
+      <workItem from="1523020465315" duration="76055000" />
     </task>
     <task id="LOCAL-00029" summary="Consolidated media operations to one button.">
       <created>1512495478178</created>
@@ -1376,11 +1350,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523220294227</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work.">
+      <created>1524189782900</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1524189782900</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1337081000" />
+    <option name="totallyTimeSpent" value="1338215000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1392,7 +1373,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="90" y="52" width="1191" height="1012" extended-state="0" />
+    <frame x="90" y="53" width="1191" height="1012" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1446,7 +1427,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Made problem difficulty depend on the probstats table which says if the problem has been use.d" />
     <MESSAGE value="Removed the use of the problemLayout table and now use the quickAuthformattemplates table." />
     <MESSAGE value="Added integrity checking of the media references in both the problem and hint statementHTML." />
     <MESSAGE value="fixed bug where it submitted a save-problem when preview button clicked." />
@@ -1471,7 +1451,8 @@
     <MESSAGE value="made args to qa_edit.html template same in both forwards to it" />
     <MESSAGE value="allowed problem layout to be null" />
     <MESSAGE value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
-    <option name="LAST_COMMIT_MESSAGE" value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
+    <MESSAGE value="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1769,14 +1750,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/stratauth/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1940,10 +1913,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="606" column="81" lean-forward="false" selection-start-line="606" selection-start-column="81" selection-end-line="606" selection-end-column="81" />
+        <state relative-caret-position="374">
+          <caret line="586" column="50" lean-forward="false" selection-start-line="586" selection-start-column="50" selection-end-line="586" selection-end-column="50" />
           <folding />
         </state>
       </provider>

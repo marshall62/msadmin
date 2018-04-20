@@ -548,7 +548,10 @@
                     onChange: function () { resetGradeChildren(ids) }
                 }
             );
-            opts = getStandardDomainOptions(allStandards, std.grade);
+            if (std)
+                opts = getStandardDomainOptions(allStandards, std.grade);
+            else
+                opts = [{val:"---", label:"---"}];
             $(ids.domain).DMPulldown(
                 {
                     options: opts,
@@ -556,7 +559,10 @@
                     selectedOption: std ? std.domain : null
                 }
             );
-            opts = getStandardClusterOptions(allStandards, std.grade,std.domain);
+            if (std)
+                opts = getStandardClusterOptions(allStandards, std.grade,std.domain);
+            else
+                opts = [{val:"---", label:"---"}];
             $(ids.cluster).DMPulldown(
                 {
                     options: opts,
@@ -564,7 +570,10 @@
                     selectedOption: std ? std.cluster : null
                 }
             );
-            opts = getStandardStandardOptions(allStandards, std.grade,std.domain,std.cluster);
+            if (std)
+                opts = getStandardStandardOptions(allStandards, std.grade,std.domain,std.cluster);
+            else
+                opts = [{val:"---", label:"---"}];
             $(ids.standard).DMPulldown(
                 {
                     options: opts,
@@ -572,7 +581,10 @@
                     selectedOption: std ? std.standard : null
                 }
             );
-            opts = getStandardPartOptions(allStandards, std.grade,std.domain,std.cluster,std.standard);
+            if (std)
+                opts = getStandardPartOptions(allStandards, std.grade,std.domain,std.cluster,std.standard);
+            else
+                opts = [{val:"---", label:"---"}];
             $(ids.part).DMPulldown(
                 {
                     options: opts,
