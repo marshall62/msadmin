@@ -496,6 +496,9 @@ def getStandards (request, probId):
     stdl = convertDictToLists(stds)
     res = {'allStandards': stdl}
 
+    if probId == '-1':
+        return JsonResponse(res)
+
     p = get_object_or_404(Problem,pk=probId)
     pstd_id = p.standardId
     if pstd_id:

@@ -108,12 +108,16 @@ class Problem (models.Model):
 
     def getDifficulty (self):
         d = ProblemDifficulty.objects.get(problem_id=self.id)
-        # I don't know what to do with this number
+        # The number we are interested in is the Y in 0.XY
         if d and d.diff_level >= 0:
-            l=d.diff_level * 10
+            l = "{0:3.2}".format(d.diff_level)
+            l = l.split('.')[1]
+            if len(l) > 1:
+                return l[1]
+            else: return '0'
+            return l
         else:
-            l=-1
-        return str(int(l))
+            return '-1'
 
     def getDifficultyProbNum (self):
         d = ProblemDifficulty.objects.get(problem_id=self.id)

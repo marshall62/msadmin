@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/json.py" afterPath="$PROJECT_DIR$/msadmin/qa/json.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" afterPath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/qaviews.py" afterPath="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/qa/urls.py" afterPath="$PROJECT_DIR$/msadmin/qa/urls.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,31 +48,38 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qaviews.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2769">
-              <caret line="191" column="28" lean-forward="false" selection-start-line="191" selection-start-column="28" selection-end-line="191" selection-end-column="28" />
+            <state relative-caret-position="21">
+              <caret line="168" column="127" lean-forward="false" selection-start-line="168" selection-start-column="127" selection-end-line="168" selection-end-column="127" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1523220261894" expanded="true" signature="12587:12656" ph="UPDATE overa... " />
-                <marker date="1523220261894" expanded="true" signature="12832:12898" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523220261894" expanded="true" signature="12832:12905" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523220261894" expanded="true" signature="12832:12926" ph="INSERT into overallprobdifficulty... " />
-                <marker date="1523220261894" expanded="true" signature="12843:12898" ph="UPDATE overa... " />
-                <marker date="1523220261894" expanded="true" signature="13031:13095" ph="select diff_... overallprobdifficulty" />
-                <marker date="1523220261894" expanded="true" signature="13054:13076" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1524518950302" expanded="true" signature="13445:13474" ph="SELECT n fro... probstats" />
+                <marker date="1524518950302" expanded="true" signature="13445:13482" ph="SELECT n FRO... probstats" />
+                <marker date="1524518950302" expanded="true" signature="13445:13484" ph="SELECT n FRO... probstats" />
+                <marker date="1524518950302" expanded="true" signature="13669:13782" ph="UPDATE overa... " />
+                <marker date="1524518950302" expanded="true" signature="13889:14761" ph="UPDATE overa... " />
+                <marker date="1524518950302" expanded="true" signature="14132:14262" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1524518950302" expanded="true" signature="14344:14345" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1524518950302" expanded="true" signature="14344:14761" ph="INSERT into overallprobdifficulty... " />
+                <marker date="1524518950302" expanded="true" signature="14450:14514" ph="select diff_... overallprobdifficulty" />
+                <marker date="1524518950302" expanded="true" signature="14473:14495" ph="INSERT into overallprobdifficulty... " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="586" column="50" lean-forward="false" selection-start-line="586" selection-start-column="50" selection-end-line="586" selection-end-column="50" />
-              <folding />
+            <state relative-caret-position="149">
+              <caret line="600" column="30" lean-forward="true" selection-start-line="600" selection-start-column="30" selection-end-line="600" selection-end-column="30" />
+              <folding>
+                <element signature="e#47959#47965#0#HTML" expanded="true" />
+                <element signature="e#47966#47972#0#HTML" expanded="true" />
+                <element signature="e#61520#61527#0#HTML" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -77,7 +87,7 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
+            <state relative-caret-position="383">
               <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
               <folding />
             </state>
@@ -87,7 +97,7 @@
       <file leaf-file-name="junk.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/junk.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="923">
+            <state relative-caret-position="960">
               <caret line="64" column="31" lean-forward="false" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
               <folding />
             </state>
@@ -97,8 +107,8 @@
       <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
-              <caret line="513" column="52" lean-forward="true" selection-start-line="513" selection-start-column="52" selection-end-line="513" selection-end-column="52" />
+            <state relative-caret-position="332">
+              <caret line="504" column="46" lean-forward="true" selection-start-line="504" selection-start-column="46" selection-end-line="504" selection-end-column="46" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -110,7 +120,7 @@
         <entry file="file://$PROJECT_DIR$/msadmin/qa/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="20" column="69" lean-forward="true" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
+              <caret line="20" column="29" lean-forward="false" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -139,7 +149,7 @@
       <file leaf-file-name="questions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="1425">
               <caret line="102" column="64" lean-forward="false" selection-start-line="102" selection-start-column="64" selection-end-line="102" selection-end-column="64" />
               <folding>
                 <element signature="e#0#62#0" expanded="true" />
@@ -151,10 +161,10 @@
       <file leaf-file-name="qauth_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="472" column="6" lean-forward="false" selection-start-line="472" selection-start-column="6" selection-end-line="472" selection-end-column="6" />
+            <state relative-caret-position="212">
+              <caret line="295" column="6" lean-forward="false" selection-start-line="295" selection-start-column="6" selection-end-line="295" selection-end-column="6" />
               <folding>
-                <marker date="1524179335589" expanded="true" signature="7724:7764" ph="select n fro... probstats" />
+                <marker date="1524517902330" expanded="true" signature="7864:7904" ph="select n fro... probstats" />
               </folding>
             </state>
           </provider>
@@ -174,10 +184,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>problem.im</find>
-      <find>getLayoutId</find>
-      <find>exists</find>
-      <find>Save Changes to H</find>
       <find>insert</find>
       <find>status</find>
       <find>redire</find>
@@ -204,6 +210,10 @@
       <find>url</find>
       <find>pulldown8</find>
       <find>probSt</find>
+      <find>difficulty</find>
+      <find>url getStandards</find>
+      <find>qauth_stand</find>
+      <find>qauth_standards</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -256,7 +266,6 @@
         <option value="$PROJECT_DIR$/msadmin/templatetags/util.py" />
         <option value="$PROJECT_DIR$/msadmin/qa/exc.py" />
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/hints.js" />
-        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
         <option value="$PROJECT_DIR$/msadmin/views.py" />
         <option value="$PROJECT_DIR$/msadminsite/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/topics/urls.py" />
@@ -276,11 +285,12 @@
         <option value="$PROJECT_DIR$/msadmin/static/js/qa/mycomponents.js" />
         <option value="$PROJECT_DIR$/msadmin/static/js/DMPulldown.js" />
         <option value="$PROJECT_DIR$/msadmin/testauth/questions.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/urls.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
-        <option value="$PROJECT_DIR$/msadmin/qa/json.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/junk.txt" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
+        <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
+        <option value="$PROJECT_DIR$/msadmin/qa/urls.py" />
+        <option value="$PROJECT_DIR$/msadmin/qa/json.py" />
+        <option value="$PROJECT_DIR$/msadmin/qa/qaviews.py" />
       </list>
     </option>
   </component>
@@ -300,9 +310,9 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="90" />
-    <option name="y" value="53" />
-    <option name="width" value="1191" />
+    <option name="x" value="481" />
+    <option name="y" value="52" />
+    <option name="width" value="1243" />
     <option name="height" value="1012" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -321,9 +331,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -333,102 +343,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="msadminsite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="msadmin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="msadmin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="msadmin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="msadmin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="qa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysite" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -448,6 +362,8 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1012,14 +928,8 @@
       <workItem from="1522164777571" duration="10360000" />
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
-      <workItem from="1523020465315" duration="76055000" />
-    </task>
-    <task id="LOCAL-00029" summary="Consolidated media operations to one button.">
-      <created>1512495478178</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1512495478178</updated>
+      <workItem from="1523020465315" duration="76071000" />
+      <workItem from="1524485026247" duration="6937000" />
     </task>
     <task id="LOCAL-00030" summary="eliminated more quirky bugs with hint dialogs">
       <created>1512497227200</created>
@@ -1357,11 +1267,18 @@
       <option name="project" value="LOCAL" />
       <updated>1524189782900</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="bug fix to stds">
+      <created>1524190921578</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1524190921579</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1338215000" />
+    <option name="totallyTimeSpent" value="1345168000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1373,7 +1290,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="90" y="53" width="1191" height="1012" extended-state="0" />
+    <frame x="481" y="52" width="1243" height="1012" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1385,9 +1302,9 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27942795" sideWeight="0.70509803" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23257767" sideWeight="0.5613772" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22284795" sideWeight="0.5553892" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.75179" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23257767" sideWeight="0.43862274" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22284795" sideWeight="0.44461077" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14922349" sideWeight="0.54618937" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20880681" sideWeight="0.4055944" order="5" side_tool="true" content_ui="tabs" />
@@ -1427,7 +1344,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed the use of the problemLayout table and now use the quickAuthformattemplates table." />
     <MESSAGE value="Added integrity checking of the media references in both the problem and hint statementHTML." />
     <MESSAGE value="fixed bug where it submitted a save-problem when preview button clicked." />
     <MESSAGE value="Fixed hint save &amp; exit so it really exits when no errors" />
@@ -1452,7 +1368,8 @@
     <MESSAGE value="allowed problem layout to be null" />
     <MESSAGE value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
     <MESSAGE value="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work." />
-    <option name="LAST_COMMIT_MESSAGE" value="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work." />
+    <MESSAGE value="bug fix to stds" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix to stds" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1472,6 +1389,16 @@
           <line>48</line>
           <option name="timeStamp" value="394" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/msadmin/qa/qaviews.py</url>
+          <line>315</line>
+          <option name="timeStamp" value="481" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/msadmin/qa/qaviews.py</url>
+          <line>323</line>
+          <option name="timeStamp" value="482" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1480,7 +1407,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="475" />
+      <option name="time" value="485" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1493,7 +1420,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5640">
           <caret line="391" column="55" lean-forward="false" selection-start-line="391" selection-start-column="55" selection-end-line="391" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1508,9 +1434,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#27#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1526,7 +1449,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4548">
           <caret line="382" column="33" lean-forward="true" selection-start-line="382" selection-start-column="33" selection-end-line="382" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1534,9 +1456,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#36#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1552,7 +1471,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1560,7 +1478,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="4" column="4" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1568,7 +1485,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1576,7 +1492,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1575">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1584,7 +1499,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="23" lean-forward="false" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1600,10 +1514,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="269">
           <caret line="428" column="14" lean-forward="true" selection-start-line="428" selection-start-column="14" selection-end-line="428" selection-end-column="15" />
-          <folding>
-            <marker date="1523218345502" expanded="true" signature="12539:12549" ph="..." />
-            <marker date="1523218345502" expanded="true" signature="12690:12707" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1619,7 +1529,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-150">
           <caret line="5" column="32" lean-forward="false" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1635,7 +1544,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="229" column="0" lean-forward="false" selection-start-line="229" selection-start-column="0" selection-end-line="229" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1651,7 +1559,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1687,14 +1594,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="7" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit2.html" />
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/base0.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1707,7 +1607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="24" column="70" lean-forward="false" selection-start-line="24" selection-start-column="70" selection-end-line="24" selection-end-column="70" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1726,7 +1625,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
           <caret line="31" column="7" lean-forward="false" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1734,9 +1632,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1744,9 +1639,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="80" lean-forward="false" selection-start-line="0" selection-start-column="80" selection-end-line="0" selection-end-column="80" />
-          <folding>
-            <element signature="n#style#0;n#img#0;n#p#1;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1772,7 +1664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="154" column="4" lean-forward="true" selection-start-line="154" selection-start-column="4" selection-end-line="154" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1780,7 +1671,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1796,9 +1686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="547">
           <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#57#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1814,7 +1701,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="91" lean-forward="false" selection-start-line="14" selection-start-column="70" selection-end-line="14" selection-end-column="91" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1822,38 +1708,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2769">
-          <caret line="191" column="28" lean-forward="false" selection-start-line="191" selection-start-column="28" selection-end-line="191" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <marker date="1523220261894" expanded="true" signature="12587:12656" ph="UPDATE overa... " />
-            <marker date="1523220261894" expanded="true" signature="12832:12898" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523220261894" expanded="true" signature="12832:12905" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523220261894" expanded="true" signature="12832:12926" ph="INSERT into overallprobdifficulty... " />
-            <marker date="1523220261894" expanded="true" signature="12843:12898" ph="UPDATE overa... " />
-            <marker date="1523220261894" expanded="true" signature="13031:13095" ph="select diff_... overallprobdifficulty" />
-            <marker date="1523220261894" expanded="true" signature="13054:13076" ph="INSERT into overallprobdifficulty... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/testauth/taviews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/testauth/questions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="1425">
           <caret line="102" column="64" lean-forward="false" selection-start-line="102" selection-start-column="64" selection-end-line="102" selection-end-column="64" />
           <folding>
             <element signature="e#0#62#0" expanded="true" />
@@ -1865,25 +1725,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="2171" column="0" lean-forward="false" selection-start-line="2171" selection-start-column="0" selection-end-line="2171" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/junk.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="64" column="31" lean-forward="false" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/urls.py">
+    <entry file="file://$PROJECT_DIR$/msadmin/testauth/taviews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="69" lean-forward="true" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="472" column="6" lean-forward="false" selection-start-line="472" selection-start-column="6" selection-end-line="472" selection-end-column="6" />
-          <folding>
-            <marker date="1524179335589" expanded="true" signature="7724:7764" ph="select n fro... probstats" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1895,37 +1752,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qauth_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="295" column="6" lean-forward="false" selection-start-line="295" selection-start-column="6" selection-end-line="295" selection-end-column="6" />
+          <folding>
+            <marker date="1524517902330" expanded="true" signature="7864:7904" ph="select n fro... probstats" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="600" column="30" lean-forward="true" selection-start-line="600" selection-start-column="30" selection-end-line="600" selection-end-column="30" />
+          <folding>
+            <element signature="e#47959#47965#0#HTML" expanded="true" />
+            <element signature="e#47966#47972#0#HTML" expanded="true" />
+            <element signature="e#61520#61527#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="20" column="29" lean-forward="false" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="513" column="52" lean-forward="true" selection-start-line="513" selection-start-column="52" selection-end-line="513" selection-end-column="52" />
+        <state relative-caret-position="332">
+          <caret line="504" column="46" lean-forward="true" selection-start-line="504" selection-start-column="46" selection-end-line="504" selection-end-column="46" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/junk.txt">
+    <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="923">
-          <caret line="64" column="31" lean-forward="false" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadminsite/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="205" column="20" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="586" column="50" lean-forward="false" selection-start-line="586" selection-start-column="50" selection-end-line="586" selection-end-column="50" />
-          <folding />
+        <state relative-caret-position="21">
+          <caret line="168" column="127" lean-forward="false" selection-start-line="168" selection-start-column="127" selection-end-line="168" selection-end-column="127" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1524518950302" expanded="true" signature="13445:13474" ph="SELECT n fro... probstats" />
+            <marker date="1524518950302" expanded="true" signature="13445:13482" ph="SELECT n FRO... probstats" />
+            <marker date="1524518950302" expanded="true" signature="13445:13484" ph="SELECT n FRO... probstats" />
+            <marker date="1524518950302" expanded="true" signature="13669:13782" ph="UPDATE overa... " />
+            <marker date="1524518950302" expanded="true" signature="13889:14761" ph="UPDATE overa... " />
+            <marker date="1524518950302" expanded="true" signature="14132:14262" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1524518950302" expanded="true" signature="14344:14345" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1524518950302" expanded="true" signature="14344:14761" ph="INSERT into overallprobdifficulty... " />
+            <marker date="1524518950302" expanded="true" signature="14450:14514" ph="select diff_... overallprobdifficulty" />
+            <marker date="1524518950302" expanded="true" signature="14473:14495" ph="INSERT into overallprobdifficulty... " />
+          </folding>
         </state>
       </provider>
     </entry>

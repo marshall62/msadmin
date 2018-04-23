@@ -155,28 +155,33 @@ def save_problem (request):
 
         # user = getLoggedInUsername()
         uname = request.user.username
+        avgincorrect = 0.5 # These defaults came from Ivon for overallprobdifficulty table
+        avgseconds = 30
+        avghints = 0.5
+
+
         if not id:
             now = datetime.now()
             # We can't rely on mysql CURRENT_TIME to work on the created_at field because it is old version of MySQL
             # not supporting two columns with CURRENT_TIME defaults.  So set it manually and let the lastModTime be
             # handled automatically
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
-                        imageURL=imageURL,status=status,form=form, problemFormat=problemFormat,
+                        imageURL=imageURL,status=status,form=form, problemFormat=problemFormat, standardId=None,clusterId=None,
                         questType=questType, audioResource=audioResource, layout_id=layoutTemplateId,
                         creator=uname,lastModifier=uname,created_at=now)
             p.save()
-            if initDifficulty != -1:
-                insertProblemDifficulty(str(p.pk),initDifficulty)
+            if p.getStandardGrade() and initDifficulty != -1:
+                insertProblemDifficulty(str(p.pk),p.getStandardGrade(),initDifficulty, avgincorrect, avgseconds,avghints)
 
         else:
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
                         questType=questType, layout_id=layoutTemplateId,lastModifier=uname)
-            if initDifficulty != -1 and selectProblemDifficulty(id):
-                updateProblemDifficulty(id,initDifficulty)
-            elif initDifficulty != -1:
-                insertProblemDifficulty(id,initDifficulty)
+            if p.getStandardGrade() and initDifficulty != -1 and selectProblemDifficulty(id):
+                updateProblemDifficulty(id,p.getStandardGrade(),initDifficulty, avgincorrect, avgseconds,avghints)
+            elif p.getStandardGrade() and initDifficulty != -1:
+                insertProblemDifficulty(id,p.getStandardGrade(),initDifficulty, avgincorrect, avgseconds,avghints)
 
             # if imageURL is given set it and clear the problem imagefile
             if imageURL:
@@ -282,16 +287,37 @@ def deleteHints (request, probId):
     return redirect("qauth_edit_prob",probId=probId)
 
 
-def updateProblemDifficulty (probId, diffSetting):
-    difflev = int(diffSetting) * 0.1
-    with connection.cursor() as cursor:
-        cursor.execute("UPDATE overallprobdifficulty SET diff_level = %s WHERE problemId = %s", [difflev, probId])
+def computeDiff (grade, diffSetting):
+    diffSetting = diffSetting if diffSetting and diffSetting != '-1' else '5'
+    if grade:
+        if grade[0].upper() == 'H':
+            grade = 9
+        elif grade[0].upper() == 'K':
+            grade = 0
+        grade = 0.1 * int(grade)
+    else: grade = 0.5
+    difflev = 0.01 * int(diffSetting)
+    difflev = grade + difflev
+    return difflev
 
-
-def insertProblemDifficulty (probId, diffSetting):
-    difflev = int(diffSetting) * 0.1
+def updateProblemDifficulty (probId, grade, diffSetting, avgincorrect, avgseconds,avghints):
+    difflev = computeDiff(grade,diffSetting)
     with connection.cursor() as cursor:
-        cursor.execute("INSERT into overallprobdifficulty (problemId, diff_level) VALUES (%s, %s)", [probId, difflev])
+        cursor.execute('''SELECT n FROM probstats WHERE probId=%s;''' % (probId))
+        r = cursor.fetchone()
+        # only update the overallprobdifficulty table if the problem hasn't been shown to students.
+        if not r:
+            q =  '''UPDATE overallprobdifficulty SET diff_level = %f, avgincorrect=%f, avgsecsprob=%d, avghints=%f WHERE problemId = %s;''' \
+                 % (difflev, avgincorrect,avgseconds,avghints,probId)
+            cursor.execute(q)
+
+# grade will be 0-9, diffSetting will be 0 - 9
+def insertProblemDifficulty (probId, grade, diffSetting, avgincorrect, avgseconds,avghints):
+    difflev = computeDiff(grade,diffSetting)
+    with connection.cursor() as cursor:
+        q = '''INSERT into overallprobdifficulty (problemId, diff_level,avgincorrect,avgsecsprob, avghints)
+          VALUES (%s, %f, %f, %d, %f)''' % (probId, difflev, avgincorrect,avgseconds,avghints)
+        cursor.execute(q)
 
 
 def selectProblemDifficulty (probId):
