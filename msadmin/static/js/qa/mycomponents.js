@@ -1,80 +1,67 @@
-function test (msg) {
-    alert(msg);
-}
+// function test (msg) {
+//     alert(msg);
+// }
+//
+//
+//
+// // Given a props object , build a select element containing options that can be stuck inside the elt.
+// // The options need to be like [{label: 'Has Audio', value:'hasAudio'}, {},...]
+// function injectPulldownIntoElement (props, elt) {
+//     var div = document.createElement('div');
+//     div.className = 'input-group';
+//     var inner = '<span class="input-group-addon">' +props.label+ '</span>';
+//     // var s = {width: 'auto'};
+//     var disable = props.isDisabled ? "disabled" : ""
+//     inner += '<select id="' +props.myId+ '" name="' +props.myName+ '" class="form-control" ' +disable+ ' >';
+//     for (var opt of props.options) {
+//         var ovalu = opt.value;
+//         if (props.selectedOption == ovalu)
+//             inner += ('<option selected value="' +opt.value+ '">' + opt.label + '</option>');
+//         else
+//             inner += ('<option value="' +opt.value+ '">' + opt.label + '</option>');
+//     }
+//     inner += "</select>";
+//     div.innerHTML = inner;
+//
+//     elt.appendChild(div);
+//     // must set style of select after html is added to the div
+//     // document.getElementById(props.myId).style.width = 'auto';
+// }
+//
+//
+// function getPulldownProps (eltId, options) {
+//     var obj = {id: eltId};
+//     obj.options = options;
+//     obj.selectId = document.getElementById(eltId).getAttribute("selectId");
+//     obj.label = document.getElementById(eltId).getAttribute("label");
+//     obj.name = document.getElementById(eltId).getAttribute("name");
+//     obj.selectedOption = document.getElementById(eltId).getAttribute("selectedOption");
+//     return obj;
+// }
+//
+// function clearPulldown (mountingEltId) {
+//     var elt = document.getElementById(mountingEltId);
+//     // remove anything that might be inside the div from previous mountings
+//     while (elt.firstChild) {
+//         elt.removeChild(elt.firstChild);
+//     }
+// }
+//
+//
+//
+// function mountPulldownComponent (mountingEltId, props) {
+//     var propsInTag = getPulldownProps(mountingEltId,props)
+//     var elt = document.getElementById(mountingEltId);
+//     clearPulldown(mountingEltId);
+//     if (elt) {
+//         injectPulldownIntoElement(props, document.getElementById(mountingEltId));
+//
+//     }
+//
+// }
 
 
 
-// Given a props object , build a select element containing options that can be stuck inside the elt.
-// The options need to be like [{label: 'Has Audio', value:'hasAudio'}, {},...]
-function injectPulldownIntoElement (props, elt) {
-    var div = document.createElement('div');
-    div.className = 'input-group';
-    var inner = '<span class="input-group-addon">' +props.label+ '</span>';
-    // var s = {width: 'auto'};
-    var disable = props.isDisabled ? "disabled" : ""
-    inner += '<select id="' +props.myId+ '" name="' +props.myName+ '" class="form-control" ' +disable+ ' >';
-    for (var opt of props.options) {
-        var ovalu = opt.value;
-        if (props.selectedOption == ovalu)
-            inner += ('<option selected value="' +opt.value+ '">' + opt.label + '</option>');
-        else
-            inner += ('<option value="' +opt.value+ '">' + opt.label + '</option>');
-    }
-    inner += "</select>";
-    div.innerHTML = inner;
-
-    elt.appendChild(div);
-    // must set style of select after html is added to the div
-    // document.getElementById(props.myId).style.width = 'auto';
-}
-
-
-function getPulldownProps (eltId, options) {
-    var obj = {id: eltId};
-    obj.options = options;
-    obj.selectId = document.getElementById(eltId).getAttribute("selectId");
-    obj.label = document.getElementById(eltId).getAttribute("label");
-    obj.name = document.getElementById(eltId).getAttribute("name");
-    obj.selectedOption = document.getElementById(eltId).getAttribute("selectedOption");
-    return obj;
-}
-
-function clearPulldown (mountingEltId) {
-    var elt = document.getElementById(mountingEltId);
-    // remove anything that might be inside the div from previous mountings
-    while (elt.firstChild) {
-        elt.removeChild(elt.firstChild);
-    }
-}
-
-
-
-function mountPulldownComponent (mountingEltId, props) {
-    var propsInTag = getPulldownProps(mountingEltId,props)
-    var elt = document.getElementById(mountingEltId);
-    clearPulldown(mountingEltId);
-    if (elt) {
-        injectPulldownIntoElement(props, document.getElementById(mountingEltId));
-
-    }
-
-}
-
-
-/*
- The pulldown menu needs to be done like:
- <select id="myPulldown" label="Choose One" selectedOption="New York" onchange="stateSelected>
- </select>
-
-
-
-// in jquery onload function:
- $('#myPulldown').initialize(
- {options: [{label: 'Connecticut', value: 'ct'}, {label: 'New York', value: 'ny'}]),
-  selectedOption:  'ct'
-  });
-
- */
 
 
 class ImageControls {

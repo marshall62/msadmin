@@ -11,7 +11,7 @@
 
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
-    <script type="text/javascript" src="{% static 'js/qa/mycomponents.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/DMPulldown.js' %}"></script>
 
     <script language="JavaScript">
 
@@ -21,8 +21,10 @@
 
     function fillPulldowns (selectedType) {
         var opts = [{label: "SWF", value: "swf"}, {label: "HTML", value: "html"}];
-
-        mountPulldownComponent('type_pulldown',{label:"Intro Type", myId:"introType", myName:"introType", selectedOption:selectedType, options: opts});
+        $('#type_pulldown').DMPulldown({
+            selectedOption:selectedType,
+            options: opts
+        })
 
     }
 
@@ -77,7 +79,12 @@
 
         </div>
         <br>
-        <div id="type_pulldown" class="input-group mb-2 mr-sm-2 mb-sm-0"></div>
+        <div>
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <span class="input-group-addon">Intro Type</span>
+                <select id="type_pulldown" name='introType' class="form-control"></select>
+            </div>
+        </div>
         <br>
 
         <div class="input-group">

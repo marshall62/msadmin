@@ -200,12 +200,12 @@
             var clust_Id=genId();
             var std_Id=genId();
             var part_Id=genId();
-            $('#ccssSelectors').append('<div id="' +div_id+ '" class="row">'+
+            $('#ccssSelectors').append('<div id="' +div_id+ '" class="row" style="height: 45px;">'+
 {#                '<div class="col col-sm-1"><a onclick="delCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a></div>'+#}
                 '<a onclick="delCCSSRow(\'' +div_id+ '\')" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a>'+
-                '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Grade') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Domain') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(clust_Id,'stdCluster','Cluster') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Gr') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Dom') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(clust_Id,'stdCluster','Clust') + '</div>' +
                 '<div class="col col-sm-2">' + pulldownDiv(std_Id,'stdStandard','Std') + '</div>' +
                 '<div class="col col-sm-2">' + pulldownDiv(part_Id,'stdPart','Part') + '</div>' +
                 '</div>');
@@ -474,11 +474,12 @@
                 success: function (data) {
                     var layoutOpts = data;
                     var opts = layoutOpts.map(function (o) { return createPulldownOption(o.id,o.name, o.description)})
-                    {% if problem %}
-                        mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", selectedOption:"{{ problem.getLayoutId }}", options: opts});
-                    {% else %}
-                        mountPulldownComponent('my-pulldown4',{label:"Layout Template", myId:"layout", myName:"layout", options: opts});
-                    {% endif %}
+                    $('#my-pulldown4').DMPulldown({
+                        label: "Layout Template",
+                        selectedOption: {% if problem %} "{{ problem.getLayoutId }}" {% else %} null {% endif %},
+                        options: opts
+                    });
+
 
 
                 }
@@ -628,6 +629,24 @@
 
         }
 
+        function displayAnswerControls () {
+            var val = $('#my-pulldown2').val();
+            answerType = val;
+            if (val == 'shortanswer') {
+                $('#shortAnswer').show();
+                $('#multichoices').hide();
+
+                if (numAnswers == 0)
+                    addShortAnswerRows(1);
+            }
+            else {
+                $('#shortAnswer').hide();
+                $('#multichoices').show();
+                if (numChoices == 0)
+                    addMultiChoiceRows(2);
+            }
+        }
+
 
         ///////////   The main function called at page load time /////////////////
 
@@ -744,37 +763,29 @@
                 removeHintImage(hintImageControls);
             });
 
-            $('#my-pulldown2').change(function (x) {
-                var val = $('#questType').val();
-                answerType = val;
-                if (val == 'shortanswer') {
-                    $('#shortAnswer').show();
-                    $('#multichoices').hide();
-
-                    if (numAnswers == 0)
-                        addShortAnswerRows(1);
+            $('#my-pulldown2').DMPulldown({
+                selectedOption: {% if probId != -1 %} "{{ problem.questType }}" {% else %} "shortanswer" {% endif %},
+                options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}],
+                onChange: displayAnswerControls
                 }
-                else {
-                    $('#shortAnswer').hide();
-                    $('#multichoices').show();
-                    if (numChoices == 0)
-                        addMultiChoiceRows(2);
+            );
+            $('#my-pulldown3').DMPulldown({
+                    selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "testable" {% endif %},
+                    options: [{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]
                 }
-            });
+            );
+            $('#my-pulldown7').DMPulldown({
+                    selectedOption: {% if probId != -1 %} "{{ problem.getDifficulty }}" {% else %} "-1" {% endif %},
+                    options: [{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
+                        {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]
+                }
+            );
+            $('#my-pulldown6').DMPulldown({
+                    selectedOption: {% if probId != -1 %} "{{ problem.usableAsExample }}" {% else %} null {% endif %},
+                    options:[{value:'True',label:'Yes'}, {value:'False',label:'No'}]
+                }
+            );
 
-            {% if probId != -1 %}
-                mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"{{ problem.questType }}", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
-                mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"{{ problem.getStatus3 }}", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
-                mountPulldownComponent('my-pulldown7',{label:"Difficulty", myId:"difficulty", myName:"difficulty", isDisabled:{%if problem.isDifficultyDisabled == True %}true{% else %}false{% endif %}, selectedOption:"{{ problem.getDifficulty }}", options:[{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
-                    {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]});
-                mountPulldownComponent('my-pulldown6',{label:"Usable as Example", myId:"usableExample", myName:"usableAsExample", selectedOption:"{{ problem.usableAsExample }}", options:[{value:'True',label:'Yes'}, {value:'False',label:'No'}]});
-            {% else %}
-                mountPulldownComponent('my-pulldown2',{label:"Answer Type", myId:"questType", myName:"questType", selectedOption:"shortanswer", options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}]});
-                mountPulldownComponent('my-pulldown3',{label:"Status", myId:"status", myName:"status", selectedOption:"testable", options:[{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]});
-                mountPulldownComponent('my-pulldown7',{label:"Difficulty", myId:"difficulty", myName:"difficulty", selectedOption:"-1", options:[{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
-                    {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]});
-
-            {% endif %}
             var url_mask;
             url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
 {#            if the probId is valid, make an ajax call to get the problem JSON #}
@@ -888,14 +899,14 @@
         </div>
         <br>
 
-        <div class="form-inline">
-            {% if probId == -1 %}
-                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="shortanswer"></div>
-            {%  else %}
-                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>
-            {% endif %}
-
-
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+            <span class="input-group-addon">Answer Type</span>
+            <select id="my-pulldown2" name="questType" class="form-control"></select>
+{#            {% if probId == -1 %}#}
+{#                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="shortanswer"></div>#}
+{#            {%  else %}#}
+{#                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>#}
+{#            {% endif %}#}
 
         </div>
         <br>
@@ -982,23 +993,28 @@
 {#       difficulty and  Status pulldowns #}
         <div class="row">
             <div class="col col-sm-4">
-                <div id="my-pulldown7" >
+                <div class="input-group">
+                    <span class="input-group-addon">Difficulty</span>
+                    <select id="my-pulldown7" name="difficulty" class="form-control" {%if problem.isDifficultyDisabled == True %}disabled{% endif %}></select>
                 </div>
             </div>
-            <div class="col col-sm-4">
-                {% if problem %}
-                    <div id="my-pulldown3" label="Status" myId="status" myName="status" selectedOption="{{ problem.getStatus3 }}">
-                {% else %}
-                    <div id="my-pulldown3" label="Status" myId="status" myName="status">
-                {% endif %}
+            <div class="col col-sm-4 input-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Status</span>
+                    <select id="my-pulldown3" name="status" class="form-control"></select>
                 </div>
             </div>
         </div>
 {#        Layout controls#}
+
         <br>
         <div class="row">
             <div class="col col-sm-6">
-                <div id="my-pulldown4"></div>
+                <div class="input-group">
+                    <span class="input-group-addon">Layout</span>
+                    <select id="my-pulldown4" name="layout" class="form-control">
+                    </select>
+                </div>
             </div>
             <div class="col col-sm-2">
                 <a onclick="openLayoutTool()" class="btn btn-primary">Layout Tool</a>
@@ -1066,21 +1082,20 @@
 
                     <table id="hintTable" class="table table-bordered pagin-table">
                         <thead>
-                        <tr><td style="width: 30px">Delete</td><th style="width: 60px">Edit</th><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th >statement</th></tr>
+                        <tr><td style="width: 30px">Delete</td><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th>name</th><th >statement</th></tr>
                         </thead>
                         <tbody id="hinttbody">
                                 put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints
                         {% for h in hints %}
 
                             <tr id="{{ h.id }}" class="dnd">
-                                <td>
-                                    <input type="checkbox"></td>
-                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>
+                                <td><input type="checkbox"></td>
+{#                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>#}
                                 <td class="hint-id">{{ h.id }}</td>
 
                                 <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
 
-                                                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }})'>{{ h.name }}</a></td>
+                                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }}, problemDir)'>{{ h.name }}</a></td>
                                 <td class="statement"> {{ h.statementHTML }}</td>
                             </tr>
                         {% endfor %}
@@ -1137,23 +1152,23 @@
                                 <a id="addMedia" onclick="addCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span></a>
 
                             </div>
-                            <div class="row">
+                            <div class="row" style="height: 45px;">
                                 <div class="col col-sm-2">
                                     <div class="input-group">
-                                        <span class="input-group-addon">Grade</span>
+                                        <span class="input-group-addon">Gr</span>
                                         <select id="my-pulldown8" name='stdGrade' class="form-control"></select>
                                     </div>
 
                                 </div>
                                 <div class="col col-sm-2">
                                     <div class="input-group">
-                                        <span class="input-group-addon">Domain</span>
+                                        <span class="input-group-addon">Dom</span>
                                         <select id="my-pulldown9" name='stdDomain' class="form-control"></select>
                                     </div>
                                 </div>
                                 <div class="col col-sm-2">
                                     <div class="input-group">
-                                        <span class="input-group-addon">Cluster</span>
+                                        <span class="input-group-addon">Clust</span>
                                         <select id="my-pulldown10" name='stdCluster' class="form-control"></select>
                                     </div>
                                 </div>
@@ -1205,8 +1220,10 @@
                         <br>
                         <div class="row">
                             <div class="col col-sm-4">
-    {#                             Pulldown menu for IsAllowedAsExample #}
-                                    <div id="my-pulldown6"></div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Usable as Example</span>
+                                    <select id="my-pulldown6" name="usableAsExample" class="form-control"></select>
+                                </div>
                             </div>
 
                             <div class="col col-sm-2">
@@ -1345,9 +1362,13 @@
                         {#                        This div is injected with image controls when the dialog opens #}
                                         <label for="hintImageControls">Main Image</label>
                                         <div id="hintImageControls" class="form-group"></div>
-                                        <div class="form-group row">
+                                        <div class="row form-group">
                                             <div class="col col-md-8">
-                                                <div id="my-pulldown5"></div>
+                                                <div class="input-group">
+    {#                                                <div id="my-pulldown5"></div>#}
+                                                    <span class="input-group-addon">Image placement</span>
+                                                    <select id="my-pulldown5" name="himage_placement" class="form-control"></select>
+                                                </div>
                                             </div>
                                             <div class="col col-xs-1">
                                                 <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Sets where the hints figure is placed.  It can replace the problem figure or be in the hint figure block (the default)"></span></a>

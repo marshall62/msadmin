@@ -67,7 +67,7 @@ function loadHintDialogData(id, theHint, problemPath) {
     loadHintDialogImage(theHint, hintPath);
     // add rows to hint's media files table
     addHintMediaFiles(theHint.mediaFiles);
-    // console.log("mounting " );
+    console.log("mounting " );
     mountImagePlacementPulldown(theHint.placement);
     setHintErrorMessage('');
     $('#hintSaveMessage').html('');
@@ -109,7 +109,12 @@ function refreshHintDialog (id, problemPath) {
 
 function mountImagePlacementPulldown (placement) {
     var opts = [{label: 'Replace problem figure', value:'1'},{label: 'Inside hint figure', value:'2'}];
-    mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
+    $('#my-pulldown5').DMPulldown({
+        options: opts,
+        selectedOption: placement
+    });
+    console.log("pulldown5 mounted with placement " + placement);
+    // mountPulldownComponent('my-pulldown5',{label:"Image placement", myId:"imageplacement", myName:"himage_placement", selectedOption:placement, options: opts});
 
 }
 
@@ -196,10 +201,12 @@ function getHintRowNumber (hintId) {
 function addHintRow2 (hint) {
     // problemDir is a global defined in qauth_edit.html - it points to the directory for the problem
     var editIcon = '<a href="#hinttbody" class="hint-edit-icon" onClick="editHint2(' +hint.id+ ', problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a>';
+    // var name = 'Hint ' + getHintRowNumber(hint.id);
     var tr = '<tr id="' +hint.id+ '" class="dnd"><td><input type="checkbox"></td>' +
-        '<td class="edit-hint">' +editIcon + '</td>' +
+        // '<td class="edit-hint">' +editIcon + '</td>' +
         '<td class="hint-id">' + hint.id + '</td>' +
         '<td class="givesAnswer">' + (hint.givesAnswer ? '<span class="glyphicon glyphicon-ok"></span>' : '') + '</td>' +
+        '<td class="hint-name"><a href="#hinttbody" onClick="editHint2(' +hint.id+ ', problemDir)">' + hint.name + '</a></td>' +
         '<td class="statement"> ' + hint.statementHTML + '</td></tr>';
     $('#hinttbody').append(tr);
 }
