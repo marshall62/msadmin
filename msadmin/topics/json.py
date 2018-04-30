@@ -34,6 +34,8 @@ def save_topic_intro (request, topicId):
         return JsonResponse(d)
 
 def getIntroHTML (topic):
+    if not topic.intro:
+        return ''
     path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, topic.intro,topic.intro +".html")
     html = read_file(path)
     if not html:
