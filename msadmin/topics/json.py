@@ -17,6 +17,8 @@ from msadmin.qa.qauth_model import Topic
 def save_topic_intro (request, topicId):
     if request.method == "POST":
         t = get_object_or_404(Topic,id=topicId)
+        if not t.intro:
+            return JsonResponse ({'message': "Error.  Can't save intro.  Topic must have an intro field set."})
         post = request.POST
         if 'topicIntroFile' in request.FILES:
             path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, t.intro)
