@@ -31,10 +31,19 @@ def save_topic (request):
         intro = post['intro']
         desc = post['descr']
         summary = post['summary']
+        if id:
+            t = get_object_or_404(Topic,id=id)
+            t.intro = intro
+            t.description = desc
+            t.summary = summary
+            t.save()
+        else:
+            t = Topic(intro=intro,description=desc,summary=summary)
+            t.save()
 
             # the intro is HTML that should be written to the file
             #
-    return redirect('topics_edit', topicId=4)
+    return redirect('topics_edit', topicId=t.id)
 
 
 

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/topics/json.py" afterPath="$PROJECT_DIR$/msadmin/topics/json.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/topics/topic_views.py" afterPath="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -111,11 +111,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="44" column="14" lean-forward="true" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
+            <state relative-caret-position="467">
+              <caret line="39" column="13" lean-forward="true" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
               <folding>
                 <element signature="e#0#57#0" expanded="true" />
               </folding>
@@ -123,7 +123,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="json.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
@@ -271,13 +271,13 @@
         <option value="$PROJECT_DIR$/msadmin/qa/qauth_model.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html" />
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/problem_948/problem_948.html" />
-        <option value="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
         <option value="$PROJECT_DIR$/docs/learning.txt" />
         <option value="$PROJECT_DIR$/msadmin/topics/urls.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/problem_933/problem_933.html" />
         <option value="$PROJECT_DIR$/msadmin/qa/util.py" />
         <option value="$PROJECT_DIR$/msadmin/topics/json.py" />
+        <option value="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
       </list>
     </option>
   </component>
@@ -980,14 +980,7 @@
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
       <workItem from="1523020465315" duration="76071000" />
-      <workItem from="1524485026247" duration="40819000" />
-    </task>
-    <task id="LOCAL-00034" summary="Added a main page for the site.">
-      <created>1513638660385</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1513638660385</updated>
+      <workItem from="1524485026247" duration="41651000" />
     </task>
     <task id="LOCAL-00035" summary="Started building testauth (port from node.js) into the site.">
       <created>1513699105553</created>
@@ -1325,11 +1318,18 @@
       <option name="project" value="LOCAL" />
       <updated>1525123731861</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="error check topics with no intro">
+      <created>1525124232399</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1525124232399</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1379050000" />
+    <option name="totallyTimeSpent" value="1379882000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1851,6 +1851,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="20" column="73" lean-forward="false" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="205">
@@ -1867,20 +1877,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="44" column="14" lean-forward="true" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
+        <state relative-caret-position="467">
+          <caret line="39" column="13" lean-forward="true" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
           <folding>
             <element signature="e#0#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="20" column="73" lean-forward="false" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
