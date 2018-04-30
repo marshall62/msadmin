@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/topics/topic_views.py" afterPath="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +64,7 @@
       <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
+            <state relative-caret-position="-118">
               <caret line="819" column="59" lean-forward="false" selection-start-line="819" selection-start-column="54" selection-end-line="819" selection-end-column="59" />
               <folding>
                 <element signature="e#47488#47494#0#HTML" expanded="true" />
@@ -79,13 +79,25 @@
       <file leaf-file-name="topics_edit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="65">
-              <caret line="82" column="29" lean-forward="false" selection-start-line="82" selection-start-column="29" selection-end-line="82" selection-end-column="29" />
+            <state relative-caret-position="410">
+              <caret line="132" column="0" lean-forward="true" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
               <folding>
-                <element signature="e#8924#8943#0#HTML" expanded="true" />
-                <element signature="e#8985#9004#0#HTML" expanded="true" />
-                <element signature="e#9078#9097#0#HTML" expanded="true" />
-                <element signature="e#10206#10212#0#HTML" expanded="true" />
+                <element signature="e#9252#9271#0#HTML" expanded="true" />
+                <element signature="e#9313#9332#0#HTML" expanded="true" />
+                <element signature="e#9406#9425#0#HTML" expanded="true" />
+                <element signature="e#10534#10540#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dummy.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fileUploads/topicIntros/dummy/dummy.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+              <folding>
+                <element signature="n#style#0;n#img#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -111,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="39" column="13" lean-forward="true" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
+            <state relative-caret-position="422">
+              <caret line="36" column="20" lean-forward="false" selection-start-line="35" selection-start-column="21" selection-end-line="36" selection-end-column="20" />
               <folding>
                 <element signature="e#0#57#0" expanded="true" />
               </folding>
@@ -197,10 +209,10 @@
       <find>type=&quot;fi</find>
       <find>filter</find>
       <find>ajax</find>
-      <find>type_pull</find>
       <find>esca</find>
-      <find>Error</find>
       <find>Response</find>
+      <find>Error</find>
+      <find>type_pull</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -227,7 +239,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/docs/readme.txt" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/loginbase.html" />
         <option value="$PROJECT_DIR$/msadmin/templates/registration/logged_out.html" />
         <option value="$PROJECT_DIR$/msadmin/templates/registration/login_old.html" />
@@ -273,11 +284,12 @@
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/problem_948/problem_948.html" />
         <option value="$PROJECT_DIR$/docs/learning.txt" />
         <option value="$PROJECT_DIR$/msadmin/topics/urls.py" />
-        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/problem_933/problem_933.html" />
         <option value="$PROJECT_DIR$/msadmin/qa/util.py" />
         <option value="$PROJECT_DIR$/msadmin/topics/json.py" />
         <option value="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
+        <option value="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
+        <option value="$PROJECT_DIR$/fileUploads/topicIntros/dummy/dummy.html" />
       </list>
     </option>
   </component>
@@ -393,7 +405,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
+              <option name="myItemId" value="fileUploads" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fileUploads" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="topicIntros" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fileUploads" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="topicIntros" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dummy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -980,14 +1032,7 @@
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
       <workItem from="1523020465315" duration="76071000" />
-      <workItem from="1524485026247" duration="41651000" />
-    </task>
-    <task id="LOCAL-00035" summary="Started building testauth (port from node.js) into the site.">
-      <created>1513699105553</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1513699105553</updated>
+      <workItem from="1524485026247" duration="43458000" />
     </task>
     <task id="LOCAL-00036" summary="Finished port of pretest survey author">
       <created>1515617591187</created>
@@ -1325,11 +1370,18 @@
       <option name="project" value="LOCAL" />
       <updated>1525124232399</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="added code to save_topic">
+      <created>1525125185327</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1525125185327</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1379882000" />
+    <option name="totallyTimeSpent" value="1381689000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1395,7 +1447,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Set up a user creation page available to users in userAuthor group" />
     <MESSAGE value="added check for survey question multiChoiceCorrectAnswer" />
     <MESSAGE value="made testauth question preview show HTML in multichoices" />
     <MESSAGE value="check c,d,e choices to be != None" />
@@ -1420,7 +1471,8 @@
     <MESSAGE value="Replaced all pulldowns with DMPulldown&#10;Eliminated the pencil icon column in hint table" />
     <MESSAGE value="Added in topic intro editing and listing of problems within topic" />
     <MESSAGE value="error check topics with no intro" />
-    <option name="LAST_COMMIT_MESSAGE" value="error check topics with no intro" />
+    <MESSAGE value="added code to save_topic" />
+    <option name="LAST_COMMIT_MESSAGE" value="added code to save_topic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1457,13 +1509,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/msadminsite/wsgi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/readme.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1575">
@@ -1775,14 +1820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/learning.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="622">
-          <caret line="45" column="52" lean-forward="false" selection-start-line="45" selection-start-column="52" selection-end-line="45" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dj2-env/lib/python3.5/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="568">
@@ -1807,19 +1844,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="65">
-          <caret line="82" column="29" lean-forward="false" selection-start-line="82" selection-start-column="29" selection-end-line="82" selection-end-column="29" />
-          <folding>
-            <element signature="e#8924#8943#0#HTML" expanded="true" />
-            <element signature="e#8985#9004#0#HTML" expanded="true" />
-            <element signature="e#9078#9097#0#HTML" expanded="true" />
-            <element signature="e#10206#10212#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fileUploads/topicIntros/problem_933/problem_933.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1834,19 +1858,6 @@
           <caret line="29" column="4" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="819" column="59" lean-forward="false" selection-start-line="819" selection-start-column="54" selection-end-line="819" selection-end-column="59" />
-          <folding>
-            <element signature="e#47488#47494#0#HTML" expanded="true" />
-            <element signature="e#47495#47501#0#HTML" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#form#0;n#div#2;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="e#61171#61178#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1877,10 +1888,54 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="39" column="13" lean-forward="true" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
+        <state relative-caret-position="422">
+          <caret line="36" column="20" lean-forward="false" selection-start-line="35" selection-start-column="21" selection-end-line="36" selection-end-column="20" />
           <folding>
             <element signature="e#0#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/learning.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="622">
+          <caret line="45" column="52" lean-forward="false" selection-start-line="45" selection-start-column="52" selection-end-line="45" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-118">
+          <caret line="819" column="59" lean-forward="false" selection-start-line="819" selection-start-column="54" selection-end-line="819" selection-end-column="59" />
+          <folding>
+            <element signature="e#47488#47494#0#HTML" expanded="true" />
+            <element signature="e#47495#47501#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#form#0;n#div#2;n#div#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="e#61171#61178#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="132" column="0" lean-forward="true" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+          <folding>
+            <element signature="e#9252#9271#0#HTML" expanded="true" />
+            <element signature="e#9313#9332#0#HTML" expanded="true" />
+            <element signature="e#9406#9425#0#HTML" expanded="true" />
+            <element signature="e#10534#10540#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fileUploads/topicIntros/dummy/dummy.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+          <folding>
+            <element signature="n#style#0;n#img#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

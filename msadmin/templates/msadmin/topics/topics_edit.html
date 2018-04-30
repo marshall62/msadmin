@@ -80,12 +80,14 @@
 
     }
 
+    // When an image is added to the topicIntro summernote, this gets an event with the file.   It sends the file
+    // to the server and gets back the URL that it is saved to which is then inserted into the summertext as an
+    // img with the correct src.
     function sendFile (file, topicId) {
         var data = new FormData();
         data.append('file',file);
         data.append('topicId', topicId);
         var url = SAVE_TOPIC_INTRO_IMAGE_FILE_URL.replace('123456', topicId);
-        console.log("Sending image file: " + url);
         $.ajax({
             url: url,
             data: data,
@@ -95,9 +97,7 @@
             type: 'POST',
             success: function (data) {
                 var url = data.url;
-                console.log("URL of the image is " );
-                console.log(url);
-{#                editor.insertImage(welEditable,data.image);#}
+                // insert an image with the correct url
                 $('#topicIntroHTML').summernote('insertImage',url);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -122,6 +122,7 @@
             width: 600,
             codemirror: { theme: 'monokai' },
             callbacks: {
+                // gets called when a file is put into the summernote
                 onImageUpload: function (files) {
                     for (var i = 0; i < files.length; i++) {
                         sendFile(files[i] {% if topic %}, {{ topic.id }}{% endif %});
@@ -132,7 +133,9 @@
 
         });
         $('#topicIntroHTML').summernote('reset');
-        var introText = '{{ introHTML }}';
+        var introText = `{{ introHTML }}`;
+        // sometimes the introText causes a JS syntax error.  This is because its an HTML string with all kinds of
+        // escaped stuff in it
         $('#topicIntroHTML').summernote('code', htmlDecode(introText));
     });
     </script>
