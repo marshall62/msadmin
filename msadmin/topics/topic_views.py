@@ -7,6 +7,7 @@ from msadmin.qa.util import do_write_file_text
 
 from django.core.files.storage import FileSystemStorage
 from msadmin.qa.qauth_model import Topic, ProblemTopicMap
+from .json import getIntroHTML
 
 # Shows the main page of the site
 @login_required
@@ -20,9 +21,7 @@ def create_topic (request):
     return render(request, 'msadmin/topics/topics_edit.html',{})
 
 
-def writeTopicIntroHTMLFile (intro, htmlText):
-    path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, intro, intro+".html")
-    do_write_file_text(path, htmlText)
+
 
 @login_required
 def save_topic (request):
@@ -32,15 +31,16 @@ def save_topic (request):
         intro = post['intro']
         desc = post['descr']
         summary = post['summary']
-        htmlText = post['htmlText']
-        writeTopicIntroHTMLFile(intro,htmlText)
+
             # the intro is HTML that should be written to the file
             #
-
-
     return redirect('topics_edit', topicId=4)
+
+
 
 @login_required
 def edit_topic (request, topicId):
     t = get_object_or_404(Topic,id=topicId)
-    return render(request, 'msadmin/topics/topics_edit.html', {'topic': t})
+    probs = t.getProblems()
+    html = getIntroHTML(t)
+    return render(request, 'msadmin/topics/topics_edit.html', {'topic': t, 'problems': probs, 'introHTML': html})

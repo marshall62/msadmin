@@ -8,12 +8,29 @@
 
 {% block page-js %}
     <!-- include summernote css/js -->
-
+    {#    Include code mirror so we can see the HTML in the summernote editor #}
+    <!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js) -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js"></script>
+{#    Include summernote to give an HTML editor #}
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+
+
+    <!-- Latest compiled and minified stuff to give us sortable tables -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
     <script type="text/javascript" src="{% static 'js/DMPulldown.js' %}"></script>
 
     <script language="JavaScript">
+
+    const SAVE_TOPIC_INTRO_URL = "{% url 'topic_save_intro' 12345 %}";
+    const SAVE_TOPIC_INTRO_IMAGE_FILE_URL = "{% url 'save_topic_intro_image_file' 123456 %}";
 
     function validateTopic() {
         return true;
@@ -24,17 +41,99 @@
         $('#type_pulldown').DMPulldown({
             selectedOption:selectedType,
             options: opts
-        })
+        });
 
+
+    }
+
+    function saveIntro (topicId) {
+        var form = $('#topicIntroForm')[0]; // get the Javascript obj for the hint form
+        var data = new FormData(form); // put all the form fields into data
+        var url = SAVE_TOPIC_INTRO_URL.replace('12345', topicId);
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            processData: false,
+            contentType: false,
+            error: function (a, b, c) {
+                console.log("Failed to write to server! " + a.responseText + b);
+                console.log(a);
+                $('#metaInfoMessages').html("Failed to write meta info server! " + a.responseText + b);
+            },
+            success: function (data) {
+                console.log(data);
+                $('#topicIntroMessage').html(data.message);
+
+                $('#topicIntroHTML').summernote('reset');
+                $('#topicIntroHTML').summernote('code', data.htmlText);
+                $('#topicIntroFile').val(null);
+            }
+        });
+    }
+
+    function removeSelectedProblems () {
+
+    }
+
+    function addProbToTopic () {
+
+    }
+
+    function sendFile (file, topicId) {
+        var data = new FormData();
+        data.append('file',file);
+        data.append('topicId', topicId);
+        var url = SAVE_TOPIC_INTRO_IMAGE_FILE_URL.replace('123456', topicId);
+        console.log("Sending image file: " + url);
+        $.ajax({
+            url: url,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function (data) {
+                var url = data.url;
+                console.log("URL of the image is " );
+                console.log(url);
+{#                editor.insertImage(welEditable,data.image);#}
+                $('#topicIntroHTML').summernote('insertImage',url);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus+ " " + errorThrown);
+            }
+        });
+    }
+
+
+
+    function htmlDecode(input){
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
     }
 
     $(document).ready(function() {
         fillPulldowns({% if topic %} '{{ topic.type }}' {% else %} 'swf' {% endif %});
 
-        $('#htmlText').summernote({
+        $('#topicIntroHTML').summernote({
             height: 400,
-            width: 600
+            width: 600,
+            codemirror: { theme: 'monokai' },
+            callbacks: {
+                onImageUpload: function (files) {
+                    for (var i = 0; i < files.length; i++) {
+                        sendFile(files[i] {% if topic %}, {{ topic.id }}{% endif %});
+                    }
+                }
+            }
+
+
         });
+        $('#topicIntroHTML').summernote('reset');
+        var introText = '{{ introHTML }}';
+        $('#topicIntroHTML').summernote('code', htmlDecode(introText));
     });
     </script>
 {% endblock %}
@@ -98,10 +197,80 @@
         </div>
 
         <br>
-        <textarea id="htmlText" name="htmlText"></textarea>
+
     </div>
 
     <button id="saveButton" class="btn btn-primary">Save</button>
 </form>
+
+
+    <div class="container"></div>
+    <div id="probTabs" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a  href="#tab1" data-toggle="tab">Problems</a>
+            </li>
+            <li><a href="#tab2" data-toggle="tab">Topic Intro</a>
+            </li>
+            <li><a href="#tab3" data-toggle="tab">Meta Info</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+                <a id="addProb" onclick="addProbToTopic()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a problem"></span></a>
+                {#                    <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>#}
+
+                <table id="probTable" data-toggle="table">
+
+                    <thead>
+                    <tr><th style="width: 30px" >Remove</th>
+                        <th style="width: 30px" data-field="id" data-sortable="true">ID</th>
+                        <th style="width: 30px"  data-field="status" data-sortable="true">Status</th>
+                        <th  data-field="ccss" data-sortable="true">CCSS</th>
+                        <th  data-field="stmt" data-sortable="true">statement</th>
+                    </tr>
+                    </thead>
+                    <tbody id="probtbody">
+                    {% for p in problems %}
+
+                        <tr id="{{ p.id }}" >
+                            <td><input type="checkbox"></td>
+                            {#                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>#}
+                            <td class="prob-id"><a href="{% url 'qauth_edit_prob' p.id %}">{{ p.id }}</a></td>
+
+                            <td class="prob-status">{{ p.status }}</td>
+
+                            <td class="prob-stds">
+                                {% for std in p.getStandards %}
+                                    {{ std.idABC }} &nbsp;
+                                {% endfor %}
+                            </td>
+                            <td class="statement"> {{ p.statementHTML }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                    <a href="#hintTable" class="btn btn-primary" onClick="removeSelectedProblems()">Remove Selected Problems from Topic</a>
+
+                    <a href="#hintTable" class="btn btn-primary">Save Changes to Problems</a>
+                {#                    <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
+                {#                    <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
+                <p style="color: red" id="topicErrorMessages"></p>
+            </div>
+
+            <div class="tab-pane" id="tab2">
+                <form id="topicIntroForm" method="post"  enctype="multipart/form-data" action="{% url 'topic_save_intro' topic.id %}">
+                    {% csrf_token %}
+                    <p>You can upload an HTML file or you can create the HTML in the editor below and save it.</p>
+                    <input id="topicIntroFile" type="file" class="form-control-file" name="topicIntroFile">
+                    <br><br>
+                    <textarea id="topicIntroHTML" name="topicIntroHTML"></textarea>
+{#                    <button class="btn btn-primary">Save</button>#}
+                    <a href="#tab2" onclick="saveIntro({{ topic.id }})" class="btn btn-primary">Save</a>
+                    <p id="topicIntroMessage"></p>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

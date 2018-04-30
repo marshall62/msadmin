@@ -101,10 +101,10 @@
         function saveProblemMetaInfo() {
             var form = $('#metainfoForm')[0]; // get the Javascript obj for the hint form
             var data = new FormData(form); // put all the form fields into data
-            console.log("stdGrades");
-            console.log(data.getAll("stdGrade"));
-            console.log("stdDomains");
-            console.log(data.getAll("stdDomain"));
+{#            console.log("stdGrades");#}
+{#            console.log(data.getAll("stdGrade"));#}
+{#            console.log("stdDomains");#}
+{#            console.log(data.getAll("stdDomain"));#}
             var probId = theProblem.id;
             var url = SAVE_META_INFO_URL.replace('12345', theProblem.id);
             $.ajax({

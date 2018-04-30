@@ -38,3 +38,9 @@ Python Stuff
 
 Django Stuff
 ============
+
+rows = Table.objects.filter(col=C).   Best way to deal with possible return of nothing:
+if rows.count() > 0:
+
+If sending HTML to a template variable and don't want it escaped:
+{% autoescape off %}{{ message }}{% endautoescape %}

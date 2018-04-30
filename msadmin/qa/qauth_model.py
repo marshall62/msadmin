@@ -236,6 +236,14 @@ class Problem (models.Model):
         else:
             return None
 
+    def getStandards (self):
+        maps = ProblemStandardMap.objects.filter(probId=self.id)
+        stds = []
+        for m in maps:
+            s = Standard.objects.get(id=m.stdId)
+            stds.append(s)
+        return stds
+
 
     def toJSON (self):
         d = {}
@@ -472,6 +480,15 @@ class Topic (models.Model):
 
     def isSelected (self):
         return self.selected
+
+    def getProblems (self):
+
+        maps = ProblemTopicMap.objects.filter(topic=self)
+        probs = []
+        for m in maps:
+            p = m.problem
+            probs.append(p)
+        return probs
 
 
 class ProblemStandardMap (models.Model):
