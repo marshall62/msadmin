@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/msadmin/topics/json.py" afterPath="$PROJECT_DIR$/msadmin/topics/json.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -91,7 +91,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dummy.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dummy.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fileUploads/topicIntros/dummy/dummy.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
@@ -123,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="topic_views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="36" column="20" lean-forward="false" selection-start-line="35" selection-start-column="21" selection-end-line="36" selection-end-column="20" />
+            <state relative-caret-position="227">
+              <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
               <folding>
                 <element signature="e#0#57#0" expanded="true" />
               </folding>
@@ -138,8 +138,8 @@
       <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="20" column="73" lean-forward="false" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
+            <state relative-caret-position="705">
+              <caret line="59" column="84" lean-forward="false" selection-start-line="59" selection-start-column="84" selection-end-line="59" selection-end-column="84" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -286,10 +286,10 @@
         <option value="$PROJECT_DIR$/msadmin/topics/urls.py" />
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/problem_933/problem_933.html" />
         <option value="$PROJECT_DIR$/msadmin/qa/util.py" />
-        <option value="$PROJECT_DIR$/msadmin/topics/json.py" />
         <option value="$PROJECT_DIR$/msadmin/topics/topic_views.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/topics/topics_edit.html" />
         <option value="$PROJECT_DIR$/fileUploads/topicIntros/dummy/dummy.html" />
+        <option value="$PROJECT_DIR$/msadmin/topics/json.py" />
       </list>
     </option>
   </component>
@@ -309,8 +309,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="132" />
-    <option name="y" value="61" />
+    <option name="x" value="351" />
+    <option name="y" value="52" />
     <option name="width" value="1372" />
     <option name="height" value="1012" />
   </component>
@@ -1032,14 +1032,7 @@
       <workItem from="1522334448353" duration="27371000" />
       <workItem from="1522690263181" duration="32385000" />
       <workItem from="1523020465315" duration="76071000" />
-      <workItem from="1524485026247" duration="43458000" />
-    </task>
-    <task id="LOCAL-00036" summary="Finished port of pretest survey author">
-      <created>1515617591187</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1515617591187</updated>
+      <workItem from="1524485026247" duration="44714000" />
     </task>
     <task id="LOCAL-00037" summary="added image upload and preview to Questions">
       <created>1515623363841</created>
@@ -1377,11 +1370,18 @@
       <option name="project" value="LOCAL" />
       <updated>1525125185327</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="fixed bug with HTML in summernote">
+      <created>1525129190330</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1525129190330</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1381689000" />
+    <option name="totallyTimeSpent" value="1382945000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1393,7 +1393,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="132" y="61" width="1372" height="1012" extended-state="0" />
+    <frame x="351" y="52" width="1372" height="1012" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1447,7 +1447,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added check for survey question multiChoiceCorrectAnswer" />
     <MESSAGE value="made testauth question preview show HTML in multichoices" />
     <MESSAGE value="check c,d,e choices to be != None" />
     <MESSAGE value="Set multi choice answers to None if not provided" />
@@ -1472,7 +1471,8 @@
     <MESSAGE value="Added in topic intro editing and listing of problems within topic" />
     <MESSAGE value="error check topics with no intro" />
     <MESSAGE value="added code to save_topic" />
-    <option name="LAST_COMMIT_MESSAGE" value="added code to save_topic" />
+    <MESSAGE value="fixed bug with HTML in summernote" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed bug with HTML in summernote" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1862,16 +1862,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="20" column="73" lean-forward="false" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/qaviews.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="205">
@@ -1882,16 +1872,6 @@
             <marker date="1524518950302" expanded="true" signature="13445:13482" ph="SELECT n FRO... probstats" />
             <marker date="1524518950302" expanded="true" signature="13445:13484" ph="SELECT n FRO... probstats" />
             <marker date="1524518950302" expanded="true" signature="13669:13782" ph="UPDATE overa... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="36" column="20" lean-forward="false" selection-start-line="35" selection-start-column="21" selection-end-line="36" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1936,6 +1916,26 @@
           <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
           <folding>
             <element signature="n#style#0;n#img#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/topics/json.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="59" column="84" lean-forward="false" selection-start-line="59" selection-start-column="84" selection-end-line="59" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/topics/topic_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#57#0" expanded="true" />
           </folding>
         </state>
       </provider>

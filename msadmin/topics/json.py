@@ -17,17 +17,15 @@ from msadmin.qa.qauth_model import Topic
 def save_topic_intro (request, topicId):
     if request.method == "POST":
         t = get_object_or_404(Topic,id=topicId)
-        if not t.intro:
-            return JsonResponse ({'message': "Error.  Can't save intro.  Topic must have an intro field set."})
         post = request.POST
         if 'topicIntroFile' in request.FILES:
-            path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, t.intro)
-            write_file(path,request.FILES['topicIntroFile'], t.intro +".html")
+            path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, getIntroDirName(topicId))
+            write_file(path,request.FILES['topicIntroFile'], getIntroDirName(topicId) +".html")
         else:
             htmlText = post['topicIntroHTML']
             if htmlText.strip() != '':
-                writeTopicIntroHTMLFile(t.intro,htmlText)
-        path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, t.intro,t.intro +".html")
+                writeTopicIntroHTMLFile(getIntroDirName(topic.id),htmlText)
+        path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, getIntroDirName(topicId),getIntroDirName(topicId) +".html")
         html = read_file(path)
         d = {
             'message': "Successfully saved",
@@ -35,10 +33,13 @@ def save_topic_intro (request, topicId):
         }
         return JsonResponse(d)
 
+def getIntroDirName (id):
+    return "topic_" + id + "_intro"
+
 def getIntroHTML (topic):
     if not topic.intro:
         return ''
-    path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, topic.intro,topic.intro +".html")
+    path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, getIntroDirName(topic.id),getIntroDirName(topic.id) +".html")
     html = read_file(path)
     if not html:
         return ''
@@ -46,15 +47,15 @@ def getIntroHTML (topic):
 
 
 
-def writeTopicIntroHTMLFile (intro, htmlText):
-    path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, intro, intro+".html")
+def writeTopicIntroHTMLFile (introDir, htmlText):
+    path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, introDir, introDir+".html")
     do_write_file_text(path, htmlText)
 
 def save_topic_intro_image_file (request, topicId):
     if request.method == "POST":
         file = request.FILES['file']
         t = get_object_or_404(Topic,id=topicId)
-        path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, t.intro)
+        path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, getIntroDirName(topicId))
         write_file(path,file)
-        imgURL = os.path.join(MEDIA_URL,TOPIC_INTROS_DIRNAME,t.intro,file.name)
+        imgURL = os.path.join(MEDIA_URL,TOPIC_INTROS_DIRNAME,getIntroDirName(topicId),file.name)
         return JsonResponse({'url': imgURL })
