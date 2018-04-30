@@ -24,7 +24,7 @@ def save_topic_intro (request, topicId):
         else:
             htmlText = post['topicIntroHTML']
             if htmlText.strip() != '':
-                writeTopicIntroHTMLFile(getIntroDirName(topic.id),htmlText)
+                writeTopicIntroHTMLFile(getIntroDirName(t.id),htmlText)
         path = os.path.join(MEDIA_ROOT,TOPIC_INTROS_DIRNAME, getIntroDirName(topicId),getIntroDirName(topicId) +".html")
         html = read_file(path)
         d = {
@@ -34,7 +34,7 @@ def save_topic_intro (request, topicId):
         return JsonResponse(d)
 
 def getIntroDirName (id):
-    return "topic_" + id + "_intro"
+    return "topic_" + str(id) + "_intro"
 
 def getIntroHTML (topic):
     if not topic.intro:
