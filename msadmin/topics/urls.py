@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^topic/save/$', tv.save_topic, name='topics_save'),
     url(r'^topic/(?P<topicId>\d+)/intro$', json.save_topic_intro, name='topic_save_intro'),
     url(r'^topic/(?P<topicId>\d+)/intro/imgFile$', json.save_topic_intro_image_file, name='save_topic_intro_image_file'),
+    url(r'^topic/(?P<topicId>\d+)/problems/remove', json.remove_topic_problems, name='remove_topic_problems'),
     url(r'^topic/edit/(?P<topicId>\d+)/$', tv.edit_topic, name='topics_edit'),
     # url(r'^topic/(?P<topicId>\d+)$', tv.qa.json.getProblemJSON, name='topics_get'),
 

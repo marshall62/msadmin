@@ -23,14 +23,18 @@
     <!-- Latest compiled and minified stuff to give us sortable tables -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-en-US.js"></script>
 
     <script type="text/javascript" src="{% static 'js/DMPulldown.js' %}"></script>
 
     <script language="JavaScript">
 
+
     const SAVE_TOPIC_INTRO_URL = "{% url 'topic_save_intro' 12345 %}";
-    const SAVE_TOPIC_INTRO_IMAGE_FILE_URL = "{% url 'save_topic_intro_image_file' 123456 %}";
+    const SAVE_TOPIC_INTRO_IMAGE_FILE_URL = "{% url 'save_topic_intro_image_file' 12345 %}";
+    const REMOVE_TOPIC_PROBLEMS_URL = "{% url 'remove_topic_problems' 12345 %}";
+
+    var checkedRows = [];
 
     function validateTopic() {
         return true;
@@ -72,9 +76,45 @@
         });
     }
 
-    function removeSelectedProblems () {
+    function removeSelectedProblems (topicId) {
+        var data = new FormData();
+        // checkedRows is a list of pid that are used as the id of each <tr>
+        for (rowid of checkedRows) {
+            data.append('removeProblemFromTopic',rowid);
+        }
+        if (confirm("Are you sure you want to remove these problems from the topic")) {
+            var url = REMOVE_TOPIC_PROBLEMS_URL.replace('12345', topicId);
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                error: function (a, b, c) {
+                    console.log("Failed to write to server! " + a.responseText + b);
+                    console.log(a);
+                    $('#metaInfoMessages').html("Failed to write meta info server! " + a.responseText + b);
+                },
+                success: function (data) {
+                    removeProblemTableRows()
+                }
+            });
+        }
 
     }
+
+    // Each row's <tr> has an id of the probId so we just go through the ids that were
+    // put in the checkedRows and find the row and remove it.
+    // Using the bootstrap table way of getting rid of a row.
+    function removeProblemTableRows () {
+        $.each(checkedRows, function(index, value) {
+            $('#probTable').bootstrapTable('removeByUniqueId', value);
+        });
+        checkedRows = [];
+
+    }
+
+
 
     function addProbToTopic () {
 
@@ -87,7 +127,7 @@
         var data = new FormData();
         data.append('file',file);
         data.append('topicId', topicId);
-        var url = SAVE_TOPIC_INTRO_IMAGE_FILE_URL.replace('123456', topicId);
+        var url = SAVE_TOPIC_INTRO_IMAGE_FILE_URL.replace('12345', topicId);
         $.ajax({
             url: url,
             data: data,
@@ -137,6 +177,19 @@
         // sometimes the introText causes a JS syntax error.  This is because its an HTML string with all kinds of
         // escaped stuff in it
         $('#topicIntroHTML').summernote('code', htmlDecode(introText));
+
+        $('#probTable').on('check.bs.table', function (e, row) {
+            checkedRows.push(row.id);
+        });
+
+        $('#probTable').on('uncheck.bs.table', function (e, row) {
+            console.log(row);
+            console.log(checkedRows);
+            var ix = checkedRows.indexOf(row.id);
+            checkedRows.splice(ix,1);
+        });
+
+
     });
     </script>
 {% endblock %}
@@ -222,40 +275,57 @@
             <div class="tab-pane active" id="tab1">
                 <a id="addProb" onclick="addProbToTopic()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a problem"></span></a>
                 {#                    <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>#}
+                <form id="topicProblemForm">
+                    <table id="probTable" data-toggle="table"
+                           data-unique-id="id"
+                           data-pagination="true"
+                           data-search="true"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-toolbar="#toolbar">
 
-                <table id="probTable" data-toggle="table">
-
-                    <thead>
-                    <tr><th style="width: 30px" >Remove</th>
-                        <th style="width: 30px" data-field="id" data-sortable="true">ID</th>
-                        <th style="width: 30px"  data-field="status" data-sortable="true">Status</th>
-                        <th  data-field="ccss" data-sortable="true">CCSS</th>
-                        <th  data-field="stmt" data-sortable="true">statement</th>
-                    </tr>
-                    </thead>
-                    <tbody id="probtbody">
-                    {% for p in problems %}
-
-                        <tr id="{{ p.id }}" >
-                            <td><input type="checkbox"></td>
-                            {#                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>#}
-                            <td class="prob-id"><a href="{% url 'qauth_edit_prob' p.id %}">{{ p.id }}</a></td>
-
-                            <td class="prob-status">{{ p.status }}</td>
-
-                            <td class="prob-stds">
-                                {% for std in p.getStandards %}
-                                    {{ std.idABC }} &nbsp;
-                                {% endfor %}
-                            </td>
-                            <td class="statement"> {{ p.statementHTML }}</td>
+                        <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true">Remove</th>
+{#                            <th style="width: 30px" >Remove</th>#}
+                            <th style="width: 30px" data-field="id" data-sortable="true">ID</th>
+                            <th style="width: 30px"  data-field="status" data-sortable="true">Status</th>
+                            <th  data-field="ccss" data-sortable="true">CCSS</th>
+                            <th  data-field="stmt" data-sortable="true">statement</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                    <a href="#hintTable" class="btn btn-primary" onClick="removeSelectedProblems()">Remove Selected Problems from Topic</a>
+                        </thead>
+
+                        <tbody id="probtbody">
+                        {% for p in problems %}
+
+                            <tr id="{{ p.id }}" >
+{#                                <td><input name="removeProblemFromTopic" value="{{ p.id }}" type="checkbox"></td>#}
+                                <td></td>
+                                <td class="prob-id">{{ p.id }}</td>
+
+                                <td class="prob-status">{{ p.status }}</td>
+
+                                <td class="prob-stds">
+                                    {% for std in p.getStandards %}
+                                        {{ std.idABC }} &nbsp;
+                                    {% endfor %}
+                                </td>
+                                <td class="statement">
+                                    {% if p.isQuickAuth %}
+                                        <a href="{% url 'qauth_edit_prob' p.id %}"> {{ p.statementHTML }}</a>
+                                    {% else %}
+                                        {{ p.statementHTML }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="#hintTable" class="btn btn-primary" onClick="removeSelectedProblems({{ topic.id }})">Remove Selected Problems from Topic</a>
 
                     <a href="#hintTable" class="btn btn-primary">Save Changes to Problems</a>
+                </form>
                 {#                    <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
                 {#                    <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
                 <p style="color: red" id="topicErrorMessages"></p>

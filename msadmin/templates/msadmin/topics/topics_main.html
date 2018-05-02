@@ -21,6 +21,7 @@
     <div class="input-group">
         <span class="input-group-addon">Topic</span>
         <select class="form-control" onchange="editTopic();" style="width:auto;" name='topic' id="topic_selector">
+            <option>---</option>
             {% for t in topics %}
                 <option value="{{ t.id }}">{{ t.id }}:{{ t.description }}</option>
             {% endfor %}

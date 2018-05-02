@@ -1,7 +1,20 @@
 Javascript & Jquery Stuff
 =========================
 
+-- Get the DOM Element from a JQuery selector.
 
+$( "#foo" )[ 0 ]; // Equivalent to document.getElementById( "foo" )
+
+Select an element within another element:
+<div id="foo">
+  ...
+  <span id="moo">
+    ...
+  </span>
+  ...
+</div>
+
+$('#foo' '#moo')
 
 
 

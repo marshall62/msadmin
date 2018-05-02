@@ -259,12 +259,16 @@ class Problem (models.Model):
         d['numHints'] = len(self.getHints())
         return d
 
+    def isQuickAuth (self):
+        return self.form=='quickAuth'
+
 
     # A static method to get all the quickAuth problems.  There's some inefficiency in this because we are going
     # call this alot and its going to get all the problems from the db.
     @staticmethod
     def get_quickAuth_problems ():
         return Problem.objects.filter(form='quickAuth')
+
 
     @staticmethod
     def getProblemDirName (id):
@@ -500,8 +504,8 @@ class ProblemStandardMap (models.Model):
         db_table = "ProbStdMap"
 
 class ProblemTopicMap (models.Model):
-    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)
-    topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT)
+    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
+    topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
 
     class Meta:
         db_table = "ProbProbGroup"
