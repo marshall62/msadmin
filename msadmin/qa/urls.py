@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^prob/image/(?P<probId>\d+)/image/$', msadmin.qa.json.removeProblemImage, name='qauth_remove_problem_image'),
     url(r'^prob/image/(?P<probId>\d+)/audio/$', msadmin.qa.json.removeProblemAudio, name='qauth_remove_problem_audio'),
     url(r'^hint/audio/(?P<hintId>\d+)/$', msadmin.qa.json.removeHintAudio, name='qauth_remove_hint_audio'),
-    url(r'^hint/image/(?P<hintId>\d+)/$', msadmin.qa.json.removeHintImage, name='qauth_remove_hint_image')
+    url(r'^hint/image/(?P<hintId>\d+)/$', msadmin.qa.json.removeHintImage, name='qauth_remove_hint_image'),
+    url(r'^problems/delete/$', msadmin.qa.json.deleteProblems, name='qauth_delete_problems')
 ]
 
 

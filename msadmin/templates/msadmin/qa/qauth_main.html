@@ -4,28 +4,130 @@
 {% endblock %}
 
 {% block page-js %}
-<script language="javascript">
 
-    function editProblem () {
-        var prob= $('#problem_selector').val() ;
-        var url_mask = "{% url 'qauth_edit_prob' probId=12345 %}";
-        url_mask = url_mask.replace(/12345/,prob);
-        window.location.href= url_mask;
+<!-- Latest compiled and minified stuff to give us sortable tables -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-en-US.js"></script>
+
+<script language="javascript">
+    var checkedRows = [];
+    const DELETE_PROBLEMS_URL = "{% url 'qauth_delete_problems' %}"
+
+
+    // Each row's <tr> has an id of the probId so we just go through the ids that were
+    // put in the checkedRows and find the row and remove it.
+    // Using the bootstrap table way of getting rid of a row.
+    function removeProblemTableRows () {
+        $.each(checkedRows, function(index, value) {
+            $('#probTable').bootstrapTable('removeByUniqueId', value);
+        });
+        checkedRows = [];
+
     }
+
+    function deleteSelectedProblems () {
+        var data = new FormData();
+        // checkedRows is a list of pid that are used as the id of each <tr>
+        for (rowid of checkedRows) {
+            data.append('problemsToDelete',rowid);
+        }
+        if (confirm("Are you sure you want to delete these problems")) {
+            var url = DELETE_PROBLEMS_URL
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                error: function (a, b, c) {
+                    console.log("Failed to write to server! " + a.responseText + b);
+                    console.log(a);
+                    $('#metaInfoMessages').html("Failed to write meta info server! " + a.responseText + b);
+                },
+                success: function (data) {
+                    removeProblemTableRows()
+                }
+            });
+        }
+    }
+
+    $(document).ready(function() {
+        $('#probTable').on('check.bs.table', function (e, row) {
+            checkedRows.push(row.id);
+        });
+
+        $('#probTable').on('uncheck.bs.table', function (e, row) {
+            console.log(row);
+            console.log(checkedRows);
+            var ix = checkedRows.indexOf(row.id);
+            checkedRows.splice(ix, 1);
+        });
+    });
+
 </script>
 {% endblock %}
 
 
 {% block content %}
+
+    <a id="createProb" href="{% url 'qauth_create_prob' %}"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Create New Problem"></span> Create Problem</a>
+{#    <h3><a href="{% url 'qauth_create_prob' %}">Create a new problem</a></h3>#}
     <h3>Select a problem to edit</h3>
-    <div class="input-group">
-        <span class="input-group-addon">Problem</span>
-        <select class="form-control" onchange="editProblem();" style="width:auto;" name='problem' id="problem_selector">
-        {% for prob in problems %}
-            <option value="{{ prob.id }}">{{ prob.id }}:{{ prob.name }}</option>
-        {% endfor %}
-    </select>
-    </div>
-    <h3><a href="{% url 'qauth_create_prob' %}">Create a new problem</a></h3>
+    <form id="topicProblemForm">
+        <table id="probTable" data-toggle="table"
+               data-unique-id="id"
+               data-pagination="true"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-toolbar="#toolbar">
+
+            <thead>
+            <tr>
+                <th data-field="state" data-checkbox="true">Remove</th>
+                {#                            <th style="width: 30px" >Remove</th>#}
+                <th style="width: 30px" data-field="id" data-sortable="true">ID</th>
+                <th style="width: 30px"  data-field="status" data-sortable="true">Status</th>
+                <th  data-field="topics" data-sortable="true">Topics</th>
+                <th  data-field="ccss" data-sortable="true">CCSS</th>
+                <th  data-field="stmt" data-sortable="true">statement</th>
+            </tr>
+            </thead>
+
+            <tbody id="probtbody">
+            {% for p in problems %}
+
+                <tr id="{{ p.id }}" >
+                    {#                                <td><input name="removeProblemFromTopic" value="{{ p.id }}" type="checkbox"></td>#}
+                    <td></td>
+                    <td class="prob-id">{{ p.id }}</td>
+
+                    <td class="prob-status">{{ p.status }}</td>
+                    <td class="prob-topics">
+                        {% for topic in p.getTopics %}
+                            <a href="{% url 'topics_edit' topic.id %}">{{ topic.description }}</a> , &nbsp;
+                        {% endfor %}
+                    </td>
+                    <td class="prob-stds">
+                        {% for std in p.getStandards %}
+                            {{ std.idABC }} &nbsp;
+                        {% endfor %}
+                    </td>
+                    <td class="statement">
+                        {% if p.isQuickAuth %}
+                            <a href="{% url 'qauth_edit_prob' p.id %}"> {{ p.statementHTML }}</a>
+                        {% else %}
+                            {{ p.statementHTML }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="#probTable" class="btn btn-primary" onClick="deleteSelectedProblems()">Delete Selected Problems</a>
+
+    </form>
 
 {% endblock %}

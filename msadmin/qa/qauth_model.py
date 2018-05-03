@@ -244,6 +244,11 @@ class Problem (models.Model):
             stds.append(s)
         return stds
 
+    def getTopics (self):
+        # get the topics by filtering such that we find the connected map with the given problem
+        inTopics = Topic.objects.filter(problemtopicmap__problem=self)
+        return inTopics
+
 
     def toJSON (self):
         d = {}

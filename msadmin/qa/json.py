@@ -1,3 +1,4 @@
+from django.db import connection
 from django.http import JsonResponse
 from collections import OrderedDict
 from django.shortcuts import get_object_or_404
@@ -6,7 +7,7 @@ from .util import  write_file
 import re
 
 from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard, Topic, ProblemTopicMap, \
-    Cluster, ProblemStandardMap
+    Cluster, ProblemStandardMap, ProblemDifficulty, ProblemAnswer, ProblemLayout
 from msadmin.qa.util import handle_uploaded_file, deleteMediaFile
 from django.contrib.auth.decorators import login_required
 
@@ -568,3 +569,29 @@ def removeHintImage (request, hintId):
         h.imageFile=None
         h.save()
     return JsonResponse({})
+
+@login_required
+def deleteProblems (request):
+    if request.method == "POST":
+        post = request.POST
+        pids = post.getlist('problemsToDelete')
+        for pid in pids:
+            prob = get_object_or_404(Problem, pk=pid)
+            try:
+                diff = ProblemDifficulty.objects.get(problem=prob)
+                diff.delete()
+            except:
+                pass
+            ans = ProblemAnswer.objects.filter(problem=prob)
+            if ans.count() > 0:
+                for a in ans:
+                    a.delete()
+            removeClassOmittedProblem(prob.id)
+            prob.delete()
+    return JsonResponse({})
+
+# grade will be 0-9, diffSetting will be 0 - 9
+def removeClassOmittedProblem (probId):
+    with connection.cursor() as cursor:
+        q = '''DELETE FROM classomittedproblems where probId=%s ''' % (probId)
+        cursor.execute(q)
