@@ -95,6 +95,16 @@ def getLoggedInUsername():
 def save_problem (request):
     if request.method == "POST":
         post = request.POST
+        # somehow requests come in with no id.  Not sure how maybe back button or manual page reload after some odd
+        # thing.   But it happens enough that maybe the best thing is to give an error message within a editor page
+        if 'id' not in post:
+            msg = "No problem ID in request.  Cannot save a non-existent problem."
+            errors = []
+            allTopics = Topic.objects.all()
+            return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors,
+                                                                  'probId': None, 'problem': None, 'hints': None,
+                                                                  'allTopics': allTopics, 'qaDir': QA_DIR,
+                                                                  'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
         id = post['id']
         logger.debug("Saving QA problem " +  id)
         name = post['name']
@@ -221,7 +231,10 @@ def save_problem (request):
             msg = 'Saved successfully'
             errors = False
         allTopics,inTopics = getTopics(p)
-        return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors, 'probId': p.id, 'problem': p, 'hints': hints, 'allTopics': allTopics, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+        return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors,
+                                                              'probId': p.id, 'problem': p, 'hints': hints,
+                                                              'allTopics': allTopics, 'qaDir': QA_DIR,
+                                                              'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
 def validateMediaRefs (problem):

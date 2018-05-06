@@ -101,7 +101,7 @@ def writeQuestion (qid, postData, files):
     elif type=="multiChoice" and correctChoice == 'noneCorrect':
         q.answer=None
     # empty text answers need to convert to null in the db field
-    elif answer.trim() == '':
+    elif answer.strip() == '':
         q.answer=None
     else:
         q.answer=answer
