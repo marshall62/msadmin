@@ -78,13 +78,7 @@
         var allStandards = null; // will be set to JSON by AJAX call when page loads
 
         // create constant URLs that will be used by supporting javascript files
-        const SAVE_MEDIA_URL = "{% url 'qauth_save_problem_media' probId=12345 %}";
         const SAVE_META_INFO_URL = "{% url 'qauth_save_problem_meta_info' probId=12345 %}";
-        const SAVE_HINTS_URL = "{% url 'qauth_save_hints' probId=12345 %}";
-        const SAVE_HINT_URL = "{% url 'qauth_save_hint' probId=12345 %}";
-        const GET_HINT_URL = "{% url 'qauth_get_hint' hintId=12345 %}";
-        const DELETE_HINTS_URL = "{% url 'qauth_delete_hints' probId=12345 %}";
-        const REMOVE_HINT_IMAGE_URL = "{% url 'qauth_remove_hint_image' hintId=12345 %}";
         const REMOVE_PROBLEM_IMAGE_URL = "{% url 'qauth_remove_problem_image' probId=12345 %}";
         const REMOVE_PROBLEM_AUDIO = "{% url 'qauth_remove_problem_audio' probId=12345 %}";
         const REMOVE_HINT_AUDIO = "{% url 'qauth_remove_hint_audio' hintId=67890%}";

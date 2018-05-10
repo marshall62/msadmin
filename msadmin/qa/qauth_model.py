@@ -10,8 +10,8 @@ class Problem (models.Model):
     answer = models.TextField()
     imageURL = models.TextField(max_length=200)
     status = models.CharField(max_length=50)
-    standardId = models.CharField(max_length=45)
-    clusterId = models.CharField(max_length=45)
+    standardId = models.CharField(max_length=45, null=True)
+    clusterId = models.CharField(max_length=45, null=True)
     form= models.CharField(max_length=50)
     # layout = models.ForeignKey('ProblemLayout',db_column='layoutID')
     layout = models.ForeignKey('FormatTemplate',db_column='layoutID', on_delete=models.PROTECT,null=True)
@@ -19,7 +19,7 @@ class Problem (models.Model):
     audioFile = models.ForeignKey('ProblemMediaFile',db_column='audioFileId',null=True, on_delete=models.PROTECT, related_name='+')
     created_at = models.DateTimeField(db_column='createTimestamp', auto_now_add=True)
     updated_at = models.DateTimeField(db_column='modTimestamp',auto_now=True)
-    authorNotes = models.TextField()
+    authorNotes = models.TextField(null=True)
     problemFormat = models.TextField()
     usableAsExample = models.BooleanField()
     # fields below here are being presented and may be edited but support is not elegant or FULL yet
@@ -509,8 +509,10 @@ class ProblemStandardMap (models.Model):
         db_table = "ProbStdMap"
 
 class ProblemTopicMap (models.Model):
-    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
-    topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
+    # problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
+    problem = models.OneToOneField('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
+    # topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
+    topic = models.OneToOneField('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
 
     class Meta:
         db_table = "ProbProbGroup"

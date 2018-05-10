@@ -1,10 +1,12 @@
 from django.db import connection
+from django.db.models import ProtectedError
 from django.http import JsonResponse
 from collections import OrderedDict
 from django.shortcuts import get_object_or_404
 from msadminsite.settings import SNAPSHOT_DIRNAME
-from .util import  write_file
-import re
+from .util import  write_file, deleteMediaDir, deleteProblemDir
+import re,os,sys
+from datetime import datetime
 
 from msadmin.qa.qauth_model import Problem, ProblemMediaFile, Hint, FormatTemplate, Standard, Topic, ProblemTopicMap, \
     Cluster, ProblemStandardMap, ProblemDifficulty, ProblemAnswer, ProblemLayout
@@ -202,7 +204,7 @@ def save_problem_meta_info (request, probId):
         # clusterId = post['clusterId']
         authorNotes = post['authorNotes']
         creator = post['creator']
-        lastModifier = post['lastModifier']
+        lastModifier = request.user.username
         example = post['example']
         topicIDs = None
         if 'topic' in post:
@@ -229,7 +231,8 @@ def save_problem_meta_info (request, probId):
             write_file(SNAPSHOT_DIRNAME, file, filename)
             # p.setFields(screenshotURL=filename)
 
-        p.setFields(authorNotes=authorNotes,creator=creator,lastModifier=lastModifier,
+        now = datetime.now()
+        p.setFields(authorNotes=authorNotes,creator=creator,lastModifier=lastModifier, updated_at=now,
                    example=example,video=video, usableAsExample=(usableAsEx == 'True'))
         p.save()
 
@@ -570,25 +573,116 @@ def removeHintImage (request, hintId):
         h.save()
     return JsonResponse({})
 
+# Given a problem id and a list of hint ids, delete the hints from the problem.
+# The force=True/False flag will force it to delete the hints and ProblemMediaFiles associated with those hints.
+# Will return True/False depending on whether it couldn't do the delete based on ProblemMediaFiles .  A second
+# message argument is included that reports the filenames of the intruding media files.
+def deleteHints (pid, listOfHintIds, force=False):
+    hintIds = listOfHintIds
+    try:
+        for hid in hintIds:
+            # If forcing, first eliminate the hint.imageFile and hint.audioFile values which ref the ProblemMediaTable
+            if force:
+                h = get_object_or_404(Hint,pk=hid)
+                h.imageFile = None
+                h.audioFile = None
+                h.save()
+                # Now blow away all the media files that are associated with the hint.
+                mfs = ProblemMediaFile.objects.filter(problem_id=pid, hint_id=hid)
+                for f in mfs:
+                    f.delete()
+            # Blow away all the files in the hint dir and then delete the dir.
+            h = get_object_or_404(Hint,pk=hid)
+
+            deleteMediaDir(pid,hid)
+
+            h.delete()
+
+        # after deleting there may be holes in the ordering sequence, so we renumber all the remaining hints
+        # 1-based ordering is used
+        hints = Hint.objects.filter(problem_id=pid).order_by('order')
+        for i in range(len(hints)):
+            hints[i].order = i+1
+            if not hints[i].givesAnswer:
+                hints[i].name = 'Hint ' + str(i+1);
+            hints[i].save()
+    except ProtectedError as e:
+        files = e.protected_objects
+        names = ""
+        for f in files:
+            names += f.filename + "\n"
+
+        message = "\nThese media files are blocking hints from deletion:\n " + names
+        message += "\n\nCannot delete the hint because it is using media that must be deleted first.  \nPlease edit the hint and delete its media first!\n\n\n"
+        return False, message
+    return True, None
+
+
+def deleteProblem (problem):
+    try:
+        hints = problem.getHints()
+        hintIds = [h.pk for h in hints]
+        deleteHints(problem.pk, hintIds, True)
+        diff = ProblemDifficulty.objects.filter(problem=problem)
+        if diff.count() > 0:
+            diff[0].delete()
+        ans = ProblemAnswer.objects.filter(problem=problem)
+        if ans.count() > 0:
+            for a in ans:
+                a.delete()
+        removeClassOmittedProblem(problem.id)
+        # eliminate refs to ProblemMediaFiles
+        problem.imageFile = None
+        problem.audioFile = None
+        problem.save()
+        media = ProblemMediaFile.objects.filter(problem=problem)
+        # blow away all the media files associated with the problem.  Note the hints belonging to the problem
+        # already had their media file rows deleted.
+        for m in media:
+            m.delete()
+        deleteProblemDir(problem.id)
+        topics = ProblemTopicMap.objects.filter(problem=problem)
+        for t in topics:
+            t.delete()
+        standards =  ProblemStandardMap.objects.filter(probId=problem.id)
+        for s in standards:
+            s.delete()
+        problem.delete()
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        raise
+
+# Determine if a problem has been used (for the purpose of disallowing removal)
+def probUsed (probId):
+    with connection.cursor() as cursor:
+        cursor.execute('''SELECT n FROM probstats WHERE probId=%s;''' % (probId))
+        r = cursor.fetchone()
+        return True if r else False
+
+
 @login_required
 def deleteProblems (request):
+    complete = True
+    message = None
     if request.method == "POST":
         post = request.POST
         pids = post.getlist('problemsToDelete')
+        message = ""
         for pid in pids:
             prob = get_object_or_404(Problem, pk=pid)
-            try:
-                diff = ProblemDifficulty.objects.get(problem=prob)
-                diff.delete()
-            except:
+            if not probUsed(pid):
                 pass
-            ans = ProblemAnswer.objects.filter(problem=prob)
-            if ans.count() > 0:
-                for a in ans:
-                    a.delete()
-            removeClassOmittedProblem(prob.id)
-            prob.delete()
-    return JsonResponse({})
+            else:
+                complete = False
+                message += "Cannot delete problem " + pid + " because it has been used by students\n"
+        if not complete:
+            return JsonResponse({'complete': complete, 'message': message})
+
+        for pid in pids:
+            prob = get_object_or_404(Problem, pk=pid)
+            deleteProblem(prob)
+    # if any problem cannot be deleted, complete will be returned as False so the user is notified that this cannot be done.
+    return JsonResponse({'complete': True, 'message': "Problems successfully deleted."})
 
 # grade will be 0-9, diffSetting will be 0 - 9
 def removeClassOmittedProblem (probId):

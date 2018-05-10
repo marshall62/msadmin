@@ -1,5 +1,6 @@
 import os
 import errno
+import shutil
 from django.core.files.storage import FileSystemStorage
 from msadmin.qa.qauth_model import Problem, Hint
 from msadmin.qa.qauth_model import ProblemAnswer,ProblemMediaFile
@@ -59,6 +60,19 @@ def handle_uploaded_file(probId, f, hintId=None):
     do_write_file(fullPath,f)
 
     return pmf
+
+
+
+
+
+# Given a problem directory, delete all its subfolders and files and then delete the dir.
+# This assumes the contents of the dir have been deleted first.
+def deleteProblemDir(probId):
+    fs = FileSystemStorage()
+    location = fs.location
+    probLoc = os.path.join(location, QUICKAUTH_PROB_DIRNAME, Problem.getProblemDirName(probId))
+    if os.path.exists(probLoc):
+        shutil.rmtree(probLoc)
 
 def deleteMediaDir (probId, hintId):
     fs = FileSystemStorage()

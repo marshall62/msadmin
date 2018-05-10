@@ -32,7 +32,7 @@
         for (rowid of checkedRows) {
             data.append('problemsToDelete',rowid);
         }
-        if (confirm("Are you sure you want to delete these problems")) {
+        if (confirm("Note:  This will remove all associations to the problem as well.  It will not delete any problem a student has used because the history must be kept intact.  Are you sure you want to delete these problems?")) {
             var url = DELETE_PROBLEMS_URL
             $.ajax({
                 url: url,
@@ -46,7 +46,14 @@
                     $('#metaInfoMessages').html("Failed to write meta info server! " + a.responseText + b);
                 },
                 success: function (data) {
-                    removeProblemTableRows()
+                    var completed = data.completed;
+                    var message = data.message;
+                    if (completed) {
+                        removeProblemTableRows();
+                        $('#message').html(message);
+                    }
+                    else
+                        alert(message);
                 }
             });
         }
@@ -117,7 +124,7 @@
                     </td>
                     <td class="statement">
                         {% if p.isQuickAuth %}
-                            <a href="{% url 'qauth_edit_prob' p.id %}"> {{ p.statementHTML }}</a>
+                            <a href="{% url 'qauth_edit_prob' p.id %}"> {% if p.statementHTML %} {{ p.statementHTML }} {% else %} NO STATEMENT YET {% endif %}</a>
                         {% else %}
                             {{ p.statementHTML }}
                         {% endif %}
@@ -127,7 +134,7 @@
             </tbody>
         </table>
         <a href="#probTable" class="btn btn-primary" onClick="deleteSelectedProblems()">Delete Selected Problems</a>
-
     </form>
+    <p id="message"></p>
 
 {% endblock %}
