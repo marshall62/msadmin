@@ -868,7 +868,7 @@
         <div class="form-inline">
             <div class="input-group">
                 <span class="input-group-addon">Audio File</span>
-                {% if probId == -1 %}
+                {% if probId == -1  or not problem.audioResource %}
                     <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
                 {% else %}
                     <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
@@ -1201,14 +1201,16 @@
                         <div class="form-inline">
                             <div class="input-group">
                                 <span class="input-group-addon">Video ID</span>
-                                    <input id="videoId" type="text" class="form-control" name="video" value = "{{ problem.video }}">
+                                    <input id="videoId" type="text" class="form-control" name="video"
+                                           value = "{% if problem.video %}{{ problem.video }}{% endif %}">
 
                             </div>
 
 
                             <div class="input-group">
                                 <span class="input-group-addon">Example ID</span>
-                                    <input id="exampleId" type="text" class="form-control" name="example" value = "{{ problem.example }}">
+                                    <input id="exampleId" type="text" class="form-control" name="example"
+                                           value = "{% if problem.example %}{{ problem.example }}{% endif %}">
 
                             </div>
                         </div>
@@ -1251,7 +1253,7 @@
                             <div class="col col-sm-5">
                                 <div class="input-group ">
                                     <span class="input-group-addon">Last Modifier</span>
-                                        <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{{ problem.lastModifier }}">
+                                        <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{% if problem.lastModifier %}{{ problem.lastModifier }}{% endif %}">
 
                                 </div>
                             </div>
@@ -1277,7 +1279,7 @@
                         <br>
                         <div class="input-group">
                             <span class="input-group-addon">Notes</span>
-                                <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{{ problem.authorNotes }}</textarea>
+                                <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{% if problem.authorNotes %}{{ problem.authorNotes }}{% endif %}</textarea>
 
                         </div>
                         <br>
