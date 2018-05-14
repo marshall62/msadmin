@@ -231,6 +231,8 @@ def save_problem (request):
             msg = 'Saved successfully'
             errors = False
         allTopics,inTopics = getTopics(p)
+        # redirect to edit problem page so the URL in the location box is appropriate
+        return redirect("qauth_edit_prob",probId=p.id)
         return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors,
                                                               'probId': p.id, 'problem': p, 'hints': hints,
                                                               'allTopics': allTopics, 'qaDir': QA_DIR,
