@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mysite.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="1317" column="48" selection-start-line="1317" selection-start-column="48" selection-end-line="1317" selection-end-column="48" />
+              <caret line="1323" column="48" selection-start-line="1323" selection-start-column="48" selection-end-line="1323" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -63,8 +60,8 @@
         <entry file="file://$PROJECT_DIR$/Readme.MD">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="400">
-                <caret line="53" column="26" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+              <first_editor>
+                <caret selection-end-line="57" />
               </first_editor>
               <second_editor />
             </state>
@@ -147,7 +144,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ajax</find>
       <find>esca</find>
       <find>Response</find>
       <find>type_pull</find>
@@ -177,6 +173,7 @@
       <find>qauth_save_hint</find>
       <find>confirm</find>
       <find>audio</find>
+      <find>name</find>
     </findStrings>
     <replaceStrings>
       <replace>red;</replace>
@@ -184,7 +181,7 @@
       <replace>yellow;</replace>
       <replace>transparent</replace>
       <replace>wayangoutpostdb.</replace>
-      <replace />
+      <replace>drop table IF EXISTS</replace>
       <replace>12345</replace>
       <replace>fetchTest</replace>
       <replace>f</replace>
@@ -296,13 +293,7 @@
             <path>
               <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
               <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="testauth" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
@@ -947,8 +938,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="294" y="32" width="1418" height="983" extended-state="0" />
-    <editor active="true" />
+    <frame x="194" y="29" width="1418" height="983" extended-state="0" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32453245" />
@@ -956,17 +946,17 @@
       <window_info anchor="bottom" id="Event Log" order="18" sideWeight="0.27579495" side_tool="true" weight="0.34238487" />
       <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.45381063" weight="0.14854828" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="14" sideWeight="0.79026216" weight="0.2420242" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="14" sideWeight="0.79026216" visible="true" weight="0.24114285" />
       <window_info anchor="bottom" id="Run" order="3" sideWeight="0.70509803" weight="0.27942795" />
       <window_info id="Designer" order="1" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.5338843" visible="true" weight="0.22425953" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.53313255" visible="true" weight="0.22425953" />
       <window_info anchor="right" id="Database" order="4" sideWeight="0.75179" weight="0.18446602" />
       <window_info anchor="right" id="SciView" />
-      <window_info id="Structure" order="3" sideWeight="0.4661157" side_tool="true" visible="true" weight="0.22425953" />
+      <window_info id="Structure" order="3" sideWeight="0.46686748" side_tool="true" visible="true" weight="0.22425953" />
       <window_info anchor="right" id="Ant Build" order="10" sideWeight="0.54618937" side_tool="true" weight="0.14922349" />
       <window_info id="UI Designer" order="0" />
       <window_info id="Favorites" order="5" sideWeight="0.4055944" side_tool="true" weight="0.20880681" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.74626863" visible="true" weight="0.30857143" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.74626863" weight="0.30857143" />
       <window_info anchor="bottom" id="Thumbnails" order="20" weight="0.32902467" />
       <window_info anchor="bottom" id="Application Servers" order="16" sideWeight="0.4977521" weight="0.31609195" />
       <window_info anchor="bottom" id="Database Console" order="11" visible="true" weight="0.22451317" />
@@ -1005,7 +995,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added topic multi-selector field to qa" />
     <MESSAGE value="added css files for multi select" />
     <MESSAGE value="added js files for multi select" />
     <MESSAGE value="FIxed CCSS editing to use correct fields" />
@@ -1030,7 +1019,8 @@
     <MESSAGE value="Replaced problem selector with table in qauth main page" />
     <MESSAGE value="replaced trim with strip" />
     <MESSAGE value="fixed some of the lastModifier stuff if meta-info is changed.&#10;&#10;Also some problem-deletion functionality is added so we can delete problems in the qauth_main.thml" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed some of the lastModifier stuff if meta-info is changed.&#10;&#10;Also some problem-deletion functionality is added so we can delete problems in the qauth_main.thml" />
+    <MESSAGE value="added a readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1262,7 +1252,7 @@
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="1317" column="48" selection-start-line="1317" selection-start-column="48" selection-end-line="1317" selection-end-column="48" />
+          <caret line="1323" column="48" selection-start-line="1323" selection-start-column="48" selection-end-line="1323" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -1276,8 +1266,8 @@
     <entry file="file://$PROJECT_DIR$/Readme.MD">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="400">
-            <caret line="53" column="26" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+          <first_editor>
+            <caret selection-end-line="57" />
           </first_editor>
           <second_editor />
         </state>
@@ -1312,7 +1302,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited />
+          <last-edited>Python 3.5 interpreter library</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1324,7 +1314,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited />
+          <last-edited>Python 3.5 (dj2mysqlenv)</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1349,7 +1339,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited />
+          <last-edited>Python 3.5.2 virtualenv at /srv/fastdisk/dev/pythondev/mysite/myenv</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
