@@ -334,7 +334,7 @@
             <div class="tab-pane" id="tab2">
                 <form id="topicIntroForm" method="post"  enctype="multipart/form-data" action="{% url 'topic_save_intro' topic.id %}">
                     {% csrf_token %}
-                    <p>You can upload an HTML file or you can create the HTML in the editor below and save it.</p>
+                    <p>You can upload an HTML file or you can create the HTML in the editor below and save it.  If you upload an HTML file, make sure images have absolute URLs</p>
                     <input id="topicIntroFile" type="file" class="form-control-file" name="topicIntroFile">
                     <br><br>
                     <textarea id="topicIntroHTML" name="topicIntroHTML"></textarea>
