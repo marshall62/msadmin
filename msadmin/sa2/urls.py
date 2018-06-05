@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from msadmin.qa.qaviews import reactTest
-from msadmin.stratauth import views, modelUpdate, json
+from msadmin.sa2 import views, modelUpdate, json
 
 urlpatterns = [
     url(r'^$', views.main, name='strat_main'),
@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^strategy/(?P<pk>\d+)/$', views.strategy_detail, name='strategy_detail'),
     url(r'^strategy/(?P<id>\d+)/save/$', modelUpdate.save_strategy, name='strategy_save'),
     url(r'^strategy/(?P<id>\d+)/lc/$', json.get_strategy_lcs, name='strategy_lcs'),
+    url(r'^strategy/(?P<strategyId>\d+)/globalize/$', modelUpdate.globalize_strategy, name='globalize-strategy'),
     url(r'^all_lcs/$', json.get_all_lcs, name='all_lcs'),
     url(r'^teacher/(?P<teacherId>\d+)/classes/$', json.get_teacher_classes, name='get-teacher-classes'),
     url(r'^class/(?P<classId>\d+)/strategies/$', json.get_class_strategies, name='get-class-strategies'),

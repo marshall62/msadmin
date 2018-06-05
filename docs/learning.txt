@@ -55,5 +55,16 @@ Django Stuff
 rows = Table.objects.filter(col=C).   Best way to deal with possible return of nothing:
 if rows.count() > 0:
 
+-------------------
+
 If sending HTML to a template variable and don't want it escaped:
 {% autoescape off %}{{ message }}{% endautoescape %}
+
+-------------------
+Doing queries through other objects:
+
+use the objectName__field (with two underscores separating the object name and field)
+
+ # get the scsimap objecs that have both interventionSelector== self.id and strategyComponent==strategyComponent.id
+ # This is done by filtering the interventionSelectorParams which connect to a scismap that has the IS and the SC with the right ids.
+ params = InterventionSelectorParam.objects.filter(scismap__interventionSelector__pk=self.pk , scismap__strategyComponent__pk=strategyComponent.pk)

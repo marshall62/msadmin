@@ -45,10 +45,9 @@
     <select id="teacherSelector" onchange="changeTeacherFilter();" class="form-control">
         <option value="All">All</option>
         {% for t in teachers %}
-            {% if t.pk == teacherId  %}
+            {% if teacherId and t.pk == teacherId  %}
                 <option selected value="{{ t.pk }}">{{ t.lname }}, {{ t.fname }}</option>
-            {% endif %}
-            {% if t.pk != teacherId  %}
+            {% else  %}
                 <option value="{{ t.pk }}">{{ t.lname }}, {{ t.fname }}</option>
             {% endif %}
         {% endfor %}

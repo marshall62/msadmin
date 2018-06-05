@@ -81,7 +81,7 @@
         var is_id; // global that holds the interventionselector id being edited in a dialog
 
         var strategyName = '{{ classStrategy.name }}'; // This can get changed by strategy dialog .
-        var strategyDescr = '{{ classStrategy.description }}'
+        var strategyDescr = '{{ classStrategy.getDescription }}'
 
         glyph_opts = {
             map: {
@@ -411,10 +411,22 @@
             }
         }
 
-
+        function makeStrategyGlobal () {
+            var url = "{% url 'globalize-strategy' strategyId=classStrategy.id %}";
+            $.ajax({
+                url: url,
+                type: "POST",
+                success: function (data) {
+                    console.log("Strategy is globalized");
+                    console.log(data.globalStrategy);
+                }
+            });
+        }
 
 
         $(function () {
+
+            $('#globalizeStrategy').click(makeStrategyGlobal);
             // 6 create an instance when the DOM is ready
             $('#treetable').fancytree({
                     extensions: ["edit", "glyph", "table"],
@@ -522,6 +534,8 @@
         <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
         </tbody>
     </table>
+
+    <button type="button" id="globalizeStrategy" class="btn btn-default">Make Strategy Global</button>
 
 
     <!-- Modal Dialog that will come up when click on Intervention Selector PARAM nodes-->

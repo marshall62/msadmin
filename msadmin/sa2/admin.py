@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from msadmin.stratauth.models import *
+from msadmin.sa2.models import *
 from msadmin.submodel.machine_model import *
 
 
@@ -162,13 +162,6 @@ class SCISMapAdmin (admin.ModelAdmin):
 
 
 
-# Defines an inline viewer for use in intervention selector so that it will display the strategy component but not allow
-# editing of it
-class ClassSCParam_Inline(admin.TabularInline):
-    model = ClassSCParam
-    extra = 1
-
-
 # This is a partial solution to a problem with the admin editors for the various classXXX forms.   I don't want users creating new classes.
 # This turns off all ability to create Classes from forms that ref the class table as  a foreign key.  The problem with this solution
 # is that I can't even create a class from top level.
@@ -194,11 +187,6 @@ class BaseISParamAdmin (admin.ModelAdmin):
 # class ClassSCParamAdmin (admin.ModelAdmin):
 #     inlines = [  ClassSCParam_Inline    ]
 
-class ClassSCISMapAdmin (admin.ModelAdmin):
-    model = ClassSCISMap
-
-class ClassISParamAdmin (admin.ModelAdmin):
-    model = ClassISParam
 
 
 class LC2RSInline(admin.TabularInline):
@@ -215,9 +203,7 @@ admin.site.register(LC,LCAdmin)
 
 admin.site.register(SCISMap,SCISMapAdmin)
 
-admin.site.register(ClassSCParam)
-admin.site.register(ClassISParam, ClassISParamAdmin)
-admin.site.register(ClassSCISMap,ClassSCISMapAdmin)
+
 admin.site.register(Class,ClassAdmin)
 
 # TODO I want to set up IS Params to be listed ordered by intervention selector name and then secondarily by the param name and sc

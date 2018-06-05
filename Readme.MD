@@ -55,7 +55,8 @@ File | Project Structure | SDKs | +
 Request a copy from me @marshall62.
 
 7.  Run | Edit Configurations.  Select Run Django-2 login page.  It may pop up a dialog.   Make sure it 
-is using the correct python environment.   It should then load the browser with the main page of the MSAdmin site.
+is using the correct python environment (Use the specified python interpreter within your
+virtualenv)   It should then load the browser with the main page of the MSAdmin site.
 
 You may need to do some django db work to create a superuser so that you can login to the MSAdmin tool and administer
 the database using django.

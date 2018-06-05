@@ -251,11 +251,21 @@ def save_problem_meta_info (request, probId):
                 m.delete()
             topicsToAdd = curTopicSet - oldTopicSet
             for t in topicsToAdd:
+                # insertProblemTopic(p.id, t)
                 m = ProblemTopicMap(topic_id=t,problem=p)
                 m.save()
 
         d = {'message': "Meta info Saved. " + addMsg, 'lastWriteTime': p.updated_at}
         return JsonResponse(d)
+
+
+# Put a row in the Problem-Topic mapping table (for some reason I need to do this rather than work with the model ProblemTopicMap object which has errors when I create and save)
+def insertProblemTopic (probId,topicId):
+    with connection.cursor() as cursor:
+        q = '''INSERT into probprobgroup (probId,pgroupId)
+          VALUES (%s,%d)''' % (probId, topicId)
+        cursor.execute(q)
+
 
 @login_required
 def getHint (request, hintId):

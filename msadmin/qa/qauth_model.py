@@ -509,10 +509,10 @@ class ProblemStandardMap (models.Model):
         db_table = "ProbStdMap"
 
 class ProblemTopicMap (models.Model):
-    # problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
-    problem = models.OneToOneField('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
-    # topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
-    topic = models.OneToOneField('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
+    problem = models.ForeignKey('Problem',db_column='probId', on_delete=models.PROTECT)
+    # problem = models.OneToOneField('Problem',db_column='probId', on_delete=models.PROTECT, primary_key=True)
+    topic = models.ForeignKey('Topic',db_column='pgroupid', on_delete=models.PROTECT)
+    # topic = models.OneToOneField('Topic',db_column='pgroupid', on_delete=models.PROTECT, primary_key=True)
 
     class Meta:
         db_table = "ProbProbGroup"

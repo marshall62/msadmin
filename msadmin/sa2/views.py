@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
-from msadmin.dbops.classops import *
+from .classops import *
 
 
 # Create your views here.
@@ -28,7 +28,7 @@ def class_list(request):
     teachers = Teacher.objects.all().order_by('lname', 'fname')
     # classes = Class.objects.filter(teacher='David Marshall').order_by('teacher', 'name')
 
-    return render(request, 'msadmin/sa/class_list.html', {'classes': classes, 'teachers': teachers})
+    return render(request, 'msadmin/sa/class_list.html', {'classes': classes, 'teachers': teachers, 'teacherId': None})
 
 # Create your views here.
 def class_list_by_teacher(request, teacherId):
@@ -55,12 +55,11 @@ def class_detail (request, pk):
     classid = c.id
     teachers = Teacher.objects.all().order_by('lname','fname')
     # Get all the strategies that exist for this class
-    class_strats = Strategy_Class.objects.filter(theClass=c)
+    class_strats = Strategy.objects.filter(aclass=c)
     strats = []
     # put in a standard list
-    for cs in class_strats:
-        if cs.strategy_id != None:
-            strats.append(cs.strategy)
+    for s in class_strats:
+        strats.append(s)
     # get all the generic strategies
     allstrats = Strategy.objects.all()
     otherstrats = []
@@ -87,6 +86,7 @@ def strategy_detail (request, pk):
 # Given a strategy-component, return a list of lists.
 # like: [ [intervSel-1 [param-1, param-2,...]],  [intervSel-2 [param-1, param-2... ]] ]
 #  The params are based on the class.
+'''
 def getInterventionSelectorInfo (aclass, stratComp):
     res = []
     for sel in stratComp.interventionSelectors.all():
@@ -100,11 +100,12 @@ def getInterventionSelectorInfo (aclass, stratComp):
             params.append(cp)
         res.append([sel, params])
     return res
+'''
 
 def configure_class_strategy (request, classId, strategyId):
     cl = get_object_or_404(Class, pk=classId)
     # st = get_object_or_404(Strategy, pk=strategyId)
-    clstrat = get_object_or_404(Strategy_Class, pk=strategyId)
+    clstrat = get_object_or_404(Strategy, pk=strategyId)
 
     return render(request, 'msadmin/sa/class_strategy2.html',
                   {'class': cl, 'classStrategy': clstrat})
@@ -114,7 +115,7 @@ def add_class_strategy (request, classId, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
 
     # Copies various items from the strategy into tables specific to this class
-    copyStrategyToClass(c,s)
+    makeActualStrategyFromGeneric(c, s)
     return redirect("class_detail",pk=classId)
 
 
@@ -145,33 +146,30 @@ def add_class_other_class_strategy (request, classId, otherClassId, stratId):
 
     # return render_to_response('foo.html', csrfContext)
     c = get_object_or_404(Class, pk=classId)
-    oc = get_object_or_404(Class, pk=otherClassId)
-    strat = get_object_or_404(Strategy_Class, pk=stratId)
+    strat = get_object_or_404(Strategy, pk=stratId)
 
-    copyStrategyFromOtherClass(c,oc,strat)
+    copyStrategyFromOtherClass(c,strat)
 
     return redirect("class_detail",pk=classId)
 
 def remove_class_strategy (request, classId, strategyId):
-    # TODO add stuff to the db
+
     c = get_object_or_404(Class, pk=classId)
-    s = get_object_or_404(Strategy_Class, pk=strategyId)
+    s = get_object_or_404(Strategy, pk=strategyId)
     # gets rid of rows in tables that have specific information about this strategy for the class
-    removeStrategyFromClass(c,s)
+    removeStrategy(s)
     return redirect("class_detail",pk=classId)
 
 
 # support for AJAX call from a checkbox next to a intervention-selector node in the jstree
-# It will set the isActive field in the class_sc_is_map table to true or false.
+# It will set the isActive field in the SCISMap table to the isActive value
 def class_activate_is (request, classId, scId, isId, isActive):
-    c = get_object_or_404(Class, pk=classId)
     sc = get_object_or_404(StrategyComponent, pk=scId)
     insel = get_object_or_404(InterventionSelector, pk=isId)
     setting = isActive=='true'
     scismap = SCISMap.objects.get(strategyComponent=sc,interventionSelector=insel)
-    cscimap = ClassSCISMap.objects.get(ismap=scismap,theClass=c)
-    cscimap.isActive = setting
-    cscimap.save()
+    scismap.isActive = setting
+    scismap.save()
     return HttpResponse()
 
 def validate_generic (request):

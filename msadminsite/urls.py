@@ -40,7 +40,7 @@ urlpatterns = [
     #     form_class=UserCreateForm,
     #     success_url='/'
     # ),name='users_main'),
-    url(r'^stratauth/', include('msadmin.stratauth.urls')),
+    url(r'^stratauth/', include('msadmin.sa2.urls')),
     url(r'^qauth/',include('msadmin.qa.urls')),
     url(r'^topics/',include('msadmin.topics.urls')),
     url(r'^testauth/',include('msadmin.testauth.urls'))

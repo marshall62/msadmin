@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from msadmin.stratauth.models import *
+from msadmin.sa2.models import *
 
 
 #When a strategy is added to a class we use the following two functions to copy data from tables
@@ -9,6 +9,7 @@ from msadmin.stratauth.models import *
 
 def createCustomStrategyForClass (aclass, strategyName, loginSC, lessonSC, tutorSC, lc, descr):
     with transaction.atomic():
+        actstrat = Strategy()
         clstrat = Strategy_Class(theClass=aclass,strategy=None,lc=lc,name=strategyName, description=descr)
         clstrat.save()
         copyStrategyComponentToClass(aclass,loginSC,clstrat)
@@ -20,10 +21,11 @@ def createCustomStrategyForClass (aclass, strategyName, loginSC, lessonSC, tutor
 # class_sc_is_map :  on/off switch for each intervention selector
 # class_is_param:  a parameter for each intervention selector (a copy of the is_param)
 # class_sc_param: a parameter for each strat-component (a copy of sc_param)
-def copyStrategyToClass (aclass,strategy):
+def copyStrategyToClass (aclass, strategy):
     # defines an atomic db transaction that will only be commited if all the operations within this block are successful.
     with transaction.atomic():
         clstrat = Strategy_Class(theClass=aclass,strategy=strategy,lc=strategy.lc,name=strategy.name, description=strategy.description)
+
         clstrat.save()
         copyStrategyComponentToClass(aclass,strategy.lesson,clstrat)
         copyStrategyComponentToClass(aclass,strategy.login,clstrat)
