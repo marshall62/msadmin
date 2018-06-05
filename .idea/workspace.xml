@@ -2,36 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/docs/dbmods.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/classops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/json.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/modelUpdate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/msadmin/sa2/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Readme.MD" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/learning.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/learning.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/dbops/classops.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/dbops/classops.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/qa/json.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/qa/json.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/qa/qauth_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/forms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/json.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/modelUpdate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/stratauth/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadminsite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadminsite/urls.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -138,8 +109,8 @@
       <file leaf-file-name="json.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="253" column="45" lean-forward="true" selection-start-line="253" selection-start-column="45" selection-end-line="253" selection-end-column="45" />
+            <state relative-caret-position="310">
+              <caret line="257" selection-start-line="257" selection-end-line="257" />
             </state>
           </provider>
         </entry>
@@ -363,18 +334,6 @@
               <item name="msadmin" type="462c0819:PsiDirectoryNode" />
               <item name="msadmin" type="462c0819:PsiDirectoryNode" />
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="qa" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="sa2" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
@@ -1099,7 +1058,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="190" y="24" width="1634" height="1056" extended-state="4" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32453245" />
@@ -1110,7 +1068,7 @@
       <window_info anchor="bottom" id="Version Control" order="15" sideWeight="0.79026216" weight="0.24059293" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.70509803" weight="0.27843988" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.531961" visible="true" weight="0.19461444" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.531961" visible="true" weight="0.19461444" />
       <window_info anchor="right" id="Database" order="5" sideWeight="0.75179" weight="0.2117503" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.7242051" weight="0.31852654" />
       <window_info anchor="right" id="SciView" order="9" />
@@ -1118,7 +1076,7 @@
       <window_info anchor="right" id="Ant Build" order="1" sideWeight="0.54618937" side_tool="true" weight="0.14922349" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="6" sideWeight="0.4055944" side_tool="true" weight="0.20880681" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.74626863" visible="true" weight="0.37053087" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.74626863" visible="true" weight="0.37053087" />
       <window_info anchor="bottom" id="Thumbnails" order="21" weight="0.32902467" />
       <window_info anchor="bottom" id="Application Servers" order="17" sideWeight="0.4977521" weight="0.31609195" />
       <window_info anchor="bottom" id="Database Console" order="12" visible="true" weight="0.22451317" />
@@ -1156,7 +1114,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added css files for multi select" />
     <MESSAGE value="added js files for multi select" />
     <MESSAGE value="FIxed CCSS editing to use correct fields" />
     <MESSAGE value="added saving problem clusterID" />
@@ -1181,7 +1138,8 @@
     <MESSAGE value="replaced trim with strip" />
     <MESSAGE value="fixed some of the lastModifier stuff if meta-info is changed.&#10;&#10;Also some problem-deletion functionality is added so we can delete problems in the qauth_main.thml" />
     <MESSAGE value="added a readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a readme" />
+    <MESSAGE value="Bug fix so that topics mapped to problems correctly save (had to remove primary key markers on the two fields and let the internal primary key work).&#10;&#10;Also contains much new code to fix problems with strategy authoring." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fix so that topics mapped to problems correctly save (had to remove primary key markers on the two fields and let the internal primary key work).&#10;&#10;Also contains much new code to fix problems with strategy authoring." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1195,16 +1153,6 @@
           <url>file://$PROJECT_DIR$/msadmin/qa/json.py</url>
           <line>195</line>
           <option name="timeStamp" value="592" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/msadmin/qa/json.py</url>
-          <line>252</line>
-          <option name="timeStamp" value="593" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/msadmin/qa/json.py</url>
-          <line>248</line>
-          <option name="timeStamp" value="594" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1577,8 +1525,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/json.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="253" column="45" lean-forward="true" selection-start-line="253" selection-start-column="45" selection-end-line="253" selection-end-column="45" />
+        <state relative-caret-position="310">
+          <caret line="257" selection-start-line="257" selection-end-line="257" />
         </state>
       </provider>
     </entry>
