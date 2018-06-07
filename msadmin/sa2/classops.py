@@ -49,11 +49,11 @@ def makeGenericSCISMapsFromActual (asc, gsc):
             gp = InterventionSelectorParam(name=ap.name,value=ap.value,isActive=ap.isActive,baseParam=ap.baseParam,scismap=gm)
             gp.save()
 
-def makeUniqueName (rootName):
+def makeUniqueName (rootName, suffix):
     i = 1
     # Give it a unique name with -Generic-N
     while True:
-        name = rootName + "-Generic-" + str(i)
+        name = rootName + "-" +suffix+"-" + str(i)
         other = Strategy.objects.filter(name=name)
         if other.count() == 0:
             return name
@@ -65,7 +65,7 @@ def makeGenericStrategyFromActual (stratId):
     astrat = get_object_or_404(Strategy, pk=stratId)
 
     gstrat = Strategy(description=astrat.description, lc=astrat.lc)
-    gstrat.name = makeUniqueName(astrat.name)
+    gstrat.name = makeUniqueName(astrat.name, "Generic")
     gstrat.save()
     gstrat.login = makeGenericSCFromActual(astrat.login)
     gstrat.lesson = makeGenericSCFromActual(astrat.lesson)
@@ -83,6 +83,7 @@ def makeActualStrategyFromGeneric (aclass, strategy):
     # defines an atomic db transaction that will only be commited if all the operations within this block are successful.
     with transaction.atomic():
         actstrat = Strategy.getActual(strategy,aclass)
+        actstrat.name = makeUniqueName(strategy.name, "Actual")
         actstrat.save()
         actLessonSC = makeActualStrategyComponent(actstrat, strategy.lesson)
         actLoginSC = makeActualStrategyComponent(actstrat, strategy.login)

@@ -61,20 +61,20 @@ def class_detail (request, pk):
     for s in class_strats:
         strats.append(s)
     # get all the generic strategies
-    allstrats = Strategy.objects.all()
-    otherstrats = []
-    # add all the generics to a standard list and then remove the ones that are already in use for the class
-    for s in allstrats:
-        otherstrats.append(s)
-    for s in strats:
-        otherstrats.remove(s)
+    allstrats = Strategy.objects.filter(aclass=None)
+    # otherstrats = []
+    # # add all the generics to a standard list and then remove the ones that are already in use for the class
+    # for s in allstrats:
+    #     otherstrats.append(s)
+    # for s in strats:
+    #     otherstrats.remove(s)
     loginSCs = StrategyComponent.objects.filter(type=StrategyComponent.LOGIN)
     lessonSCs = StrategyComponent.objects.filter(type=StrategyComponent.LESSON)
     tutorSCs = StrategyComponent.objects.filter(type=StrategyComponent.TUTOR)
     lcs = LC.objects.all()
     # sc = StrategyComponent.ojects.get(pk=pk)
     return render(request, 'msadmin/sa/class.html',
-                  {'class': c, 'strategies' : class_strats, 'otherStrategies': otherstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
+                  {'class': c, 'strategies' : class_strats, 'otherStrategies': allstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
 
 
 

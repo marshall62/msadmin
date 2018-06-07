@@ -422,9 +422,11 @@ class Strategy (models.Model):
     # providing a getter to make sure bad chars like "\n" are not included which breaks the Javascript section of the
     # class_strategy2.html
     def getDescription (self):
-        descr= self.description.replace('\n','')
-        descr= descr.replace('\r','')
-        return descr
+        if self.description:
+            descr= self.description.replace('\n','')
+            descr= descr.replace('\r','')
+            return descr
+        else: return ''
 
     class Meta:
         db_table = "strategy"

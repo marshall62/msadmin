@@ -45,7 +45,6 @@
             var selector = document.getElementById('teacherSelector');
             var option = selector.options[selector.selectedIndex];
             var teacherId = option.value;
-            alert("selected Option " + option.text + "id : " + teacherId);
             // make AJAX call to get the list of classes this teacher owns
             // on successful return of this, it will repopulate the classes selector and empty the strategy selector
             var url = "{% url 'get-teacher-classes' teacherId=12345 %}".replace(/12345/, teacherId);
@@ -185,8 +184,8 @@
                 <li class="active">
                     <a  href="#1b" data-toggle="tab">Start from a Generic Strategy</a>
                 </li>
-                <li><a href="#2b" data-toggle="tab">Create a Custom Strategy</a>
-                </li>
+{#                <li><a href="#2b" data-toggle="tab">Create a Custom Strategy</a>#}
+{#                </li>#}
                 <li><a href="#3b" data-toggle="tab">Get Strategy from another class</a>
                 </li>
 
@@ -211,60 +210,60 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tab-pane" id="2b">
-                <br>
-                    <h4>Name your strategy and select its components</h4>
-                    <form name="customStrategyForm" method="post" onsubmit="return validCustomStrategy();" action="{% url 'add-class-custom-strategy'  classId=class.id %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="strategyName">Name</label>
-                            <input id="strategyName" class="form-control" name="strategyName" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label for="lcId">Learning Companion</label>
-                            <select id="lcId" name="lcId" class="form-control">
-                                {% for lc in lcs %}
-                                    <option value="{{ lc.id }}">{{ lc.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginSCId">Login Component</label>
-                            <select id="loginSCId" name="loginSCId" class="form-control">
-                                {% for sc in loginSCs %}
-                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
-                                {% endfor %}
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="lessonSCId">Lesson Component</label>
-                            <select id="lessonSCId" name="lessonSCId" class="form-control">
-                                {% for sc in lessonSCs %}
-                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
-                                {% endfor %}
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="tutorSCId">Tutor Component</label>
-                            <select id="tutorSCId" name="tutorSCId" class="form-control">
-                                {% for sc in tutorSCs %}
-                                    <option value="{{ sc.id }}">{{ sc.name }}</option>
-                                {% endfor %}
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="strategyDescr">Description</label>
-                            <textarea id="strategyDescr" name="strategyDescr" class="form-control" rows="4" cols="50"></textarea>
-                        </div>
-
-                        <br>
-                        <button id="addCustomStrategy" class="btn btn-default">Add</button>
-
-                    </form>
-                </div>
+{#                <div class="tab-pane" id="2b">#}
+{#                <br>#}
+{#                    <h4>Name your strategy and select its components</h4>#}
+{#                    <form name="customStrategyForm" method="post" onsubmit="return validCustomStrategy();" action="{% url 'add-class-custom-strategy'  classId=class.id %}">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="form-group">#}
+{#                            <label for="strategyName">Name</label>#}
+{#                            <input id="strategyName" class="form-control" name="strategyName" type="text">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="lcId">Learning Companion</label>#}
+{#                            <select id="lcId" name="lcId" class="form-control">#}
+{#                                {% for lc in lcs %}#}
+{#                                    <option value="{{ lc.id }}">{{ lc.name }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="loginSCId">Login Component</label>#}
+{#                            <select id="loginSCId" name="loginSCId" class="form-control">#}
+{#                                {% for sc in loginSCs %}#}
+{#                                    <option value="{{ sc.id }}">{{ sc.name }}</option>#}
+{#                                {% endfor %}#}
+{##}
+{#                            </select>#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="lessonSCId">Lesson Component</label>#}
+{#                            <select id="lessonSCId" name="lessonSCId" class="form-control">#}
+{#                                {% for sc in lessonSCs %}#}
+{#                                    <option value="{{ sc.id }}">{{ sc.name }}</option>#}
+{#                                {% endfor %}#}
+{##}
+{#                            </select>#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="tutorSCId">Tutor Component</label>#}
+{#                            <select id="tutorSCId" name="tutorSCId" class="form-control">#}
+{#                                {% for sc in tutorSCs %}#}
+{#                                    <option value="{{ sc.id }}">{{ sc.name }}</option>#}
+{#                                {% endfor %}#}
+{##}
+{#                            </select>#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="strategyDescr">Description</label>#}
+{#                            <textarea id="strategyDescr" name="strategyDescr" class="form-control" rows="4" cols="50"></textarea>#}
+{#                        </div>#}
+{##}
+{#                        <br>#}
+{#                        <button id="addCustomStrategy" class="btn btn-default">Add</button>#}
+{##}
+{#                    </form>#}
+{#                </div>#}
                 <div class="tab-pane" id="3b">
                     <br>
                     <div class="form-group">
