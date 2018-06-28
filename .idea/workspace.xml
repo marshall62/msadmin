@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/generic_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/dbmods.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docs/dbmods.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/dbmods2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docs/dbmods2.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/classops.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/classops.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/json.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/json.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/modelUpdate.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/modelUpdate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/templates/msadmin/sa/main.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -76,8 +64,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="82" column="35" lean-forward="true" selection-start-line="82" selection-start-column="35" selection-end-line="82" selection-end-column="35" />
+            <state relative-caret-position="1170">
+              <caret line="82" column="35" selection-start-line="82" selection-start-column="35" selection-end-line="82" selection-end-column="35" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -88,8 +76,8 @@
       <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
+            <state relative-caret-position="165">
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -100,8 +88,8 @@
       <file leaf-file-name="dbmods2.sql" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/dbmods2.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="111" column="60" lean-forward="true" selection-start-line="111" selection-start-column="60" selection-end-line="111" selection-end-column="60" />
+            <state relative-caret-position="1290">
+              <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -109,8 +97,8 @@
       <file leaf-file-name="dbmods.sql" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/dbmods.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+            <state>
+              <caret selection-end-line="4" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -127,8 +115,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="200" column="31" lean-forward="true" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
+            <state relative-caret-position="-1260">
+              <caret line="200" column="31" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -139,7 +127,7 @@
       <file leaf-file-name="modelUpdate.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/modelUpdate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
+            <state relative-caret-position="690">
               <caret line="54" column="16" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
             </state>
           </provider>
@@ -172,7 +160,7 @@
       <file leaf-file-name="classops.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/classops.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
+            <state relative-caret-position="1905">
               <caret line="130" column="92" selection-start-line="130" selection-start-column="92" selection-end-line="130" selection-end-column="92" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
@@ -335,6 +323,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -403,7 +392,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -1096,45 +1084,45 @@
       <window_info anchor="bottom" id="Event Log" order="19" sideWeight="0.27579495" side_tool="true" weight="0.34238487" />
       <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.45381063" weight="0.14854828" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.70509803" weight="0.27843988" />
       <window_info anchor="bottom" id="Version Control" order="15" sideWeight="0.79026216" weight="0.24059293" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.70509803" weight="0.27843988" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.531961" visible="true" weight="0.1961752" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.531961" visible="true" weight="0.1961752" />
       <window_info anchor="right" id="Database" order="5" sideWeight="0.75179" weight="0.2117503" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.7242051" visible="true" weight="0.31852654" />
       <window_info anchor="right" id="SciView" order="9" />
       <window_info id="Structure" order="1" sideWeight="0.468039" side_tool="true" weight="0.23076923" />
       <window_info anchor="right" id="Ant Build" order="1" sideWeight="0.54618937" side_tool="true" weight="0.14922349" />
       <window_info id="UI Designer" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.74626863" weight="0.3716143" />
       <window_info id="Favorites" order="6" sideWeight="0.4055944" side_tool="true" weight="0.20880681" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.74626863" weight="0.3716143" />
       <window_info anchor="bottom" id="Thumbnails" order="21" weight="0.32902467" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Application Servers" order="17" sideWeight="0.4977521" weight="0.31609195" />
       <window_info anchor="bottom" id="CVS" order="20" sideWeight="0.49120122" weight="0.32549942" />
       <window_info id="Persistence" order="7" sideWeight="0.19129439" side_tool="true" weight="0.26061398" />
       <window_info anchor="bottom" id="Database Console" order="12" visible="true" weight="0.22451317" />
       <window_info anchor="right" id="JetGradle" order="11" />
       <window_info anchor="bottom" id="Changes" order="11" sideWeight="0.49965918" visible="true" weight="0.29496402" />
+      <window_info id="Web" order="8" sideWeight="0.32349467" side_tool="true" weight="0.34019768" />
+      <window_info anchor="bottom" id="Terminal" order="4" weight="0.3298122" />
       <window_info id="Capture Tool" order="5" />
       <window_info anchor="right" id="Capture Analysis" order="10" />
       <window_info anchor="bottom" id="SVN Properties" order="16" sideWeight="0.49736643" />
       <window_info anchor="right" id="Commander" order="3" sideWeight="0.3344788" weight="0.39973873" />
       <window_info anchor="bottom" id="IDEtalk Messages" order="13" weight="0.32962963" />
+      <window_info anchor="bottom" id="Messages" order="14" sideWeight="0.64" weight="0.2551963" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" sideWeight="0.68037605" weight="0.24962631" />
       <window_info anchor="bottom" id="Java Enterprise" order="5" weight="0.3298122" />
       <window_info anchor="bottom" id="SVN Repositories" order="18" sideWeight="0.46977812" weight="0.30062112" />
       <window_info anchor="bottom" id="manage.py@mysite" order="0" weight="0.32900944" />
-      <window_info anchor="bottom" id="Terminal" order="4" weight="0.3298122" />
+      <window_info anchor="right" id="Coverage" order="14" side_tool="true" />
       <window_info anchor="right" id="IDEtalk" order="13" />
-      <window_info anchor="bottom" id="Messages" order="14" sideWeight="0.64" weight="0.2551963" />
       <window_info anchor="bottom" id="Message" order="7" />
-      <window_info id="Web" order="8" sideWeight="0.32349467" side_tool="true" weight="0.34019768" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info id="Image Layers" order="4" />
       <window_info anchor="right" id="CDI" order="12" sideWeight="0.75170845" weight="0.3294621" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="right" id="Coverage" order="14" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.7242051" visible="true" weight="0.31852654" />
       <window_info anchor="right" id="Bean Validation" order="2" />
     </layout>
   </component>
@@ -1145,7 +1133,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="FIxed CCSS editing to use correct fields" />
     <MESSAGE value="added saving problem clusterID" />
     <MESSAGE value="fixed clustId bug" />
     <MESSAGE value="added some test logging to qaview" />
@@ -1170,7 +1157,8 @@
     <MESSAGE value="added a readme" />
     <MESSAGE value="Bug fix so that topics mapped to problems correctly save (had to remove primary key markers on the two fields and let the internal primary key work).&#10;&#10;Also contains much new code to fix problems with strategy authoring." />
     <MESSAGE value="Bug fixes to strategy auth" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes to strategy auth" />
+    <MESSAGE value="Made fixes so that it is compatible with mathspring to run with these simpler strategies." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made fixes so that it is compatible with mathspring to run with these simpler strategies." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1472,32 +1460,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/sa2/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="82" column="35" lean-forward="true" selection-start-line="82" selection-start-column="35" selection-end-line="82" selection-end-column="35" />
+        <state relative-caret-position="1170">
+          <caret line="82" column="35" selection-start-line="82" selection-start-column="35" selection-end-line="82" selection-end-column="35" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/dbmods.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/dbmods2.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="111" column="60" lean-forward="true" selection-start-line="111" selection-start-column="60" selection-end-line="111" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/sa2/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        <state relative-caret-position="165">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
@@ -1506,14 +1480,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/sa2/modelUpdate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
+        <state relative-caret-position="690">
           <caret line="54" column="16" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/sa2/classops.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
+        <state relative-caret-position="1905">
           <caret line="130" column="92" selection-start-line="130" selection-start-column="92" selection-end-line="130" selection-end-column="92" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
@@ -1521,10 +1495,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/docs/dbmods2.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1290">
+          <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/dbmods.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="4" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/sa2/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="200" column="31" lean-forward="true" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
+        <state relative-caret-position="-1260">
+          <caret line="200" column="31" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>

@@ -322,11 +322,7 @@ class StrategyComponentParam (models.Model):
         db_table = "sc_param"
 
     def __str__(self):
-        m = SCParamMap.objects.filter(param=self)
-        if m.count() > 0:
-            scname = m.first().strategyComponent.name
-        else: scname = ""
-        return scname + ":" + self.name + "=" + self.value
+        return self.name + "=" + self.value
 
     def getJSON (self):
 
