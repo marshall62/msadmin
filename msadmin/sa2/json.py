@@ -22,14 +22,10 @@ def get_is_param_json (request, isParamId):
     d["id"] = isParamId
     d["name"] = p.name
     d["value"] = p.value
-    possibleVals = []
-    for v in p.getPossibleValues():
-        possibleVals.append(v.value)
-
+    possibleVals = p.getPossibleValues()
     d["possibleValues"] = possibleVals
     d["description"] = p.getDescription()
     d["isActive"] =  p.isActive
-    d["interventionSelectorName"] = p.getISName()
     return JsonResponse(d)
 
 def get_sc_param_json (request, scParamId):

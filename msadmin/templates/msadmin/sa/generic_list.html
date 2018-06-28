@@ -1,0 +1,40 @@
+{% extends 'msadmin/base_ajax.html' %}
+{% block page-js %}
+    <script>
+        function deleteGenericStrategy (input) {
+            var name = input.name;
+            var val = input.value;
+            // Deleting a generic strategy is a risky operation because an actual strategy may be built from it and there is
+            // a fk connection from the is_param_sc to the is_param_base which means the actual strategy depends on the generic being there because
+            // the is_param_base is a generic structure.
+
+            // For now:
+            if (confirm("This is risky.  Do you really want to delete this generic strategy?")) {
+                var url_mask = "{% url 'delete_generic_strategy' strategyId=12345 %}".replace(/12345/, val);
+                location.href = url_mask;
+            }
+        }
+
+        $(function () {
+
+            $('.deleteGeneric').click(function () { deleteGenericStrategy(this); });
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Generic Strategies:</h1>
+    <table>
+    <thead><td>name</td><td>delete</td></thead>
+    <tbody>
+    {% for s in strategies %}
+        <tr><td><a href="#">{{ s.name }}</a></td><td><input class="deleteGeneric" type="checkbox" name="deleteGeneric" value="{{ s.id }}"></td></tr>
+
+
+
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

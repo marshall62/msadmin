@@ -181,5 +181,11 @@ def validate_class_tutoring (request):
 def test (request):
     return render(request, 'msadmin/test.html')
 
-def blee (request):
-    return HttpResponse("Blee")
+def generic_list (request):
+    genericStrats= Strategy.objects.filter(aclass=None)
+    return render(request, "msadmin/sa/generic_list.html", {'strategies': genericStrats})
+
+def delete_generic_strategy (request, strategyId):
+    s = get_object_or_404(Strategy,pk=strategyId)
+    deleteGenericStrategy(s)
+    return redirect('generic_list')

@@ -16,7 +16,7 @@ def createCustomStrategyForClass (aclass, strategyName, loginSC, lessonSC, tutor
 
 # Makes the generic SC and its substructure from an actual SC
 def makeGenericSCFromActual (asc):
-    gsc = StrategyComponent(name=asc.name,description=asc.description, briefDescr=asc.briefDescr, className=asc.className, type=asc.type)
+    gsc = StrategyComponent(name=asc.name,description=asc.description, briefDescr=asc.briefDescr, className=asc.className, type=asc.type, is_generic=True)
     gsc.save()
     # create the SCISMaps
     makeGenericSCISMapsFromActual(asc,gsc)
@@ -128,6 +128,7 @@ def makeActualInterventionSelectors(asc, gsc, actualStrat):
         # Make actual SCIS map
         ascismap = SCISMap(interventionSelector=actualIS,strategyComponent=asc)
         ascismap.myStrategy = actualStrat
+        # The config for the IS is on the generic scismap and should be cloned to the actual
         ascismap.config = scismap.config
         ascismap.isActive = scismap.isActive
         ascismap.save()
@@ -265,7 +266,7 @@ def copyStrategyFromOtherClass (thisClass, classStrategy):
                 new_scismap.save()
                 # clone all the intervention selectors params
                 for p in intsel.getParams(sc):
-                    new_isparam = InterventionSelectorParam.getInstanceFromGenericParam(p,new_strat)
+                    new_isparam = InterventionSelectorParam.getInstanceFromActualParam(p,new_strat)
                     new_isparam.scismap = new_scismap
                     new_isparam.save()
         new_strat.login = new_scs[0]
@@ -315,6 +316,46 @@ def removeStrategy (strategy):
             if sc:
                 sc.delete()
 
+def deleteGenericStrategy (strategy):
+    with transaction.atomic():
+        isParams = []
+        scParams = []
+        scpmaps = []
+        scismaps = []
+        scs = [strategy.lesson, strategy.tutor, strategy.login]
+        for sc in scs:
+            maps = SCParamMap.objects.filter(strategyComponent=sc)
+            for m in maps:
+                scpmaps.append(m)
+                scParams.append(m.param)
+            maps = SCISMap.objects.filter(strategyComponent=sc)
+            for m in maps:
+                scismaps.append(m)
+                params = InterventionSelectorParam.objects.filter(scismap=m)
+                for p in params:
+                    isParams.append(p)
+        # first we get rid of IS params because they point to SCIS maps
+        for isp in isParams:
+            isp.delete()
+        # now get rid of scis maps because they point to IS and SC rows
+        for m in scismaps:
+            m.delete()
+        # get rid of sc param maps because they point to SC Params and SC
+        for m in scpmaps:
+            m.delete()
+        # get rid of sc params (they point to nothing)
+        for scp in scParams:
+            scp.delete()
+
+        # get rid of the strategy because it has ids of its SCs
+        strategy.delete()
+
+        # get rid of SC s
+        for sc in scs:
+            if sc:
+                print("deleting " + str(sc.id))
+                sc.delete()
+                print("deleted " + str(sc.id))
 
 
 def indent (n):

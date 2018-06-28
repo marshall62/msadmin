@@ -92,6 +92,8 @@ class ISParamInline(admin.TabularInline):
             scisid = int(s)
             # lookup the scismap and get its interv selector
             insel = SCISMap.objects.get(id=scisid).interventionSelector
+            if insel.genericParent:
+                insel = insel.genericParent
             # queryset of is-param-base objects should be limited to only those for this intervention selector
             kwargs["queryset"] = ISParamBase.objects.filter(interventionSelector=insel)
         return super(ISParamInline, self).formfield_for_foreignkey(db_field, request, **kwargs)

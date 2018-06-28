@@ -9,8 +9,9 @@
 {% block content %}
     <ul >
 
-        <li><a href="{% url 'class_list' %}"><span class="glyphicon glyphicon-log-out"></span> Class Selection</a></li>
-        <li><a href="{% url 'admin:index' %}msadmin">Admin for Base Strategy Components</a></li>
-        <li><a href="{% url 'validate_generic' %}">Validate Strategy Components</a></li>
+        <li><a href="{% url 'class_list' %}"><span class="glyphicon glyphicon-log-out"></span>Configure a Class with Tutoring Strategies</a></li>
+        <li><a href="{% url 'admin:index' %}msadmin">Admin for Generic Strategies</a></li>
+        <li><a href="{% url 'generic_list' %}">Generic Strategies</a></li>
+        <li><a href="{% url 'validate_generic' %}">Validatation Utility for Strategy Components</a></li>
     </ul>
 {% endblock %}

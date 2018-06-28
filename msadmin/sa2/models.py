@@ -66,11 +66,20 @@ class InterventionSelectorParam(models.Model):
     # interventionSelector = models.ForeignKey('InterventionSelector',db_column="isid",on_delete=models.PROTECT)
     myStrategy = models.ForeignKey('Strategy',db_column='strategy_id', null=True,on_delete=models.PROTECT)
     scismap = models.ForeignKey('SCISMap', db_column="sc_is_map_id",verbose_name="StrategyComponent:InterventionSelector", on_delete=models.PROTECT)
-
-
+    possibleValues = models.TextField(db_column='possible_values') # a CSV list of possible values that may be selected from for certain params
+    description = models.CharField(max_length=500)
 
     @staticmethod
-    # Note this is used both for creating actuals from generic and for cloning actuals
+    def __makePossibleValsCSV (baseParam):
+        vals = baseParam.getPossibleValues()
+        if vals.count() > 0:
+            poss_vals_csv = ""
+            for v in vals:
+                poss_vals_csv += v.value + ","
+            return poss_vals_csv[0:-1]
+        else: return None
+
+    @staticmethod
     def getInstanceFromGenericParam (genericISParam, actualStrat):
         g=genericISParam
         self = InterventionSelectorParam()
@@ -78,7 +87,21 @@ class InterventionSelectorParam(models.Model):
         self.value = g.value
         self.isActive = g.isActive
         self.myStrategy = actualStrat
-        self.baseParam = g.baseParam
+        # self.baseParam = g.baseParam
+        self.possibleValues = InterventionSelectorParam.__makePossibleValsCSV(g.baseParam)
+        self.description = g.description
+        return self
+
+    @staticmethod
+    def getInstanceFromActualParam (actualISParam, actualStrat):
+        a=actualISParam
+        self = InterventionSelectorParam()
+        self.name = a.name
+        self.value = a.value
+        self.isActive = a.isActive
+        self.myStrategy = actualStrat
+        self.possibleValues = a.possibleValues
+        self.description = a.description
         return self
 
     @staticmethod
@@ -88,17 +111,20 @@ class InterventionSelectorParam(models.Model):
         self.value = baseParam.value
         self.isActive = False
         self.myStrategy = actualStrat
-        self.baseParam = baseParam
+        # self.baseParam = baseParam
+        self.possibleValues = InterventionSelectorParam.__makePossibleValsCSV(baseParam)
+        self.description = baseParam.description
         return self
 
-    def getISName (self):
-        return self.baseParam.interventionSelector.name
 
     def getDescription (self):
-        return self.baseParam.description
+        return self.description
 
+    # return whats in the CSV string as a list of strings
     def getPossibleValues (self):
-        return self.baseParam.getPossibleValues()
+        if self.possibleValues:
+            return self.possibleValues.split(',')
+        else: return []
 
 
     # provide a constructor so that I can add in my own properties
@@ -139,8 +165,9 @@ class InterventionSelectorParam(models.Model):
 
 
     def __str__(self):
-        isname = self.interventionSelector.name
-        return isname + " : " + self.name + "=" + firstN(self.value,60)
+        isname = self.scismap.interventionSelector.name
+
+        return isname + ":" + self.name + "=" + firstN(self.value,60)
 
 
 #
@@ -153,13 +180,13 @@ class InterventionSelector(models.Model):
     name = models.CharField(max_length=45)
     onEvent = models.CharField(max_length=45)
     className = models.CharField(max_length=100)
-    config = models.TextField(blank=True)
-    description = models.CharField(max_length=800)
-    briefDescription = models.CharField(max_length=120)
-    myStrategy =  models.ForeignKey('Strategy',db_column='strategy_id', null=True,on_delete=models.PROTECT)
+    # config = models.TextField(blank=True)
+    description = models.CharField(max_length=800,blank=True)
+    briefDescription = models.CharField(max_length=120,blank=True)
+    myStrategy =  models.ForeignKey('Strategy',db_column='strategy_id', null=True,blank=True,on_delete=models.PROTECT)
     type = models.CharField(max_length=10,choices=[(LOGIN,LOGIN),(LESSON,LESSON),(TUTOR,TUTOR) ])
     # actual intervention selectors hold a pointer to the generic parent
-    genericParent = models.ForeignKey('InterventionSelector',db_column="generic_is_id", null=True,on_delete=models.SET_NULL)
+    genericParent = models.ForeignKey('InterventionSelector',db_column="generic_is_id", null=True,blank=True,on_delete=models.SET_NULL)
 
 
     # This creates an actual IS from a generic and is also be used to clone actual ISs.
@@ -170,7 +197,7 @@ class InterventionSelector(models.Model):
         self.name = g.name
         self.onEvent = g.onEvent
         self.className = g.className
-        self.config = g.config
+        # self.config = g.config
         self.description = g.description
         self.briefDescription = g.briefDescription
         self.myStrategy = actualStrat
@@ -184,7 +211,11 @@ class InterventionSelector(models.Model):
 
 
     def __str__(self):
-        return self.name
+        if not self.myStrategy:
+            parent = "Generic"
+        else:
+            parent = self.myStrategy.name
+        return parent +":"+self.name
 
     def isActual (self):
         return self.myStrategy != None
@@ -291,7 +322,11 @@ class StrategyComponentParam (models.Model):
         db_table = "sc_param"
 
     def __str__(self):
-        return self.name + "=" + self.value
+        m = SCParamMap.objects.filter(param=self)
+        if m.count() > 0:
+            scname = m.first().strategyComponent.name
+        else: scname = ""
+        return scname + ":" + self.name + "=" + self.value
 
     def getJSON (self):
 
@@ -315,7 +350,7 @@ class StrategyComponent(models.Model):
     # id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)
     # className = models.CharField(max_length=100)
-    className = models.CharField(max_length=100, choices=[('edu.umass.ckc.wo.tutor.model.TopicModel','TopicModel'),
+    className = models.CharField(max_length=100, null=True, blank=True, choices=[('edu.umass.ckc.wo.tutor.model.TopicModel','TopicModel'),
                                                           ('edu.umass.ckc.wo.tutor.model.CCLessonModel','CCLessonModel'),
                                                           ('edu.umass.ckc.wo.tutor.pedModel.BasePedagogicalModel', 'BasePedagogicalModel'),
                                                           ('edu.umass.ckc.wo.tutor.pedModel.SingleTopicPM','SingleTopicPedagogicalModel'),
@@ -333,7 +368,7 @@ class StrategyComponent(models.Model):
     # supports the many-to-many relationship from StrategyComponent to StrategyComponentParam via the sc_param_map
     params = models.ManyToManyField(StrategyComponentParam, through='SCParamMap')
     # strategy = models.ForeignKey('Strategy', db_column='strategy_id', null=True, on_delete=models.SET_NULL) # will have a value if this is part of an actual strategy
-
+    is_generic = models.BooleanField(blank=True)
 
     def getParams (self):
         params = StrategyComponentParam.objects.filter(scparammap__strategyComponent=self)
@@ -349,6 +384,7 @@ class StrategyComponent(models.Model):
         self.description = g.description
         self.briefDescr=g.briefDescr
         self.type = g.type
+        self.is_generic = False
         return self
 
 
@@ -359,7 +395,7 @@ class StrategyComponent(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return self.name + (" <Generic>" if self.is_generic else " <Actual>")
 
     # return a dictionary
     def getJSON (self, aclass, strategy):
@@ -463,7 +499,7 @@ class SCISMap (models.Model):
     interventionSelector = models.ForeignKey(InterventionSelector, db_column="intervention_selector_id", on_delete=models.PROTECT)
     config = models.TextField(db_column='config',blank=True)
 
-    myStrategy = models.ForeignKey('Strategy', db_column='strategy_id',null=True,on_delete=models.PROTECT)
+    myStrategy = models.ForeignKey('Strategy', db_column='strategy_id',null=True,blank=True,on_delete=models.PROTECT)
     isActive = models.BooleanField()
 
     # def __init__ (self, *args, **kwargs):

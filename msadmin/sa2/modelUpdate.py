@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
-from msadmin.sa2.classops import makeGenericStrategyFromActual
+from msadmin.sa2.classops import makeGenericStrategyFromActual, deleteGenericStrategy
 from msadmin.sa2.models import Class, InterventionSelectorParam, StrategyComponentParam
 from msadmin.sa2.models import InterventionSelector
 from msadmin.sa2.models import SCISMap
@@ -123,3 +123,4 @@ def globalize_strategy (request, strategyId):
     print("Globalize strategy " + strategyId)
     gs = makeGenericStrategyFromActual(strategyId)
     return JsonResponse({'globalStrategy': gs.getJSON(None)})
+

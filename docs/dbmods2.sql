@@ -108,6 +108,8 @@ ADD CONSTRAINT `fk_intervention_selector_2`
 ALTER TABLE `wayangoutpostdb`.`strategy_component`
 CHANGE COLUMN `className` `className` VARCHAR(100) NULL ;
 
+ALTER TABLE `wayangoutpostdb`.`strategy_component`
+ADD COLUMN `is_generic` TINYINT NULL DEFAULT 1 AFTER `type`;
 
 
 
