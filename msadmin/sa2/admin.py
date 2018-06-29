@@ -32,6 +32,7 @@ class SCISMapInline(admin.TabularInline):
 # sets up many-to-many from strategyComponent to sc_param through sc_param_map
 class SCParamMapInLine(admin.TabularInline):
     model = SCParamMap
+    fields = ('param', 'is_active')
     extra = 1
 
 

@@ -305,7 +305,7 @@ class StrategyComponentParam (models.Model):
     value = models.CharField(max_length=200)
     description = models.CharField(max_length=800)
     isActive = models.BooleanField()
-    myStrategy = models.ForeignKey('Strategy',db_column='strategy_id', null=True,on_delete=models.PROTECT)
+    myStrategy = models.ForeignKey('Strategy',db_column='strategy_id', null=True, blank=True, on_delete=models.PROTECT)
 
     @staticmethod
     def getActual ( genericSCParam, strat):
@@ -322,7 +322,12 @@ class StrategyComponentParam (models.Model):
         db_table = "sc_param"
 
     def __str__(self):
-        return self.name + "=" + self.value
+        maps = SCParamMap.objects.filter(param=self)
+        if maps.count() > 0:
+            scname = maps.first().strategyComponent.name
+        else:
+            scname = ""
+        return scname + ":" + self.name + "=" + self.value
 
     def getJSON (self):
 
@@ -433,7 +438,7 @@ class Strategy (models.Model):
     lesson = models.ForeignKey(StrategyComponent,db_column='lesson_sc_id',related_name='StrategyLesson', null=True, on_delete=models.PROTECT)
     login = models.ForeignKey(StrategyComponent,db_column='login_sc_id',related_name='StrategyLogin', null=True, on_delete=models.PROTECT)
     tutor = models.ForeignKey(StrategyComponent,db_column='tutor_sc_id',related_name='StrategyTutor', null=True, on_delete=models.PROTECT)
-    lc = models.ForeignKey('LC',db_column='lcid', on_delete=models.PROTECT)
+    lc = models.ForeignKey('LC',db_column='lcid', blank=True, null=True, on_delete=models.PROTECT)
     description = models.TextField();
     aclass = models.ForeignKey('Class',db_column='classid',null=True,blank=True, on_delete=models.PROTECT) # will be null if generic strategy
 
@@ -546,6 +551,7 @@ class SCParamMap (models.Model):
     strategyComponent = models.ForeignKey(StrategyComponent, db_column="strategy_component_id", on_delete=models.PROTECT)
     param = models.ForeignKey(StrategyComponentParam, db_column="sc_param_id", on_delete=models.PROTECT)
     myStrategy = models.ForeignKey('Strategy',db_column='strategy_id',blank=True,null=True,on_delete=models.PROTECT)
+    is_active = models.BooleanField(blank=True)
 
     class Meta:
         db_table = "sc_param_map"
