@@ -306,6 +306,7 @@ class StrategyComponentParam (models.Model):
     description = models.CharField(max_length=800)
     isActive = models.BooleanField()
     myStrategy = models.ForeignKey('Strategy',db_column='strategy_id', null=True, blank=True, on_delete=models.PROTECT)
+    type = models.CharField(max_length=45, blank=True, null=True)
 
     @staticmethod
     def getActual ( genericSCParam, strat):

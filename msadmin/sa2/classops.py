@@ -126,10 +126,13 @@ def makeActualInterventionSelectors(asc, gsc, actualStrat):
         scismap = SCISMap.objects.filter(interventionSelector=gIS, strategyComponent=gsc).first()
         actualIS = InterventionSelector.getActual(gIS,actualStrat)
         actualIS.save()
+
         # Make actual SCIS map
         ascismap = SCISMap(interventionSelector=actualIS,strategyComponent=asc)
         ascismap.myStrategy = actualStrat
-        # The config for the IS is on the generic scismap and should be cloned to the actual
+        # The config for the IS is on the generic SCISMap and cloned to the actual SCISMap
+        # because it's possible to then make a new generic strategy from this actual strategy and then the
+        # config needs to move from the actual scisMap to a new generic scisMap (placing config on the IS won't allow this g->a->g)
         ascismap.config = scismap.config
         ascismap.isActive = scismap.isActive
         ascismap.save()
@@ -208,29 +211,30 @@ def addInactiveISParamsFromISBaseParams (genericSC, actualSC, genericIS, actualI
 #         cp = ClassISParam(theClass=aclass, isParam=p, value=p.value)
 #         cp.save()
 
-
-# Given the generic SC and the actual SC,
-# make actual SC params from each of the generic SC params and add these to the actual SC
-# Returns the list of params so that the caller can add them into their SC
-# def makeActualSCParams (asc, gsc, astrat):
-#     gscparams = gsc.params.all() # gets a list of StrategyComponentParam objects
-#     for gp in gscparams:
-#         ap = StrategyComponentParam.getActual(gp,astrat)
-#         ap.save()
-#         m = SCParamMap(strategyComponent=asc,param=ap,myStrategy=astrat)
-#         m.save()
-#     asc.save()
-
+# Get the params that are connected to the generic SC and copy to the actual.
+# Then get other params marked for the same type of SC (e.g. lesson, tutor) and copy them in as inactive.
 def makeActualSCParams (asc, gsc, astrat):
     gscparam_maps = SCParamMap.objects.filter(strategyComponent=gsc)
+    paramNames = []
     for m in gscparam_maps:
         gp = m.param
         ap = StrategyComponentParam.getActual(gp,astrat)
         # When copying the generic we use the isActive value on the map to determine if the param isActive by default or not.
         ap.isActive = m.is_active
         ap.save()
+        paramNames.append(ap.name)
         m = SCParamMap(strategyComponent=asc,param=ap,myStrategy=astrat)
         m.save()
+    allParams = StrategyComponentParam.objects.filter(type=gsc.type, myStrategy=None)
+    # go through all params of the appropriate type for this sc and add in ones that weren't put in by the above.  THey will be inactive
+    for gp in allParams:
+        if gp.name not in paramNames:
+            ap = StrategyComponentParam.getActual(gp,astrat)
+            # When copying the generic we use the isActive value on the map to determine if the param isActive by default or not.
+            ap.isActive = False
+            ap.save()
+            m = SCParamMap(strategyComponent=asc,param=ap,myStrategy=astrat)
+            m.save()
     asc.save()
 
 
