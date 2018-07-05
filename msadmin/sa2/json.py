@@ -14,6 +14,26 @@ def get_strategy_json (request, classId, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
     return JsonResponse(s.getJSON(c), safe=False)
 
+def get_generic_strategy_json (request, strategyId):
+    s = get_object_or_404(Strategy, pk=strategyId)
+    return JsonResponse(s.getSimpleJSON())
+
+def save_generic_strategy  (request, id):
+    if request.method == "POST":
+        post = request.POST
+        lcid = post['lc']
+        name = post['name']
+        descr = post['description']
+        stratclass = get_object_or_404(Strategy,pk=id)
+        if lcid:
+            lc = get_object_or_404(LC,pk=lcid)
+        else: lc = None
+        stratclass.lc = lc
+        stratclass.name = name
+        stratclass.description = descr
+        stratclass.save()
+        return JsonResponse({"id": id, "name": name})
+
 def get_sc_json (request, scId):
     sc = get_object_or_404(StrategyComponent, pk=scId)
     d = {}
