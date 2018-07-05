@@ -457,6 +457,9 @@
                 success: function (data) {
                     console.log("Strategy is globalized");
                     console.log(data.globalStrategy);
+                    var name = data.name;
+                    var id = data.id;
+                    $('#message').html("Strategy " +id+ " " +name+ "is now available as Generic Global")
                 }
             });
         }
@@ -579,7 +582,7 @@
     </table>
 
     <button type="button" id="globalizeStrategy" class="btn btn-default">Make Strategy Global</button>
-
+    <p id="message" style="color:red"></p>
 
     <!-- Modal Dialog that will come up when click on Intervention Selector PARAM nodes-->
     <div class="modal fade" id="isParamModalEditor" role="dialog">

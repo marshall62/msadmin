@@ -87,7 +87,7 @@ class InterventionSelectorParam(models.Model):
         self.value = g.value
         self.isActive = g.isActive
         self.myStrategy = actualStrat
-        # self.baseParam = g.baseParam
+        self.baseParam = g.baseParam
         self.possibleValues = InterventionSelectorParam.__makePossibleValsCSV(g.baseParam)
         self.description = g.description
         return self
@@ -111,7 +111,7 @@ class InterventionSelectorParam(models.Model):
         self.value = baseParam.value
         self.isActive = False
         self.myStrategy = actualStrat
-        # self.baseParam = baseParam
+        self.baseParam = baseParam
         self.possibleValues = InterventionSelectorParam.__makePossibleValsCSV(baseParam)
         self.description = baseParam.description
         return self

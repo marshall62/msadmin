@@ -133,5 +133,5 @@ def save_strategy (request, id):
 def globalize_strategy (request, strategyId):
     print("Globalize strategy " + strategyId)
     gs = makeGenericStrategyFromActual(strategyId)
-    return JsonResponse({'globalStrategy': gs.getJSON(None)})
+    return JsonResponse( gs.getSimpleJSON())
 
