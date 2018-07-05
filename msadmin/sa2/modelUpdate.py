@@ -56,6 +56,15 @@ def save_is (request, isId, strategyId):
         scismap.save()
     return JsonResponse({"isId": isId, "isActive": scismap.isActive})
 
+def save_sc (request, scId):
+    if request.method == "POST":
+        sc = get_object_or_404(StrategyComponent, pk=scId)
+        sc.name = request.POST['name']
+        sc.description = request.POST['description']
+        sc.briefDescr = request.POST['briefDescr']
+        sc.save()
+    return JsonResponse({"scId": scId, "name": sc.name})
+
 # An AJAX post request coming from the tree editor when checkbox next to an isParam is clicked
 # if checkbox is selected, isActive='true', o/w = 'false'
 # sets the sc.isActive field accordingly
@@ -111,7 +120,9 @@ def save_strategy (request, id):
         name = post['name']
         descr = post['description']
         stratclass = get_object_or_404(Strategy,pk=id)
-        lc = get_object_or_404(LC,pk=lcid)
+        if lcid:
+            lc = get_object_or_404(LC,pk=lcid)
+        else: lc = None
         stratclass.lc = lc
         stratclass.name = name
         stratclass.description = descr

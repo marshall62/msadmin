@@ -14,6 +14,14 @@ def get_strategy_json (request, classId, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
     return JsonResponse(s.getJSON(c), safe=False)
 
+def get_sc_json (request, scId):
+    sc = get_object_or_404(StrategyComponent, pk=scId)
+    d = {}
+    d["id"] = sc.id
+    d["name"] = sc.name
+    d["description"] = sc.description
+    d["briefDescr"] = sc.briefDescr
+    return JsonResponse(d)
 
 # Given the id of a ISParam return JSON that represents all its detail
 def get_is_param_json (request, isParamId):
@@ -69,7 +77,7 @@ def get_strategy_lcs (request, id):
     lcs = LC.objects.all()
     # build a dictionary with the lcid of the strategy's lcid and a sub-dictionary containing all the other lc ids (to put in a pulldown menu)
     d = {}
-    d['lcid'] = strat.lc.id
+    d['lcid'] = strat.lc.id if strat.lc else None
     lcd = {}
     for lc in lcs:
         lcd[lc.id] = lc.name + ':' + lc.charName

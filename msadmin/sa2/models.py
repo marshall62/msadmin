@@ -402,8 +402,12 @@ class StrategyComponent(models.Model):
     # return a dictionary
     def getJSON (self, aclass, strategy):
         d = {}
+        d['id'] = self.id
         d ['title'] = self.name
+        d['description'] = self.description
+        d['briefDescr'] = self.briefDescr
         d ['icon'] = "glyphicon glyphicon-king"
+        d['type'] = "sc"
         d['unselectable'] = 'true' # disables the checkbox
         intervFolder = {}
         intervFolder['title'] = 'Interventions'

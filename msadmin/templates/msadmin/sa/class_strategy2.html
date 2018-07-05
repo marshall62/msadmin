@@ -79,6 +79,7 @@
         var is_param_id; // global that holds the is_param_id being edited in a dialog
         var sc_param_id; // global that holds the sc_param_id being edited in a dialog
         var is_id; // global that holds the interventionselector id being edited in a dialog
+        var sc_id; // global that holds the sc id being edited in a dialog
 
         var strategyName = '{{ classStrategy.name }}'; // This can get changed by strategy dialog .
         var strategyDescr = '{{ classStrategy.getDescription }}'
@@ -144,6 +145,14 @@
             });
         }
 
+        function configSC (scId) {
+            var url_mask = "{% url 'sc_detail_json' scId=12345 %}".replace(/12345/,scId.toString());
+            $.get(url_mask, function(data) {
+                showSCDialog(data);
+
+            });
+        }
+
 
         // When the pencil icon next to an intervention selector is clicked, this calls the server to get JSON about it.
         // This is then used to populate a dialog that comes up.
@@ -205,6 +214,16 @@
             $('#isModalEditor').modal('show');
         }
 
+        function showSCDialog (scObj) {
+            $('#sc_name').val(scObj.name);
+            $('#sc_description').val(scObj.description);
+            $('#sc_briefDescr').val(scObj.briefDescr);
+            $('#sc_id').val(scObj.id);
+            sc_id = scObj.id; // set global var so we know the SC we are editing
+            $('#scModalEditor').modal('show');
+
+        }
+
         // If there are a set of possible values for a param, then we remove the text input from the divId tag and replace it with
         // tags that create a pulldown menu set with the curValue and the set of possible values.
         function setValueInput (inputId, possibleValues, curValue) {
@@ -258,6 +277,25 @@
             $('#sc-param-dialog-title').html("Strategy Component Parameter");
             sc_param_id = scParamObj.id;  // set a global var holding the id of the sc-param we edit
             $('#scParamModalEditor').modal('show');
+        }
+
+        function saveSCEdit () {
+
+            var url_mask = "{% url 'sc_save' scId=12345 %}".replace(/12345/, sc_id);
+            var name = $('#sc_name').val();
+            var briefDescr = $('#sc_briefDescr').val();
+            var descr = $('#sc_description').val();
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: {name: name, briefDescr: briefDescr, description: descr },
+                success: function (data) {
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    node = $("#treetable").fancytree("getActiveNode");
+                    node.setTitle(data.name );
+                }
+            });
+            $('#scModalEditor').modal('toggle');
         }
 
         // Saves the sc-param values from the dialog when the save button is clicked.  Then takes down the dialog
@@ -472,6 +510,11 @@
                             $tdList.eq(3).html("<a onClick='" +fnCall+ ";' data-toggle='modal' data-target='#isParamModalEditor'>" +
                                 "<span class='glyphicon glyphicon-pencil'></span></a>");
                         }
+                        else if (node.data.type == 'sc') {
+                            fnCall = "configSC(" +node.data.id+ ")";
+                            $tdList.eq(3).html("<a onClick='" +fnCall+ ";' data-toggle='modal' data-target='#scModalEditor'>" +
+                                "<span class='glyphicon glyphicon-pencil'></span></a>")
+                        }
                         else if (node.data.type == 'interventionSelector') {
                             node.setSelected(node.data.isActive=='true');
                             fnCall = "configIS(" +node.data.id+ ", " +node.data.scId+ ") ";
@@ -653,6 +696,46 @@
                 </div>
                 <div class="modal-footer">
                     <button onClick="saveISEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
+                    <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="scModalEditor" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dialogHeader" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="is-dialog-title" class="modal-title">Strategy Component</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="sc_name">Name</label>
+                            <input type="text" class="form-control" id="sc_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="sc_id">Id</label>
+                            <input type="text" class="form-control" id="sc_id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sc_description">Description</label>
+                            <textarea class="form-control" rows="3" id="sc_description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sc_briefDescr">Brief Description</label>
+                            <textarea class="form-control" rows="3" id="sc_briefDescr"></textarea>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onClick="saveSCEdit();" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Save</button>
                     <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
