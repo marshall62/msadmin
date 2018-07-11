@@ -589,7 +589,19 @@ class Class (models.Model):
 
 
 
+class ClassConfig (models.Model):
+    mouseSaveInterval = models.IntegerField(db_column="mouseSaveInterval")
+    postTestOn = models.BooleanField(db_column="showPostSurvey")
+    classId = models.IntegerField(db_column="classId", primary_key=True)
 
+    class Meta:
+        db_table = "classconfig"
+
+    def toJSON (self):
+        d = {}
+        d['mouseSaveInterval'] = self.mouseSaveInterval
+        d['postTestOn'] = self.postTestOn
+        return d
 
 
 class Teacher (models.Model):

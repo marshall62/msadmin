@@ -17,6 +17,20 @@ Debian and Ubuntu use it to provide both python-mysqldb andpython3-mysqldb packa
 5.   (env) pip3 install mysqlclient
 6.   (env) pip3 install django
 7    (env) deactivate
+
+----------------------------
+
+I added the requests library which required installing pipenv as follows:
+
+pip install --user pipenv
+cd /srv/raiddisk/dev/pydev/msadmin
+pipenv install requests
+
+cd /srv/raiddisk/dev/pydev
+source dj2mysqlenv/bin/activate
+(env) pip3 install requests
+(env) deactivate
+
 ---------------------------------------------------------------------
 NOtes on Upgrading to Django 2.0 on 2/26/18:
 
@@ -50,6 +64,9 @@ I get this error:
 But I find that the database is defined in settings.py and has the below which is supposed to take care of this problem.
 'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+
+
+
 
 
 On Rose (upgrade to Django 2)

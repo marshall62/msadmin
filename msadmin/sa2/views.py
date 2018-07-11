@@ -50,6 +50,7 @@ def class_list_by_teacher(request, teacherId):
 def class_detail (request, pk):
     # csrfContext = RequestContext(request)
     c = get_object_or_404(Class, pk=pk)
+    c_config = get_object_or_404(ClassConfig, classId=pk)
     teacherId= c.teacherId
     classes = Class.objects.filter(teacherId=teacherId).order_by('name')
     classid = c.id
@@ -74,7 +75,7 @@ def class_detail (request, pk):
     lcs = LC.objects.all()
     # sc = StrategyComponent.ojects.get(pk=pk)
     return render(request, 'msadmin/sa/class.html',
-                  {'class': c, 'strategies' : class_strats, 'otherStrategies': allstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
+                  {'class': c, 'classconfig': c_config, 'strategies' : class_strats, 'otherStrategies': allstrats, 'loginSCs': loginSCs, 'lessonSCs': lessonSCs, 'tutorSCs' : tutorSCs, 'lcs': lcs, 'myclasses': classes, 'teachers': teachers, 'curTeacherId': teacherId })
 
 
 

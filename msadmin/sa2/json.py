@@ -1,12 +1,14 @@
+import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
-from msadmin.sa2.models import Class, InterventionSelectorParam, StrategyComponentParam
+from msadmin.sa2.models import Class, ClassConfig, InterventionSelectorParam, StrategyComponentParam
 
 from msadmin.sa2.models import InterventionSelector
 from msadmin.sa2.models import SCISMap
 from msadmin.sa2.models import Strategy
 from msadmin.sa2.models import StrategyComponent, LC
+from msadminsite.settings import MATHSPRING_HOST
 
 
 def get_strategy_json (request, classId, strategyId):
@@ -134,4 +136,36 @@ def get_class_strategies (request, classId) :
         json_arr.append(s.getSimpleJSON())
 
     return JsonResponse(json_arr,safe=False)
+
+def flush_strategy_cache (req):
+    res = requests.get("http://localhost:8080/mt/WoAdmin?action=AdminFlushStrategyCache")
+    if res.status_code == 200:
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+def flush_single_strategy_from_cache (req, strategyId):
+    res = requests.get("http://localhost:8080/mt/WoAdmin?action=AdminFlushSingleStrategyFromCache&strategyId="+strategyId)
+    if res.status_code == 200:
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+def class_save (request, classId):
+    if request.method == "POST":
+        post = request.POST
+        mouseSaveInterval = int(post['mouseSaveInterval'])
+        dumpStrategyCache = post['dumpStrategyCache']=='true'
+        posttestsActive = post['posttestsActivated']=='true'
+        cc = get_object_or_404(ClassConfig, classId=classId)
+        cc.mouseSaveInterval = mouseSaveInterval
+        cc.postTestOn = posttestsActive
+        if dumpStrategyCache:
+            res = requests.get(MATHSPRING_HOST + "WoAdmin?action=AdminFlushStrategyCache")
+
+        cc.save()
+        d = {"success": True}
+    else:
+        d = {"success": False}
+    return JsonResponse(d)
 

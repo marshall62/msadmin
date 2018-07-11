@@ -7,6 +7,22 @@
 {% block page-js %}
     <script language="javascript">
 
+
+        function saveChanges () {
+            var url_mask = "{% url 'class_save' classId=class.pk %}";
+
+            $.ajax({
+                url: url_mask,
+                type: "POST",
+                data: {mouseSaveInterval: $('#mouseTracking_interval').val(), posttestsActivated: $('#posttest_on').prop('checked'),
+                    dumpStrategyCache: $('#dumpStrategyCache').prop('checked') },
+                success: function (data) {
+                    // update the node in the tree so that its value is consistent with what was POSTed.
+                    $('#message').html("Saved successfully");
+                }
+            });
+        }
+
         function getFirstClass (classesJSON) {
             if (classesJSON.length > 0)
                 return classesJSON[0].id;
@@ -35,6 +51,35 @@
                     option.value = strategies[i].id;
                     selector.add(option);
                 }
+            }
+        }
+
+        function flushSingleStrategyFromCache (strategyId) {
+            if (confirm("This cause Mathspring to flush this strategy from its cache so that a newer version will go into effect the next time the strategy is requested by a user?")) {
+                {#var url_mask = mathspringHost + "WoAdmin?action=AdminFlushStrategyCache";#}
+                var url_mask = "{% url 'flush_single_strategy_from_cache' strategyId=12345 %}"
+                url_mask = url_mask.replace(/12345/, strategyId);
+                $.get(url_mask, function(data) {
+                    if (data.success)
+                        $('#message').html("Strategy successfully flushed.");
+                    else
+                        $('#message').html("Strategy NOT flushed!");
+
+                });
+            }
+        }
+
+        function flushStrategyCache () {
+            if (confirm("This will dump the strategy cache of Mathspring which affects all users and classes.  Are you sure you want to flush the strategy cache of Mathspring?")) {
+                {#var url_mask = mathspringHost + "WoAdmin?action=AdminFlushStrategyCache";#}
+                var url_mask = "{% url 'flush_strategy_cache' %}";
+                $.get(url_mask, function(data) {
+                    if (data.success)
+                        $('#message').html("Strategy Cache successfully flushed.");
+                    else
+                        $('#message').html("Strategy Cache NOT flushed!");
+
+                });
             }
         }
 
@@ -121,23 +166,71 @@
             else {
                 alert("Please select a class and strategy ")
             }
-{##}
-{#            var d = {};#}
-{##}
-{#            $.ajax({#}
-{#                url: url,#}
-{#                type: "POST",#}
-{#                data: d,#}
-{#                success: function (data) {#}
-{#                    console.log("JSON returned by GET");#}
-{#                    console.log(data);#}
-{#                    // Get back JSON that is a bunch of class objects like {id: 34, name: 'Test class'}#}
-{#                   // populateClassStrategies(data);#}
-{#                }#}
-{#            });#}
+
+        }
+
+        function warnCacheDump () {
+            console.log($('#dumpStrategyCache').val());
+            if ($('#dumpStrategyCache').prop('checked')) {
+                if (confirm('This will dump Mathsprings strategy cache.  If you want to reload a single strategy in this class, use the refresh button on a strategy listed below. Are you sure you want to do this?'  )) {
+                    console.log('set on');
+                    $('#dumpStrategyCache').prop('checked',true);
+                }
+                else {
+                    console.log("set off");
+                    $('#dumpStrategyCache').prop('checked', false);
+                }
+
+            }
+        }
+
+        function warnPosttestActivate () {
+            console.log($('#posttest_on').val());
+            if ($('#posttest_on').prop('checked')) {
+                if (confirm('This will activate the post-tests/post-surveys for this class so that the next time students login, they will see them. Are you sure you want to do this?'  )) {
+                    console.log('set on');
+                    $('#posttest_on').prop('checked',true);
+                }
+                else {
+                    console.log("set off");
+                    $('#posttest_on').prop('checked', false);
+                }
+
+            }
+        }
+
+        function warnMouseTrackingActivate () {
+            console.log($('#mouseTracking_on').val());
+            if ($('#mouseTracking_on').prop('checked')) {
+                if (confirm('This will activate mouse tracking for all your classes in Mathspring. This is for GRIT research.  Are you sure you want to do this?'  )) {
+                    console.log('set on');
+                    $('#mouseTracking_on').prop('checked',true);
+                    $('#mouseTracking_interval').val("10");
+                    $('#mouseTracking_interval').prop("readonly",false);
+                    $('#mouseTracking_interval').prop("disabled",false);
+                }
+                else {
+                    console.log("set off");
+                    $('#mouseTracking_on').prop('checked', false);
+                    $('#mouseTracking_interval').val("-1");
+                    $('#mouseTracking_interval').prop("readonly",true);
+                    $('#mouseTracking_interval').prop("disabled",true);
+                }
+
+            }
+            else {
+                $('#mouseTracking_interval').val("-1");
+                $('#mouseTracking_interval').prop("readonly",true);
+                $('#mouseTracking_interval').prop("disabled",true);
+            }
         }
 
         $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement : 'top'
+            });
+            // This makes dynamically added elements with tooltips work correctly
+            $('body').tooltip({selector:'[data-toggle=tooltip]'});
             $('.dropdown-toggle').dropdown();
             $('#teacherSelector').change(teacherChanged);
             $('#classSelector').change(classChanged);
@@ -149,33 +242,70 @@
     </script>
 {% endblock %}
 {% block content %}
-    <h3>class: {{  class.name }}</h3>
-    <h3>teacher: <a href="{% url 'class_list_by_teacher' teacherId=class.teacherId %}">{{  class.teacher }}</a></h3>
-    
+    <label for="classname">Class: </label> <input id="classname" type="text" readonly disabled value="{{  class.name }}">
+    <br>
+    <label for="classid">Class ID: </label> <input id="classid" type="text" readonly disabled value="{{ class.pk }}">
+    <br>
+    <label for="teacher">Teacher: </label>
+    <a href="{% url 'class_list_by_teacher' teacherId=class.teacherId %}">{{  class.teacher }}</a>
+    <br>
+    <label for="posttest_on">Posttests Active:</label>
+    {% if classconfig.postTestOn %}
+        <input id="posttest_on"  onclick='warnPosttestActivate()' type="checkbox" name="posttestOn" checked>
+    {% else %}
+        <input id="posttest_on" onclick='warnPosttestActivate()' type="checkbox" name="posttestOn" >
+    {% endif %}
+    <br>
+    <label for="mouseTracking_on">Mouse Tracking Active:</label>
+    {% if classconfig.mouseSaveInterval == -1 %}
+        <input id="mouseTracking_on" type="checkbox" onclick='warnMouseTrackingActivate()' name="mouseTrackingOn">
+    {% else %}
+        <input id="mouseTracking_on" type="checkbox" onclick='warnMouseTrackingActivate()' name="mouseTrackingOn" checked>
+    {% endif %}
+    <br>
+    <label for="mouseTracking_interval">Mouse Tracking Save Interval (milliseconds)</label>
+    {% if classconfig.mouseSaveInterval == -1 %}
+        <input id="mouseTracking_interval" type="text" readonly disabled name="mouseTrackingInterval" value="{{ classconfig.mouseSaveInterval }}">
+    {% else %}
+        <input id="mouseTracking_interval" type="text" name="mouseTrackingInterval" value="{{ classconfig.mouseSaveInterval }}">
+    {% endif %}
+    <br>
+    <label for="dumpStrategyCache">Dump Strategy Cache</label>
+    <input id="dumpStrategyCache" onclick='warnCacheDump()' type="checkbox" name="dumpStrategyCache"></input>
+    <br><br>
+    <button onclick="saveChanges()" class="btn btn-default btn-primary">Save Changes</button>
+
+
+    <p id="message"></p>
+
     <h3>Strategies used by this class:</h3>
 
 
-        <table style="border-spacing: 30px 0;">
-            <tbody>
-            {% for s in strategies %}
-                <tr>
-        {#            <td><a  href="{% url 'class_detail' pk=c.pk %}">{{s.name}}</a></td>#}
-                    <td class="padded-td"><a href="{% url 'strategy_detail' pk=s.pk %}">{{s.name}}</a></td>
-                    <td class="padded-td"><a href="{% url 'class-strategy' classId=class.pk strategyId=s.pk %}"><span class="glyphicon glyphicon-wrench"></span></a></td>
-                    <td class="padded-td">
-                        <a onclick="confirm('Are you sure you want to remove this strategy?')" href="{% url 'remove-class-strategy' classId=class.pk strategyId=s.pk%}">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
-                    </td>
+    <table style="border-spacing: 30px 0;">
+        <tbody>
+        {% for s in strategies %}
+            <tr>
+                {#            <td><a  href="{% url 'class_detail' pk=c.pk %}">{{s.name}}</a></td>#}
+                <td class="padded-td"><a href="{% url 'strategy_detail' pk=s.pk %}">{{s.name}}</a></td>
+                <td class="padded-td"><a href="{% url 'class-strategy' classId=class.pk strategyId=s.pk %}"><span class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-original-title="Edit the details of this strategy"></span></a></td>
+                <td class="padded-td">
+                    <a onclick="confirm('Are you sure you want to remove this strategy?')" href="{% url 'remove-class-strategy' classId=class.pk strategyId=s.pk%}">
+                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this strategy from the class"></span>
+                    </a>
+                </td>
+                <td class="padded-td">
+                    <a onclick="flushSingleStrategyFromCache({{ s.pk }})" >
+                        <span class="glyphicon glyphicon-refresh" data-toggle="tooltip" data-original-title="Flush this strategy from the Mathspring cache"></span>
+                    </a>
+                </td>
 
-    {#                <td><a href="{% url 'class_strat_detail' classId=class.id strategyId=s.pk %}">Customize</a></td>#}
+                {#                <td><a href="{% url 'class_strat_detail' classId=class.id strategyId=s.pk %}">Customize</a></td>#}
 
-                </tr>
-            {% endfor %}
+            </tr>
+        {% endfor %}
 
-            </tbody>
-        </table>
-
+        </tbody>
+    </table>
 
     <h3>Add a strategy </h3>
     <div class="container"></div>
