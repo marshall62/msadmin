@@ -145,7 +145,7 @@ def flush_strategy_cache (req):
         return JsonResponse({'success': False})
 
 def flush_single_strategy_from_cache (req, strategyId):
-    res = requests.get("http://localhost:8080/mt/WoAdmin?action=AdminFlushSingleStrategyFromCache&strategyId="+strategyId)
+    res = requests.get(MATHSPRING_HOST + "WoAdmin?action=AdminFlushSingleStrategyFromCache&strategyId="+strategyId)
     if res.status_code == 200:
         return JsonResponse({'success': True})
     else:

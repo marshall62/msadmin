@@ -31,6 +31,13 @@ source dj2mysqlenv/bin/activate
 (env) pip3 install requests
 (env) deactivate
 
+On rose:
+
+cd /mnt/net/django/msadmin
+source env-msadmin-py345-dj2/bin/activate
+(env) sudo pip3 install requests
+(env) deactivate
+
 ---------------------------------------------------------------------
 NOtes on Upgrading to Django 2.0 on 2/26/18:
 
