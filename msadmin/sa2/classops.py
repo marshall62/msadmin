@@ -152,11 +152,19 @@ def makeActualInterventionSelectors(asc, gsc, actualStrat):
     used = set(interventionSelectors)
     unused = others.difference(used)
 
+    # If the intervention selector isn't connected to the SC via an SCISMap we must get the default config
+    # for the IS from the IS itself.  Generic ISs have a config field that can be set for this purpose.
+    # The common use-case is that the Generic Seed Strategy has a tutor SC that connects no ISs so there will
+    # be no SCISMaps connecting SCs to ISs.  Therefore when building SCISMaps in the new actual strategy, we must get
+    # the config value to put in those maps from the generic IS.
+
     # Make actual ISs and SCISmaps to the actual SC for the other unused intervention selectors
     for guIS in unused:
         auIS = InterventionSelector.getActual(guIS,actualStrat)
         auIS.save()
         m = SCISMap(interventionSelector=auIS,strategyComponent=asc,myStrategy=actualStrat,isActive=False)
+        # heres where we put the config on the SCISMap from the generic IS.
+        m.config = guIS.config
         m.save()
         # add in all the base IS params to the new actual IS and make them inactive.
         addInactiveISParamsFromISBaseParams(gsc, asc, guIS, auIS, actualStrat)

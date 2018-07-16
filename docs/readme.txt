@@ -20,6 +20,8 @@ Debian and Ubuntu use it to provide both python-mysqldb andpython3-mysqldb packa
 
 ----------------------------
 
+!!!!NOTE:  YOU CANNOT SUDO when running pip3 install commands within virtualenv !!!!
+
 I added the requests library which required installing pipenv as follows:
 
 pip install --user pipenv
@@ -43,11 +45,14 @@ NOtes on Upgrading to Django 2.0 on 2/26/18:
 
 Mr Charlie:
 
+!!!!NOTE:  YOU CANNOT SUDO when running pip3 install commands within virtualenv !!!!
+
 cd /srv/fastdisk/dev/pythondev/msadmin
 virtualenv -p python3 dj2-env
 source dj2-env/bin/activate
 () pip3 install mysqlclient
 () pip3 install -U Django
+() pip3 install requests
 () deactivate
 Make Intellij project use this virtualenv:
 Project Structure | Project | + | Python SDK | Add local | navigate to dj2-env/bin/python3.5
@@ -78,11 +83,14 @@ But I find that the database is defined in settings.py and has the below which i
 
 On Rose (upgrade to Django 2)
 
+!!!!NOTE:  YOU CANNOT SUDO when running pip3 install commands within virtualenv !!!!
+
 cd /mnt/net/django/msadmin
 virtualenv env-msadmin-py345-dj2
 source /env-msadmin-py345-dj2/bin/activate
 () pip3 install mysqlclient
 () pip3 install -U Django
+() pip3 install requests
 () deactivate
 
 Edit /etc/httpd/conf.d/wsgi.conf to use this new venv
