@@ -18,6 +18,12 @@ def get_strategy_json (request, classId, strategyId):
 
 def get_generic_strategy_json (request, strategyId):
     s = get_object_or_404(Strategy, pk=strategyId)
+    d = s.getSimpleJSON()
+    all_lcs = LC.objects.all()
+    lcd = {}
+    for lc in all_lcs:
+        lcd[lc.id] = lc.name + ':' + lc.charName
+    d['all_lcs'] = lcd
     return JsonResponse(s.getSimpleJSON())
 
 def save_generic_strategy  (request, id):

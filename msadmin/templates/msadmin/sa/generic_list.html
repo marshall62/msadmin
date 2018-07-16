@@ -37,7 +37,17 @@
         function fillStratDialog (data) {
             $('#strategy_name').val(data.name);
             $('#strategy_description').val(data.description);
-            $('#strategy_lc').val(data.lc);
+            {#$('#strategy_lc').val(data.lc);#}
+
+            $('#strategy_lc').empty();
+            var curLCID = data.lc;
+            var allLCs = data.all_lcs;
+            // allLCs is JSON with all the learning companions.   Each key is an lc-id, Each value is a String which is the name+character of the lc.
+            $.each(allLCs, function(key, value) {
+                $('#strategy_lc')
+                    .append($("<option/>").val(key).text(value));
+            });
+            $('#strategy_lc').val(curLCID); // sets the option that has curlcId as its val to be selected
         }
 
         function showStratDialog (sid) {
