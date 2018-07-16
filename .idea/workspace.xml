@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e31564d-51f5-4178-a4a0-a9276a25507d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msadmin/sa2/json.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/msadmin/sa2/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/msadmin/sa2/models.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,27 +62,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="class_strategy2.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="296" column="15" lean-forward="true" selection-start-line="283" selection-start-column="12" selection-end-line="296" selection-end-column="15" />
-              <folding>
-                <element signature="e#27748#27765#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="qauth_edit.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/qa/qauth_edit.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="657" column="12" selection-start-line="657" selection-start-column="12" selection-end-line="661" selection-end-column="66" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="class.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -96,13 +74,13 @@
       <file leaf-file-name="readme.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-15">
-              <caret line="29" column="31" lean-forward="true" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
+            <state relative-caret-position="-690">
+              <caret line="92" column="3" selection-start-line="92" selection-start-column="3" selection-end-line="92" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="json.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="json.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msadmin/sa2/json.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="213">
@@ -119,6 +97,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
               <caret line="6" column="32" selection-start-line="6" selection-end-line="6" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/msadmin/sa2/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="335">
+              <caret line="183" column="31" lean-forward="true" selection-start-line="183" selection-start-column="31" selection-end-line="183" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -149,6 +139,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="333">
               <caret line="125" selection-start-line="125" selection-end-line="125" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="classops.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/msadmin/sa2/classops.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="485">
+              <caret line="165" column="75" selection-start-line="165" selection-start-column="75" selection-end-line="165" selection-end-column="75" />
+              <folding>
+                <element signature="e#0#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -277,18 +279,18 @@
         <option value="$PROJECT_DIR$/docs/dbmods.sql" />
         <option value="$PROJECT_DIR$/docs/dbmods2.sql" />
         <option value="$PROJECT_DIR$/msadmin/sa2/admin.py" />
-        <option value="$PROJECT_DIR$/msadmin/sa2/classops.py" />
         <option value="$PROJECT_DIR$/docs/notes.txt" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class_strategy2.html" />
         <option value="$PROJECT_DIR$/msadmin/sa2/modelUpdate.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/sa/generic_list.html" />
         <option value="$PROJECT_DIR$/msadmin/sa2/views.py" />
-        <option value="$PROJECT_DIR$/msadmin/sa2/models.py" />
         <option value="$PROJECT_DIR$/msadmin/sa2/urls.py" />
         <option value="$PROJECT_DIR$/msadminsite/settings.py" />
         <option value="$PROJECT_DIR$/msadmin/templates/msadmin/sa/class.html" />
-        <option value="$PROJECT_DIR$/docs/readme.txt" />
         <option value="$PROJECT_DIR$/msadmin/sa2/json.py" />
+        <option value="$PROJECT_DIR$/docs/readme.txt" />
+        <option value="$PROJECT_DIR$/msadmin/sa2/classops.py" />
+        <option value="$PROJECT_DIR$/msadmin/sa2/models.py" />
       </list>
     </option>
   </component>
@@ -337,7 +339,7 @@
               <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
               <item name="msadmin" type="462c0819:PsiDirectoryNode" />
               <item name="msadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="qa" type="462c0819:PsiDirectoryNode" />
+              <item name="sa2" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="msadmin" type="b2602c69:ProjectViewProjectNode" />
@@ -1089,8 +1091,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="allowed problem layout to be null" />
-    <MESSAGE value="changed a bunch of stuff so we generate less errors including hint deletion messages." />
     <MESSAGE value="Allows a list of CCSS to be edited in a qa problem.   &#10;&#10;An initial topic editor is in there needing much more work." />
     <MESSAGE value="bug fix to stds" />
     <MESSAGE value="Added final algorithm for difficulty based on Ivon and Toms description.   Also made sure standard and cluster are null when problem first created." />
@@ -1114,7 +1114,9 @@
     <MESSAGE value="Bug fixes so that strategies can go from g -&gt; a -&gt; g ..." />
     <MESSAGE value="Bug fixes to strategy saving stuff with new dialo to allow changing generic strategy names." />
     <MESSAGE value="Added fields to edit stuff about class config" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added fields to edit stuff about class config" />
+    <MESSAGE value="Bug fix cache dumping" />
+    <MESSAGE value="Bug fix when building actual from generic seed.  Config on AskEmotion IS wasn't copied to actual SCISMap" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fix when building actual from generic seed.  Config on AskEmotion IS wasn't copied to actual SCISMap" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1347,16 +1349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/sa2/classops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="173" column="60" selection-start-line="173" selection-start-column="60" selection-end-line="173" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/templates/msadmin/sa/main.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -1377,16 +1369,6 @@
           <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
           <folding>
             <element signature="e#2463#2480#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msadmin/sa2/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="594" column="71" selection-start-line="594" selection-start-column="71" selection-end-line="594" selection-end-column="71" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1452,13 +1434,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
-          <caret line="29" column="31" lean-forward="true" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/msadmin/qa/util.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1479,6 +1454,33 @@
           <caret line="147" column="42" selection-start-line="147" selection-start-column="42" selection-end-line="147" selection-end-column="42" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/readme.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-690">
+          <caret line="92" column="3" selection-start-line="92" selection-start-column="3" selection-end-line="92" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/sa2/classops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="485">
+          <caret line="165" column="75" selection-start-line="165" selection-start-column="75" selection-end-line="165" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msadmin/sa2/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="183" column="31" lean-forward="true" selection-start-line="183" selection-start-column="31" selection-end-line="183" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>

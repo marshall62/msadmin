@@ -180,7 +180,7 @@ class InterventionSelector(models.Model):
     name = models.CharField(max_length=45)
     onEvent = models.CharField(max_length=45)
     className = models.CharField(max_length=100)
-    # config = models.TextField(blank=True)
+    config = models.TextField(blank=True)
     description = models.CharField(max_length=800,blank=True)
     briefDescription = models.CharField(max_length=120,blank=True)
     myStrategy =  models.ForeignKey('Strategy',db_column='strategy_id', null=True,blank=True,on_delete=models.PROTECT)
