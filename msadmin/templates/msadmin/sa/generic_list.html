@@ -40,7 +40,7 @@
             {#$('#strategy_lc').val(data.lc);#}
 
             $('#strategy_lc').empty();
-            var curLCID = data.lc;
+            var curLCID = data.lcid;
             var allLCs = data.all_lcs;
             // allLCs is JSON with all the learning companions.   Each key is an lc-id, Each value is a String which is the name+character of the lc.
             $.each(allLCs, function(key, value) {

@@ -24,7 +24,7 @@ def get_generic_strategy_json (request, strategyId):
     for lc in all_lcs:
         lcd[lc.id] = lc.name + ':' + lc.charName
     d['all_lcs'] = lcd
-    return JsonResponse(s.getSimpleJSON())
+    return JsonResponse(d)
 
 def save_generic_strategy  (request, id):
     if request.method == "POST":
@@ -40,7 +40,7 @@ def save_generic_strategy  (request, id):
         stratclass.name = name
         stratclass.description = descr
         stratclass.save()
-        return JsonResponse({"id": id, "name": name})
+        return JsonResponse(stratclass.getSimpleJSON())
 
 def get_sc_json (request, scId):
     sc = get_object_or_404(StrategyComponent, pk=scId)

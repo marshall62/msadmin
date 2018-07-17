@@ -482,6 +482,7 @@ class Strategy (models.Model):
         d['name'] = self.name
         d['description'] = self.description
         d['lc'] = self.lc.name if self.lc else None
+        d['lcid'] = self.lc.id if self.lc else None
         return d
 
     def getJSON (self, aclass):
