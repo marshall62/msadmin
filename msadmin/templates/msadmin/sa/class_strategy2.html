@@ -193,12 +193,18 @@
             $('#strategy-lc').empty();
             var curLCID = data.lcid;
             var allLCs = data.all_lcs;
+            $('#strategy-lc')
+                .append($("<option/>").val(-1).text('No Learning Companion'));
             // allLCs is JSON with all the learning companions.   Each key is an lc-id, Each value is a String which is the name+character of the lc.
             $.each(allLCs, function(key, value) {
                 $('#strategy-lc')
                     .append($("<option/>").val(key).text(value));
             });
-            $('#strategy-lc').val(curLCID); // sets the option that has curlcId as its val to be selected
+            // sets the option that has curlcId as its val to be selected
+            if (curLCID)
+                $('#strategy-lc').val(curLCID);
+            else
+                $('#strategy-lc').val(-1);
             $('#strategyModalEditor').modal('show');
         }
 

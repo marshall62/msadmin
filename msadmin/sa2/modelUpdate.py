@@ -120,7 +120,7 @@ def save_strategy (request, id):
         name = post['name']
         descr = post['description']
         stratclass = get_object_or_404(Strategy,pk=id)
-        if lcid:
+        if lcid and lcid != '-1':
             lc = get_object_or_404(LC,pk=lcid)
         else: lc = None
         stratclass.lc = lc
