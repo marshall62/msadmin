@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from msadminsite.settings import SESSION_INACTIVITY_TIMEOUT_MIN
 from .forms import CustomUserCreationForm, MathspringAdminForm
 
@@ -21,7 +21,8 @@ class MyLoginView (auth_views.LoginView):
 
 
 
-@permission_required('users.can_add_user')
+# @permission_required('users.can_add_user')
+@user_passes_test(lambda u: u.is_staff)
 def register(request):
     if request.method == 'POST':
         if 'adminForm' in request.POST:
