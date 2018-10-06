@@ -206,6 +206,7 @@ def save_problem_meta_info (request, probId):
         creator = post['creator']
         lastModifier = request.user.username
         example = post['example']
+        hasSnapshot = 'hasSnapshot' in post or 'snapshotFile' in request.FILES
         topicIDs = None
         if 'topic' in post:
             topicIDs = post.getlist('topic')
@@ -224,16 +225,13 @@ def save_problem_meta_info (request, probId):
         errs, addMsg = processCCSS(p,grades,domains,clusters,standards,parts)
 
         if 'snapshotFile' in request.FILES:
-            file = request.FILES['snapshotFile']
-            filename = file.name
-            ext = filename.split(".")[1]
-            filename = "problem_"+probId+"."+ext
-            write_file(SNAPSHOT_DIRNAME, file, filename)
-            # p.setFields(screenshotURL=filename)
+            ss_file = request.FILES['snapshotFile']
+            filename = p.getSnapshotFilename()
+            write_file(SNAPSHOT_DIRNAME, ss_file, filename)
 
         now = datetime.now()
         p.setFields(authorNotes=authorNotes,creator=creator,lastModifier=lastModifier, updated_at=now,
-                   example=example,video=video, usableAsExample=(usableAsEx == 'True'))
+                   example=example,video=video, usableAsExample=(usableAsEx == 'True'), hasSnapshot=hasSnapshot)
         p.save()
 
         if topicIDs:
