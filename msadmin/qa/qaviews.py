@@ -169,6 +169,8 @@ def save_problem (request):
         avgseconds = 30
         avghints = 0.5
 
+        if 'language' in post:
+            language = post['language']
 
         if not id:
             now = datetime.now()
@@ -178,7 +180,7 @@ def save_problem (request):
             p = Problem(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         imageURL=imageURL,status=status,form=form, problemFormat=problemFormat, standardId=None,clusterId=None,
                         questType=questType, audioResource=audioResource, layout_id=layoutTemplateId,
-                        creator=uname,lastModifier=uname,created_at=now)
+                        creator=uname,lastModifier=uname,created_at=now, language=language)
             p.save()
             if p.getStandardGrade() and initDifficulty != -1:
                 insertProblemDifficulty(str(p.pk),p.getStandardGrade(),initDifficulty, avgincorrect, avgseconds,avghints)
@@ -187,7 +189,7 @@ def save_problem (request):
             p = get_object_or_404(Problem, pk=id)
             p.setFields(name=name,nickname=nickname,statementHTML=statementHTML,answer=correctAnswer,
                         status=status,form=form, problemFormat=problemFormat,
-                        questType=questType, layout_id=layoutTemplateId,lastModifier=uname)
+                        questType=questType, layout_id=layoutTemplateId,lastModifier=uname, language=language)
             if p.getStandardGrade() and initDifficulty != -1 and selectProblemDifficulty(id):
                 updateProblemDifficulty(id,p.getStandardGrade(),initDifficulty, avgincorrect, avgseconds,avghints)
             elif p.getStandardGrade() and initDifficulty != -1:

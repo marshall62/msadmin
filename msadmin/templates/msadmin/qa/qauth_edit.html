@@ -787,6 +787,14 @@
                 }
             );
 
+            // drop down for language selection
+            $('#language').DMPulldown({
+                selectedOption: {% if probId != -1 %} "{{ problem.language }}" {% else %} "english" {% endif %},
+                options:[{value:'english',label:'English'}, {value:'spanish',label:'Spanish'}]
+                //onChange: displayAnswerControls
+                }
+            );
+
             var url_mask;
             url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
 {#            if the probId is valid, make an ajax call to get the problem JSON #}
@@ -846,6 +854,13 @@
                             <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
                         {% endif %}
 
+                    </div>
+                </div>
+
+                <div class="col col-sm-4">
+                    <div class="input-group ">
+                        <span class="input-group-addon">Language</span>
+                        <select id="language" class="form-control" name="language"></select>
                     </div>
                 </div>
             </div>
