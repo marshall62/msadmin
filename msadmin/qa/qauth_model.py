@@ -31,6 +31,8 @@ class Problem (models.Model):
                                                     # derived from the file upload of snapshotFile to json.py
     hasSnapshot = models.BooleanField()
 
+    language = models.CharField(max_length=10, default='english')
+
 
     MULTI_CHOICE="multichoice"
     SHORT_ANSWER="shortanswer"
@@ -76,6 +78,8 @@ class Problem (models.Model):
                 self.problemFormat=kwargs['problemFormat']
             if 'hasSnapshot' in kwargs:
                 self.hasSnapshot=kwargs['hasSnapshot']
+            if 'language' in kwargs:
+                self.language = kwargs['language']
 
 
     class Meta:
