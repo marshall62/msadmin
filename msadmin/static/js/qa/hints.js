@@ -223,7 +223,7 @@ function saveHint (isExit) {
     var data = new FormData(form); // put all the form fields into data
     var probId = theProblem.id;
     // get the row # of this hint
-    var rown = getHintRowNumber(theHint.id);
+    var rown = theHint.order;
     data.append('order',rown);
     setWaitCursor(true); // change cursor to hourglass while waiting for save.
     var url_mask = SAVE_HINT_URL.replace(/12345/, probId.toString());
