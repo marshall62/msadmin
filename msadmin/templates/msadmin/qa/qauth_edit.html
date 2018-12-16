@@ -93,7 +93,7 @@
 
         const PREVIEW_URL = "http://rose.cs.umass.edu/woj/WoAdmin?action=AdminGetQuickAuthSkeleton&probId=%s&teacherId=-1&reload=true&zoom=1";
         const LAYOUT_TOOL_URL = "http://rose.cs.umass.edu/woj/WoAdmin?action=AdminEditProblemFormat&problemId=%s";
-
+        const DOWNLOAD_MEDIA_URL = "{% url 'qauth_download_prob_media' probId=12345 %}";
 
         function createPulldownOption (value, label, description) {
             return {label: label+(description ? ("  "+description) : ""), value: value};
@@ -464,6 +464,11 @@
             window.open(url);
         }
 
+        function downloadMedia () {
+            var url = DOWNLOAD_MEDIA_URL.replace('12345', theProblem.id);
+            window.open(url);
+        }
+
         function initializeLayoutPulldown () {
             var url_mask = "{% url 'qauth_layouts' %}";
             $.ajax({
@@ -701,6 +706,9 @@
             });
             $('#previewButton').click(function (x) {
                 showPreview();
+            });
+            $('#downloadButton').click(function (x) {
+                downloadMedia();
             });
             $('#hintSaveExit').click(function (x) {
                 saveHint(true);
@@ -1066,6 +1074,7 @@
         {% if probId != -1 %}
 {#            specifying type=button prevents the button from submitting the form #}
         <button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+        <button type="button" id="downloadButton" class="btn btn-primary">Download Media</button>
         {% endif %}
         </div>
 

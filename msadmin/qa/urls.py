@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^prob/save/$', qaviews.save_problem, name='qauth_save_prob'),
     url(r'^prob/save/prob/(?P<probId>\d+)/media/$', msadmin.qa.json.save_problem_media, name='qauth_save_problem_media'),
     url(r'^prob/edit/(?P<probId>\d+)/$', qaviews.edit_problem, name='qauth_edit_prob'),
+    url(r'^prob/download/(?P<probId>\d+)/$', qaviews.download_media, name='qauth_download_prob_media'),
     url(r'^problem/(?P<probId>\d+)/$', msadmin.qa.json.getProblemJSON, name='qauth_get_problem'),
     url(r'^hint/(?P<hintId>\d+)/$', msadmin.qa.json.getHint, name='qauth_get_hint'),
     url(r'^prob/(?P<probId>\d+)/hint/save/$', msadmin.qa.json.saveHint, name='qauth_save_hint'),

@@ -1,8 +1,9 @@
 import os
 import re
 import logging
+import zipfile
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError, HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
@@ -63,6 +64,28 @@ def edit_problem (request, probId):
     allTopics,inTopics = getTopics(prob)
 
     return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+
+
+@login_required
+def download_media(request, probId):
+    # Get the default FileSystemStorage class based on MEDIA_ROOT settings in settings.py
+    fs = FileSystemStorage()
+    location = fs.location
+    prob_dir = os.path.join(location, QA_DIR, getProblemDirName(probId))
+
+    response = HttpResponse(content_type='application/zip')
+    with zipfile.ZipFile(response, 'w') as zip_file:
+        for dirname, subdirs, files in os.walk(prob_dir):
+            abs_src = os.path.abspath(prob_dir)
+            files = [f for f in files if f[0] != '.']
+            for filename in files:
+                absname = os.path.abspath(os.path.join(dirname, filename))
+                arcname = absname[len(abs_src) + 1:]
+                zip_file.write(absname, arcname)
+
+    response['Content-Disposition'] = 'attachment; filename=problem_{}.zip'.format(probId)
+    return response
+
 
 # write the file to path/problem_probId/f.name
 # no longer used.  We use the handle_uploaded_file above instead
