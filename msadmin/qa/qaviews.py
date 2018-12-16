@@ -1,3 +1,4 @@
+import io
 import os
 import re
 import logging
@@ -73,8 +74,8 @@ def download_media(request, probId):
     location = fs.location
     prob_dir = os.path.join(location, QA_DIR, getProblemDirName(probId))
 
-    response = HttpResponse(content_type='application/zip')
-    with zipfile.ZipFile(response, 'w') as zip_file:
+    byte_data = io.BytesIO()
+    with zipfile.ZipFile(byte_data, 'w') as zip_file:
         for dirname, subdirs, files in os.walk(prob_dir):
             abs_src = os.path.abspath(prob_dir)
             files = [f for f in files if f[0] != '.']
@@ -83,6 +84,7 @@ def download_media(request, probId):
                 arcname = absname[len(abs_src) + 1:]
                 zip_file.write(absname, arcname)
 
+    response = HttpResponse(byte_data.getvalue(), content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename=problem_{}.zip'.format(probId)
     return response
 
