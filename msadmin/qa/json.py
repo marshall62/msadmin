@@ -2,7 +2,7 @@ from django.db import connection
 from django.db.models import ProtectedError
 from django.http import JsonResponse
 from collections import OrderedDict
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from msadminsite.settings import SNAPSHOT_DIRNAME
 from .util import  write_file, deleteMediaDir, deleteProblemDir
 import re,os,sys
@@ -299,33 +299,41 @@ def produceHintMediaDeleteMessage (hint, pmfs):
     str += "</ul>"
     return str
 
+
 # When the user clicks save in the hint dialog this is called with the form inputs
 @login_required
-def saveHint (request, probId):
+def saveHint(request, probId):
     if request.method == "POST":
         post = request.POST
-        id = post['id'] # the hint ID
-        # a brand new hint save will have no id.  So create the object now so we have it and its ID
-        if not id:
+        hint_id = post['id']  # the hint ID
+        # a brand new hint save will have no hint_id.  So create the object now so we have it and its ID
+        if not hint_id:
             hints = Hint.objects.filter(problem_id=probId)
             name = 'Hint ' + str(len(hints) + 1)
             order = len(hints)
-            h = Hint(name=name,problem_id=probId,order=order)
+            h = Hint(name=name,problem_id=probId, order=order)
             h.save()
-            id = str(h.id)
+            hint_id = str(h.id)
+        else:
+            h = get_object_or_404(Hint, pk=hint_id)
 
         statementHTML = post['statementHTML']
         # hoverText = post['hoverText']
         imageURL = post['imageURL']
+        audResource = None
         placement = post['himage_placement']
         imgfil = None
         audfil = None
 
-        p = get_object_or_404(Problem,pk=probId)
+        h.statementHTML = statementHTML
+        # h.hoverText=hoverText
+        h.order = post['order']
+
+        # p = get_object_or_404(Problem, pk=probId)
         if 'audioFile' in request.FILES:
             audFile = request.FILES['audioFile']
             audResource = "{[" + audFile.name + "]}"
-            audfil = handle_uploaded_file(probId, audFile, id)
+            audfil = handle_uploaded_file(probId, audFile, hint_id)
 
         # imageFile and imageURL are fields that should not be given at the same time.
         # But it is hard to have the hint dialog enforce this so instead we use this rule:
@@ -333,52 +341,63 @@ def saveHint (request, probId):
         # because the imageFile will only be there if the user selected a local file in this current dialog
         # whereas the imageURL might be there from a previous time.
 
-        if 'imageFile' in request.FILES:
-            imgFile = request.FILES['imageFile']
-            imageURL = "{[" + imgFile.name + "]}"
-            imgfil = handle_uploaded_file(probId, imgFile,id)
+        if h.imageFile is None and not 'imageFile' in request.FILES:
+            # No new image exists, no new image has been added, so it might be an added or changed imageURL
+            imageURL = imageURL if imageURL else h.imageURL
+        else:
+            if 'imageFile' in request.FILES:
+                # New file added and do everything based on this file
+                imgFile = request.FILES['imageFile']
+                image_file_name = imgFile.name
+                imgfil = handle_uploaded_file(probId, imgFile, hint_id)
+            else:
+                # No new image added, but an older image exists, which might have been changed
+                image_file_name = h.imageFile.filename
 
-        if 'givesAnswer' in post:
-            givesAnswer = True
-        else: givesAnswer = False
+            if placement == '1':
+                # For "replace problem figure", the DB field for imageURL needs to be populated
+                imageURL = "{[" + image_file_name + "]}"
+            elif placement == '2':
+                # For "inside hint", the DB field for imageURL needs to be cleared
+                imageURL = ""
+            else:
+                raise Exception('Invalid value for placement - {}'.format(placement))
+
+        h.imageURL = imageURL
+        h.placement = placement
+
+        gives_answer = 'givesAnswer' in post
+        h.givesAnswer = gives_answer
+
         # media files that are being uploaded along with the hint
         if 'hmediaFiles[]' in request.FILES:
             files = request.FILES.getlist('hmediaFiles[]')
-            if id:
-                uploadFiles(files,probId,id)
+            if hint_id:
+                uploadFiles(files, probId, hint_id)
 
-        h = get_object_or_404(Hint,pk=id)
-        h.statementHTML=statementHTML
-        # h.hoverText=hoverText
-        h.order=post['order']
-        h.imageURL = imageURL
-        # If setting the imageURL field, then we eliminate the setting of the imageFile field.
-        if imageURL:
-            h.imageFile = None
-        h.placement=placement
-        h.givesAnswer=givesAnswer
         # only write audio filename if an aud file is uploaded.
         if audfil:
             h.audioFile = audfil
             h.audioResource = audResource
-        # only write an image file if one is given
+        # only write/update an image file if one is given
         if imgfil:
-            h.imageFile=imgfil
+            h.imageFile = imgfil
 
         h.save()
 
-    # finally process any delete requests that are included as media file ids
-    delHintMediaFileIds = post.getlist('deletehMediaFile[]') # ids of selected media files to delete
-    fails = processHintDeleteMediaFiles(delHintMediaFileIds, h) # returns PMF objs that couldn't be deleted
-    mediaDelMsg = produceHintMediaDeleteMessage(h,fails) # Produce error message about why media couldn't delete
-    hintSaveMsg = validateMediaRefs(h)
-    json = h.toJSON()
-    success = 1 if len(fails) == 0 and not hintSaveMsg else 0
-    if not hintSaveMsg:
-        hintSaveMsg = "Saved"
-    d = {'hint': json, 'success': success, 'message': mediaDelMsg, 'saveMessage': hintSaveMsg}
-    return JsonResponse(d)
-    # return redirect("qauth_edit_prob",probId=probId)
+        # finally process any delete requests that are included as media file ids
+        delHintMediaFileIds = post.getlist('deletehMediaFile[]')  # ids of selected media files to delete
+        fails = processHintDeleteMediaFiles(delHintMediaFileIds, h)  # returns PMF objs that couldn't be deleted
+        mediaDelMsg = produceHintMediaDeleteMessage(h, fails)  # Produce error message about why media couldn't delete
+        hintSaveMsg = validateMediaRefs(h)
+        json = h.toJSON()
+        success = 1 if len(fails) == 0 and not hintSaveMsg else 0
+        if not hintSaveMsg:
+            hintSaveMsg = "Saved"
+        d = {'hint': json, 'success': success, 'message': mediaDelMsg, 'saveMessage': hintSaveMsg}
+        return JsonResponse(d)
+    else:
+        return redirect("qauth_edit_prob", probId=probId)
 
 
 # Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
