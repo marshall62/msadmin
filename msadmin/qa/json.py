@@ -711,6 +711,23 @@ def deleteProblems (request):
     # if any problem cannot be deleted, complete will be returned as False so the user is notified that this cannot be done.
     return JsonResponse({'complete': True, 'message': "Problems successfully deleted."})
 
+
+@login_required
+def bugfix(request):
+    for hint_id in ('7105', '7109', '7337', '7479', '7480', '7484', '7523', '7582', '7584', '7585', '7587', '7589',
+                    '7636', '7637', '7638', '7639', '7640', '7646', '7647', '7866', '7867', '7868', '7869', '7870',
+                    '7887', '7888', '7889', '7905', '7906', '8052', '8081', '8082', '8404', '8424', '8464', '8647',
+                    '8648', '8649', '8650', '8651', '8710', '8714', '8715', '8717', '8736', '8737', '8775', '8784'):
+        try:
+            h = get_object_or_404(Hint, pk=hint_id)
+            if h.imageFile:
+                h.imageURL = "{[" + h.imageFile.filename + "]}"
+                h.save()
+        except Exception as e:
+            print(e, hint_id)
+    return JsonResponse({'status': 'success'})
+
+
 # grade will be 0-9, diffSetting will be 0 - 9
 def removeClassOmittedProblem (probId):
     with connection.cursor() as cursor:
