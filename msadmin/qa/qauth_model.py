@@ -174,7 +174,7 @@ class Problem (models.Model):
 
     def getMediaFiles (self):
         files = ProblemMediaFile.objects.filter(problem=self)
-        return files;
+        return files
 
     # Because the imageURL is stored in the db as {[myimage.jpg]} or http://somepath/myimage.jpg we need to return
     # just myimage.jpg in the first case.
@@ -338,7 +338,7 @@ class Hint (models.Model):
 
     def getMediaFiles (self):
         files = ProblemMediaFile.objects.filter(hint=self)
-        return files;
+        return files
 
     @staticmethod
     def getHintDirName (id):

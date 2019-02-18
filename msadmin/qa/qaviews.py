@@ -22,7 +22,9 @@ from django.contrib.auth.decorators import login_required
 logger = logging.getLogger(__name__)
 
 # settings.py has the name of the dir where quickAuth problems should be stored.
-QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
+# QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
+QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME, "qa")
+QA_DIR_URL = QUICKAUTH_PROB_DIRNAME + '/qa/'
 
 # CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
 
@@ -44,7 +46,7 @@ def reactTest(request):
 @login_required
 def create_problem (request):
     allTopics = Topic.objects.all()
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'problem': None, 'hints': None, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': -1, 'problem': None, 'hints': None, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR_URL, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 def getTopics (prob):
     allTopics = Topic.objects.all()
@@ -63,8 +65,7 @@ def edit_problem (request, probId):
     logger.debug("Editing QA problem " +  probId)
     hints = Hint.objects.filter(problem=prob).order_by('order')
     allTopics,inTopics = getTopics(prob)
-
-    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
+    return render(request, 'msadmin/qa/qauth_edit.html', {'probId': probId, 'problem': prob, 'hints': hints, 'allTopics': allTopics, 'errors': False, 'message': None, 'qaDir': QA_DIR_URL, 'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 
 @login_required
@@ -128,7 +129,7 @@ def save_problem (request):
             allTopics = Topic.objects.all()
             return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors,
                                                                   'probId': None, 'problem': None, 'hints': None,
-                                                                  'allTopics': allTopics, 'qaDir': QA_DIR,
+                                                                  'allTopics': allTopics, 'qaDir': QA_DIR_URL,
                                                                   'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
         id = post['id']
         logger.debug("Saving QA problem " +  id)
@@ -262,7 +263,7 @@ def save_problem (request):
         return redirect("qauth_edit_prob",probId=p.id)
         return render(request, 'msadmin/qa/qauth_edit.html', {'message': msg, 'errors': errors,
                                                               'probId': p.id, 'problem': p, 'hints': hints,
-                                                              'allTopics': allTopics, 'qaDir': QA_DIR,
+                                                              'allTopics': allTopics, 'qaDir': QA_DIR_URL,
                                                               'SNAPSHOT_DIRNAME': SNAPSHOT_DIRNAME})
 
 # Make sure that the refs in the statement only refer to files that are among the problems media files in the problemmediafile
