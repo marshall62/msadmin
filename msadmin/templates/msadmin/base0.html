@@ -40,29 +40,31 @@
 
 </head>
 <body>
-<div class="page-header">
-    <div style="left: 0;">
-        <img src="{% static 'images/apple-touch-icon.png' %}" width="60" height="60">
+    <div class="page-header">
+        <div style="left: 0;">
+            <img src="{% static 'images/apple-touch-icon.png' %}" width="60" height="60">
+        </div>
+        <div style="position: absolute; top: 10px; width: 600px; height: 50px; left: 120px;"> <h1><a href="/">MathSpring Admin Tool</a></h1></div>
+
     </div>
-    <div style="position: absolute; top: 10px; width: 600px; height: 50px; left: 120px;"> <h1><a href="/">MathSpring Admin Tool</a></h1></div>
-
-</div>
 
 
-{% block navbar %}
-{% endblock %}
+    {% block navbar %}
+    {% endblock %}
 
 
 
-<div class="content container">
-    <div class="row">
-        <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </div>
-</div>
+
+    {% block js-bottom %}
+    {% endblock %}
 </body>
 
-</body>
 </html>

@@ -6,3 +6,5 @@ fileUploads
 db.sqlite3
 /msadminsite/settings.py
 .DS_Store
+.vscode
+.idea
