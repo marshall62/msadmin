@@ -22,9 +22,9 @@ from django.contrib.auth.decorators import login_required
 logger = logging.getLogger(__name__)
 
 # settings.py has the name of the dir where quickAuth problems should be stored.
-# QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
-QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME, "qa")
-QA_DIR_URL = QUICKAUTH_PROB_DIRNAME + '/qa/'
+QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME,"")
+# QA_DIR=os.path.join(QUICKAUTH_PROB_DIRNAME, "qa")
+QA_DIR_URL = QA_DIR.replace('\\', '/')
 
 # CONTENT_MEDIA_URL = "http://rose.cs.umass.edu/mathspring/mscontent/html5Probs/"
 
