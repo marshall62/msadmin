@@ -47,6 +47,7 @@
         {% csrf_token %}
 
         <div class="form-group">
+            {# Problem ID, Name, Language #}
             <div class="row">
                 <div class="col col-sm-3">
                     <div class="input-group">
@@ -56,7 +57,6 @@
                         {% else %}
                             <input id="id" type="text" class="form-control" name="id" readonly value = "{{ problem.id }}" placeholder="--">
                         {% endif %}
-
                     </div>
                 </div>
                 <div class="col col-sm-5">
@@ -67,10 +67,8 @@
                         {% else %}
                             <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
                         {% endif %}
-
                     </div>
                 </div>
-
                 <div class="col col-sm-4">
                     <div class="input-group ">
                         <span class="input-group-addon">Language</span>
@@ -78,79 +76,95 @@
                     </div>
                 </div>
             </div>
-        <br>
-        <div class="input-group">
-            <span class="input-group-addon">Nick Name</span>
-            {% if probId == -1 %}
-                <input id="nickname" type="text" class="form-control" name="nickname" placeholder="Nick Name">
-            {% else %}
-                <input id="nickname" type="text" class="form-control" name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
-            {% endif %}
+            <br>
 
-        </div>
-        <br>
-
-        <div class="input-group">
-            <span class="input-group-addon">Statement</span>
-            {% if probId == -1 %}
-                <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML"></textarea>
-            {% else %}
-                <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
-            {% endif %}
-
-        </div>
-        <br>
-        <div class="form-inline">
+            {# Problem Nick Name #}
             <div class="input-group">
-                <span class="input-group-addon">Audio File</span>
-                {% if probId == -1  or not problem.audioResource %}
-                    <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
+                <span class="input-group-addon">Nick Name</span>
+                {% if probId == -1 %}
+                    <input id="nickname" type="text" class="form-control" name="nickname" placeholder="Nick Name">
                 {% else %}
-                    <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
+                    <input id="nickname" type="text" class="form-control" name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
                 {% endif %}
-
             </div>
-            <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
-            <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
-            {% if problem and problem.audioResource %}
-                <audio id="problem_audio_player" controls>
-                    <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
-                    Your browser does not support the audio tag.
-                </audio>
-                <a class="remove_problem_audio" href="#">
-                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the problem"></span>
-                </a>
-            {% endif %}
-        </div>
+            <br>
 
-        <br>
-            {#   The below div is filled with ImageControls in the page load js function#}
-        <div id="problemImageControls" class="form-inline">
-        </div>
-        <br>
+            {# Problem Statement #}
+            <div class="input-group">
+                <span class="input-group-addon">Statement</span>
+                {% if probId == -1 %}
+                    <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML"></textarea>
+                {% else %}
+                    <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
+                {% endif %}
+            </div>
+            <br>
 
-        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-            <span class="input-group-addon">Answer Type</span>
-            <select id="my-pulldown2" name="questType" class="form-control"></select>
-{#            {% if probId == -1 %}#}
-{#                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="shortanswer"></div>#}
-{#            {%  else %}#}
-{#                <div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>#}
-{#            {% endif %}#}
+            {# Audio File #}
+            <div class="form-inline">
+                <div class="input-group">
+                    <span class="input-group-addon">Audio File</span>
+                    {% if probId == -1  or not problem.audioResource %}
+                        <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
+                    {% else %}
+                        <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
+                    {% endif %}
+                </div>
+                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
+                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
+                {% if problem and problem.audioResource %}
+                    <audio id="problem_audio_player" controls>
+                        <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                    </audio>
+                    <a class="remove_problem_audio" href="#">
+                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the problem"></span>
+                    </a>
+                {% endif %}
+            </div>
+            <br>
 
-        </div>
-        <br>
-        <div id="shortAnswer" class="input-group mb-2 mr-sm-2 mb-sm-0" >
-            <a id="addAnswer" href="#shortAnswer"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a short answer"></span></a>
-            <table id="shortanswertable" class="table table-bordered">
-                <thead><tr><th style="width: 60px">Delete</th>
-                    <th>Value <a href="#shortAnswer"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Each row should have a possible correct answer (e.g. 4, 4.0, 8/2)"></span></a>
-                    </th></tr></thead>
-                <tbody id="shortanswertablebody">
-                {% if probId != -1 and problem.isShortAnswer %}
+            {# The below div is filled with ImageControls in the page load js function #}
+            <div id="problemImageControls" class="form-inline">
+            </div>
+            <br>
 
-                    {% for c in problem.getAnswers %}
+            {# Multiple Choice vs Short Answer Selector #}
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <span class="input-group-addon">Answer Type</span>
+                <select id="my-pulldown2" name="questType" class="form-control"></select>
+                {#{% if probId == -1 %}#}
+                {#<div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="shortanswer"></div>#}
+                {#{%  else %}#}
+                {#<div id="my-pulldown2" class="input-group mb-2 mr-sm-2 mb-sm-0" label="Answer Type" myId="questType" myName="questType" selectedOption="{{ problem.questType }}"></div>#}
+                {#{% endif %}#}
+            </div>
+            <br>
 
+            {# Short Answer #}
+            <div id="shortAnswer" class="input-group mb-2 mr-sm-2 mb-sm-0" >
+                <a id="addAnswer" href="#shortAnswer"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a short answer"></span></a>
+                <table id="shortanswertable" class="table table-bordered">
+                    <thead><tr><th style="width: 60px">Delete</th>
+                        <th>Value <a href="#shortAnswer"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Each row should have a possible correct answer (e.g. 4, 4.0, 8/2)"></span></a>
+                        </th></tr></thead>
+                    <tbody id="shortanswertablebody">
+                    {% if probId != -1 and problem.isShortAnswer %}
+                        {% for c in problem.getAnswers %}
+                            <tr><td class="deleteButton">
+                                <a class="delShortAnswer" href="#shortanswertable">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
+                                </a>
+                            </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <input id="answer-{{ forloop.counter0 }}" name="shortanswer[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                        </div>
+                                    </div>
+                                </td></tr>
+                        {% endfor %}
+                    {% elif probId == -1  %}
                         <tr><td class="deleteButton">
                             <a class="delShortAnswer" href="#shortanswertable">
                                 <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
@@ -159,133 +173,123 @@
                             <td>
                                 <div class="row">
                                     <div class="form-group col-lg-12">
-                                        <input id="answer-{{ forloop.counter0 }}" name="shortanswer[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                        <input id="answer-0" name="shortanswer[]" type="text" class="form-control" value=""/>
                                     </div>
                                 </div>
                             </td></tr>
-                    {% endfor %}
-                {% elif probId == -1  %}
-                    <tr><td class="deleteButton">
-                        <a class="delShortAnswer" href="#shortanswertable">
-                            <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
-                        </a>
-                    </td>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <input id="answer-0" name="shortanswer[]" type="text" class="form-control" value=""/>
-                                </div>
-                            </div>
-                        </td></tr>
-                {% endif %}
-
-                </tbody>
-            </table>
-
-
-        </div>
-
-        <div id="multichoices">
-            <a id="addChoice" href="#multichoices"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a choice answer"></span></a>
-            <table id="multichoicetable" class="table table-bordered">
-                <thead><tr><th style="width: 60px">Delete</th><th style="width: 60px">Choice</th><th style="width: 60px">Correct</th>
-                    <th>Value <a href="#multichoices"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Value or image URL like {[myimage.jpg]}"></span></a>
-                    </th></tr></thead>
-                <tbody id="multichoicetablebody">
-                    {% if probId != -1 and problem.isMultiChoice %}
-
-                        {% for c in problem.getAnswers %}
-
-                            <tr>
-{#                                <td><input name="deleteChoice" type="checkbox"></td>#}
-                                <td class="deleteButton">
-                                    <a class="delChoice" href="#multichoices">
-                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this choice"></span>
-                                    </a>
-                                </td>
-                                <td class="choiceLabel">{{ c.choiceLetter }}</td>
-                                <td class="choiceCorrect">
-                                    <input class="correctRadio" type="radio" name="correctChoice" {% if c.choiceLetter == problem.answer %} checked {% endif %} value="{{ c.choiceLetter }}">
-                               </td>
-                                <td>
-                                    <div class="row">
-                                       <div class="form-group col-lg-12">
-                                           <input id="choice-{{ forloop.counter0 }}" name="multichoice[]" type="text" class="form-control" value="{{ c.val }}"/>
-                                       </div>
-                                    </div>
-                                </td></tr>
-                        {% endfor %}
                     {% endif %}
-                </tbody>
-            </table>
-        </div>
-        <br>
-{#       difficulty and  Status pulldowns #}
-        <div class="row">
-            <div class="col col-sm-4">
-                <div class="input-group">
-                    <span class="input-group-addon">Difficulty</span>
-                    <select id="my-pulldown7" name="difficulty" class="form-control" {%if problem.isDifficultyDisabled == True %}disabled{% endif %}></select>
+                    </tbody>
+                </table>
+            </div>
+
+            {# Multiple Choice #}
+            <div id="multichoices">
+                <a id="addChoice" href="#multichoices">
+                    <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a choice answer"></span>
+                </a>
+                <table id="multichoicetable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px">Delete</th>
+                            <th style="width: 60px">Choice</th>
+                            <th style="width: 60px">Correct</th>
+                            <th>Value <a href="#multichoices">
+                                <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Value or image URL like {[myimage.jpg]}"></span>
+                            </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="multichoicetablebody">
+                        {% if probId != -1 and problem.isMultiChoice %}
+                            {% for c in problem.getAnswers %}
+                                <tr>
+                                    {#<td><input name="deleteChoice" type="checkbox"></td>#}
+                                    <td class="deleteButton">
+                                        <a class="delChoice" href="#multichoices">
+                                            <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this choice"></span>
+                                        </a>
+                                    </td>
+                                    <td class="choiceLabel">{{ c.choiceLetter }}</td>
+                                    <td class="choiceCorrect">
+                                        <input class="correctRadio" type="radio" name="correctChoice" {% if c.choiceLetter == problem.answer %} checked {% endif %} value="{{ c.choiceLetter }}">
+                                </td>
+                                    <td>
+                                        <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <input id="choice-{{ forloop.counter0 }}" name="multichoice[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+
+            {# Difficulty and Status Pulldowns #}
+            <div class="row">
+                <div class="col col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Difficulty</span>
+                        <select id="my-pulldown7" name="difficulty" class="form-control" {%if problem.isDifficultyDisabled == True %}disabled{% endif %}></select>
+                    </div>
+                </div>
+                <div class="col col-sm-4 input-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Status</span>
+                        <select id="my-pulldown3" name="status" class="form-control"></select>
+                    </div>
                 </div>
             </div>
-            <div class="col col-sm-4 input-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Status</span>
-                    <select id="my-pulldown3" name="status" class="form-control"></select>
+            <br>
+
+            {# Layout controls #}
+            <div class="row">
+                <div class="col col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Layout</span>
+                        <select id="my-pulldown4" name="layout" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col col-sm-2">
+                    <a onclick="openLayoutTool()" class="btn btn-primary">Layout Tool</a>
+                </div>
+                <div class="col col-xs-2">
+                    <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Use the layout tool to create a layout and copy/paste the string into the layout field below"></span></a>
                 </div>
             </div>
-        </div>
-{#        Layout controls#}
+            <br>
 
-        <br>
-        <div class="row">
-            <div class="col col-sm-6">
-                <div class="input-group">
-                    <span class="input-group-addon">Layout</span>
-                    <select id="my-pulldown4" name="layout" class="form-control">
-                    </select>
-                </div>
+            {# Layout result from the layout tool #}
+            <div class="input-group">
+                <span class="input-group-addon">Layout</span>
+                {% if probId == -1 or problem.problemFormat == None %}
+                    <input type="text" class="form-control" name="problemFormat" placeholder="Layout string from Layout Tool goes here">
+                {% else %}
+                    <input type="text" class="form-control" name="problemFormat"  value = "{{ problem.problemFormat }}">
+                {% endif %}
+                <span class="input-group-addon">
+                    <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Copy/paste from layout tool"></span></a>
+                </span>
             </div>
-            <div class="col col-sm-2">
-                <a onclick="openLayoutTool()" class="btn btn-primary">Layout Tool</a>
-            </div>
-            <div class="col col-xs-2">
-                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Use the layout tool to create a layout and copy/paste the string into the layout field below"></span></a>
-            </div>
-        </div>
-        <br>
+            <br>
 
-
-        <div class="input-group">
-            <span class="input-group-addon">Layout</span>
-            {% if probId == -1 or problem.problemFormat == None %}
-                <input type="text" class="form-control" name="problemFormat" placeholder="Layout string from Layout Tool goes here">
-            {% else %}
-                <input type="text" class="form-control" name="problemFormat"  value = "{{ problem.problemFormat }}">
+            {# Action Buttons #}
+            <button id="saveButton" type="button"
+                data-snapshot="{{problem.hasSnapshot|yesno:'1,0'}}"
+                data-hint="{{hints|length_is:"0"}}"
+                data-video="{{problem.video|yesno:'1,0'}}"
+                data-example="{{problem.example|yesno:'1,0'}}"
+                class="btn btn-primary">Save
+            </button>
+            {% if probId != -1 %}
+                {# specifying type=button prevents the button from submitting the form #}
+                <button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+                <button type="button" id="downloadButton" class="btn btn-primary">Download Media</button>
             {% endif %}
-            <span class="input-group-addon">
-                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Copy/paste from layout tool"></span></a>
-            </span>
-
-        </div>
-
-
-
-
-        <br/>
-
-
-        <br>
-        {#{% if not problem.hasSnapshot %}#}
-        <button id="saveButton" type="button" class="btn btn-primary" data-snapshot="{{problem.hasSnapshot|yesno:'1,0'}}">Save</button>
-        {#{% else %}#}
-        {#<button id="saveButton" class="btn btn-primary">Save</button>#}
-        {#{% endif %}#}
-        {% if probId != -1 %}
-{#            specifying type=button prevents the button from submitting the form #}
-        <button type="button" id="previewButton" class="btn btn-primary">Preview</button>
-        <button type="button" id="downloadButton" class="btn btn-primary">Download Media</button>
-        {% endif %}
         </div>
 
         {% if message %}
@@ -293,7 +297,7 @@
         {% endif %}
 
         {# Warnings while saving #}
-        {% if not problem.hasSnapshot %}
+        {#% if not problem.hasSnapshot %#}
         <!-- Modal Dialog that will come up when Save is clicked-->
         <div class="modal fade" id="warningDialog" role="dialog">
             <div class="modal-dialog">
@@ -307,7 +311,7 @@
                     <div class="modal-body" style="padding:40px 50px;">
                         {% if not problem.hasSnapshot %}
                         <div>
-                            <p>You are saving the question without a snapshot. Are you sure you want to continue?</p>
+                            <p id="warning-text"></p>
                         </div>
                         {% endif %}
                     </div>
@@ -321,251 +325,258 @@
 
             </div>
         </div>
-        {% endif %}
+        {#% endif %#}
 
     </form>
 
 
 
     {% if probId != -1 %}
-        <div class="container"></div>
-        <div id="probTabs" class="container">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a  href="#tab1" data-toggle="tab">Hints</a>
-                </li>
-                <li><a href="#tab2" data-toggle="tab">Media Files</a>
-                </li>
-                <li><a href="#tab3" data-toggle="tab">Meta Info</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
-                    <a id="addHint" onclick="addHint()" href="#hintTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span></a>
-{#                    <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span></a>#}
-                    &nbsp; &nbsp;
-                    Drag and Drop rows to reorder hints
+    <div class="container"></div>
+    <div id="probTabs" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab1" data-toggle="tab">Hints</a>
+            </li>
+            <li>
+                <a href="#tab2" data-toggle="tab">Media Files</a>
+            </li>
+            <li>
+                <a href="#tab3" data-toggle="tab">Meta Info</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+                <a id="addHint" onclick="addHint()" href="#hintTable">
+                    <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a hint"></span>
+                </a>
+                {% comment "Delete Hint" %}
+                <a id="delHint" onclick="deleteSelectedHints({{ problem.id }})" href="#hintTable">
+                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Delete selected hints"></span>
+                </a>
+                {% endcomment %}
+                &nbsp; &nbsp;
+                Drag and Drop rows to reorder hints
 
-                    <table id="hintTable" class="table table-bordered pagin-table">
+                <table id="hintTable" class="table table-bordered pagin-table">
+                    <thead>
+                    <tr>
+                        <td style="width: 30px">Delete</td>
+                        <th style="width: 30px">ID</th>
+                        <th style="width: 30px">Answer</th>
+                        <th>Name</th>
+                        <th>Statement</th>
+                    </tr>
+                    </thead>
+                    <tbody id="hinttbody">
+                    {# put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
+                    {# Loop through all the hints #}
+                    {% for hint in hints %}
+                        <tr id="{{ hint.id }}" class="dnd">
+                            <td><input type="checkbox"></td>
+                            {% comment "Edit Hint" %}
+                            <td class="edit-hint">
+                                <a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ hint.id }}, problemDir)">
+                                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span>
+                                </a>
+                            </td>
+                            {% endcomment %}
+                            <td class="hint-id">{{ hint.id }}</td>
+                            <td class="givesAnswer">{% if hint.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                            <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ hint.id }}, problemDir)'>{{ hint.name }}</a></td>
+                            <td class="statement"> {{ hint.statementHTML }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if problem %}
+                    <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Delete Selected Hints</a>
+                {% else %}
+                    <a href="#hintTable" class="btn btn-primary">Save Changes to Hints</a>
+                {% endif %}
+                {#<a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
+                {#<a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
+                <p style="color: red" id="hintErrorMessages"></p>
+            </div>
+
+            <div class="tab-pane" id="tab2">
+                <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=probId %}">
+                    {#<div class="input-group">#}
+                    {% csrf_token %}
+                    <a id="addMedia" onclick="addMediaRow()" href="#mediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
+                    <table id="mediaTable" class="table table-bordered">
                         <thead>
-                        <tr><td style="width: 30px">Delete</td><th style="width: 30px">ID</th><th style="width: 30px">answer</th><th>name</th><th >statement</th></tr>
+                        <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
                         </thead>
-                        <tbody id="hinttbody">
-                                put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints
-                        {% for h in hints %}
-
-                            <tr id="{{ h.id }}" class="dnd">
-                                <td><input type="checkbox"></td>
-{#                                <td class="edit-hint"><a href="#hinttbody" class="hint-edit-icon" onClick="editHint2({{ h.id }}, problemDir)"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-original-title="Edit this hint"></span></a></td>#}
-                                <td class="hint-id">{{ h.id }}</td>
-
-                                <td class="givesAnswer">{% if h.givesAnswer %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
-
-                                <td class="name"><a href="#" class="hint-name-label" onClick='editHint2({{ h.id }}, problemDir)'>{{ h.name }}</a></td>
-                                <td class="statement"> {{ h.statementHTML }}</td>
+                        <tbody id="mediatbody">
+                        {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
+                        {% for f in problem.getMediaFiles %}
+                            <tr id="{{ f.id }}"><td><input type="checkbox"></td><td>{{ f.id }}</td><td>{[{{ f.filename }}]}</td>
+                                <td></td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                    {% if problem %}
-                        <a href="#hintTable" class="btn btn-primary" onClick="deleteSelectedHints({{ problem.id }})">Delete Selected Hints</a>
-                    {% else %}
-                        <a href="#hintTable" class="btn btn-primary">Save Changes to Hints</a>
-                    {% endif %}
-{#                    <a id="testButton" onclick="validateHints()" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Add alert"></span></a>#}
-{#                    <a id="testButton2" onclick="setHintAlert (2, 'hi')" href="#hintTable"><span class="glyphicon glyphicon-scale" data-toggle="tooltip" data-original-title="Remove alert"></span></a>#}
-                    <p style="color: red" id="hintErrorMessages"></p>
-                </div>
+                    <div style="color:red;" id="mediaFileErrorMessages">
 
-                <div class="tab-pane" id="tab2">
-                    <form id="mediaFilesForm" method="post" enctype="multipart/form-data" onsubmit="return validateProblem();" action="{% url 'qauth_save_problem_media' probId=probId %}">
-                        {#        <div class="input-group">#}
-                        {% csrf_token %}
+                    </div>
+                    {#        save will submit the form, deleting will ajax the ids to server but will keep the page where it is#}
+                    {#        <button  class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Changes to Media Files</button>#}
+                    <a href="#mediaTable" class="btn btn-primary" onClick="saveMediaFiles()">Save Changes to Media Files</a>
+                </form>
+            </div>
 
-
-                        <a id="addMedia" onclick="addMediaRow()" href="#mediaTable"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a media file"></span></a>
-
-
-                        <table id="mediaTable" class="table table-bordered">
-                            <thead>
-                            <tr><td style="width: 60px">Delete</td><th style="width: 60px">ID</th><th style="width: 60px">Ref file name</th><td>Upload</td></tr>
-                            </thead>
-                            <tbody id="mediatbody">
-                            {#        put the hint id in the tr as the id so that when delete is executed we can easily find the selected hints #}
-                            {% for f in problem.getMediaFiles %}
-                                <tr id="{{ f.id }}"><td><input type="checkbox"></td><td>{{ f.id }}</td><td>{[{{ f.filename }}]}</td>
-                                    <td></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        <div style="color:red;" id="mediaFileErrorMessages">
-
+            <div class="tab-pane" id="tab3">
+                <form id="metainfoForm">
+                    <br>
+                    {#<div class="form-inline">#}
+                    {#<div class="input-group">#}
+                    <div id="ccssSelectors">
+                        <div class="row">
+                            <a id="addMedia" onclick="addCCSSRow()" href="#metainfoForm">
+                                <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span>
+                            </a>
                         </div>
-                        {#        save will submit the form, deleting will ajax the ids to server but will keep the page where it is#}
-                        {#        <button  class="btn btn-primary" onClick="$('mediaFilesForm').submit();">Save Changes to Media Files</button>#}
-                        <a href="#mediaTable" class="btn btn-primary" onClick="saveMediaFiles()">Save Changes to Media Files</a>
-                    </form>
-                </div>
-
-                <div class="tab-pane" id="tab3">
-                    <form id="metainfoForm">
-                        <br>
-{#                        <div class="form-inline">#}
-{#                            <div class="input-group">#}
-                        <div id="ccssSelectors">
-                            <div class="row">
-                                <a id="addMedia" onclick="addCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span></a>
-
+                        <div class="row" style="height: 45px;">
+                            <div class="col col-sm-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Gr</span>
+                                    <select id="my-pulldown8" name='stdGrade' class="form-control"></select>
+                                </div>
                             </div>
-                            <div class="row" style="height: 45px;">
-                                <div class="col col-sm-2">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Gr</span>
-                                        <select id="my-pulldown8" name='stdGrade' class="form-control"></select>
-                                    </div>
-
+                            <div class="col col-sm-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Dom</span>
+                                    <select id="my-pulldown9" name='stdDomain' class="form-control"></select>
                                 </div>
-                                <div class="col col-sm-2">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Dom</span>
-                                        <select id="my-pulldown9" name='stdDomain' class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-2">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Clust</span>
-                                        <select id="my-pulldown10" name='stdCluster' class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-2">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Std</span>
-                                        <select id="my-pulldown11" name='stdStandard' class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-2">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Part</span>
-                                        <select id="my-pulldown12" name='stdPart' class="form-control"></select>
-                                    </div>
-                                </div>
-{#                                <input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
                             </div>
+                            <div class="col col-sm-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Clust</span>
+                                    <select id="my-pulldown10" name='stdCluster' class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="col col-sm-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Std</span>
+                                    <select id="my-pulldown11" name='stdStandard' class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="col col-sm-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Part</span>
+                                    <select id="my-pulldown12" name='stdPart' class="form-control"></select>
+                                </div>
+                            </div>
+                            {#<input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
                         </div>
-{#                            <div class="input-group">#}
-{#                                <span class="input-group-addon">Domain ID</span>#}
-{#                                <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">#}
-{#                            </div>#}
-{#                        </div>#}
-                        <br>
+                    </div>
+                    {% comment "Domain ID" %}
+                    <div class="input-group">
+                        <span class="input-group-addon">Domain ID</span>
+                        <input id="clusterId" type="text" class="form-control" name="clusterId" value = "{{ problem.clusterId }}">
+                    </div>
+                    {% endcomment %}
+                    <br>
+
                     <div class="input-group">
                         <span class="input-group-addon">Topic</span>
                         <select id="topicSelect" name="topic" data-placeholder="Choose Topics" class="chosen-select form-control" multiple tabindex="4">
                             {% for t in allTopics %}
                                 <option value="{{ t.id }}" {% if t.isSelected %} selected {% endif %}>{{ t.description }}</option>
                             {% endfor %}
-
                         </select>
                     </div>
                     <br>
-                        <div class="form-inline">
-                            <div class="input-group">
-                                <span class="input-group-addon">Video ID</span>
-                                    <input id="videoId" type="text" class="form-control" name="video"
-                                           value = "{% if problem.video %}{{ problem.video }}{% endif %}">
 
-                            </div>
-
-
-                            <div class="input-group">
-                                <span class="input-group-addon">Example ID</span>
-                                    <input id="exampleId" type="text" class="form-control" name="example"
-                                           value = "{% if problem.example %}{{ problem.example }}{% endif %}">
-
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col col-sm-4">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Usable as Example</span>
-                                    <select id="my-pulldown6" name="usableAsExample" class="form-control"></select>
-                                </div>
-                            </div>
-
-                            {#<div class="col col-sm-2">#}
-                                {#                             Pulldown menu for IsAllowedAsExample #}
-                                {#<input type="checkbox" name="hasSnapshot" value=1 {% if problem.hasSnapshot %} checked {% endif %}> Has Snapshot</input>#}
-                            {#</div>#}
-
-                            <div class="col col-sm-6">
-                                <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
-                            </div>
-                        </div>
-                        <br>
-                        {% if problem.hasSnapshot %}
-                        <div class="form-group">
-                            <label for="snapshotPreview">Snapshot Image</label>
-                            <img id="snapshotPreview" src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
-                                 onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
-                                 onmouseout="this.width='70'; this.height='70';" width="70" height="70">
-                        </div>
-                        {% endif %}
-                        <br>
-                        <div class="row">
-                            <div class="col col-sm-5">
-                                <div class="input-group ">
-                                    <span class="input-group-addon">Creator</span>
-                                        <input id="creatorId" type="text" class="form-control" name="creator" readonly value = "{{ problem.creator }}">
-
-                                </div>
-                            </div>
-                            <div class="col col-sm-5">
-                                <div class="input-group ">
-                                    <span class="input-group-addon">Last Modifier</span>
-                                        <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{% if problem.lastModifier %}{{ problem.lastModifier }}{% endif %}">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col col-sm-5">
-                                <div class="input-group" >
-                                    <span class="input-group-addon">Cr. Time</span>
-                                        <input id="crTimeId" type="text" readonly class="form-control" name="creationTime" value = "{{ problem.created_at }}">
-
-                                </div>
-                            </div>
-                            <div class="col col-sm-5">
-                                <div class="input-group ">
-                                    <span class="input-group-addon">Last Wr. Time</span>
-                                        <input id="lastWriteTimeId" type="text" readonly class="form-control" name="lastWriteTime" value = "{{ problem.updated_at }}">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
+                    <div class="form-inline">
                         <div class="input-group">
-                            <span class="input-group-addon">Notes</span>
-                                <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{% if problem.authorNotes %}{{ problem.authorNotes }}{% endif %}</textarea>
-
+                            <span class="input-group-addon">Video ID</span>
+                            <input id="videoId" type="text" class="form-control" name="video" value = "{% if problem.video %}{{ problem.video }}{% endif %}">
                         </div>
-                        <br>
-                        <a href="#metainfoForm" class="btn btn-primary" onClick="saveProblemMetaInfo()">Save Meta Info</a>
-                        <p style="color: red" id="metaInfoMessages"></p>
+                        <div class="input-group">
+                            <span class="input-group-addon">Example ID</span>
+                            <input id="exampleId" type="text" class="form-control" name="example" value = "{% if problem.example %}{{ problem.example }}{% endif %}">
+                        </div>
+                    </div>
+                    <br>
 
-                    </form>
-                </div>
+                    <div class="row">
+                        <div class="col col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">Usable as Example</span>
+                                <select id="my-pulldown6" name="usableAsExample" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        {% comment "Pulldown menu for IsAllowedAsExample" %}
+                        <div class="col col-sm-2">
+                            <input type="checkbox" name="hasSnapshot" value=1 {% if problem.hasSnapshot %} checked {% endif %}> Has Snapshot</input>
+                        </div>
+                        {% endcomment %}
+
+                        <div class="col col-sm-6">
+                            <input id="snapshotfile" type="file" class="form-control-file" name="snapshotFile">
+                        </div>
+                    </div>
+                    <br>
+
+                    {% if problem.hasSnapshot %}
+                    <div class="form-group">
+                        <label for="snapshotPreview">Snapshot Image</label>
+                        <img id="snapshotPreview" src="{{ MEDIA_URL }}{{ SNAPSHOT_DIRNAME }}/{{ problem.getSnapshotFilename }}"
+                                onmouseover="this.removeAttribute('width'); this.removeAttribute('height');"
+                                onmouseout="this.width='70'; this.height='70';" width="70" height="70">
+                    </div>
+                    {% endif %}
+                    <br>
+
+                    <div class="row">
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Creator</span>
+                                <input id="creatorId" type="text" class="form-control" name="creator" readonly value = "{{ problem.creator }}">
+                            </div>
+                        </div>
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Last Modifier</span>
+                                <input id="lastModifierId" type="text" class="form-control" name="lastModifier" readonly value = "{% if problem.lastModifier %}{{ problem.lastModifier }}{% endif %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-sm-5">
+                            <div class="input-group" >
+                                <span class="input-group-addon">Cr. Time</span>
+                                <input id="crTimeId" type="text" readonly class="form-control" name="creationTime" value = "{{ problem.created_at }}">
+                            </div>
+                        </div>
+                        <div class="col col-sm-5">
+                            <div class="input-group ">
+                                <span class="input-group-addon">Last Wr. Time</span>
+                                <input id="lastWriteTimeId" type="text" readonly class="form-control" name="lastWriteTime" value = "{{ problem.updated_at }}">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">Notes</span>
+                        <textarea rows="3" cols="80" name="authorNotes" class="form-control" id="authorNotesId">{% if problem.authorNotes %}{{ problem.authorNotes }}{% endif %}</textarea>
+                    </div>
+                    <br>
+
+                    <a href="#metainfoForm" class="btn btn-primary" onClick="saveProblemMetaInfo()">Save Meta Info</a>
+                    <p style="color: red" id="metaInfoMessages"></p>
+                </form>
             </div>
         </div>
-
-
+    </div>
     {% endif %}
 
-{#    Don't want a hint dialog if this is a new problem.   Wait until it has an id.#}
+    {# Don't want a hint dialog if this is a new problem. Wait until it has an id. #}
     {% if probId != -1 %}
     <!-- Modal Dialog that will come up when hint name is clicked-->
     <div class="modal fade" id="hintDialog" role="dialog">
