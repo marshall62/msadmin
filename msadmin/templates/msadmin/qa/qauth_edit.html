@@ -63,9 +63,9 @@
                     <div class="input-group ">
                         <span class="input-group-addon">Name</span>
                         {% if probId == -1 %}
-                            <input id="name" type="text" class="form-control" name="name" placeholder="Problem Name">
+                            <input id="name" type="text" class="form-control" required name="name" placeholder="Problem Name">
                         {% else %}
-                            <input id="name" type="text" class="form-control" name="name" value = "{{ problem.name }}" placeholder="Problem Name">
+                            <input id="name" type="text" class="form-control" required name="name" value = "{{ problem.name }}" placeholder="Problem Name">
                         {% endif %}
                     </div>
                 </div>
@@ -82,9 +82,9 @@
             <div class="input-group">
                 <span class="input-group-addon">Nick Name</span>
                 {% if probId == -1 %}
-                    <input id="nickname" type="text" class="form-control" name="nickname" placeholder="Nick Name">
+                    <input id="nickname" type="text" class="form-control" required name="nickname" placeholder="Nick Name">
                 {% else %}
-                    <input id="nickname" type="text" class="form-control" name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
+                    <input id="nickname" type="text" class="form-control" required name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
                 {% endif %}
             </div>
             <br>
@@ -93,9 +93,9 @@
             <div class="input-group">
                 <span class="input-group-addon">Statement</span>
                 {% if probId == -1 %}
-                    <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML"></textarea>
+                    <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML"></textarea>
                 {% else %}
-                    <textarea rows="8" cols="80" name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
+                    <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
                 {% endif %}
             </div>
             <br>
@@ -278,7 +278,7 @@
             <br>
 
             {# Action Buttons #}
-            <button id="saveButton" type="button"
+            <button id="saveButton" type="submit"
                 data-snapshot="{{problem.hasSnapshot|yesno:'1,0'}}"
                 data-hint="{{hints|length_is:"0"}}"
                 data-video="{{problem.video|yesno:'1,0'}}"
@@ -326,7 +326,6 @@
             </div>
         </div>
         {#% endif %#}
-
     </form>
 
 
@@ -710,17 +709,15 @@
         </div>
     </div>
     {% endif %}
-
-
 {% endblock %}
 
+
+
 {% block js-bottom %}
-
-
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react.js"></script>#}
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react-dom.js"></script>#}
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.3/react-bootstrap.min.js"></script>#}
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/JSXTransformer.js"></script>#}
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react.js"></script>#}
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react-dom.js"></script>#}
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.3/react-bootstrap.min.js"></script>#}
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/JSXTransformer.js"></script>#}
     <script type="text/javascript" src="{% static 'js/qa/mycomponents.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/DMPulldown.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/qa/main.js' %}"></script>
@@ -731,28 +728,25 @@
     <script type="text/javascript" src="{% static 'js/util.js' %}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.3/chosen.proto.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.3/chosen.jquery.min.js"></script>
-{#    <script type="text/javascript" src="{% static 'js/chosen.jquery.min.js' %}"></script>#}
-{#    <script type="text/javascript" src="{% static 'js/chosen.proto.min.js' %}"></script>#}
+    {#<script type="text/javascript" src="{% static 'js/chosen.jquery.min.js' %}"></script>#}
+    {#<script type="text/javascript" src="{% static 'js/chosen.proto.min.js' %}"></script>#}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.3/chosen.min.css">
-{#    <link rel="stylesheet" href="{% static 'css/chosen.css' %}">#}
-{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
-{#    <link rel="stylesheet" href="{% static 'css/prism.css' %}">#}
+    {#<link rel="stylesheet" href="{% static 'css/chosen.css' %}">#}
+    {#<link rel="stylesheet" href="{% static 'css/style.css' %}">#}
+    {#<link rel="stylesheet" href="{% static 'css/prism.css' %}">#}
 
     <script language="javascript">
-
         var theProblem = null; // a problem object obtained from AJAX call when page loads
         var theHint = null; // the hint currently being edited in a dialog box
         var answerType = "shortanswer"; // the currently selected answerType
         var choiceLabels = ["a", "b", "c", "d", "e"];
         var numChoices = 0; // keeps track of how many multi choice answers fields there are.
         var numAnswers = 0; // keeps track of how many short answer fields there are.
-
         var hintImageControls;  // an object that needs to be global because it gets manipulated by callbacks in hints.js
         var hintEditMode; // set to either NEW_HINT or EXISTING_HINT
         var idCount=0;
 
-
-{#        var mediaURL = "{{ MEDIA_URL }}";#}
+        {#var mediaURL = "{{ MEDIA_URL }}";#}
         {% if problem %}
         var problemDir = "{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}";
         {% else %}
@@ -786,10 +780,10 @@
         function saveProblemMetaInfo() {
             var form = $('#metainfoForm')[0]; // get the Javascript obj for the hint form
             var data = new FormData(form); // put all the form fields into data
-{#            console.log("stdGrades");#}
-{#            console.log(data.getAll("stdGrade"));#}
-{#            console.log("stdDomains");#}
-{#            console.log(data.getAll("stdDomain"));#}
+            {#console.log("stdGrades");#}
+            {#console.log(data.getAll("stdGrade"));#}
+            {#console.log("stdDomains");#}
+            {#console.log(data.getAll("stdDomain"));#}
             var probId = theProblem.id;
             var url = SAVE_META_INFO_URL.replace('12345', theProblem.id);
             $.ajax({
@@ -817,10 +811,7 @@
 
         }
 
-
-
         ////////   Functions that operate on the problem /////////////
-
         function validateProblem () {
             // some multi-choice answer must be marked correct
             if (answerType == 'multichoice') {
@@ -852,11 +843,10 @@
         //
         function delCCSSRow (id) {
             $('#'+id).remove();
-
         }
 
-/*    Add a div to the end of the set of rows contained in the div #ccssSelectors
-   <div class="row">
+        /* Add a div to the end of the set of rows contained in the div #ccssSelectors
+        <div class="row">
             <div class="col col-sm-2">
                 <div id="my-pulldown8">
                 </div>
@@ -886,7 +876,7 @@
             var std_Id=genId();
             var part_Id=genId();
             $('#ccssSelectors').append('<div id="' +div_id+ '" class="row" style="height: 45px;">'+
-{#                '<div class="col col-sm-1"><a onclick="delCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a></div>'+#}
+                {#'<div class="col col-sm-1"><a onclick="delCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a></div>'+#}
                 '<a onclick="delCCSSRow(\'' +div_id+ '\')" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a>'+
                 '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Gr') + '</div>' +
                 '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Dom') + '</div>' +
@@ -925,8 +915,7 @@
             return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
         }
 
-
-        // WHen this page loads it sends an AJAX request to get all the common core standards as an ordered dictionary.
+        // When this page loads it sends an AJAX request to get all the common core standards as an ordered dictionary.
         // The standards ultimately populate 4 pulldown menus (my-pulldown8, 9, 10, 11).
         // This function extracts the grades out of the standards and builds the first pulldown menu (8).
         // The other menus get values stuck in them when an option from grade pulldown is selected.
@@ -1048,9 +1037,6 @@
             }
             else return [{val:"---", label:"---"}];
         }
-
-
-
 
         // Callback function.  When this HTML file opens on an existing problem, an AJAX call is made to get the JSON
         // of the problem.  The JSON data is sent to this function to initialize internal state in the page's javascript
@@ -1187,7 +1173,6 @@
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
-
         // If a new cluster is chosen, populate the standard pulldown based on the children of the new category
         function resetClusterChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
@@ -1284,7 +1269,6 @@
             );
         }
 
-
         function initializeStandardPulldowns () {
             var url_mask = "{% url 'qauth_standards' probId='12345' %}";
             url_mask = url_mask.replace("12345", "{{ probId }}");
@@ -1337,13 +1321,10 @@
             }
         }
 
-
         ///////////   The main function called at page load time /////////////////
-
         // loads the pulldowns with their options
         // The main function runs when the page is onReady
         $(function () {
-
             $('[data-toggle="tooltip"]').tooltip({
                 placement : 'top'
             });
@@ -1425,7 +1406,7 @@
                 no_results_text: "Oops, nothing found!",
                 width: "95%"
             });
-{#            $("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
+            {#$("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
             {% if problem and problem.imageURL %}
                 var imgURL = '{{ problem.imageURL }}';
             {% else %}
@@ -1489,7 +1470,7 @@
 
             var url_mask;
             url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
-{#            if the probId is valid, make an ajax call to get the problem JSON #}
+            {# if the probId is valid, make an ajax call to get the problem JSON #}
             {% if probId != -1 %}
                 url_mask = url_mask.replace("12345", "{{ probId }}");
             $.ajax({
@@ -1507,12 +1488,7 @@
             initializeLayoutPulldown();
             initializeStandardPulldowns();
         });
-
-
     </script>
 {% endblock %}
 
 {#  Dialog that previews the problem #}
-
-
-
