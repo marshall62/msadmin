@@ -145,24 +145,33 @@
             <div id="shortAnswer" class="input-group mb-2 mr-sm-2 mb-sm-0" >
                 <a id="addAnswer" href="#shortAnswer"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a short answer"></span></a>
                 <table id="shortanswertable" class="table table-bordered">
-                    <thead><tr><th style="width: 60px">Delete</th>
-                        <th>Value <a href="#shortAnswer"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Each row should have a possible correct answer (e.g. 4, 4.0, 8/2)"></span></a>
-                        </th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px">Delete</th>
+                            <th>Value
+                                <a href="#shortAnswer">
+                                    <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Each row should have a possible correct answer (e.g. 4, 4.0, 8/2)"></span>
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
                     <tbody id="shortanswertablebody">
                     {% if probId != -1 and problem.isShortAnswer %}
                         {% for c in problem.getAnswers %}
-                            <tr><td class="deleteButton">
-                                <a class="delShortAnswer" href="#shortanswertable">
-                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
-                                </a>
-                            </td>
+                            <tr>
+                                <td class="deleteButton">
+                                    <a class="delShortAnswer" href="#shortanswertable">
+                                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Delete this answer"></span>
+                                    </a>
+                                </td>
                                 <td>
                                     <div class="row">
                                         <div class="form-group col-lg-12">
-                                            <input id="answer-{{ forloop.counter0 }}" name="shortanswer[]" type="text" class="form-control" value="{{ c.val }}"/>
+                                            <input id="answer-{{ forloop.counter0 }}" required name="shortanswer[]" type="text" class="form-control" value="{{ c.val }}"/>
                                         </div>
                                     </div>
-                                </td></tr>
+                                </td>
+                            </tr>
                         {% endfor %}
                     {% elif probId == -1  %}
                         <tr><td class="deleteButton">
@@ -1307,6 +1316,7 @@
             var val = $('#my-pulldown2').val();
             answerType = val;
             if (val == 'shortanswer') {
+                $('#shortanswertablebody :input').attr('required', true);
                 $('#shortAnswer').show();
                 $('#multichoices').hide();
 
@@ -1314,6 +1324,7 @@
                     addShortAnswerRows(1);
             }
             else {
+                $('#shortanswertablebody :input').removeAttr('required');
                 $('#shortAnswer').hide();
                 $('#multichoices').show();
                 if (numChoices == 0)
@@ -1437,34 +1448,123 @@
                 removeHintImage(hintImageControls);
             });
 
-            $('#my-pulldown2').DMPulldown({
-                selectedOption: {% if probId != -1 %} "{{ problem.questType }}" {% else %} "shortanswer" {% endif %},
-                options:[{value:'multichoice',label:'Multiple Choice'}, {value:'shortanswer',label:'Short Answer'}],
-                onChange: displayAnswerControls
+            $('#my-pulldown2').DMPulldown(
+                {
+                    selectedOption: {% if probId != -1 %} "{{ problem.questType }}" {% else %} "shortanswer" {% endif %},
+                    options: [
+                        {
+                            value:'multichoice',
+                            label:'Multiple Choice'
+                        },
+                        {
+                            value:'shortanswer',
+                            label:'Short Answer'
+                        }
+                    ],
+                    onChange: displayAnswerControls
                 }
             );
-            $('#my-pulldown3').DMPulldown({
+            $('#my-pulldown3').DMPulldown(
+                {
                     selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "testable" {% endif %},
-                    options: [{value:'ready',label:'Ready'}, {value:'testable',label:'Testable'}, {value:'dead',label:'Dead'}]
+                    options: [
+                        {
+                            value:'ready',
+                            label:'Ready'
+                        },
+                        {
+                            value:'testable',
+                            label:'Testable'
+                        },
+                        {
+                            value:'dead',
+                            label:'Dead'
+                        }
+                    ]
                 }
             );
-            $('#my-pulldown7').DMPulldown({
+            $('#my-pulldown7').DMPulldown(
+                {
                     selectedOption: {% if probId != -1 %} "{{ problem.getDifficulty }}" {% else %} "-1" {% endif %},
-                    options: [{value:'-1', label:'---'}, {value:'0',label:'0'},{value:'1',label:'1'}, {value:'2',label:'2'}, {value:'3',label:'3'},{value:'4',label:'4'},
-                        {value:'5',label:'5'},{value:'6',label:'6'},{value:'7',label:'7'},{value:'8',label:'8'},{value:'9',label:'9'}]
+                    options: [
+                        {
+                            value:'-1',
+                            label:'---'
+                        },
+                        {
+                            value:'0',
+                            label:'0'
+                        },
+                        {
+                            value:'1',
+                            label:'1'
+                        },
+                        {
+                            value:'2',
+                            label:'2'
+                        },
+                        {
+                            value:'3',
+                            label:'3'
+                        },
+                        {
+                            value:'4',
+                            label:'4'
+                        },
+                        {
+                            value:'5',
+                            label:'5'
+                        },
+                        {
+                            value:'6',
+                            label:'6'
+                        },
+                        {
+                            value:'7',
+                            label:'7'
+                        },
+                        {
+                            value:'8',
+                            label:'8'
+                        },
+                        {
+                            value:'9',
+                            label:'9'
+                        }
+                    ]
                 }
             );
-            $('#my-pulldown6').DMPulldown({
+            $('#my-pulldown6').DMPulldown(
+                {
                     selectedOption: {% if probId != -1 %} "{{ problem.usableAsExample }}" {% else %} null {% endif %},
-                    options:[{value:'True',label:'Yes'}, {value:'False',label:'No'}]
+                    options: [
+                        {
+                            value:'True',
+                            label:'Yes'
+                        },
+                        {
+                            value:'False',
+                            label:'No'
+                        }
+                    ]
                 }
             );
 
             // drop down for language selection
-            $('#language').DMPulldown({
-                selectedOption: {% if probId != -1 %} "{{ problem.language }}" {% else %} "english" {% endif %},
-                options:[{value:'english',label:'English'}, {value:'spanish',label:'Spanish'}]
-                //onChange: displayAnswerControls
+            $('#language').DMPulldown(
+                {
+                    selectedOption: {% if probId != -1 %} "{{ problem.language }}" {% else %} "english" {% endif %},
+                    options: [
+                        {
+                            value:'english',
+                            label:'English'
+                        },
+                        {
+                            value:'spanish',
+                            label:'Spanish'
+                        }
+                    ]
+                    //onChange: displayAnswerControls
                 }
             );
 
