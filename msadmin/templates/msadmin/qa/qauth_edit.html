@@ -1047,7 +1047,7 @@
         // Thus the fields of the JSON object are the grades.
         function getStandardGradeOptions(standards) {
             var options = [];
-            options.push(createPulldownOption("---", ""));
+            options.push(createPulldownOption("", "---"));
             for (var s of standards) {
                 var gr = s[0];
                 options.push(createPulldownOption(gr,gr));
@@ -1066,7 +1066,7 @@
                     break;
                 }
             }
-            options.push(createPulldownOption("---", ""));
+            options.push(createPulldownOption("", "---"));
             for (var d of gr) {
                 var domain= d[0];
                 options.push(createPulldownOption(domain,domain));
@@ -1091,7 +1091,7 @@
                     break;
                 }
             }
-            options.push(createPulldownOption("---", ""));
+            options.push(createPulldownOption("", "---"));
             for (var clust of clusters)
                 options.push(createPulldownOption(clust[0],clust[0]));
             return options;
@@ -1118,12 +1118,10 @@
                     break;
                 }
             }
-            options.push(createPulldownOption("---", ""));
+            options.push(createPulldownOption("", "---"));
             for (var s of stds)
                 options.push(createPulldownOption(s[0],s[0]));
             return options;
-
-
         }
 
         function getStandardPartOptions (standards, grade, domain, cluster, standard) {
@@ -1153,7 +1151,7 @@
                     break;
                 }
             }
-            options.push(createPulldownOption("---", ""));
+            options.push(createPulldownOption("", "---"));
             if (parts.length > 0) {
                 for (var p of parts)
                     options.push(createPulldownOption(p,p));
@@ -1164,13 +1162,12 @@
 
         function resetGradeChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
-            var opts;
-            if (grade == '---')
-                opts = [{val:"---", label:"---"}];
-            else opts = getStandardDomainOptions(allStandards,grade);
+            var opts = [{val:"", label:"---"}];
+            if (grade)
+                opts = getStandardDomainOptions(allStandards, grade);
 
             $(stdPulldownIds.domain).setDMPulldownOptions({options: opts});
-            opts = [{val:"---", label:"---"}];
+            opts = [{val:"", label:"---"}];
             $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
             $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
@@ -1178,13 +1175,13 @@
 
         function resetDomainChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
-            var opts = [{val:"---", label:"---"}];
+            var opts = [{val:"", label:"---"}];
             var domain = $(stdPulldownIds.domain).val();
-            if (domain != "---")
-                opts = getStandardClusterOptions(allStandards,grade,domain);
+            if (domain)
+                opts = getStandardClusterOptions(allStandards, grade, domain);
 
             $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
-            opts = [{val:"---", label:"---"}];
+            opts = [{val:"", label:"---"}];
             $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
@@ -1193,12 +1190,12 @@
         function resetClusterChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
             var domain = $(stdPulldownIds.domain).val();
-            var opts = [{val:"---", label:"---"}];
+            var opts = [{val:"", label:"---"}];
             var clust = $(stdPulldownIds.cluster).val();
-            if (clust != "---")
+            if (clust)
                 opts = getStandardStandardOptions(allStandards,grade,domain, clust);
             $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
-            opts = [{val:"---", label:"---"}];
+            opts = [{val:"", label:"---"}];
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
@@ -1207,61 +1204,70 @@
             var domain = $(stdPulldownIds.domain).val();
             var clust = $(stdPulldownIds.cluster).val();
             var std = $(stdPulldownIds.standard).val();
-            var opts = [{val:"---", label:"---"}];
-            if (std != "---")
+            var opts = [{val:"", label:"---"}];
+            if (std)
                 opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
         function setStandardPulldowns (ids, std) {
-            var opts = getStandardGradeOptions(allStandards);
+            // Initialize the grades dropdown with grade selected if there is a grade saved
+            var gradeOptions = getStandardGradeOptions(allStandards);
             $(ids.grade).DMPulldown(
                 {
                     selectedOption: std ? std.grade : null,
-                    options: opts,
+                    options: gradeOptions,
                     onChange: function () { resetGradeChildren(ids) }
                 }
             );
+
+            // If there is a saved domain, populate this dropdown with the saved domain selected, else initialize as blank
             if (std)
-                opts = getStandardDomainOptions(allStandards, std.grade);
+                domainOptions = getStandardDomainOptions(allStandards, std.grade);
             else
-                opts = [{val:"---", label:"---"}];
+                domainOptions = [{val:"", label:"---"}];
             $(ids.domain).DMPulldown(
                 {
-                    options: opts,
+                    options: domainOptions,
                     onChange: function () { resetDomainChildren(ids)} ,
                     selectedOption: std ? std.domain : null
                 }
             );
+
+            // If there is a saved cluster, populate this dropdown with the saved cluster selected, else initialize as blank
             if (std)
-                opts = getStandardClusterOptions(allStandards, std.grade,std.domain);
+                clusterOptions = getStandardClusterOptions(allStandards, std.grade,std.domain);
             else
-                opts = [{val:"---", label:"---"}];
+                clusterOptions = [{val:"", label:"---"}];
             $(ids.cluster).DMPulldown(
                 {
-                    options: opts,
+                    options: clusterOptions,
                     onChange: function () { resetClusterChildren(ids)} ,
                     selectedOption: std ? std.cluster : null
                 }
             );
+
+            // If there is a saved standard, populate this dropdown with the saved standard selected, else initialize as blank
             if (std)
-                opts = getStandardStandardOptions(allStandards, std.grade,std.domain,std.cluster);
+                standardOptions = getStandardStandardOptions(allStandards, std.grade,std.domain,std.cluster);
             else
-                opts = [{val:"---", label:"---"}];
+                standardOptions = [{val:"", label:"---"}];
             $(ids.standard).DMPulldown(
                 {
-                    options: opts,
+                    options: standardOptions,
                     onChange: function () { resetStandardChildren(ids)} ,
                     selectedOption: std ? std.standard : null
                 }
             );
+
+            // If there is a saved part, populate this dropdown with the saved part selected, else initialize as blank
             if (std)
-                opts = getStandardPartOptions(allStandards, std.grade,std.domain,std.cluster,std.standard);
+                partOptions = getStandardPartOptions(allStandards, std.grade,std.domain,std.cluster,std.standard);
             else
-                opts = [{val:"---", label:"---"}];
+                partOptions = [{val:"", label:"---"}];
             $(ids.part).DMPulldown(
                 {
-                    options: opts,
+                    options: partOptions,
                     selectedOption: std && std.part ? std.part : null
                 }
             );
@@ -1273,14 +1279,13 @@
             $.ajax({
                 url: url_mask,
                 type: "GET",
-                error: function (a,b,c) {
+                error: function (a, b, c) {
                     alert("Failed to get standards " + a.responseText + b);
                 },
                 success: function (data) {
                     allStandards = data.allStandards;
                     var primaryStandard = data.primaryStandard; // may be absent
                     var probStandards = data.probStandards; // may be absent
-                    var opts = getStandardGradeOptions(allStandards);
                     var stdPulldownIds = {
                         grade: '#my-pulldown8',
                         domain:'#my-pulldown9',
@@ -1305,7 +1310,7 @@
         }
 
         function pulldownDiv (id, name, label) {
-            return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
+            return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select required id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
         }
 
         function addCCSSRow (std) {
@@ -1329,21 +1334,20 @@
             $('#'+gr_Id).DMPulldown({options: opts, selectedOption: (std ? std.grade : null), onChange: function () { resetGradeChildren(ids) }});
             if (std)
                 opts = getStandardDomainOptions(allStandards,std.grade);
-            else opts = [{val:"---", label:"---"}];
+            else opts = [{val:"", label:"---"}];
             $('#'+dom_Id).DMPulldown({options: opts, selectedOption: (std ? std.domain : null), onChange: function () { resetDomainChildren(ids) }});
             if (std)
                 opts = getStandardClusterOptions(allStandards,std.grade,std.domain);
-            else opts = [{val:"---", label:"---"}];
+            else opts = [{val:"", label:"---"}];
             $('#'+clust_Id).DMPulldown({options: opts, selectedOption: (std ? std.cluster : null), onChange: function () { resetClusterChildren(ids) }});
             if (std)
                 opts = getStandardStandardOptions(allStandards,std.grade,std.domain,std.cluster);
-            else opts = [{val:"---", label:"---"}];
+            else opts = [{val:"", label:"---"}];
             $('#'+std_Id).DMPulldown({options: opts, selectedOption: (std ? std.standard : null), onChange: function () { resetStandardChildren(ids) }});
             if (std)
                 opts = getStandardPartOptions(allStandards,std.grade,std.domain,std.cluster,std.standard);
             else opts = [{val:"---", label:"---"}];
             $('#'+part_Id).DMPulldown({options: opts, selectedOption: (std ? std.part : null)});
-
         }
 
         function delCCSSRow (id) {

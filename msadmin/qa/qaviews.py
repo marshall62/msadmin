@@ -233,8 +233,8 @@ def save_problem (request):
         clusters = post.getlist('stdCluster')
         standards = post.getlist('stdStandard')
         parts = post.getlist('stdPart')
-        errs, addMsg = processCCSS(p,grades,domains,clusters,standards,parts)
-        
+        errs, addMsg = processCCSS(p, grades, domains, clusters, standards, parts)
+
         p.save()
         probId = p.pk
 
