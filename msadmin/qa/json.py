@@ -126,68 +126,68 @@ def save_problem_media (request, probId):
         return JsonResponse(d)
 
 
-def processCCSS (prob, grades,domains,clusters,standards,parts):
-    addMsg = ""
-    errors = False
-    count = 0
-    probStdIds = []
-    for grade,domain,cluster,standard,part in zip(grades,domains,clusters,standards,parts):
-        if grade not in ["---", 'undefined'] and domain not in ["---", 'undefined']  and cluster not in ["---", 'undefined'] and standard not in ["---", 'undefined']:
-            if grade != 'H':
-                standardId = grade+"."+domain+"."+cluster+"."+standard
-                catCode = grade+"."+domain
-                clustABCD = cluster
-            else:
-                standardId = domain+"."+cluster+"."+standard
-                catCode = domain+"."+cluster
-                clustABCD = standard
-            if part not in ["---", 'undefined']:
-                standardId += "." + part
-        else:
-            standardId = None
+# def processCCSS (prob, grades,domains,clusters,standards,parts):
+#     addMsg = ""
+#     errors = False
+#     count = 0
+#     probStdIds = []
+#     for grade,domain,cluster,standard,part in zip(grades,domains,clusters,standards,parts):
+#         if grade not in ["---", 'undefined'] and domain not in ["---", 'undefined']  and cluster not in ["---", 'undefined'] and standard not in ["---", 'undefined']:
+#             if grade != 'H':
+#                 standardId = grade+"."+domain+"."+cluster+"."+standard
+#                 catCode = grade+"."+domain
+#                 clustABCD = cluster
+#             else:
+#                 standardId = domain+"."+cluster+"."+standard
+#                 catCode = domain+"."+cluster
+#                 clustABCD = standard
+#             if part not in ["---", 'undefined']:
+#                 standardId += "." + part
+#         else:
+#             standardId = None
 
-        foundStd = Standard.objects.filter(idABC=standardId)
-        if not foundStd.exists() or foundStd.count() == 0:
-            givenStd = (grade+"."+domain+"."+cluster+"."+standard+"."+part).replace("undefined",'---')
-            addMsg += "Standard ID " + givenStd + " is not valid<br>"
-            errors = True
-            stdId = None
-            clustId = None
-        else:
-            foundStd = foundStd.first()
-            stdId = foundStd.id
-            clust = Cluster.objects.filter(categoryCode=catCode, clusterABCD=clustABCD)
-            if clust.count() > 0:
-                clustId = clust.first().id
-            else:
-                clustId = None
-        # The first CCSS is considered the primary and we need to set the problems standard and cluster Ids.
-        if count == 0:
-            prob.setFields(standardId=stdId,clusterId=clustId)
-        # Every CCSS should be entered into the problemStandardMap
-        if stdId:
-            probStdIds.append(stdId)
+#         foundStd = Standard.objects.filter(idABC=standardId)
+#         if not foundStd.exists() or foundStd.count() == 0:
+#             givenStd = (grade+"."+domain+"."+cluster+"."+standard+"."+part).replace("undefined",'---')
+#             addMsg += "Standard ID " + givenStd + " is not valid<br>"
+#             errors = True
+#             stdId = None
+#             clustId = None
+#         else:
+#             foundStd = foundStd.first()
+#             stdId = foundStd.id
+#             clust = Cluster.objects.filter(categoryCode=catCode, clusterABCD=clustABCD)
+#             if clust.count() > 0:
+#                 clustId = clust.first().id
+#             else:
+#                 clustId = None
+#         # The first CCSS is considered the primary and we need to set the problems standard and cluster Ids.
+#         if count == 0:
+#             prob.setFields(standardId=stdId,clusterId=clustId)
+#         # Every CCSS should be entered into the problemStandardMap
+#         if stdId:
+#             probStdIds.append(stdId)
 
-        count += 1
-    if errors:
-        return errors, addMsg
-    # Go through the ProblemStandardMap and delete any standards that are no longer in the list
-    # and add (or update the modtimestamp) of standards that are in the list.
-    pstd = ProblemStandardMap.objects.filter(probId=prob.pk)
-    if pstd.exists():
-        for m in pstd:
-            # If the map row already exists remove it from list of standards
-            if m.stdId in probStdIds:
-                probStdIds.remove(m.stdId)
-            # delete a map if its not in the list being sent by the gui
-            else:
-                m.delete()
-    # The remaining standards in probStds will be newly added ones
-    for ps in probStdIds:
-        psm = ProblemStandardMap(probId=prob.pk, stdId=ps)
-        psm.save()
+#         count += 1
+#     if errors:
+#         return errors, addMsg
+#     # Go through the ProblemStandardMap and delete any standards that are no longer in the list
+#     # and add (or update the modtimestamp) of standards that are in the list.
+#     pstd = ProblemStandardMap.objects.filter(probId=prob.pk)
+#     if pstd.exists():
+#         for m in pstd:
+#             # If the map row already exists remove it from list of standards
+#             if m.stdId in probStdIds:
+#                 probStdIds.remove(m.stdId)
+#             # delete a map if its not in the list being sent by the gui
+#             else:
+#                 m.delete()
+#     # The remaining standards in probStds will be newly added ones
+#     for ps in probStdIds:
+#         psm = ProblemStandardMap(probId=prob.pk, stdId=ps)
+#         psm.save()
 
-    return errors, addMsg
+#     return errors, addMsg
 
 # URL: POST /problem/<id>/metaInfo
 # write the fields into the problem table and return nothing.
@@ -195,11 +195,11 @@ def processCCSS (prob, grades,domains,clusters,standards,parts):
 def save_problem_meta_info (request, probId):
     if request.method == 'POST':
         post = request.POST
-        grades = post.getlist('stdGrade')
-        domains = post.getlist('stdDomain')
-        clusters = post.getlist('stdCluster')
-        standards = post.getlist('stdStandard')
-        parts = post.getlist('stdPart')
+        # grades = post.getlist('stdGrade')
+        # domains = post.getlist('stdDomain')
+        # clusters = post.getlist('stdCluster')
+        # standards = post.getlist('stdStandard')
+        # parts = post.getlist('stdPart')
         # standardId = post['standardId']
         # clusterId = post['clusterId']
         authorNotes = post['authorNotes']
@@ -222,7 +222,7 @@ def save_problem_meta_info (request, probId):
         except: video = None
         addMsg = ""
         p = get_object_or_404(Problem, pk=probId)
-        errs, addMsg = processCCSS(p,grades,domains,clusters,standards,parts)
+        # errs, addMsg = processCCSS(p,grades,domains,clusters,standards,parts)
 
         if 'snapshotFile' in request.FILES:
             ss_file = request.FILES['snapshotFile']

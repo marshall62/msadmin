@@ -79,53 +79,67 @@
             <br>
 
             {# Problem Nick Name #}
-            <div class="input-group">
-                <span class="input-group-addon">Nick Name</span>
-                {% if probId == -1 %}
-                    <input id="nickname" type="text" class="form-control" required name="nickname" placeholder="Nick Name">
-                {% else %}
-                    <input id="nickname" type="text" class="form-control" required name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
-                {% endif %}
+            <div class="row">
+                <div class="col col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Nick Name</span>
+                        {% if probId == -1 %}
+                            <input id="nickname" type="text" class="form-control" required name="nickname" placeholder="Nick Name">
+                        {% else %}
+                            <input id="nickname" type="text" class="form-control" required name="nickname" value = "{{ problem.nickname }}" placeholder="Nick Name">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <br>
 
             {# Problem Statement #}
-            <div class="input-group">
-                <span class="input-group-addon">Statement</span>
-                {% if probId == -1 %}
-                    <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML"></textarea>
-                {% else %}
-                    <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
-                {% endif %}
+            <div class="row">
+                <div class="col col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Statement</span>
+                        {% if probId == -1 %}
+                            <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML"></textarea>
+                        {% else %}
+                            <textarea rows="8" cols="80" required name="statementHTML" class="form-control" id="statementHTML">{{ problem.statementHTML }}</textarea>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <br>
 
             {# Audio File #}
-            <div class="form-inline">
-                <div class="input-group">
-                    <span class="input-group-addon">Audio File</span>
-                    {% if probId == -1  or not problem.audioResource %}
-                        <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
-                    {% else %}
-                        <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
+            <div class="form-inline row">
+                <div class="col col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Audio File</span>
+                        {% if probId == -1  or not problem.audioResource %}
+                            <input id="audioResource" type="text" class="form-control" readonly name="audioResource" placeholder="">
+                        {% else %}
+                            <input id="audioResource" type="text" class="form-control" readonly name="audioResource" value = "{{ problem.audioResource }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col col-sm-4">
+                    <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
+                    <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
+                </div>
+                <div class="col col-sm-4">
+                    {% if problem and problem.audioResource %}
+                        <audio id="problem_audio_player" controls>
+                            <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
+                            Your browser does not support the audio tag.
+                        </audio>
+                        <a class="remove_problem_audio" href="#">
+                            <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the problem"></span>
+                        </a>
                     {% endif %}
                 </div>
-                <input class="form-control mb-2 mr-sm-2 mb-sm-0" name="audioFile" type="file">
-                <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A sound file that plays when the hint is shown"></span></a>
-                {% if problem and problem.audioResource %}
-                    <audio id="problem_audio_player" controls>
-                        <source src="{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}/{{ problem.getAudioFile }}" type="audio/mpeg">
-                        Your browser does not support the audio tag.
-                    </audio>
-                    <a class="remove_problem_audio" href="#">
-                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-original-title="Remove this audio from the problem"></span>
-                    </a>
-                {% endif %}
             </div>
             <br>
 
             {# The below div is filled with ImageControls in the page load js function #}
-            <div id="problemImageControls" class="form-inline">
+            <div id="problemImageControls" class="form-inline row">
             </div>
             <br>
 
@@ -265,9 +279,12 @@
                 </div>
                 <div class="col col-sm-2">
                     <a onclick="openLayoutTool()" class="btn btn-primary">Layout Tool</a>
-                </div>
-                <div class="col col-xs-2">
-                    <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Use the layout tool to create a layout and copy/paste the string into the layout field below"></span></a>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-question-sign"
+                            data-toggle="tooltip"
+                            data-original-title="Use the layout tool to create a layout and copy/paste the string into the layout field below">
+                        </span>
+                    </a>
                 </div>
             </div>
             <br>
@@ -283,6 +300,48 @@
                 <span class="input-group-addon">
                     <a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Copy/paste from layout tool"></span></a>
                 </span>
+            </div>
+            <br>
+
+            <div id="ccssSelectors">
+                <div class="row">
+                    <a id="addMedia" onclick="addCCSSRow()">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span>
+                    </a>
+                </div>
+                <div class="row" style="height: 45px;">
+                    <div class="col col-sm-2">
+                        <div class="input-group">
+                            <span class="input-group-addon">Gr</span>
+                            <select id="my-pulldown8" required name='stdGrade' class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col col-sm-2">
+                        <div class="input-group">
+                            <span class="input-group-addon">Dom</span>
+                            <select id="my-pulldown9" required name='stdDomain' class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col col-sm-2">
+                        <div class="input-group">
+                            <span class="input-group-addon">Clust</span>
+                            <select id="my-pulldown10" required name='stdCluster' class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col col-sm-2">
+                        <div class="input-group">
+                            <span class="input-group-addon">Std</span>
+                            <select id="my-pulldown11" required name='stdStandard' class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col col-sm-2">
+                        <div class="input-group">
+                            <span class="input-group-addon">Part</span>
+                            <select id="my-pulldown12" required name='stdPart' class="form-control"></select>
+                        </div>
+                    </div>
+                    {#<input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
+                </div>
             </div>
             <br>
 
@@ -340,8 +399,7 @@
 
 
     {% if probId != -1 %}
-    <div class="container"></div>
-    <div id="probTabs" class="container">
+    <div id="probTabs">
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="#tab1" data-toggle="tab">Hints</a>
@@ -436,10 +494,10 @@
 
             <div class="tab-pane" id="tab3">
                 <form id="metainfoForm">
-                    <br>
+                    {% comment %} <br> {% endcomment %}
                     {#<div class="form-inline">#}
                     {#<div class="input-group">#}
-                    <div id="ccssSelectors">
+                    {% comment %} <div id="ccssSelectors">
                         <div class="row">
                             <a id="addMedia" onclick="addCCSSRow()" href="#metainfoForm">
                                 <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-original-title="Add a CCSS"></span>
@@ -478,7 +536,7 @@
                             </div>
                             {#<input id="standardId" type="text" class="form-control" name="standardId" value = "{{ problem.standardId }}">#}
                         </div>
-                    </div>
+                    </div> {% endcomment %}
                     {% comment "Domain ID" %}
                     <div class="input-group">
                         <span class="input-group-addon">Domain ID</span>
@@ -753,7 +811,7 @@
         var numAnswers = 0; // keeps track of how many short answer fields there are.
         var hintImageControls;  // an object that needs to be global because it gets manipulated by callbacks in hints.js
         var hintEditMode; // set to either NEW_HINT or EXISTING_HINT
-        var idCount=0;
+        var idCount = 0;
 
         {#var mediaURL = "{{ MEDIA_URL }}";#}
         {% if problem %}
@@ -782,17 +840,29 @@
         const LAYOUT_TOOL_URL = "http://rose.cs.umass.edu/woj/WoAdmin?action=AdminEditProblemFormat&problemId=%s";
         const DOWNLOAD_MEDIA_URL = "{% url 'qauth_download_prob_media' probId=12345 %}";
 
-        function createPulldownOption (value, label, description) {
-            return {label: label+(description ? ("  "+description) : ""), value: value};
+        function displayAnswerControls () {
+            var val = $('#my-pulldown2').val();
+            answerType = val;
+            if (val == 'shortanswer') {
+                $('#shortanswertablebody :input').attr('required', true);
+                $('#shortAnswer').show();
+                $('#multichoices').hide();
+
+                if (numAnswers == 0)
+                    addShortAnswerRows(1);
+            }
+            else {
+                $('#shortanswertablebody :input').removeAttr('required');
+                $('#shortAnswer').hide();
+                $('#multichoices').show();
+                if (numChoices == 0)
+                    addMultiChoiceRows(2);
+            }
         }
 
         function saveProblemMetaInfo() {
             var form = $('#metainfoForm')[0]; // get the Javascript obj for the hint form
             var data = new FormData(form); // put all the form fields into data
-            {#console.log("stdGrades");#}
-            {#console.log(data.getAll("stdGrade"));#}
-            {#console.log("stdDomains");#}
-            {#console.log(data.getAll("stdDomain"));#}
             var probId = theProblem.id;
             var url = SAVE_META_INFO_URL.replace('12345', theProblem.id);
             $.ajax({
@@ -849,204 +919,6 @@
             else return true;
         }
 
-        //
-        function delCCSSRow (id) {
-            $('#'+id).remove();
-        }
-
-        /* Add a div to the end of the set of rows contained in the div #ccssSelectors
-        <div class="row">
-            <div class="col col-sm-2">
-                <div id="my-pulldown8">
-                </div>
-            </div>
-            <div class="col col-sm-2">
-                <div id="my-pulldown9">
-                </div>
-            </div>
-            <div class="col col-sm-2">
-                <div id="my-pulldown10">
-                </div>
-            </div>
-            <div class="col col-sm-2">
-                <div id="my-pulldown11">
-                </div>
-            </div>
-            <div class="col col-sm-2">
-                <div id="my-pulldown12">
-                </div>
-            </div>
-        </div> */
-        function addCCSSRow (std) {
-            var div_id=genId();
-            var gr_Id=genId();
-            var dom_Id=genId();
-            var clust_Id=genId();
-            var std_Id=genId();
-            var part_Id=genId();
-            $('#ccssSelectors').append('<div id="' +div_id+ '" class="row" style="height: 45px;">'+
-                {#'<div class="col col-sm-1"><a onclick="delCCSSRow()" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a></div>'+#}
-                '<a onclick="delCCSSRow(\'' +div_id+ '\')" href="#metainfoForm"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a>'+
-                '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Gr') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Dom') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(clust_Id,'stdCluster','Clust') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(std_Id,'stdStandard','Std') + '</div>' +
-                '<div class="col col-sm-2">' + pulldownDiv(part_Id,'stdPart','Part') + '</div>' +
-                '</div>');
-            var opts = getStandardGradeOptions(allStandards);
-
-            var ids = {grade:'#'+gr_Id, domain:'#'+dom_Id, cluster: '#'+clust_Id, standard: '#'+std_Id, part:'#'+part_Id};
-            $('#'+gr_Id).DMPulldown({options: opts, selectedOption: (std ? std.grade : null), onChange: function () { resetGradeChildren(ids) }});
-            if (std)
-                opts = getStandardDomainOptions(allStandards,std.grade);
-            else opts = [{val:"---", label:"---"}];
-            $('#'+dom_Id).DMPulldown({options: opts, selectedOption: (std ? std.domain : null), onChange: function () { resetDomainChildren(ids) }});
-            if (std)
-                opts = getStandardClusterOptions(allStandards,std.grade,std.domain);
-            else opts = [{val:"---", label:"---"}];
-            $('#'+clust_Id).DMPulldown({options: opts, selectedOption: (std ? std.cluster : null), onChange: function () { resetClusterChildren(ids) }});
-            if (std)
-                opts = getStandardStandardOptions(allStandards,std.grade,std.domain,std.cluster);
-            else opts = [{val:"---", label:"---"}];
-            $('#'+std_Id).DMPulldown({options: opts, selectedOption: (std ? std.standard : null), onChange: function () { resetStandardChildren(ids) }});
-            if (std)
-                opts = getStandardPartOptions(allStandards,std.grade,std.domain,std.cluster,std.standard);
-            else opts = [{val:"---", label:"---"}];
-            $('#'+part_Id).DMPulldown({options: opts, selectedOption: (std ? std.part : null)});
-
-        }
-
-        function genId () {
-            return 'pulldown_selector_id-' + ++idCount;
-        }
-
-        function pulldownDiv (id, name, label) {
-            return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
-        }
-
-        // When this page loads it sends an AJAX request to get all the common core standards as an ordered dictionary.
-        // The standards ultimately populate 4 pulldown menus (my-pulldown8, 9, 10, 11).
-        // This function extracts the grades out of the standards and builds the first pulldown menu (8).
-        // The other menus get values stuck in them when an option from grade pulldown is selected.
-        // The standards JSON object is a Python OrderedDict such that the keys of this ORderedDict are the grades.
-        // Thus the fields of the JSON object are the grades.
-        function getStandardGradeOptions(standards) {
-            var options = [];
-            options.push(createPulldownOption("---","---"));
-            for (var s of standards) {
-                var gr = s[0];
-                options.push(createPulldownOption(gr,gr));
-            }
-            return options;
-        }
-
-        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
-        // options for each field in this object.
-        function getStandardDomainOptions (standards, grade) {
-            var gr;
-            var options = [];
-            for (var s of standards) {
-                if (s[0] == grade) {
-                    gr = s[1];
-                    break;
-                }
-            }
-            options.push(createPulldownOption("---","---"));
-            for (var d of gr) {
-                var domain= d[0];
-                options.push(createPulldownOption(domain,domain));
-            }
-            return options;
-        }
-
-        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
-        // options for each field in this object.
-        function getStandardClusterOptions (standards, grade, domain) {
-            var domains, clusters;
-            var options = [];
-            for (var s of standards) {
-                if (s[0] == grade) {
-                    domains = s[1];
-                    break;
-                }
-            }
-            for (var d of domains) {
-                if (d[0] == domain) {
-                    clusters = d[1];
-                    break;
-                }
-            }
-            options.push(createPulldownOption("---","---"));
-            for (var clust of clusters)
-                options.push(createPulldownOption(clust[0],clust[0]));
-            return options;
-        }
-
-        function getStandardStandardOptions (standards, grade, domain, cluster) {
-            var domains, clusters, stds;
-            var options = [];
-            for (var s of standards) {
-                if (s[0] == grade) {
-                    domains = s[1];
-                    break;
-                }
-            }
-            for (var d of domains) {
-                if (d[0] == domain) {
-                    clusters = d[1];
-                    break;
-                }
-            }
-            for (var clust of clusters) {
-                if (clust[0] == cluster) {
-                    stds = clust[1];
-                    break;
-                }
-            }
-            options.push(createPulldownOption("---","---"));
-            for (var s of stds)
-                options.push(createPulldownOption(s[0],s[0]));
-            return options;
-
-
-        }
-
-        function getStandardPartOptions (standards, grade, domain, cluster, standard) {
-            var domains, clusters, stds, parts;
-            var options = [];
-            for (var s of standards) {
-                if (s[0] == grade) {
-                    domains = s[1];
-                    break;
-                }
-            }
-            for (var d of domains) {
-                if (d[0] == domain) {
-                    clusters = d[1];
-                    break;
-                }
-            }
-            for (var clust of clusters) {
-                if (clust[0] == cluster) {
-                    stds = clust[1];
-                    break;
-                }
-            }
-            for (var std of stds) {
-                if (std[0] == standard) {
-                    parts = std[1];
-                    break;
-                }
-            }
-            options.push(createPulldownOption("---","---"));
-            if (parts.length > 0) {
-                for (var p of parts)
-                    options.push(createPulldownOption(p,p));
-                return options;
-            }
-            else return [{val:"---", label:"---"}];
-        }
-
         // Callback function.  When this HTML file opens on an existing problem, an AJAX call is made to get the JSON
         // of the problem.  The JSON data is sent to this function to initialize internal state in the page's javascript
         function problemInit (data) {
@@ -1086,24 +958,6 @@
             }
         }
 
-        function removeProblemAudio () {
-            if (confirm("Do you want to remove the problem audio")) {
-                // send the delete request and remove the image div from the problem form
-                var url_mask = REMOVE_PROBLEM_AUDIO.replace('12345', theProblem.id);
-                $.ajax({
-                    url: url_mask,
-                    type: "DELETE",
-                    error: function (a, b, c) {
-                        alert("Failed to get problem " + a.responseText + b);
-                    },
-                    success: function (data) {
-                        console.log("successful delete of problem audio");
-                        resetProbAudioControls();
-                    }
-                });
-            }
-        }
-
         function removeHintAudio () {
             if (confirm("Do you want to remove the hint audio")) {
                 // send the delete request and remove the image div from the problem form
@@ -1127,24 +981,41 @@
             $('#haudioResource').val('');
         }
 
+        function removeProblemAudio () {
+            if (confirm("Do you want to remove the problem audio")) {
+                // send the delete request and remove the image div from the problem form
+                var url_mask = REMOVE_PROBLEM_AUDIO.replace('12345', theProblem.id);
+                $.ajax({
+                    url: url_mask,
+                    type: "DELETE",
+                    error: function (a, b, c) {
+                        alert("Failed to get problem " + a.responseText + b);
+                    },
+                    success: function (data) {
+                        console.log("successful delete of problem audio");
+                        resetProbAudioControls();
+                    }
+                });
+            }
+        }
+
         function resetProbAudioControls () {
             $('.remove_problem_audio').remove();
             $('#problem_audio_player').remove();
             $('#audioResource').val('');
         }
 
-        function showPreview () {
-            var url = sprintf(PREVIEW_URL,theProblem.id);
+        function downloadMedia () {
+            var url = DOWNLOAD_MEDIA_URL.replace('12345', theProblem.id);
             window.open(url);
+        }
+
+        function createPulldownOption (value, label, description) {
+            return {label: label+(description ? ("  "+description) : ""), value: value};
         }
 
         function openLayoutTool () {
             var url = sprintf(LAYOUT_TOOL_URL,theProblem ? theProblem.id : "");
-            window.open(url);
-        }
-
-        function downloadMedia () {
-            var url = DOWNLOAD_MEDIA_URL.replace('12345', theProblem.id);
             window.open(url);
         }
 
@@ -1164,21 +1035,157 @@
                         selectedOption: {% if problem %} "{{ problem.getLayoutId }}" {% else %} null {% endif %},
                         options: opts
                     });
-
-
-
                 }
             });
         }
 
-        function resetStandardChildren (stdPulldownIds) {
+        // When this page loads it sends an AJAX request to get all the common core standards as an ordered dictionary.
+        // The standards ultimately populate 4 pulldown menus (my-pulldown8, 9, 10, 11).
+        // This function extracts the grades out of the standards and builds the first pulldown menu (8).
+        // The other menus get values stuck in them when an option from grade pulldown is selected.
+        // The standards JSON object is a Python OrderedDict such that the keys of this ORderedDict are the grades.
+        // Thus the fields of the JSON object are the grades.
+        function getStandardGradeOptions(standards) {
+            var options = [];
+            options.push(createPulldownOption("---", ""));
+            for (var s of standards) {
+                var gr = s[0];
+                options.push(createPulldownOption(gr,gr));
+            }
+            return options;
+        }
+
+        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
+        // options for each field in this object.
+        function getStandardDomainOptions (standards, grade) {
+            var gr;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    gr = s[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---", ""));
+            for (var d of gr) {
+                var domain= d[0];
+                options.push(createPulldownOption(domain,domain));
+            }
+            return options;
+        }
+
+        // Given the grade, go into the standard JSON and get the value of the field for the grade and then return a list of
+        // options for each field in this object.
+        function getStandardClusterOptions (standards, grade, domain) {
+            var domains, clusters;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    domains = s[1];
+                    break;
+                }
+            }
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---", ""));
+            for (var clust of clusters)
+                options.push(createPulldownOption(clust[0],clust[0]));
+            return options;
+        }
+
+        function getStandardStandardOptions (standards, grade, domain, cluster) {
+            var domains, clusters, stds;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    domains = s[1];
+                    break;
+                }
+            }
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
+                    break;
+                }
+            }
+            for (var clust of clusters) {
+                if (clust[0] == cluster) {
+                    stds = clust[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---", ""));
+            for (var s of stds)
+                options.push(createPulldownOption(s[0],s[0]));
+            return options;
+
+
+        }
+
+        function getStandardPartOptions (standards, grade, domain, cluster, standard) {
+            var domains, clusters, stds, parts;
+            var options = [];
+            for (var s of standards) {
+                if (s[0] == grade) {
+                    domains = s[1];
+                    break;
+                }
+            }
+            for (var d of domains) {
+                if (d[0] == domain) {
+                    clusters = d[1];
+                    break;
+                }
+            }
+            for (var clust of clusters) {
+                if (clust[0] == cluster) {
+                    stds = clust[1];
+                    break;
+                }
+            }
+            for (var std of stds) {
+                if (std[0] == standard) {
+                    parts = std[1];
+                    break;
+                }
+            }
+            options.push(createPulldownOption("---", ""));
+            if (parts.length > 0) {
+                for (var p of parts)
+                    options.push(createPulldownOption(p,p));
+                return options;
+            }
+            else return [{val:"---", label:"---"}];
+        }
+
+        function resetGradeChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
-            var domain = $(stdPulldownIds.domain).val();
-            var clust = $(stdPulldownIds.cluster).val();
-            var std = $(stdPulldownIds.standard).val();
+            var opts;
+            if (grade == '---')
+                opts = [{val:"---", label:"---"}];
+            else opts = getStandardDomainOptions(allStandards,grade);
+
+            $(stdPulldownIds.domain).setDMPulldownOptions({options: opts});
+            opts = [{val:"---", label:"---"}];
+            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
+            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
+            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
+        }
+
+        function resetDomainChildren (stdPulldownIds) {
+            var grade = $(stdPulldownIds.grade).val();
             var opts = [{val:"---", label:"---"}];
-            if (std != "---")
-                opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
+            var domain = $(stdPulldownIds.domain).val();
+            if (domain != "---")
+                opts = getStandardClusterOptions(allStandards,grade,domain);
+
+            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
+            opts = [{val:"---", label:"---"}];
+            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
@@ -1195,33 +1202,15 @@
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
         }
 
-        function resetDomainChildren (stdPulldownIds) {
+        function resetStandardChildren (stdPulldownIds) {
             var grade = $(stdPulldownIds.grade).val();
-            var opts = [{val:"---", label:"---"}];
             var domain = $(stdPulldownIds.domain).val();
-            if (domain != "---")
-                opts = getStandardClusterOptions(allStandards,grade,domain);
-
-            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
-            opts = [{val:"---", label:"---"}];
-            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
+            var clust = $(stdPulldownIds.cluster).val();
+            var std = $(stdPulldownIds.standard).val();
+            var opts = [{val:"---", label:"---"}];
+            if (std != "---")
+                opts = getStandardPartOptions(allStandards,grade,domain, clust,std);
             $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
-
-        }
-
-        function resetGradeChildren (stdPulldownIds) {
-            var grade = $(stdPulldownIds.grade).val();
-            var opts;
-            if (grade == '---')
-                opts = [{val:"---", label:"---"}];
-            else opts = getStandardDomainOptions(allStandards,grade);
-
-            $(stdPulldownIds.domain).setDMPulldownOptions({options: opts});
-            opts = [{val:"---", label:"---"}];
-            $(stdPulldownIds.cluster).setDMPulldownOptions({options: opts});
-            $(stdPulldownIds.standard).setDMPulldownOptions({options: opts});
-            $(stdPulldownIds.part).setDMPulldownOptions({options: opts});
-
         }
 
         function setStandardPulldowns (ids, std) {
@@ -1301,35 +1290,69 @@
                     }
                     // TODO The first CCSS row needs to be deleteable but this means some
                     // additional work to make sure one CCSS is always remaining.
-                    setStandardPulldowns(stdPulldownIds,primaryStandard);
-                    if (probStandards)
+                    setStandardPulldowns(stdPulldownIds, primaryStandard);
+                    if (probStandards) {
                         for (std of probStandards) {
                             addCCSSRow(std);
                         }
-
+                    }
                 }
             });
+        }
+
+        function genId () {
+            return 'pulldown_selector_id-' + ++idCount;
+        }
+
+        function pulldownDiv (id, name, label) {
+            return '<div class="input-group"><span class="input-group-addon">' +label+ '</span><select id="' +id+ '" name="' +name+ '" class="form-control"></select> </div>'
+        }
+
+        function addCCSSRow (std) {
+            var div_id=genId();
+            var gr_Id=genId();
+            var dom_Id=genId();
+            var clust_Id=genId();
+            var std_Id=genId();
+            var part_Id=genId();
+            $('#ccssSelectors').append('<div id="' +div_id+ '" class="row" style="height: 45px;">'+
+                '<a id="removeMedia" onclick="delCCSSRow(\'' +div_id+ '\')"><span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-original-title="Remove this standard"></span></a>'+
+                '<div class="col col-sm-2">' + pulldownDiv(gr_Id,'stdGrade','Gr') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(dom_Id,'stdDomain','Dom') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(clust_Id,'stdCluster','Clust') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(std_Id,'stdStandard','Std') + '</div>' +
+                '<div class="col col-sm-2">' + pulldownDiv(part_Id,'stdPart','Part') + '</div>' +
+                '</div>');
+            var opts = getStandardGradeOptions(allStandards);
+
+            var ids = {grade:'#'+gr_Id, domain:'#'+dom_Id, cluster: '#'+clust_Id, standard: '#'+std_Id, part:'#'+part_Id};
+            $('#'+gr_Id).DMPulldown({options: opts, selectedOption: (std ? std.grade : null), onChange: function () { resetGradeChildren(ids) }});
+            if (std)
+                opts = getStandardDomainOptions(allStandards,std.grade);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+dom_Id).DMPulldown({options: opts, selectedOption: (std ? std.domain : null), onChange: function () { resetDomainChildren(ids) }});
+            if (std)
+                opts = getStandardClusterOptions(allStandards,std.grade,std.domain);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+clust_Id).DMPulldown({options: opts, selectedOption: (std ? std.cluster : null), onChange: function () { resetClusterChildren(ids) }});
+            if (std)
+                opts = getStandardStandardOptions(allStandards,std.grade,std.domain,std.cluster);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+std_Id).DMPulldown({options: opts, selectedOption: (std ? std.standard : null), onChange: function () { resetStandardChildren(ids) }});
+            if (std)
+                opts = getStandardPartOptions(allStandards,std.grade,std.domain,std.cluster,std.standard);
+            else opts = [{val:"---", label:"---"}];
+            $('#'+part_Id).DMPulldown({options: opts, selectedOption: (std ? std.part : null)});
 
         }
 
-        function displayAnswerControls () {
-            var val = $('#my-pulldown2').val();
-            answerType = val;
-            if (val == 'shortanswer') {
-                $('#shortanswertablebody :input').attr('required', true);
-                $('#shortAnswer').show();
-                $('#multichoices').hide();
+        function delCCSSRow (id) {
+            $('#'+id).remove();
+        }
 
-                if (numAnswers == 0)
-                    addShortAnswerRows(1);
-            }
-            else {
-                $('#shortanswertablebody :input').removeAttr('required');
-                $('#shortAnswer').hide();
-                $('#multichoices').show();
-                if (numChoices == 0)
-                    addMultiChoiceRows(2);
-            }
+        function showPreview () {
+            var url = sprintf(PREVIEW_URL,theProblem.id);
+            window.open(url);
         }
 
         ///////////   The main function called at page load time /////////////////
@@ -1346,11 +1369,9 @@
             // This will be replaced by appropriate controls if we are loading an existing problem
             exposeShortAnswerControls()
 
-
             $('#addChoice').click(function (x) {
                 addMultiChoiceRows(1);
             });
-
 
             $('#addAnswer').click(function (x) {
                 addShortAnswerRows(1);
@@ -1358,9 +1379,7 @@
 
             $('#hinttbody').sortable();
             $( ".dnd" ).droppable({
-                drop: function( event, ui ) {
-
-                }
+                drop: function( event, ui ) {}
             });
             $('.dnd').on('drop',function (event, ui) {
 
@@ -1418,11 +1437,15 @@
                 width: "95%"
             });
             {#$("#topicSelect").on('change', function () { alert("selected topics " + $('#topicSelect').val()) });#}
+
+            // Image URL
             {% if problem and problem.imageURL %}
                 var imgURL = '{{ problem.imageURL }}';
             {% else %}
                 var imgURL = null;
             {% endif %}
+
+            // Image Name and ID
             {% if problem and problem.imageFile != None %}
                 var imgFilename = '{{ problem.imageFile.filename }}';
                 var imgFileId = '{{ problem.imageFile.id }}';
@@ -1430,24 +1453,45 @@
                 var imgFilename = null;
                 var imgFileId = null;
             {% endif %}
+
+            // Image URI
             {% if problem %}
                 var imgURI = '{{ MEDIA_URL }}{{ qaDir }}{{ problem.getProblemDir }}'; // URI to image within our apache root . Add on imageFilename for full URL
             {% else %}
                 var imgURI = '{{ MEDIA_URL }}{{ qaDir }}';
             {% endif %}
-            var problemImageControls = new ImageControls(imgURL,imgFilename,imgFileId,imgURI);
-            problemImageControls.mountComponent('problemImageControls',{imageFileName:'imageFile', delImageClassName: 'a_problem_delete_img'});
+
+            var problemImageControls = new ImageControls(imgURL, imgFilename, imgFileId, imgURI);
+            problemImageControls.mountComponent('problemImageControls', {imageFileName:'imageFile', delImageClassName: 'a_problem_delete_img'});
             // handle the click on the X next to a problem image to get rid of it.
             $(document).on('click', '.a_problem_delete_img', function(){
                 removeProblemImage(problemImageControls);
             });
 
             // The problem and hint both preview the image and have an X icon that can be clicked to remove the hint
-            // from the problem/hint.   This is the listener.
+            // from the problem/hint. This is the listener.
             $(document).on('click', '.a_hint_delete_img', function(){
                 removeHintImage(hintImageControls);
             });
 
+            // Language Selection Dropdown
+            $('#language').DMPulldown(
+                {
+                    selectedOption: {% if probId != -1 %} "{{ problem.language }}" {% else %} "english" {% endif %},
+                    options: [
+                        {
+                            value:'english',
+                            label:'English'
+                        },
+                        {
+                            value:'spanish',
+                            label:'Spanish'
+                        }
+                    ]
+                }
+            );
+
+            // Answer Type Dropdown
             $('#my-pulldown2').DMPulldown(
                 {
                     selectedOption: {% if probId != -1 %} "{{ problem.questType }}" {% else %} "shortanswer" {% endif %},
@@ -1464,25 +1508,8 @@
                     onChange: displayAnswerControls
                 }
             );
-            $('#my-pulldown3').DMPulldown(
-                {
-                    selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "testable" {% endif %},
-                    options: [
-                        {
-                            value:'ready',
-                            label:'Ready'
-                        },
-                        {
-                            value:'testable',
-                            label:'Testable'
-                        },
-                        {
-                            value:'dead',
-                            label:'Dead'
-                        }
-                    ]
-                }
-            );
+
+            // Difficulty Dropdown
             $('#my-pulldown7').DMPulldown(
                 {
                     selectedOption: {% if probId != -1 %} "{{ problem.getDifficulty }}" {% else %} "-1" {% endif %},
@@ -1534,6 +1561,29 @@
                     ]
                 }
             );
+
+            // Problem Status Dropdown
+            $('#my-pulldown3').DMPulldown(
+                {
+                    selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "testable" {% endif %},
+                    options: [
+                        {
+                            value:'ready',
+                            label:'Ready'
+                        },
+                        {
+                            value:'testable',
+                            label:'Testable'
+                        },
+                        {
+                            value:'dead',
+                            label:'Dead'
+                        }
+                    ]
+                }
+            );
+
+            // Usable as Example Dropdown (Meta Info)
             $('#my-pulldown6').DMPulldown(
                 {
                     selectedOption: {% if probId != -1 %} "{{ problem.usableAsExample }}" {% else %} null {% endif %},
@@ -1550,43 +1600,28 @@
                 }
             );
 
-            // drop down for language selection
-            $('#language').DMPulldown(
-                {
-                    selectedOption: {% if probId != -1 %} "{{ problem.language }}" {% else %} "english" {% endif %},
-                    options: [
-                        {
-                            value:'english',
-                            label:'English'
-                        },
-                        {
-                            value:'spanish',
-                            label:'Spanish'
-                        }
-                    ]
-                    //onChange: displayAnswerControls
-                }
-            );
+            // Layout Dropdown
+            initializeLayoutPulldown();
+
+            // Standards Dropdowns
+            initializeStandardPulldowns();
 
             var url_mask;
             url_mask = "{% url 'qauth_get_problem' probId=12345 %}";
-            {# if the probId is valid, make an ajax call to get the problem JSON #}
+            // if the probId is valid, make an ajax call to get the problem JSON
             {% if probId != -1 %}
                 url_mask = url_mask.replace("12345", "{{ probId }}");
-            $.ajax({
-                url: url_mask,
-                type: "GET",
-                error: function (a,b,c) {
-                    alert("Failed to get problem " + a.responseText + b);
-                },
-                success: function (data) {
-                    problemInit(data);
-
-                }
-            });
+                $.ajax({
+                    url: url_mask,
+                    type: "GET",
+                    error: function (a, b, c) {
+                        alert("Failed to get problem " + a.responseText + b);
+                    },
+                    success: function (data) {
+                        problemInit(data);
+                    }
+                });
             {% endif %}
-            initializeLayoutPulldown();
-            initializeStandardPulldowns();
         });
     </script>
 {% endblock %}
