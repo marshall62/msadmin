@@ -142,7 +142,13 @@ class ImageControls {
     mountComponent (eltId, props) {
         var msgText = null,inputImageURLTag = null,afilenameTag=null;
         var imgPreviewTag=null,spanDeleteImageIconTag=null, adeleteImageTag=null;
+        var container1 = $('<div class="col col-sm-4"></div>');
+        var container2 = $('<div class="col col-sm-4"></div>');
+        var container3 = $('<div class="col col-sm-12"></div>');
         var mainDiv = $('#'+eltId);
+        mainDiv.append(container1);
+        mainDiv.append(container2);
+        mainDiv.append(container3);
         var inputImageURLTag = '<input id="imageURL" type="text" class="form-control" name="imageURL" placeholder="">';
         // An existing problem will need these controls.
         if (this.imageURL || this.imageId) {
@@ -172,20 +178,20 @@ class ImageControls {
             afilenameTag = '<a class="a_img_filename">' + this.fileURL() + '</a>';
         }
         // Add elements to the main div that are always present
-        var inpDiv = $('<div class="input-group"></div>').appendTo(mainDiv);
+        var inpDiv = $('<div class="input-group"></div>').appendTo(container1);
         // note:  We don't need to hold any of these elements in instance variables.
         var span = '<span class="input-group-addon">Image URL</span>';
         var fileInputTag = '<input class="form-control mb-2 mr-sm-2 mb-sm-0" name="' +props.imageFileName+ '" type="file">';
         var helpIcon = '<a href="#"><span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Either a URL to an image or else you may upload an image file"></span></a>';
         inpDiv.append(span); // a label saying "Image URL"
         this.inputImageURL = $(inputImageURLTag).appendTo(inpDiv);
-        this.inputFile = $(fileInputTag).appendTo(mainDiv);
-        mainDiv.append(helpIcon); // an <a> tag that provides help if you hover over the icon in the span.
+        this.inputFile = $(fileInputTag).appendTo(container2);
+        container2.append(helpIcon); // an <a> tag that provides help if you hover over the icon in the span.
         // Now, if there is an imageURL or an imageFile add a second div that contains preview elements
 
         // If there is an image URL or an image File, put in the preview controls.
         if (this.imageURL || this.imageId) {
-            this.previewDiv = $('<div class="imgPreviewDiv"></div>').appendTo(mainDiv);
+            this.previewDiv = $('<div class="imgPreviewDiv"></div>').appendTo(container3);
             this.previewDiv.append(msgText);
             this.imgPreview = $(imgPreviewTag).appendTo(this.previewDiv);
             this.previewDiv.append('<br>');

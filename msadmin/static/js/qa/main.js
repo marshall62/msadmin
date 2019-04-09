@@ -6,10 +6,45 @@ function checkSnapshotValidity () {
 
 $('#saveButton').on('click', function() {
     var status = $('#my-pulldown3').val();
-    if (status === 'ready' && $(this).data('snapshot') == 0) {
-        $('#warningDialog').modal('show');
-    }
-    else {
-        $('#editProblem').submit();
+    var warningString = "";
+    var formElement = document.getElementById('editProblem');
+    if (formElement.checkValidity()) {
+        if (status === 'ready') {
+            if ($(this).data('snapshot') == 0) {
+                warningString += "snapshot";
+            }
+            if ($(this).data('hint') == "True") {
+                if (warningString.length) {
+                    warningString += " or hint";
+                }
+                else {
+                    warningString += "hint";
+                }
+            }
+            if ($(this).data('video') == 0) {
+                if (warningString.length) {
+                    warningString += " or video";
+                }
+                else {
+                    warningString += "video";
+                }
+            }
+            if ($(this).data('example') == 0) {
+                if (warningString.length) {
+                    warningString += " or example";
+                }
+                else {
+                    warningString += "example";
+                }
+            }
+            if (warningString) {
+                event.preventDefault();
+                $('#warning-text').text("You are saving the question without any " + warningString + ". Are you sure you want to continue?");
+                $('#warningDialog').modal('show');
+            }
+        }
+        // else {
+        //     $('#editProblem').submit();
+        // }
     }
 });

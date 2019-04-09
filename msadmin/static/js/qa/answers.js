@@ -41,7 +41,7 @@ function addShortAnswerRows (n) {
             '</td>';
 
         var tdtxt = '<td><div class="row"><div class="form-group col-lg-12">' +
-            '<input type="text" class="form-control" name="shortanswer[]" value=""/>' +
+            '<input type="text" class="form-control" required name="shortanswer[]" value=""/>' +
             "</div>" +
             "</div></td>";
 
