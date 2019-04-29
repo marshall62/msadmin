@@ -56,7 +56,7 @@ Here are the Pre/Post tests
         {% for test in tests %}
         <tr>
             <td> <input type="checkbox" name="removeTest[]" value="{{ test.id }}"></td>
-            <td>{{ test.id }}</td>
+            <td> &nbsp;<a href="{% url 'ta_tests_gp_page' testId=test.id %}">{{ test.id }} </a>  </td>
             <td> &nbsp;<a href="{% url 'ta_tests_gp_page' testId=test.id %}">{{ test.name }} </a>  </td>
             <td>{% if not test.isActive %}
                 inactive
