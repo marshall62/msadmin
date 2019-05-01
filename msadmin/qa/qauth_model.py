@@ -104,7 +104,7 @@ class Problem (models.Model):
     #     return 'hasAudio' if self.isReadAloud() else 'noAudio'
 
     def getStatus3 (self):
-        if self.status == 'ready' or self.status == 'testable':
+        if self.status in ('ready', 'testable', 'in-progress')
             return self.status
         else:
             return 'dead'
