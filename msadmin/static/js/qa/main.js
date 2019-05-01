@@ -9,7 +9,7 @@ $('#saveButton').on('click', function() {
     var warningString = "";
     var formElement = document.getElementById('editProblem');
     if (formElement.checkValidity()) {
-        if (status === 'ready') {
+        if (status === 'ready' || status === 'testable') {
             if ($(this).data('snapshot') == 0) {
                 warningString += "snapshot";
             }
