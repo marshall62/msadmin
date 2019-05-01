@@ -1569,11 +1569,15 @@
             // Problem Status Dropdown
             $('#my-pulldown3').DMPulldown(
                 {
-                    selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "testable" {% endif %},
+                    selectedOption: {% if probId != -1 %} "{{ problem.getStatus3 }}" {% else %} "in-progress" {% endif %},
                     options: [
                         {
                             value:'ready',
                             label:'Ready'
+                        },
+                        {
+                            value:'in-progress',
+                            label:'In Progress'
                         },
                         {
                             value:'testable',
